@@ -16,8 +16,8 @@ export default function TopBar({
 
   return (
     <div className="hidden md:block fixed top-0 left-0 right-0 z-50 w-full bg-[#1F0808] text-white text-xs sm:text-sm">
-      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-        <div className="flex flex-col sm:flex-row items-center justify-around gap-1 sm:gap-3 pt-1 sm:pt-1.5 pb-0 sm:pb-1.5">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-1 sm:gap-3 pt-1 sm:pt-1.5 pb-0 sm:pb-1.5">
           {/* Left Side */}
           <div className="flex items-center gap-4 sm:gap-10 order-2 sm:order-none" dir={i18n.dir()}>
             <button

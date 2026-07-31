@@ -38,8 +38,7 @@ export default function RootLayout() {
     { label: t("nav.calculator"), path: "/finance-calculator" },
     { label: t("nav.about"), path: "/about" },
     { label: t("nav.blog"), path: "/blog" },
-    { label: t("nav.contact"), path: "/contact" },
-    { label: t("nav.orders"), path: "/orders" },
+    { label: t("nav.orders"), path: "/orders/ordinary" },
   ];
 
   return (

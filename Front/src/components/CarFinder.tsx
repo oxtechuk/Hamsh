@@ -50,7 +50,7 @@ export default function CarFinder({
                 <h2 className="mb-8 text-center text-[28px] font-bold text-white">
                     {filterTitle || t("carFinder.title")}
                 </h2>
-                <div className="mt-7 grid grid-cols-1 gap-4 lg:grid-cols-4 mb-3">
+        <div className="mt-7 grid grid-cols-1 gap-4 lg:grid-cols-4 mb-3">
                     <div className="relative lg:col-span-2">
                         <input
                             type="text"
@@ -60,19 +60,18 @@ export default function CarFinder({
                             onKeyDown={(e) =>
                                 e.key === "Enter" && handleSearch()
                             }
-                            className="h-[52px] w-full rounded-[8px] border border-[#D7E3F5] bg-white px-5 pr-11 text-sm text-[#111827] outline-none placeholder:text-[#4B8FEA] focus:border-[var(--brand-primary-color)] focus:ring-2 focus:ring-[rgba(41,155,224,0.25)]"
+                            className="h-[52px] w-full rounded-[8px] border border-white/20 bg-white/10 px-5 pe-11 text-sm text-white outline-none placeholder:text-white/50 backdrop-blur-sm focus:border-white/40 focus:ring-2 focus:ring-white/20"
                         />
-
                         <Search
                             size={18}
-                            className="absolute right-4 top-1/2 -translate-y-1/2 text-[#4B8FEA]"
+                            className="absolute end-4 top-1/2 -translate-y-1/2 text-white/60"
                         />
                     </div>
 
                     <button
                         type="button"
                         onClick={handleSearch}
-                        className="h-[52px] rounded-[8px] bg-[var(--brand-secondary-color)] text-base font-medium text-white transition hover:opacity-90"
+                        className="h-[52px] rounded-[8px] bg-[#C5232B] text-base font-medium text-white transition hover:bg-[#A91D24]"
                     >
                         {t("carFinder.searchButton")}
                     </button>
@@ -80,16 +79,16 @@ export default function CarFinder({
                     <button
                         type="button"
                         onClick={handleReset}
-                        className="flex h-[52px] items-center justify-center gap-2 rounded-[8px] border border-[var(--brand-secondary-color)] text-base font-medium text-[var(--brand-secondary-color)] transition hover:bg-[var(--brand-secondary-color)] hover:text-white"
+                        className="flex h-[52px] items-center justify-center gap-2 rounded-[8px] border border-white/30 text-base font-medium text-white/80 transition hover:bg-white/10"
                     >
                         <RotateCcw size={17} />
                         {t("carFinder.resetButton")}
                     </button>
                 </div>
 
-                <div className="grid grid-cols-2 gap-6 md:grid-cols-2 lg:grid-cols-4 ">
+                <div className="grid grid-cols-2 gap-6 md:grid-cols-2 lg:grid-cols-4">
                     <div className="w-full">
-                        <label className=" block text-center text-[13px] font-medium text-white">
+                        <label className="block text-end text-[13px] font-medium text-white/70">
                             {t("carFinder.brand")}
                         </label>
                         <Select
@@ -102,12 +101,12 @@ export default function CarFinder({
                                 value: String(b.id),
                             }))}
                             icon={<Tag size={18} className="text-[#FF4A4A]" />}
-                            className="h-[52px] rounded-[8px] border border-[#D7E3F5] bg-white text-sm text-[#111827]"
+                            className="h-[52px] rounded-[8px] border border-white/20 bg-white/10 text-sm text-white backdrop-blur-sm"
                         />
                     </div>
 
                     <div className="w-full">
-                        <label className="block text-center text-[13px] font-medium text-white">
+                        <label className="block text-end text-[13px] font-medium text-white/70">
                             {t("carFinder.type")}
                         </label>
                         <Select
@@ -120,12 +119,12 @@ export default function CarFinder({
                                 value: String(t.id),
                             }))}
                             icon={<Car size={18} className="text-[#B84DFF]" />}
-                            className="h-[52px] rounded-[8px] border border-[#D7E3F5] bg-white text-sm text-[#111827]"
+                            className="h-[52px] rounded-[8px] border border-white/20 bg-white/10 text-sm text-white backdrop-blur-sm"
                         />
                     </div>
 
                     <div className="w-full">
-                        <label className="block text-center text-[13px] font-medium text-white">
+                        <label className="block text-end text-[13px] font-medium text-white/70">
                             {t("carFinder.category")}
                         </label>
                         <Select
@@ -137,18 +136,13 @@ export default function CarFinder({
                                 label: localize(c.name, i18n.language),
                                 value: String(c.id),
                             }))}
-                            icon={
-                                <CalendarDays
-                                    size={18}
-                                    className="text-[#3B82F6]"
-                                />
-                            }
-                            className="h-[52px] rounded-[8px] border border-[#D7E3F5] bg-white text-sm text-[#111827]"
+                            icon={<CalendarDays size={18} className="text-[#3B82F6]" />}
+                            className="h-[52px] rounded-[8px] border border-white/20 bg-white/10 text-sm text-white backdrop-blur-sm"
                         />
                     </div>
 
                     <div className="w-full">
-                        <label className=" block text-center text-[13px] font-medium text-white">
+                        <label className="block text-end text-[13px] font-medium text-white/70">
                             {t("carFinder.year")}
                         </label>
                         <Select
@@ -157,16 +151,11 @@ export default function CarFinder({
                             value={yearVal}
                             onChange={setYearVal}
                             options={years.map((y) => {
-                                const val =
-                                    typeof y === "string"
-                                        ? y
-                                        : (y?.year ?? String(y));
+                                const val = typeof y === "string" ? y : (y?.year ?? String(y));
                                 return { label: val, value: val };
                             })}
-                            icon={
-                                <Gauge size={18} className="text-[#FF3FB4]" />
-                            }
-                            className="h-[52px] rounded-[8px] border border-[#D7E3F5] bg-white text-sm text-[#111827]"
+                            icon={<Gauge size={18} className="text-[#FF3FB4]" />}
+                            className="h-[52px] rounded-[8px] border border-white/20 bg-white/10 text-sm text-white backdrop-blur-sm"
                         />
                     </div>
                 </div>

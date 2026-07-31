@@ -42,10 +42,11 @@ export default function OfferListCard({
         {/* Discount badge — top start corner */}
         {badge && (
           <div
-            className="absolute start-0 top-0 z-20 flex min-h-[40px] items-center justify-center rounded-es-[10px] px-4 text-[16px] font-extrabold text-white shadow-md"
-            style={{ backgroundColor: badgeColor ?? "#C5232B" }}
+            className="absolute start-4 top-4 z-20 p-[3px] shadow-lg"
           >
-            {badge}
+            <div className="rounded-[8px] 0 px-2  bg-[var(--brand-secondary-color)]">
+              <span className="text-[15px] text-white">{badge}</span>
+            </div>
           </div>
         )}
 

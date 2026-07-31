@@ -5,8 +5,5 @@ export interface IBlogsPageHeroProps {
   badgeText: string;
   title: string;
   description: string;
-  categories: IBlogCategory[];
-  activeCategory: string;
-  onCategoryChange?: (value: string) => void;
   featuredPost?: IBlogFeaturedCardProps;
 }

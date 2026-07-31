@@ -22,7 +22,7 @@ export default function AboutStatsSection({
       dir={i18n.dir()}
       className={`w-full bg-[#FAF9F7] py-8 sm:py-10 ${className}`}
     >
-      <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div
           className={[
             "grid grid-cols-2 gap-y-8",

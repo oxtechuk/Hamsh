@@ -3,7 +3,7 @@ import type { ICarColor } from "./ICarDetailsHeroProps";
 export interface ICarDetailsGalleryProps {
   title: string;
   images: string[];
-  currentImages: string[];
+  currentImages?: string[];
   currentImage: string;
   activeImage: number;
   onImageSelect: (index: number) => void;

@@ -17,7 +17,7 @@ interface BrandsCarouselProps {
 
 export default function BrandsCarousel({
   brands,
-  speed = 40,
+  speed = 60,
   showName = false,
 }: BrandsCarouselProps) {
   const { i18n } = useTranslation();
@@ -39,17 +39,17 @@ export default function BrandsCarousel({
           "px-6",
           showName
             ? "h-auto w-[145px] flex-col gap-2 py-5 sm:w-[170px]"
-            : "h-[86px] w-[145px] sm:h-[96px] sm:w-[170px]",
+            : "h-[120px] w-[145px] sm:h-[140px] sm:w-[170px]",
         ].join(" ")}
       >
         <LazyImg
           src={brand.logo}
           alt={brand.name}
           className={[
-            "max-h-[48px] max-w-[105px] object-contain",
+            "max-h-[70px] max-w-[130px] object-contain",
             "transition duration-300",
             "hover:scale-105",
-            "sm:max-h-[54px] sm:max-w-[120px]",
+            "sm:max-h-[80px] sm:max-w-[150px]",
           ].join(" ")}
         />
         {showName && (

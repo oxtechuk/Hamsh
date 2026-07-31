@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { submitBooking } from "../services/api";
@@ -87,7 +87,7 @@ export default function OrdinaryOrderPage() {
       />
 
       <section className="w-full px-4 py-10 sm:py-14">
-        <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {!done && (
             <div className="mb-10">
               <SpecialOrderStepper activeStep={step} steps={STEPS} />
@@ -115,6 +115,18 @@ export default function OrdinaryOrderPage() {
               onBack={() => setStep(1)}
               submitting={submitting}
             />
+          )}
+
+          {!done && (
+            <p className="mt-8 text-center text-[14px] text-[#9CA3AF]">
+              {t("ordinaryOrder.notFound", "لم تجد سيارتك؟")}{" "}
+              <Link
+                to="/orders/special"
+                className="font-bold text-[#C5232B] underline transition hover:text-[#A91D24]"
+              >
+                {t("ordinaryOrder.specialOrderLink", "قدم طلب خاص")}
+              </Link>
+            </p>
           )}
         </div>
       </section>

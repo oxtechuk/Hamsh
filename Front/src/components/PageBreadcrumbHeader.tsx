@@ -15,7 +15,7 @@ export default function PageBreadcrumbHeader({
 
   return (
     <section dir={i18n.dir()} className={`w-full py-8 sm:py-10 ${className}`}>
-      <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className={isRtl ? "text-right" : "text-left"}>
           <nav
             aria-label={t("common.breadcrumb", "Breadcrumb")}

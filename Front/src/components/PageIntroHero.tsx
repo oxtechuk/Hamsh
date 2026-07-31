@@ -83,7 +83,7 @@ export default function PageIntroHero({
         ].join(" ")}
       />
 
-      <div className="relative z-10 mx-auto w-full max-w-[1440px] px-5 py-6 sm:px-8 sm:py-8 lg:px-12 lg:py-10">
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-5 py-6 sm:px-8 sm:py-8 lg:px-12 lg:py-10">
         <div
           className={[
             "text-start",

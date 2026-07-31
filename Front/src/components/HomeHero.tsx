@@ -146,7 +146,7 @@ export default function HomeHero({
       dir={direction}
       className="w-full overflow-hidden  py-10 sm:py-14 lg:min-h-[680px] lg:py-16"
     >
-      <div className="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[auto_1fr] lg:gap-20 xl:gap-28">
           {/* Hero content */}
           <div className="order-2 text-center lg:order-1 lg:text-start">
@@ -200,7 +200,7 @@ export default function HomeHero({
               <Button
                 bgColor="bg-[var(--brand-secondary-color)]"
                 className="h-[56px] w-full gap-3 rounded-[5px]! px-6 text-[15px] font-extrabold hover:opacity-90!"
-                onClick={(e) => { e?.preventDefault?.(); setFinderOpen(true); }}
+                onClick={() => navigate("/cars")}
               >
                 <ArrowLeft size={22} strokeWidth={1.8} />
 

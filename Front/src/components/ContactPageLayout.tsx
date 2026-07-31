@@ -15,7 +15,7 @@ export default function ContactPageLayout({
       dir={i18n.dir()}
       className={`w-full py-10 sm:py-14 lg:py-16 ${className}`}
     >
-      <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div
           className={[
             "grid grid-cols-1 items-start gap-8",

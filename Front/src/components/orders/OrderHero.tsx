@@ -15,7 +15,7 @@ export default function OrderHero({ badgeKey, badgeFallback, titleKey, titleFall
   return (
     <section className="relative w-full overflow-hidden bg-[#060709] px-4 py-10 sm:py-14">
       <div className="pointer-events-none absolute inset-0" />
-      <div className="relative mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <p className="mb-3 text-[13px] font-semibold text-[var(--brand-secondary-color)]">
           {t(badgeKey, badgeFallback)}
         </p>

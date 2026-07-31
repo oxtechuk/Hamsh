@@ -75,7 +75,7 @@ export default function Footer({
       dir={direction}
       className="w-full bg-[#040609] pb-[96px] text-white lg:pb-0"
     >
-      <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-10 xl:px-12">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10 xl:px-12">
         {/* Main footer */}
         <div
           className={[

@@ -72,6 +72,11 @@ export default function OffersPage() {
     [rawOffers, t, language],
   );
 
+  const mainOffer = USE_MOCK
+    ? MOCK_OFFER
+    : (offersResponse?.meta.main_offer ?? null);
+  const heroMeta = USE_MOCK ? null : (offersResponse?.meta.hero ?? null);
+
   const currentPage = USE_MOCK
     ? page
     : (offersResponse?.meta.current_page ?? page);
@@ -82,20 +87,16 @@ export default function OffersPage() {
   return (
     <>
       <OffersPageHero
-        image={APP_IMAGES.OFFER_HERO_PLACEHOLDER}
-        badgeText=""
-        title1="لا تفوّت"
-        title2="عروض"
-        description="عروض مختارة بعناية على أبرز السيارات. محدودة الوقت."
-        endsAt={new Date(
-          Date.now() +
-            12 * 24 * 60 * 60 * 1000 +
-            8 * 60 * 60 * 1000 +
-            34 * 60 * 1000 +
-            19 * 1000,
-        ).toISOString()}
-        primaryButtonText=""
-        primaryButtonTo=""
+        image={heroMeta?.image || APP_IMAGES.OFFER_HERO_PLACEHOLDER}
+        badgeText={heroMeta?.title.badge || ""}
+        title1={heroMeta?.colored_title || "لا تفوّت"}
+        title2={heroMeta?.title.text || "عروض"}
+        description={heroMeta?.description || mainOffer?.description || "عروض مختارة بعناية على أبرز السيارات. محدودة الوقت."}
+        countdown={mainOffer?.countdown}
+        discountPercent={mainOffer?.discount_percent}
+        specialPrice={mainOffer?.special_price}
+        primaryButtonText={heroMeta?.button_1.text || ""}
+        primaryButtonTo={heroMeta?.button_1.link || ""}
       />
 
       <OffersGridSection

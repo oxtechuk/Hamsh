@@ -52,7 +52,7 @@ export default function MobileBottomNav() {
                   to={item.to}
                   className="relative -top-4 flex flex-col items-center"
                 >
-                  <div className="flex h-[54px] w-[54px] items-center justify-center rounded-full bg-[var(--brand-primary-color)] shadow-[0_6px_20px_rgba(0,0,0,0.28)]">
+                  <div className="flex h-[54px] w-[54px] items-center justify-center rounded-full bg-[var(--brand-secondary-color)] shadow-[0_6px_20px_rgba(0,0,0,0.28)]">
                     <Icon size={24} strokeWidth={2} className="text-white" />
                   </div>
                   <span className="mt-1 text-[10px] font-semibold text-[#6B7280]">
@@ -74,12 +74,12 @@ export default function MobileBottomNav() {
                   <Icon
                     size={22}
                     strokeWidth={1.8}
-                    className={isActive ? "text-[var(--brand-primary-color)]" : "text-[#9CA3AF]"}
+                    className={isActive ? "text-[var(--brand-secondary-color)]" : "text-[#9CA3AF]"}
                   />
-                  <span className={`text-[10px] font-semibold ${isActive ? "text-[var(--brand-primary-color)]" : "text-[#9CA3AF]"}`}>
+                  <span className={`text-[10px] font-semibold ${isActive ? "text-[var(--brand-secondary-color)]" : "text-[#9CA3AF]"}`}>
                     {t(item.labelKey)}
                   </span>
-                  {isActive && <span className="h-[2px] w-5 rounded-full bg-[var(--brand-primary-color)]" />}
+                  {isActive && <span className="h-[2px] w-5 rounded-full bg-[var(--brand-secondary-color)]" />}
                 </button>
               );
             }
@@ -94,12 +94,12 @@ export default function MobileBottomNav() {
                 <Icon
                   size={22}
                   strokeWidth={1.8}
-                  className={isActive ? "text-[var(--brand-primary-color)]" : "text-[#9CA3AF]"}
+                  className={isActive ? "text-[var(--brand-secondary-color)]" : "text-[#9CA3AF]"}
                 />
-                <span className={`text-[10px] font-semibold ${isActive ? "text-[var(--brand-primary-color)]" : "text-[#9CA3AF]"}`}>
+                <span className={`text-[10px] font-semibold ${isActive ? "text-[var(--brand-secondary-color)]" : "text-[#9CA3AF]"}`}>
                   {t(item.labelKey)}
                 </span>
-                {isActive && <span className="h-[2px] w-5 rounded-full bg-[var(--brand-primary-color)]" />}
+                {isActive && <span className="h-[2px] w-5 rounded-full bg-[var(--brand-secondary-color)]" />}
               </NavLink>
             );
           })}
@@ -145,7 +145,7 @@ export default function MobileBottomNav() {
                     to={link.to}
                     onClick={() => setSidebarOpen(false)}
                     className={`flex items-center gap-3 rounded-xl px-4 py-3.5 text-[15px] font-bold transition ${
-                      isActive ? "bg-[var(--brand-primary-color)]/10 text-[var(--brand-primary-color)]" : "text-[#07111F] hover:bg-gray-50"
+                      isActive ? "bg-[var(--brand-secondary-color)]/10 text-[var(--brand-secondary-color)]" : "text-[#07111F] hover:bg-gray-50"
                     }`}
                   >
                     <LinkIcon size={20} strokeWidth={2} />

@@ -23,7 +23,7 @@ export interface ICarDetailsHeroProps {
   rating?: string;
   views?: number;
   colors: ICarColor[];
-  orderTo: string;
+  orderTo: () => void;
   financeTo?: string;
   brand?: string;
   year?: string;

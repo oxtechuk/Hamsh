@@ -11,7 +11,7 @@ export default function FaqSection({ faqs }: IFaqSectionProps) {
     setOpenId((prev) => (prev === id ? null : id));
 
   return (
-    <section dir={i18n.dir()} className="w-full bg-[#F9F9F7] py-14">
+    <section dir={i18n.dir()} className="w-full  py-14">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-8 text-start">
           <h2 className="text-[32px]  text-[#111827] md:text-[38px] font-bold">

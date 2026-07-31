@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { useLanguageStore } from "../store/language.store";
@@ -17,6 +17,7 @@ export default function CarDetailsPage() {
   useSEO(t("nav.cars"), t("carDetails.hero.metaDescription"));
   const language = useLanguageStore((s) => s.language);
   const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate();
 
   const {
     data: car,
@@ -110,7 +111,7 @@ export default function CarDetailsPage() {
           value: color.hex,
           image: color.image,
         }))}
-        orderTo="/contact"
+        orderTo={() => navigate("/finance-calculator", { state: { car } })}
         financeTo="/finance-calculator"
         specsTabs={tabs}
         recommendations={relatedCars}

@@ -251,7 +251,11 @@
       "4,000 - 6,000 SAR",
       "7,000 - 9,000 SAR",
       "More than 9,000 SAR"
-    ]
+    ],
+    "empty": {
+      "title": "No Cars Available",
+      "subtitle": "There are no cars available in this price range at the moment"
+    }
   },
   "financeSolutions": {
     "titleBlue": "Smart Financing Solutions",
@@ -1010,7 +1014,9 @@
       "submit": "Submit Request",
       "submitting": "Submitting...",
       "backButton": "Back"
-    }
+    },
+    "notFound": "Didn't find your car?",
+    "specialOrderLink": "Place a special order"
   },
   "common": {
     "previousSlide": "Previous slide",

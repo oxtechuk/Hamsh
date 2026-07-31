@@ -83,7 +83,7 @@ export default function SpecialOrderPage() {
       />
 
       <section className="w-full bg-[#F5F4EF] px-4 py-10 sm:py-14">
-        <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {!done && (
             <div className="mb-10">
               <SpecialOrderStepper activeStep={step} />

@@ -14,16 +14,13 @@ import CarDetailsRecommendations from "../CarDetailsRecommendations";
 
 export default function CarDetailsHero({
   title,
-  description,
   images,
   exteriorImages,
   interiorImages,
   price,
   monthlyInstallment,
-  minDownPayment,
   rating,
   views,
-  colors,
   orderTo,
   brand,
   year,
@@ -42,15 +39,12 @@ export default function CarDetailsHero({
   const [viewType, setViewType] = useState<"inside" | "outside">("inside");
   const [selectedColor, setSelectedColor] = useState<ICarColor | null>(null);
 
-  const currentImages =
-    viewType === "inside"
-      ? (interiorImages?.length ? interiorImages : images).map(getImageUrl)
-      : (exteriorImages?.length ? exteriorImages : images).map(getImageUrl);
+  const allImages = images.map(getImageUrl);
 
   const colorImage = selectedColor?.image
     ? getImageUrl(selectedColor.image)
     : null;
-  const currentImage = colorImage ?? currentImages[activeImage];
+  const currentImage = colorImage ?? allImages[activeImage];
   const isShowingColorImage = !!colorImage;
 
   const handleViewChange = useCallback((type: "inside" | "outside") => {
@@ -67,8 +61,7 @@ export default function CarDetailsHero({
           <div className="order-2 min-w-0 lg:order-1">
             <CarDetailsGallery
               title={title}
-              images={currentImages}
-              currentImages={currentImages}
+              images={allImages}
               currentImage={currentImage}
               activeImage={activeImage}
               onImageSelect={setActiveImage}
@@ -206,12 +199,13 @@ export default function CarDetailsHero({
 
               {/* CTA buttons */}
               <div className="mt-6 flex flex-col gap-3">
-                <a
-                  href={orderTo}
+                <button
+                  type="button"
+                  onClick={orderTo}
                   className="flex h-[62px] w-full items-center justify-center rounded-[6px] bg-[var(--brand-secondary-color)] text-[18px] font-bold text-white! transition hover:opacity-90"
                 >
                   {t("carDetails.hero.orderNow")}
-                </a>
+                </button>
 
                 <a
                   href="/compare"

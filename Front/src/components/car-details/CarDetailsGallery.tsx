@@ -5,7 +5,7 @@ import LazyImg from "../LazyImg";
 
 export default function CarDetailsGallery({
   title,
-  currentImages,
+  images,
   currentImage,
   activeImage,
   onImageSelect,
@@ -22,7 +22,7 @@ export default function CarDetailsGallery({
         <LazyImg
           src={currentImage}
           alt={title}
-          className="h-[340px] w-full object-cover sm:h-[440px] lg:h-[500px] xl:h-[560px]"
+          className="h-auto w-full object-contain"
         />
 
         {/* Color overlay */}
@@ -62,13 +62,13 @@ export default function CarDetailsGallery({
       </div>
 
       {/* Thumbnails */}
-      {!isShowingColorImage && currentImages.length > 0 && (
+      {!isShowingColorImage && images.length > 0 && (
         <div className="mt-4 overflow-hidden">
           <div
             dir="ltr"
             className="flex gap-2 overflow-x-auto pb-1 scrollbar-none snap-x snap-mandatory"
           >
-            {currentImages.map((image, index) => {
+            {images.map((image, index) => {
               const isActive = activeImage === index;
               return (
                 <button

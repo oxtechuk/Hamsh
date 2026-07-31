@@ -143,7 +143,7 @@ export default function AllCarsPage() {
           { label: t("pageTitles.allCarsBreadcrumb") },
         ]}
       />
-      <section className="mx-auto max-w-[1440px] px-4 py-6 sm:px-6 lg:px-8 lg:flex lg:items-start lg:gap-6">
+      <section className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:flex lg:items-start lg:gap-6">
         <CarsSidebarFilter
           transmissions={sidebarData.transmissions}
           fuelTypes={[]}

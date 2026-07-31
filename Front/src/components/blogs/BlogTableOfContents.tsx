@@ -6,7 +6,6 @@ export type { ITocItem };
 
 export default function BlogTableOfContents({
   items,
-  activeId,
   onClickItem,
 }: IBlogTableOfContentsProps) {
   const { t } = useTranslation();
@@ -21,13 +20,8 @@ export default function BlogTableOfContents({
       <ol className="space-y-2">
         {items.map((item) => (
           <li key={item.id}>
-            <button
-              type="button"
-              onClick={() => onClickItem(item.id)}
-              className={[
-                "flex w-full items-center gap-3 text-start text-[13px] transition",
-                "font-bold text-[#C5232B] underline decoration-2 underline-offset-4 ",
-              ].join(" ")}
+            <div
+              className="flex w-full items-center gap-3 text-start text-[13px] font-bold text-[#C5232B]"
             >
               <span className="flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full bg-[#EFEFEF] text-[11px] text-[#7A7A7A]">
                 {item.index}
@@ -35,7 +29,7 @@ export default function BlogTableOfContents({
               <span className="flex-1 text-start text-[#7A7A7A]">
                 {item.text}
               </span>
-            </button>
+            </div>
           </li>
         ))}
       </ol>

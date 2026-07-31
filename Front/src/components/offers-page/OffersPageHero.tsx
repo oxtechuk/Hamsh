@@ -37,17 +37,27 @@ export default function OffersPageHero({
   description,
   carLabel,
   endsAt,
-  discountPercent,
-  specialPrice,
   primaryButtonText,
   primaryButtonTo,
+  countdown,
 }: IOffersPageHeroProps) {
   const { t, i18n } = useTranslation();
 
   const direction = i18n.dir();
-  const isRTL = direction === "rtl";
 
-  const target = useMemo(() => (endsAt ? new Date(endsAt) : null), [endsAt]);
+  const target = useMemo(() => {
+    if (countdown && !countdown.is_expired) {
+      const now = new Date();
+      return new Date(
+        now.getTime() +
+          countdown.days * 86400000 +
+          countdown.hours * 3600000 +
+          countdown.minutes * 60000 +
+          countdown.seconds * 1000,
+      );
+    }
+    return endsAt ? new Date(endsAt) : null;
+  }, [endsAt, countdown]);
 
   const [timeLeft, setTimeLeft] = useState(() =>
     target
@@ -78,7 +88,7 @@ export default function OffersPageHero({
 
   return (
     <section dir={direction} className="w-full py-6 sm:py-8 lg:py-10">
-      <div className="mx-auto max-w-[1440px] px-3 sm:px-5 lg:px-8">
+      <div className="mx-auto max-w-7xl px-3 sm:px-5 lg:px-8">
         <div
           className={[
             "relative overflow-hidden rounded-[22px]",
@@ -143,23 +153,6 @@ export default function OffersPageHero({
                 <p className="mt-4 text-[15px] font-bold text-[#D22B32]">
                   {carLabel}
                 </p>
-              )}
-
-              {/* Optional offer details */}
-              {(discountPercent || specialPrice) && (
-                <div className="mt-5 flex flex-wrap items-center gap-3">
-                  {discountPercent && (
-                    <span className="rounded-full bg-[#C7252C] px-4 py-2 text-[13px] font-bold text-white">
-                      {discountPercent}
-                    </span>
-                  )}
-
-                  {specialPrice && (
-                    <span className="text-[18px] font-extrabold text-white">
-                      {specialPrice}
-                    </span>
-                  )}
-                </div>
               )}
 
               {/* Countdown box */}

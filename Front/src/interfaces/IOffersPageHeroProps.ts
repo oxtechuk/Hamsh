@@ -10,4 +10,11 @@ export interface IOffersPageHeroProps {
   specialPrice?: number | null;
   primaryButtonText: string;
   primaryButtonTo: string;
+  countdown?: {
+    days: number;
+    hours: number;
+    minutes: number;
+    seconds: number;
+    is_expired: boolean;
+  } | null;
 }

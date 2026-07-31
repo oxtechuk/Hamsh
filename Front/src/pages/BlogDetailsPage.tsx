@@ -68,7 +68,7 @@ export default function BlogDetailsPage() {
 
   return (
     <main dir={direction} className="w-full bg-[#FAFAF8] py-10 sm:py-14">
-      <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[minmax(0,1fr)_340px]">
 
           {/* ── ARTICLE ── */}
@@ -82,6 +82,15 @@ export default function BlogDetailsPage() {
 
             {blog.summary && <SummaryQuoteCard summary={blog.summary} />}
 
+            {/* ── TOC (mobile only) ── */}
+            <div className="mt-6 lg:hidden">
+              <BlogTableOfContents
+                items={tocItems}
+                activeId={activeId}
+                onClickItem={scrollTo}
+              />
+            </div>
+
             <div className="mt-6 px-1">
               <BlogArticleContent
                 content={blog.content}
@@ -92,11 +101,13 @@ export default function BlogDetailsPage() {
 
           {/* ── SIDEBAR ── */}
           <aside className="space-y-5 lg:sticky lg:top-[110px]">
-            <BlogTableOfContents
-              items={tocItems}
-              activeId={activeId}
-              onClickItem={scrollTo}
-            />
+            <div className="hidden lg:block">
+              <BlogTableOfContents
+                items={tocItems}
+                activeId={activeId}
+                onClickItem={scrollTo}
+              />
+            </div>
             <BlogSidebarCta />
             <BlogSidebarRelated articles={relatedArticles} />
           </aside>

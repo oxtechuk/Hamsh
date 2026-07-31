@@ -4,6 +4,7 @@ import type {
   ICarDetailsRecommendationItem,
   ICarDetailsRecommendationsProps,
 } from "../interfaces/ICarDetailsRecommendationsProps";
+import LazyImg from "./LazyImg";
 
 export type { ICarDetailsRecommendationItem };
 
@@ -62,10 +63,9 @@ function RecommendationRow({
       ].join(" ")}
     >
       <div className="h-[58px] overflow-hidden rounded-[8px] bg-[#F2F2F2]">
-        <img
+        <LazyImg
           src={car.image}
           alt={car.name}
-          loading="lazy"
           className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
       </div>

@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
 import {
@@ -24,16 +25,19 @@ import { localize } from "../utils/localize";
 
 export default function FinanceCalculatorPage() {
   const { i18n, t } = useTranslation();
+  const location = useLocation();
 
   useSEO(
     t("pageTitles.financeCalculator"),
     t("financeCalculator.description"),
   );
 
+  const preSelectedCar = (location.state as { car?: CarItem } | null)?.car ?? null;
+
   const [step, setStep] = useState<IStepperStep>(1);
   const [done, setDone] = useState(false);
-  const [selectedCarData, setSelectedCarData] = useState<CarItem | null>(null);
-  const [selectedCarId, setSelectedCarId] = useState(0);
+  const [selectedCarData, setSelectedCarData] = useState<CarItem | null>(preSelectedCar);
+  const [selectedCarId, setSelectedCarId] = useState(preSelectedCar?.id ?? 0);
   const [downPaymentPercent, setDownPaymentPercent] = useState(20);
   const [term, setTerm] = useState(48);
   const [personalInfo, setPersonalInfo] = useState<IPersonalInfo | null>(null);
@@ -67,7 +71,7 @@ export default function FinanceCalculatorPage() {
         dir={i18n.dir()}
         className="relative w-full overflow-hidden bg-[#0A0A0A] px-4 py-10 sm:py-14"
       >
-        <div className="relative mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <p className="mb-3 text-[13px] font-semibold text-[#C5232B]">
             {t("financeCalculator.badge", "حاسبة الأقساط")}
           </p>
@@ -82,7 +86,7 @@ export default function FinanceCalculatorPage() {
 
       {/* Content */}
       <section className="w-full px-4 py-10 sm:py-14">
-        <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
           {!done && (
             <div className="mb-10">

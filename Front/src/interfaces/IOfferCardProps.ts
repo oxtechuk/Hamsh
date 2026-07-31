@@ -3,4 +3,5 @@ export interface IOfferCardProps {
   title?: string;
   buttonText: string;
   buttonTo: string;
+  badge?: string;
 }

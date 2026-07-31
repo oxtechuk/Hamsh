@@ -45,7 +45,7 @@ export default function CompareSummary({
   return (
     <section
       dir={i18n.dir()}
-      className="mx-auto w-full max-w-[1280px] px-4 pb-10"
+      className="mx-auto w-full max-w-7xl px-4 pb-10"
     >
       <div
         className={[

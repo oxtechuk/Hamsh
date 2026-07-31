@@ -230,9 +230,10 @@ export default function Home() {
           t("hero.titleLine2Highlight", "تليق فيك")
         }
         description={data?.hero?.description || undefined}
-        browseButtonText={data?.hero?.button_1?.text || undefined}
+        browseButtonText={data?.hero?.button_1?.text || "undfined"}
         calculatorButtonText={data?.hero?.button_2?.text || undefined}
         calculatorButtonTo={data?.hero?.button_2?.url || "/finance-calculator"}
+        
         stats={data?.homepage_stats?.map((s) => ({ value: s.value, label: s.label }))}
       />
 

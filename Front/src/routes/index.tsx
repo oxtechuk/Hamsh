@@ -13,66 +13,64 @@ import BlogDetailsPage from "../pages/BlogDetailsPage";
 import ContactPage from "../pages/ContactPage";
 import FinanceCalculatorPage from "../pages/FinanceCalculatorPage";
 import BrandsPage from "../pages/BrandsPage";
-import OrdersPage from "../pages/OrdersPage";
 import SpecialOrderPage from "../pages/SpecialOrderPage";
 import OrdinaryOrderPage from "../pages/OrdinaryOrderPage";
 
-export const router = createBrowserRouter([
+export const router = createBrowserRouter(
+  [
+    {
+      path: "/",
+      Component: RootLayout,
+      errorElement: <NotFoundPage />,
+      children: [
+        {
+          index: true,
+          Component: HomePage,
+        },
+        { path: "/cars", element: <AllCarsPage /> },
+        { path: "/cars/:slug", element: <CarDetailsPage /> },
+        { path: "/compare", element: <ComparePage /> },
+        { path: "/offers", element: <OffersPage /> },
+        {
+          path: "/about",
+          element: <AboutPage />,
+        },
+        {
+          path: "/blog",
+          element: <BlogsPage />,
+        },
+        {
+          path: "/blog/:slug",
+          element: <BlogDetailsPage />,
+        },
+        {
+          path: "/contact",
+          element: <ContactPage />,
+        },
+        {
+          path: "/finance-calculator",
+          element: <FinanceCalculatorPage />,
+        },
+        {
+          path: "/brands",
+          element: <BrandsPage />,
+        },
+        {
+          path: "/orders/special",
+          element: <SpecialOrderPage />,
+        },
+        {
+          path: "/orders/ordinary",
+          element: <OrdinaryOrderPage />,
+        },
+        {
+          path: "*",
+          Component: NotFoundPage,
+        },
+      ],
+    },
+  ],
   {
-    path: "/",
-    Component: RootLayout,
-    errorElement: <NotFoundPage />,
-    children: [
-      {
-        index: true,
-        Component: HomePage,
-      },
-      { path: "/cars", element: <AllCarsPage /> },
-      { path: "/cars/:slug", element: <CarDetailsPage /> },
-      { path: "/compare", element: <ComparePage /> },
-      { path: "/offers", element: <OffersPage /> },
-      {
-        path: "/about",
-        element: <AboutPage />,
-      },
-      {
-        path: "/blog",
-        element: <BlogsPage />,
-      },
-      {
-        path: "/blog/:slug",
-        element: <BlogDetailsPage />,
-      },
-      {
-        path: "/contact",
-        element: <ContactPage />,
-      },
-      {
-        path: "/finance-calculator",
-        element: <FinanceCalculatorPage />,
-      },
-      {
-        path: "/brands",
-        element: <BrandsPage />,
-      },
-      {
-        path: "/orders",
-        element: <OrdersPage />,
-      },
-      {
-        path: "/orders/special",
-        element: <SpecialOrderPage />,
-      },
-      {
-        path: "/orders/ordinary",
-        element: <OrdinaryOrderPage />,
-      },
-      {
-        path: "*",
-        Component: NotFoundPage,
-      },
-    ],
+    basename: import.meta.env.BASE_URL,
   },
-], {
-  basename: import.meta.env.BASE_URL,
-});
+);

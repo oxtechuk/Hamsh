@@ -66,7 +66,7 @@ export default function Header({
                     [
                       "transition-colors duration-200 whitespace-nowrap inline-block pb-0.5",
                       isActive || (item.path !== "/" && window.location.pathname.startsWith(item.path))
-                        ? "text-[var(--brand-secondary-color)] border-b-2 border-[var(--brand-secondary-color)]"
+                        ? "text-[var(--brand-secondary-color)]! border-b-2 border-[var(--brand-secondary-color)]"
                         : "text-[#1F2937] border-b-2 border-transparent hover:border-[var(--brand-secondary-color)] hover:text-[var(--brand-secondary-color)]",
                     ].join(" ")
                   }

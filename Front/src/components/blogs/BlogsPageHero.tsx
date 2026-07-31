@@ -8,9 +8,6 @@ import { useLanguageStore } from "../../store/language.store";
 export default function BlogsPageHero({
   title,
   description,
-  categories,
-  activeCategory,
-  onCategoryChange,
 }: IBlogsPageHeroProps) {
   const { t } = useTranslation();
   const direction = useLanguageStore((state) => state.direction);
@@ -22,7 +19,7 @@ export default function BlogsPageHero({
       dir={direction}
       className="w-full py-10 sm:py-12 lg:py-14"
     >
-      <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div
           className={[
             "flex flex-col gap-8",
@@ -58,8 +55,8 @@ export default function BlogsPageHero({
 
             <h1
               className={[
-                "mt-5 text-[34px] font-extrabold leading-[1.15]",
-                "text-[#C5232B]",
+                "mt-5 leading-[1.15] font-bold",
+                "text-[var(--brand-secondary-color)]",
                 "sm:text-[42px] lg:text-[48px]",
               ].join(" ")}
               dangerouslySetInnerHTML={{
@@ -74,52 +71,6 @@ export default function BlogsPageHero({
             )}
           </div>
 
-          {/* Categories */}
-          {categories.length > 0 && (
-            <div
-              className={[
-                "flex flex-wrap items-center gap-2.5",
-                isRTL
-                  ? "justify-start lg:justify-end"
-                  : "justify-start",
-              ].join(" ")}
-            >
-              {categories.map((category) => {
-                const isActive =
-                  category.value === activeCategory;
-
-                return (
-                  <button
-                    key={category.value}
-                    type="button"
-                    onClick={() =>
-                      onCategoryChange?.(category.value)
-                    }
-                    className={[
-                      "flex min-h-[38px] items-center justify-center",
-                      "rounded-[4px] px-5",
-                      "text-[13px] font-bold",
-                      "transition duration-300",
-                      isActive
-                        ? [
-                            "bg-[#C5232B]",
-                            "text-white",
-                            "shadow-[0_5px_14px_rgba(197,35,43,0.14)]",
-                          ].join(" ")
-                        : [
-                            "bg-[#F2F2F2]",
-                            "text-[#858589]",
-                            "hover:bg-[#E8E8E8]",
-                            "hover:text-[#C5232B]",
-                          ].join(" "),
-                    ].join(" ")}
-                  >
-                    {category.label}
-                  </button>
-                );
-              })}
-            </div>
-          )}
         </div>
       </div>
     </section>

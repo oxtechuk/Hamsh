@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { Crosshair, HandHeart, Sparkles } from "lucide-react";
 import { formatNumber } from "../utils/formatNumber";
+import LazyImg from "./LazyImg";
 import type {
   IAboutValueItem,
   IAboutStorySectionProps,
@@ -69,7 +70,7 @@ export default function AboutStorySection({
       dir={i18n.dir()}
       className={`w-full bg-[#FAF9F7] py-16 sm:py-20 lg:py-24 ${className}`}
     >
-      <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Top: text + images */}
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[1fr_1.05fr] lg:gap-20">
           <div className="text-start">
@@ -97,19 +98,17 @@ export default function AboutStorySection({
           <div className="relative mx-auto w-full max-w-[600px]">
             <div className="grid grid-cols-[1fr_1.05fr] items-center gap-4">
               <div className="overflow-hidden rounded-[14px] bg-[#E8E8E8]">
-                <img
+                <LazyImg
                   src={primaryImage}
                   alt=""
-                  loading="lazy"
                   className="h-[365px] w-full object-cover sm:h-[405px]"
                 />
               </div>
               <div className="space-y-4">
                 <div className="overflow-hidden rounded-[14px] bg-[#E8E8E8]">
-                  <img
+                  <LazyImg
                     src={secondaryImage}
                     alt=""
-                    loading="lazy"
                     className="h-[210px] w-full object-cover sm:h-[240px]"
                   />
                 </div>

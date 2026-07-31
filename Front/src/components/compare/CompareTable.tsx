@@ -17,7 +17,7 @@ export default function CompareTable({
   return (
     <section
       dir={i18n.dir()}
-      className="mx-auto w-full max-w-[1250px] space-y-5 pb-20"
+      className="mx-auto w-full max-w-7xl space-y-5 pb-20"
     >
       {sections.map((section, sectionIndex) => (
         <ComparisonSection

@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { useSettingsStore } from "../store/settings.store";
+import { Link } from "react-router-dom";
 import type { IContactCtaSectionProps } from "../interfaces/IContactCtaSectionProps";
 
 export default function ContactCtaSection({
@@ -9,10 +9,6 @@ export default function ContactCtaSection({
   phoneText,
 }: IContactCtaSectionProps) {
   const { i18n, t } = useTranslation();
-  const settings = useSettingsStore((s) => s.settings);
-
-  const phone = settings?.contact?.phone ?? "";
-  const resolvedHref = phone ? `tel:${phone.replace(/\s+/g, "")}` : "/contact";
 
   const title = [titleWhite, titleOrange].filter(Boolean).join(" ");
 
@@ -22,7 +18,7 @@ export default function ContactCtaSection({
       className="w-full py-8 sm:py-10 lg:py-12"
       style={{}}
     >
-      <div className="mx-auto max-w-[1480px] px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div
           className={[
             "flex min-h-[260px] items-center justify-center",
@@ -58,8 +54,8 @@ export default function ContactCtaSection({
               </p>
             )}
 
-            <a
-              href={resolvedHref}
+            <Link
+              to="/orders/ordinary"
               className={[
                 "mt-10 flex h-[64px] min-w-[210px]",
                 "items-center justify-center",
@@ -72,7 +68,7 @@ export default function ContactCtaSection({
               ].join(" ")}
             >
               {phoneText || t("contactCta.button", "تواصل معنا")}
-            </a>
+            </Link>
           </div>
         </div>
       </div>

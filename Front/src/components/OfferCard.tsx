@@ -8,6 +8,7 @@ export default function OfferCard({
   title,
   buttonText,
   buttonTo,
+  badge,
 }: IOfferCardProps) {
   const navigate = useNavigate();
 
@@ -20,6 +21,16 @@ export default function OfferCard({
 
       {title && (
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+      )}
+
+      {badge && (
+        <div className="absolute top-4 right-4 z-10 bg-[var(--brand-secondary-color,#c0272d)] rounded-[10px] p-[3px] shadow-lg">
+          <div className="rounded-[8px] border-2 border-white/60 px-4 py-1.5">
+            <span className="text-white text-[15px] font-bold">
+              {badge}
+            </span>
+          </div>
+        </div>
       )}
 
       {title && (

@@ -4,7 +4,7 @@ import type { IFaqAccordionProps } from "../../interfaces/IFaqAccordionProps";
 export default function FaqAccordion({ faq, isOpen, onToggle }: IFaqAccordionProps) {
   return (
     <div
-      className={`overflow-hidden rounded-[14px] border bg-white transition ${
+      className={`overflow-hidden rounded-[14px] border  transition ${
         isOpen
           ? "border-[var(--brand-secondary-color)]/35"
           : "border-[var(--brand-secondary-color)]/25"
@@ -13,7 +13,7 @@ export default function FaqAccordion({ faq, isOpen, onToggle }: IFaqAccordionPro
       <button
         type="button"
         onClick={() => onToggle(faq.id)}
-        className="flex w-full items-center justify-between gap-5 px-7 py-7 text-end"
+        className="flex w-full items-center justify-between gap-5 px-7 py-7 text-start"
       >
         <span className="text-[19px] leading-8 text-[#07111F] font-bold">
           {faq.question}

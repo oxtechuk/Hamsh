@@ -51,7 +51,7 @@ export default function BlogCard({
               "start-5",
               "inline-flex min-h-[30px] items-center justify-center",
               "rounded-[6px] bg-[var(--brand-secondary-color)] px-2",
-              "text-[11px] text-white",
+              "text-[13px] text-white font-semibold",
               "shadow-[0_8px_20px_rgba(0,0,0,0.12)]",
             ].join(" ")}
           >
@@ -88,7 +88,7 @@ export default function BlogCard({
             "mt-3 line-clamp-2 text-start",
             "text-[16px] font-bold leading-[1.45]",
             "text-[#080808]",
-            "sm:text-[29px]",
+            "sm:text-[16px]",
           ].join(" ")}
         >
           {title}

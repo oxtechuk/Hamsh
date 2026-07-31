@@ -49,7 +49,7 @@ export default function ComparePage() {
   return (
     <div dir={dir} className="min-h-screen overflow-x-hidden bg-[#f3f6fa]">
       <div className="relative z-20 mt-[80px] px-6 pb-20">
-        <div className="mx-auto max-w-[1200px]">
+        <div className="mx-auto max-w-7xl">
           <div className="grid grid-cols-[minmax(280px,380px)_1fr_minmax(280px,380px)] items-start gap-12 max-lg:grid-cols-1 max-lg:max-w-[460px] max-lg:mx-auto max-lg:gap-7">
             {/* Car 1 slot */}
             <div className="max-lg:order-1">

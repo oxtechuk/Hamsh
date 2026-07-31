@@ -74,16 +74,21 @@ export default function PurchaseExperienceSection({
   return (
     <section
       dir={direction}
-      className="w-full bg-[#040609] py-16 text-white sm:py-20"
+      className="relative w-full overflow-hidden bg-[#040609] py-16 text-white sm:py-20"
     >
-      <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
+      {/* Red glow — start side */}
+      <div className="pointer-events-none absolute start-0 top-1/2 h-[400px] w-[300px] -translate-y-1/2 rounded-full bg-[#C5232B] opacity-[0.12] blur-[80px]" />
+      {/* Red glow — end side */}
+      <div className="pointer-events-none absolute end-0 top-1/2 h-[400px] w-[300px] -translate-y-1/2 rounded-full bg-[#C5232B] opacity-[0.12] blur-[80px]" />
+
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Features */}
         <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:mt-14 lg:grid-cols-4 lg:gap-5">
           {resolvedFeatures.map((feature) => (
             <article
               key={feature.id}
               className={[
-                "group min-h-[175px] rounded-[18px]",
+                "group relative min-h-[175px] rounded-[18px] overflow-hidden",
                 "border border-[#30343B]",
                 "bg-[#262A30]",
                 "px-6 pb-5 pt-4",

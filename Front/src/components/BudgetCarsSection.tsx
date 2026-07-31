@@ -65,8 +65,7 @@ export default function BudgetCarsSection({
 
   const defaultRanges = useDefaultRanges(t);
   const resolvedRanges = ranges ?? defaultRanges;
-
-  if (!cars.length) return null;
+  const isEmpty = cars.length === 0;
 
   return (
     <section
@@ -74,7 +73,7 @@ export default function BudgetCarsSection({
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
-      <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
         {/* Header bar */}
         <div className={`mb-8 flex flex-wrap items-center justify-between gap-4 `}>
@@ -88,42 +87,57 @@ export default function BudgetCarsSection({
           />
         </div>
 
-        {/* Carousel */}
-        <div ref={containerRef} className="overflow-hidden">
-          <div
-            className="flex"
-            style={{
-              transform: `translateX(${translateX}px)`,
-              transition: animated ? "transform 300ms ease-in-out" : "none",
-            }}
-            onTransitionEnd={onTransitionEnd}
-          >
-            {track.map((car, i) => (
+        {/* Carousel / Empty state */}
+        {isEmpty ? (
+          <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
+            <span className="text-[48px]">🚗</span>
+            <p className="text-[18px] font-bold text-[#0D0D0D]">
+              {t("budgetCars.empty.title", "لا توجد سيارات")}
+            </p>
+            <p className="text-[14px] text-[#9CA3AF]">
+              {t("budgetCars.empty.subtitle", "لا توجد سيارات ضمن هذا النطاق السعري حالياً")}
+            </p>
+          </div>
+        ) : (
+          <>
+            {/* Carousel */}
+            <div ref={containerRef} className="overflow-hidden">
               <div
-                key={`${car.id}-${i}`}
-                dir={isRTL ? "rtl" : "ltr"}
-                style={{ width: `${cardWidth}px`, flexShrink: 0 }}
+                className="flex"
+                style={{
+                  transform: `translateX(${translateX}px)`,
+                  transition: animated ? "transform 300ms ease-in-out" : "none",
+                }}
+                onTransitionEnd={onTransitionEnd}
               >
-                <CarCard {...car} />
+                {track.map((car, i) => (
+                  <div
+                    key={`${car.id}-${i}`}
+                    dir={isRTL ? "rtl" : "ltr"}
+                    style={{ width: `${cardWidth}px`, flexShrink: 0 }}
+                  >
+                    <CarCard {...car} />
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
+            </div>
 
-        {/* Arrows */}
-        {canLoop && (
-          <div dir="ltr" className="mt-8 flex items-center justify-center gap-6">
-            <SlideArrow
-              direction="prev"
-              onClick={isRTL ? next : prev}
-              className="h-10! w-10! rounded-[5px]! border-[var(--brand-secondary-color)]! bg-transparent! text-[var(--brand-secondary-color)]! shadow-none!"
-            />
-            <SlideArrow
-              direction="next"
-              onClick={isRTL ? prev : next}
-              className="h-10! w-10! rounded-[5px]! border-[var(--brand-secondary-color)]! bg-transparent! text-[var(--brand-secondary-color)]! shadow-none!"
-            />
-          </div>
+            {/* Arrows */}
+            {canLoop && (
+              <div dir="ltr" className="mt-8 flex items-center justify-center gap-6">
+                <SlideArrow
+                  direction="prev"
+                  onClick={isRTL ? next : prev}
+                  className="h-10! w-10! rounded-[5px]! border-[var(--brand-secondary-color)]! bg-transparent! text-[var(--brand-secondary-color)]! shadow-none!"
+                />
+                <SlideArrow
+                  direction="next"
+                  onClick={isRTL ? prev : next}
+                  className="h-10! w-10! rounded-[5px]! border-[var(--brand-secondary-color)]! bg-transparent! text-[var(--brand-secondary-color)]! shadow-none!"
+                />
+              </div>
+            )}
+          </>
         )}
       </div>
     </section>

@@ -35,7 +35,7 @@ export default function SpecialOrderStepTwo({
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    if (!data.brand) return;
+    if (!data.brand || !data.color || !data.year) return;
     onNext();
   };
 
@@ -51,7 +51,7 @@ export default function SpecialOrderStepTwo({
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label className="mb-3 block text-start text-[14px] font-bold text-[#111111]">
-            {t("specialOrder.step2.brand", "العلامة التجارية")}
+            {t("specialOrder.step2.brand", "العلامة التجارية")}<span className="text-red-500">*</span>
           </label>
           <div className="flex flex-wrap justify-start gap-2">
             {BRANDS.map((brand) => (
@@ -91,7 +91,7 @@ export default function SpecialOrderStepTwo({
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="mb-1.5 block text-start text-[14px] font-bold text-[#111111]">
-              {t("specialOrder.step2.color", "اللون المفضل")}
+              {t("specialOrder.step2.color", "اللون المفضل")}<span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -99,11 +99,12 @@ export default function SpecialOrderStepTwo({
               onChange={(e) => onChange("color", e.target.value)}
               placeholder=""
               className={fieldCls}
+              required
             />
           </div>
           <div>
             <label className="mb-1.5 block text-start text-[14px] font-bold text-[#111111]">
-              {t("specialOrder.step2.year", "سنة الموديل")}
+              {t("specialOrder.step2.year", "سنة الموديل")}<span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -111,6 +112,7 @@ export default function SpecialOrderStepTwo({
               onChange={(e) => onChange("year", e.target.value)}
               placeholder=""
               className={fieldCls}
+              required
             />
           </div>
         </div>
@@ -125,7 +127,7 @@ export default function SpecialOrderStepTwo({
           </button>
           <button
             type="submit"
-            disabled={!data.brand}
+            disabled={!data.brand || !data.color || !data.year}
             className="flex h-[52px] flex-1 items-center justify-center rounded-[8px] bg-[var(--brand-secondary-color)] text-[15px] font-bold text-white transition hover:bg-[#A91D24] disabled:opacity-40"
           >
             {t("specialOrder.step2.nextButton", "التالي — الميزانية")}
