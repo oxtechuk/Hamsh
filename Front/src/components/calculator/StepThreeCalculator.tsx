@@ -3,11 +3,12 @@ import { Send } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 
-import { calculateFinance, submitCalculatorLead } from "../../services/api";
+import { calculateFinance, submitCalculatorLead, getCalculatorSettings } from "../../services/api";
 import { useLanguageStore } from "../../store/language.store";
 import FinanceSliderStyles from "./FinanceSliderStyles";
 import FinanceSummaryCard from "./FinanceSummaryCard";
 import FinanceDetailsForm from "./FinanceDetailsForm";
+import OtpModal from "./OtpModal";
 
 import type { ICalculateData } from "../../interfaces/ICalculatorTypes";
 import type { IStepTwoCalculatorProps } from "../../interfaces/IStepTwoCalculatorProps";
@@ -30,13 +31,21 @@ export default function StepThreeCalculator({
   const [monthlyObligations, setMonthlyObligations] = useState(
     personalInfo.obligations ?? "",
   );
+  const [employerSector, setEmployerSector] = useState("private_accredited");
+  const [wantDebtConsolidation, setWantDebtConsolidation] = useState(false);
   const [isCalculating, setIsCalculating] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [otpEnabled, setOtpEnabled] = useState(false);
+  const [isOtpModalOpen, setIsOtpModalOpen] = useState(false);
 
   const carPrice = Number(selectedCar.price) || 0;
   const carId = Number(selectedCar.id) || 0;
   const downPayment = Math.round((carPrice * downPaymentPercent) / 100);
   const riyal = t("financeCalculator.step3.riyal", "ر.س");
+
+  useEffect(() => {
+    getCalculatorSettings().then((s) => setOtpEnabled(s.otp_enabled));
+  }, []);
 
   useEffect(() => {
     if (!carPrice) {
@@ -71,18 +80,15 @@ export default function StepThreeCalculator({
   const totalInterest = calculation?.total_interest ?? 0;
   const annualRate = calculation?.annual_rate ?? 0;
 
-  const handleSubmit = async () => {
-    if (!monthlyIncome.trim() || !monthlyObligations.trim()) {
-      toast.error(
-        t(
-          "financeCalculator.validation.fillRequired",
-          "يرجى تعبئة جميع الحقول المطلوبة",
-        ),
-      );
-      return;
-    }
+  const submitLeadCore = async () => {
     setIsSubmitting(true);
     try {
+      let combinedNotes = personalInfo.message ? `${personalInfo.message}\n` : "";
+      combinedNotes += `جهة العمل: ${employerSector}`;
+      if (wantDebtConsolidation) {
+        combinedNotes += ` | يرغب في خيار الحلول التمويلية وتوحيد الالتزامات`;
+      }
+
       await submitCalculatorLead({
         name: personalInfo.fullName,
         phone: personalInfo.phone,
@@ -90,7 +96,7 @@ export default function StepThreeCalculator({
         city: personalInfo.city,
         purpose: personalInfo.purpose,
         car_ids: [carId],
-        notes: personalInfo.message,
+        notes: combinedNotes,
         monthly_obligations: Number(monthlyObligations) || 0,
         salary: Number(monthlyIncome) || 0,
       });
@@ -104,6 +110,24 @@ export default function StepThreeCalculator({
       );
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!monthlyIncome.trim() || !monthlyObligations.trim()) {
+      toast.error(
+        t(
+          "financeCalculator.validation.fillRequired",
+          "يرجى تعبئة جميع الحقول المطلوبة",
+        ),
+      );
+      return;
+    }
+
+    if (otpEnabled) {
+      setIsOtpModalOpen(true);
+    } else {
+      await submitLeadCore();
     }
   };
 
@@ -123,6 +147,11 @@ export default function StepThreeCalculator({
           setMonthlyIncome={setMonthlyIncome}
           monthlyObligations={monthlyObligations}
           setMonthlyObligations={setMonthlyObligations}
+          monthlyPayment={monthlyPayment}
+          employerSector={employerSector}
+          setEmployerSector={setEmployerSector}
+          wantDebtConsolidation={wantDebtConsolidation}
+          setWantDebtConsolidation={setWantDebtConsolidation}
           riyal={riyal}
         />
         <FinanceSummaryCard
@@ -162,6 +191,16 @@ export default function StepThreeCalculator({
           {t("financeCalculator.step3.backButton", "رجوع")}
         </button>
       </div>
+
+      <OtpModal
+        isOpen={isOtpModalOpen}
+        phone={personalInfo.phone}
+        onClose={() => setIsOtpModalOpen(false)}
+        onVerified={async () => {
+          setIsOtpModalOpen(false);
+          await submitLeadCore();
+        }}
+      />
     </section>
   );
 }

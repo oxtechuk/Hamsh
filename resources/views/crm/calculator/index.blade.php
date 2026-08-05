@@ -26,18 +26,38 @@
             @endcan
         </div>
 
-        
-
-        @if ($errors->any())
-            <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm rounded-4 mb-4">
-                <ul class="mb-0 small fw-bold">
-                    @foreach ($errors->all() as $e)
-                        <li>{{ $e }}</li>
-                    @endforeach
-                </ul>
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm rounded-4 mb-4">
+                <span class="fw-bold"><i class="bi bi-check-circle me-1"></i> {{ session('success') }}</span>
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
+
+        {{-- إعداد رمز التحقق OTP --}}
+        @can('manage-calculator-settings')
+        <div class="card border-0 shadow-sm mb-4 rounded-4 overflow-hidden">
+            <div class="card-body p-4 d-flex align-items-center justify-content-between flex-wrap gap-3">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="avatar avatar-md bg-danger-subtle text-danger rounded-circle d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                        <i class="bi bi-shield-lock fs-4"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-1 fw-bold text-dark">{{ __('إعداد رمز التحقق (Twilio OTP)') }}</h6>
+                        <p class="text-muted mb-0 small">{{ __('عند التفعيل، سيتوجب على العميل في حاسبة التمويل تأكيد رقم جواله عبر رمز OTP قبل تقديم الطلب.') }}</p>
+                    </div>
+                </div>
+                <form action="{{ route('calculator.otp.toggle') }}" method="POST" class="d-flex align-items-center gap-2">
+                    @csrf
+                    <div class="form-check form-switch fs-5 mb-0">
+                        <input class="form-check-input" type="checkbox" name="enable_twilio_otp" value="1" role="switch" id="enableOtpSwitch" {{ !empty($otpEnabled) ? 'checked' : '' }} onchange="this.form.submit()">
+                        <label class="form-check-label fs-6 fw-bold text-dark ms-2" for="enableOtpSwitch">
+                            {{ !empty($otpEnabled) ? __('مفعّل') : __('معطّل') }}
+                        </label>
+                    </div>
+                </form>
+            </div>
+        </div>
+        @endcan
 
         {{-- البنوك --}}
         <div class="card border-0 shadow-sm mb-5 rounded-4 overflow-hidden">

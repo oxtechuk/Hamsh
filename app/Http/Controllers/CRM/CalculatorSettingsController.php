@@ -5,6 +5,7 @@ namespace App\Http\Controllers\CRM;
 use App\Http\Controllers\Controller;
 use App\Models\CalculatorBank;
 use App\Models\CalculatorFactor;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -14,8 +15,21 @@ class CalculatorSettingsController extends Controller
     {
         $banks = CalculatorBank::query()->orderBy('sort_order')->orderBy('id')->get();
         $factors = CalculatorFactor::query()->orderBy('type')->orderBy('sort_order')->orderBy('id')->get()->groupBy('type');
+        $otpSetting = Setting::where('key', 'enable_twilio_otp')->first();
+        $otpEnabled = $otpSetting ? (bool) $otpSetting->value : false;
 
-        return view('crm.calculator.index', compact('banks', 'factors'));
+        return view('crm.calculator.index', compact('banks', 'factors', 'otpEnabled'));
+    }
+
+    public function toggleOtp(Request $request)
+    {
+        $enabled = $request->boolean('enable_twilio_otp');
+        Setting::updateOrCreate(
+            ['key' => 'enable_twilio_otp'],
+            ['value' => $enabled]
+        );
+
+        return back()->with('success', __('تم تحديث إعداد رمز التحقق OTP بنجاح'));
     }
 
     public function storeBank(Request $request)

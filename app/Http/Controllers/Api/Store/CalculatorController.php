@@ -10,6 +10,7 @@ use App\Http\Requests\Api\Store\CalculatorOtpSendRequest;
 use App\Http\Requests\Api\Store\CalculatorOtpVerifyRequest;
 use App\Http\Resources\Store\CalculatorBankResource;
 use App\Models\CalculatorBank;
+use App\Models\Setting;
 use App\Services\Api\Store\CalculatorApiService;
 
 final class CalculatorController extends ApiBaseController
@@ -27,6 +28,16 @@ final class CalculatorController extends ApiBaseController
         return $this->respondSuccess(
             CalculatorBankResource::collection($banks),
         );
+    }
+
+    public function settings()
+    {
+        $otpSetting = Setting::where('key', 'enable_twilio_otp')->first();
+        $otpEnabled = $otpSetting ? (bool) $otpSetting->value : false;
+
+        return $this->respondSuccess([
+            'otp_enabled' => $otpEnabled,
+        ]);
     }
 
     public function calculate(CalculatorCalculateRequest $request)

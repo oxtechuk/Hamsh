@@ -144,25 +144,25 @@ export default function HomeHero({
     <>
     <section
       dir={direction}
-      className="w-full overflow-hidden  py-10 sm:py-14 lg:min-h-[680px] lg:py-16"
+      className="w-full overflow-hidden py-6 sm:py-14 lg:min-h-[680px] lg:py-16 pb-20 sm:pb-16"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[auto_1fr] lg:gap-20 xl:gap-28">
+        <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-[auto_1fr] lg:gap-20 xl:gap-28">
           {/* Hero content */}
-          <div className="order-2 text-center lg:order-1 lg:text-start">
+          <div className="order-1 text-center lg:order-1 lg:text-start">
             {/* First heading line */}
-            <div className="flex flex-wrap items-center justify-center gap-3 lg:justify-start">
-              <span className="text-[44px] font-black leading-none tracking-[-2px] text-[#060709] sm:text-[58px] xl:text-[72px]">
+            <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 lg:justify-start">
+              <span className="text-[32px] font-black leading-none tracking-[-1px] sm:tracking-[-2px] text-[#060709] sm:text-[58px] xl:text-[72px]">
                 {resolvedTitlePrefix}
               </span>
 
-              <span className="inline-flex -rotate-[4deg] items-center justify-center rounded-[18px] bg-[var(--brand-secondary-color)]! px-5 pb-3 pt-1 text-[43px] font-black leading-none tracking-[-2px] text-white shadow-[0_10px_25px_rgba(180,34,37,0.18)] sm:px-7 sm:text-[57px] xl:text-[70px]">
+              <span className="inline-flex -rotate-[4deg] items-center justify-center rounded-[12px] sm:rounded-[18px] bg-[var(--brand-secondary-color)]! px-4 sm:px-7 pb-2.5 pt-1 text-[30px] font-black leading-none tracking-[-1px] sm:tracking-[-2px] text-white shadow-[0_10px_25px_rgba(180,34,37,0.18)] sm:text-[57px] xl:text-[70px]">
                 {resolvedTitleHighlight}
               </span>
             </div>
 
             {/* Second heading line */}
-            <h1 className="mt-5 text-[41px] font-black leading-[1.2] tracking-[-2px] text-[#060709] sm:text-[56px] xl:text-[70px]">
+            <h1 className="mt-3 sm:mt-5 text-[30px] font-black leading-[1.25] tracking-[-1px] sm:tracking-[-2px] text-[#060709] sm:text-[56px] xl:text-[70px]">
               <span>{resolvedTitleLine2Prefix}</span>
 
               {resolvedTitleLine2Highlight && (
@@ -175,19 +175,19 @@ export default function HomeHero({
               )}
             </h1>
 
-            <p className="mx-auto mt-7 pt-4 max-w-[610px] text-[15px] font-medium leading-[2] text-[#676767] sm:text-[17px] lg:mx-0">
+            <p className="mx-auto mt-4 sm:mt-7 pt-2 sm:pt-4 max-w-[610px] text-[14px] font-medium leading-[1.8] sm:leading-[2] text-[#676767] sm:text-[17px] lg:mx-0">
               {resolvedDescription}
             </p>
 
             {/* Buttons */}
             <div
               dir="ltr"
-              className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2"
+              className="mt-6 sm:mt-8 grid grid-cols-1 gap-3.5 sm:grid-cols-2"
             >
               <Button
-                to={calculatorButtonTo}
+                to={calculatorButtonTo || "/finance-calculator"}
                 bgColor="bg-[#060709]"
-                className="h-[56px] w-full gap-3 rounded-[5px]! px-6 text-[15px] font-extrabold hover:bg-[#2E3035]!"
+                className="h-[52px] sm:h-[56px] w-full gap-3 rounded-[5px]! px-6 text-[15px] font-extrabold hover:bg-[#2E3035]!"
               >
                 <Calculator size={21} strokeWidth={1.8} />
 
@@ -199,7 +199,7 @@ export default function HomeHero({
 
               <Button
                 bgColor="bg-[var(--brand-secondary-color)]"
-                className="h-[56px] w-full gap-3 rounded-[5px]! px-6 text-[15px] font-extrabold hover:opacity-90!"
+                className="h-[52px] sm:h-[56px] w-full gap-3 rounded-[5px]! px-6 text-[15px] font-extrabold hover:opacity-90!"
                 onClick={() => navigate("/cars")}
               >
                 <ArrowLeft size={22} strokeWidth={1.8} />
@@ -214,21 +214,21 @@ export default function HomeHero({
             {/* Statistics */}
             <div
               dir="ltr"
-              className="mt-8 grid grid-cols-4 border-t border-[#E4E2DF] pt-7"
+              className="mt-6 sm:mt-8 grid grid-cols-3 border-t border-[#E4E2DF] pt-5 sm:pt-7"
             >
               {resolvedStats.map((stat, statIndex) => (
                 <div
                   key={`${stat.value}-${statIndex}`}
                   dir={direction}
-                  className={`px-2 text-center sm:px-5 ${
+                  className={`px-1.5 text-center sm:px-5 ${
                     statIndex > 0 ? "border-l border-[#E4E2DF]" : ""
                   }`}
                 >
-                  <strong className="block text-[23px] font-black leading-tight text-[#060709] sm:text-[28px]">
+                  <strong className="block text-[19px] font-black leading-tight text-[#060709] sm:text-[28px]">
                     {stat.value}
                   </strong>
 
-                  <span className="mt-2 block text-[11px] font-medium text-[#676767] sm:text-[13px]">
+                  <span className="mt-1 sm:mt-2 block text-[10px] font-medium text-[#676767] sm:text-[13px]">
                     {stat.label}
                   </span>
                 </div>
@@ -237,9 +237,9 @@ export default function HomeHero({
           </div>
 
           {/* Car showcase */}
-          <div className="order-1 lg:order-2">
+          <div className="order-2 lg:order-2">
             <div className="relative mx-auto lg:mx-0">
-              <article className="relative h-[470px] overflow-hidden rounded-[24px] bg-[#050608] shadow-[0_22px_55px_rgba(15,23,42,0.14)] sm:h-[520px]">
+              <article className="relative h-[260px] sm:h-[400px] md:h-[470px] sm:h-[520px] overflow-hidden rounded-[20px] sm:rounded-[24px] bg-[#050608] shadow-[0_22px_55px_rgba(15,23,42,0.14)]">
                 {/* Car image */}
                 <LazyImg
                   key={current.id}
@@ -274,8 +274,8 @@ export default function HomeHero({
                         aria-current={slideIndex === index ? "true" : undefined}
                         className={`h-[7px] rounded-full border-0 transition-all duration-300 ${
                           slideIndex === index
-                            ? "w-[58px] bg-[var(--brand-secondary-color)]"
-                            : "w-[20px] bg-[#C7C8CA]"
+                            ? "w-[40px] sm:w-[58px] bg-[var(--brand-secondary-color)]"
+                            : "w-[16px] sm:w-[20px] bg-[#C7C8CA]"
                         }`}
                       />
                     ))}

@@ -1,4 +1,4 @@
-﻿import { Quote } from "lucide-react";
+import { Quote } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useRef, useState, useEffect, useCallback } from "react";
 import SlideArrow from "./SlideArrow";
@@ -149,7 +149,6 @@ export default function AboutTestimonialsSection({
 }
 
 function TestimonialCard({ testimonial }: { testimonial: IAboutTestimonialItem }) {
-  const { i18n } = useTranslation();
   const rating = Math.min(5, Math.max(0, testimonial.rating ?? 5));
 
   return (

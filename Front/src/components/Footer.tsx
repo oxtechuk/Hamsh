@@ -32,7 +32,7 @@ export default function Footer({
 
   const isRTL = direction === "rtl";
 
-  const resolvedLogo = settings?.logo_color || APP_IMAGES.LOGO_WHITE;
+  const resolvedLogo = logoSrc || settings?.logo_color || APP_IMAGES.LOGO_WHITE;
 
   const phone =
     settings?.contact?.phone ?? settings?.contact?.sales_phone ?? propPhone;

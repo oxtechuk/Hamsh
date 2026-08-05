@@ -1,4 +1,3 @@
-import type { IBlogCategory } from "./IBlogCategory";
 import type { IBlogFeaturedCardProps } from "./IBlogFeaturedCardProps";
 
 export interface IBlogsPageHeroProps {

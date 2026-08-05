@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://knoz.oxtech.uk/sitemap.xml
+Sitemap: https://qemt.oxtech.uk/sitemap.xml

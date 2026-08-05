@@ -12,6 +12,14 @@ export default function Button({
   const classes = `${bgColor} ${textColor} flex items-center justify-center px-10 py-4 rounded-[8px] text-lg font-medium hover:opacity-90 transition ${className}`;
 
   if (to) {
+    const isExternal = /^(https?:\/\/|wa\.me|mailto:|tel:)/i.test(to);
+    if (isExternal) {
+      return (
+        <a href={to} target="_blank" rel="noopener noreferrer" className={classes}>
+          {children}
+        </a>
+      );
+    }
     return (
       <NavLink to={to} className={classes}>
         {children}

@@ -3,7 +3,6 @@ import { Clock3 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 import { formatPrice } from "../../utils/format";
-import { padTime } from "../../utils/countdown";
 import type { IOfferListCardProps } from "../../interfaces/IOfferListCardProps";
 import LazyImg from "../LazyImg";
 
@@ -44,7 +43,10 @@ export default function OfferListCard({
           <div
             className="absolute start-4 top-4 z-20 p-[3px] shadow-lg"
           >
-            <div className="rounded-[8px] 0 px-2  bg-[var(--brand-secondary-color)]">
+            <div
+              className="rounded-[8px] px-2 bg-[var(--brand-secondary-color)]"
+              style={badgeColor ? { backgroundColor: badgeColor } : undefined}
+            >
               <span className="text-[15px] text-white">{badge}</span>
             </div>
           </div>

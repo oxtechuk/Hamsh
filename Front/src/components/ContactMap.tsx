@@ -124,9 +124,6 @@ function InfoRow({
   value: string;
   ltr?: boolean;
 }) {
-  const { i18n } = useTranslation();
-  const isRtl = i18n.dir() === "rtl";
-
   return (
     <div className={`flex items-center gap-2 text-start`}>
       <span className="shrink-0 text-[#C5232B]">{icon}</span>

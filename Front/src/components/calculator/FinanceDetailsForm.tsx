@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { TERM_OPTIONS } from "../../constants/calculator.constants";
 import { useLanguageStore } from "../../store/language.store";
 import LazyImg from "../LazyImg";
+import AcceptanceIndicator from "./AcceptanceIndicator";
 import { fmt } from "../../utils/format";
 
 const DOWN_PAYMENT_MIN = 10;
@@ -36,6 +37,11 @@ interface IFinanceDetailsFormProps {
   setMonthlyIncome: (v: string) => void;
   monthlyObligations: string;
   setMonthlyObligations: (v: string) => void;
+  monthlyPayment: number;
+  employerSector: string;
+  setEmployerSector: (v: string) => void;
+  wantDebtConsolidation: boolean;
+  setWantDebtConsolidation: (v: boolean) => void;
   riyal: string;
 }
 
@@ -50,6 +56,11 @@ export default function FinanceDetailsForm({
   setMonthlyIncome,
   monthlyObligations,
   setMonthlyObligations,
+  monthlyPayment,
+  employerSector,
+  setEmployerSector,
+  wantDebtConsolidation,
+  setWantDebtConsolidation,
   riyal,
 }: IFinanceDetailsFormProps) {
   const { t } = useTranslation();
@@ -168,9 +179,9 @@ export default function FinanceDetailsForm({
         <label className="mb-1.5 block text-start text-[13px] font-bold text-[#111111]">
           {t(
             "financeCalculator.step3.monthlyObligations",
-            "الالتزامات الشهرية الحالية",
+            "الالتزامات الشهرية الحالية (ر.س)",
           )}
-          <span className="ms-1 ">*</span>
+          <span className="ms-1">*</span>
         </label>
         <input
           type="number"
@@ -179,13 +190,24 @@ export default function FinanceDetailsForm({
           onChange={(e) => setMonthlyObligations(e.target.value)}
           placeholder={t(
             "financeCalculator.step3.monthlyObligationsPlaceholder",
-            "مثال: 300 (أو صفر إن لم يكن)",
+            "مثال: 800 (أو صفر إن لم يكن)",
           )}
           inputMode="numeric"
           dir="ltr"
           className={`${fieldCls} text-end`}
         />
       </div>
+
+      {/* مؤشر إمكانية القبول والحلول التمويلية */}
+      <AcceptanceIndicator
+        salary={Number(monthlyIncome) || 0}
+        obligations={Number(monthlyObligations) || 0}
+        monthlyPayment={monthlyPayment}
+        employerSector={employerSector}
+        setEmployerSector={setEmployerSector}
+        wantDebtConsolidation={wantDebtConsolidation}
+        setWantDebtConsolidation={setWantDebtConsolidation}
+      />
     </div>
   );
 }

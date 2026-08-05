@@ -21,7 +21,8 @@ export default function BlogTableOfContents({
         {items.map((item) => (
           <li key={item.id}>
             <div
-              className="flex w-full items-center gap-3 text-start text-[13px] font-bold text-[#C5232B]"
+              onClick={() => onClickItem?.(item.id)}
+              className="flex w-full cursor-pointer items-center gap-3 text-start text-[13px] font-bold text-[#C5232B]"
             >
               <span className="flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full bg-[#EFEFEF] text-[11px] text-[#7A7A7A]">
                 {item.index}

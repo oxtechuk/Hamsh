@@ -35,6 +35,7 @@ Route::prefix('store')->name('store.api.')->group(function () {
     Route::get('/booking/meta', [BookingController::class, 'meta'])->name('booking.meta');
     Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
     Route::get('/calculator/banks', [CalculatorController::class, 'banks'])->name('calculator.banks');
+    Route::get('/calculator/settings', [CalculatorController::class, 'settings'])->name('calculator.settings');
     Route::post('/calculator/calculate', [CalculatorController::class, 'calculate'])->name('calculator.calculate');
     Route::post('/calculator/lead', [CalculatorController::class, 'saveLead'])->name('calculator.lead');
     Route::post('/calculator/otp/send', [CalculatorController::class, 'sendOtp'])->name('calculator.otp.send');

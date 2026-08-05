@@ -171,6 +171,7 @@ Route::prefix('crm')->name('crm.')->middleware(['auth:employee', 'guard.employee
         Route::post('calculator/factors', [CalculatorSettingsController::class, 'storeFactor'])->name('calculator.factors.store');
         Route::put('calculator/factors/{calculatorFactor}', [CalculatorSettingsController::class, 'updateFactor'])->name('calculator.factors.update');
         Route::delete('calculator/factors/{calculatorFactor}', [CalculatorSettingsController::class, 'destroyFactor'])->name('calculator.factors.destroy');
+        Route::post('calculator/otp-toggle', [CalculatorSettingsController::class, 'toggleOtp'])->name('calculator.otp.toggle');
     });
 
     // === عملاء الحاسبة ===

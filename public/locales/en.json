@@ -1,716 +1,1045 @@
 {
-  "topbar": {
-    "language": "AR",
-    "phone": "Phone",
-    "email": "Email",
-    "location": "Location",
-    "phoneValue": "540-907-0453",
-    "emailValue": "oxtech.uk@gmail.com",
-    "locationValue": "Ajman 5"
-  },
-  "nav": {
-    "home": "Home",
-    "cars": "Cars",
-    "offers": "Best Offers",
-    "about": "About Us",
-    "blog": "Blog",
-    "contact": "Contact Us"
-  },
-  "carFinder": {
-    "title": "Find a car that suits you",
-    "brand": "Brand / Manufacturer",
-    "brandPlaceholder": "Choose a brand",
-    "brandOptions": {
-      "toyota": "Toyota",
-      "hyundai": "Hyundai",
-      "kia": "Kia"
+    "topbar": {
+        "language": "EN",
+        "phone": "Phone",
+        "email": "Email",
+        "location": "Location",
+        "phoneValue": "540-907-0453",
+        "emailValue": "oxtech.uk@gmail.com",
+        "locationValue": "Ajman 5"
     },
-    "type": "Car Type",
-    "typePlaceholder": "Choose type",
-    "typeOptions": {
-      "sedan": "Sedan",
-      "suv": "SUV",
-      "hatchback": "Hatchback"
+    "nav": {
+        "home": "Home",
+        "cars": "Cars",
+        "offers": "Offers",
+        "calculator": "Finance Calculator",
+        "orders": "Request a Car",
+        "about": "About the Company",
+        "blog": "Blog",
+        "contact": "Contact Us"
     },
-    "category": "Car Category",
-    "categoryPlaceholder": "Choose category",
-    "categoryOptions": {
-      "economy": "Economy",
-      "family": "Family",
-      "luxury": "Luxury"
+    "carFinder": {
+        "title": "Find a Car That Suits You",
+        "brand": "Brand / Manufacturer",
+        "brandPlaceholder": "Select Brand",
+        "brandOptions": {
+            "toyota": "Toyota",
+            "hyundai": "Hyundai",
+            "kia": "Kia"
+        },
+        "type": "Car Type",
+        "typePlaceholder": "Select Type",
+        "typeOptions": {
+            "sedan": "Sedan",
+            "suv": "SUV",
+            "hatchback": "Hatchback"
+        },
+        "category": "Car Category",
+        "categoryPlaceholder": "Select Category",
+        "categoryOptions": {
+            "economy": "Economy",
+            "family": "Family",
+            "luxury": "Luxury"
+        },
+        "year": "Year / Model",
+        "yearPlaceholder": "Select Year",
+        "searchPlaceholder": "Enter the car name, brand, or model...",
+        "searchButton": "Search",
+        "resetButton": "Reset"
     },
-    "year": "Year / Model",
-    "yearPlaceholder": "Choose year",
-    "searchPlaceholder": "Search by car name, brand, or model...",
-    "searchButton": "Show Results",
-    "resetButton": "Reset"
-  },
-  "carCard": {
-    "compare": "Add to compare",
-    "subtitle": "Comfortable family cars",
-    "cashPrice": "Cash price",
-    "monthlyPayment": "Monthly payment",
-    "estimated": "Estimated",
-    "reserve": "Book now",
-    "model": "Model"
-  },
-  "offers": {
-    "titleWhite": "Best Offers,",
-    "titleOrange": "to Ease Your Financing",
-    "buttonText": "All Offers"
-  },
-  "featuredCars": {
-    "titleBlue": "Handpicked",
-    "titleOrange": "for You",
-    "description": "Discover the latest models ready for instant financing with the lowest monthly installment and the best price in the kingdom.",
-    "buttonText": "Browse All Cars",
-    "noCars": "No cars found matching your filters."
-  },
-  "rootLayout": {
-    "logoAlt": "Knoz Cars",
-    "quickLinks": [
-      {
-        "label": "Home",
-        "to": "/"
-      },
-      {
-        "label": "All Cars",
-        "to": "/cars"
-      },
-      {
-        "label": "Our Offers",
-        "to": "/offers"
-      },
-      {
-        "label": "About Us",
-        "to": "/about"
-      },
-      {
-        "label": "Blog",
-        "to": "/blog"
-      }
-    ],
-    "phone": "056 9988 998",
-    "email": "Tese@test.com",
-    "address": "Riyadh, Saudi Arabia",
-    "copyright": "All rights reserved, Konooz Car 2026 ©"
-  },
-  "footer": {
-    "followUs": "Follow Us",
-    "quickLinks": "Quick Links",
-    "contactUs": "Contact Us",
-    "addressLabel": "Address",
-    "emailLabel": "Email Us",
-    "phoneLabel": "Call Us",
-    "privacyPolicy": "Privacy Policy",
-    "termsAndConditions": "Terms & Conditions"
-  },
-  "brandsSection": {
-    "titleBlue": "Choose Your Favorite Brand",
-    "titleOrange": "and Go!",
-    "description": "We've gathered a selection of the world's leading car manufacturers for you to choose the name you trust.",
-    "buttonText": "All Brands",
-    "searchPlaceholder": "Search for a brand...",
-    "categories": [
-      "All",
-      "Luxury",
-      "Economic",
-      "Electric",
-      "SUV",
-      "Family"
-    ],
-    "noResults": "No brands found"
-  },
-  "homePage": {
-    "fallbackOfferButton": "Get the Offer"
-  },
-  "allCarsHero": {
-    "badge": "Limited Time Offers",
-    "title": {
-      "line1": "Own Your Car Today",
-      "line2Prefix": "Without",
-      "line2Highlight": "Down Payment"
+    "carCard": {
+        "compare": "Add to Compare",
+        "subtitle": "Comfortable Family Cars",
+        "cashPrice": "Cash Price",
+        "monthlyPayment": "Monthly Installment",
+        "estimated": "Estimated",
+        "reserve": "Reserve It Now",
+        "details": "More Details",
+        "moreDetails": "More Details",
+        "startsFrom": "Starting From",
+        "month": "Month",
+        "model": "Model"
     },
-    "description": "Best offers on the latest models starting from 1,350 SAR monthly. Don't miss out!",
-    "stats": [
-      {
-        "value": "0%",
-        "label": "Down Payment"
-      },
-      {
-        "value": "+50",
-        "label": "Brands"
-      },
-      {
-        "value": "+500",
-        "label": "Cars Available"
-      }
-    ],
-    "button1": "Browse Our Offers",
-    "button2": "Request Financing"
-  },
-  "carsSidebarFilter": {
-    "search": "Search",
-    "brands": "Brands",
-    "otherFilters": "Other Filters",
-    "all": "All",
-    "engineSystem": "Engine System",
-    "transmission": "Transmission",
-    "fuelType": "Fuel Type",
-    "priceRange": "Price Range",
-    "from": "From",
-    "to": "To",
-    "sar": "SAR",
-    "mobileToggle": "Filters",
-    "apply": "Apply Filters"
-  },
-  "select": {
-    "search": "Search...",
-    "noResults": "No results found"
-  },
-  "allCarsPage": {
-    "noCarsMatch": "No cars match your search",
-    "contactBadge": "Our team is ready to help",
-    "contactTitleWhite": "Do you have",
-    "contactTitleOrange": "a Question?",
-    "contactDescription": "Our team is ready to answer all your questions and help you choose your next car",
-    "contactPhone": "Contact Us",
-    "contactWhatsapp": "WhatsApp"
-  },
-  "allCarsFilterBar": {
-    "searchPlaceholder": "Search by car name, brand, or model...",
-    "all": "All"
-  },
-  "budgetCars": {
-    "titleBlue": "Your Car Within",
-    "titleOrange": "Your Budget",
-    "description": "Choose your next car from a wide selection of the latest models, and enjoy flexible financing solutions designed specifically to fit your budget in all cities of the kingdom.",
-    "buttonText": "Browse All Cars",
-    "ranges": [
-      "3,000 - 4,000 SAR",
-      "4,000 - 6,000 SAR",
-      "7,000 - 9,000 SAR",
-      "More than 9,000 SAR"
-    ]
-  },
-  "financeSolutions": {
-    "titleBlue": "Smart Financing Solutions",
-    "titleOrange": "to Expand Your Fleet",
-    "description": "We offer businesses flexible and comprehensive financing solutions to expand your car fleet, with an integrated service including delivery, maintenance, and contract management.",
-    "buttonText": "Contact Our Team for Help",
-    "stats": [
-      {
-        "label": "Corporate Clients"
-      },
-      {
-        "label": "Funded Cars"
-      },
-      {
-        "label": "Financing Partners"
-      }
-    ],
-    "features": [
-      "Financing up to 100% of the car value",
-      "Car delivery anywhere in the kingdom",
-      "After-sales service and free maintenance",
-      "Comprehensive administrative reports on your requests"
-    ]
-  },
-  "carsShowcase": {
-    "titleBlue": "Handpicked",
-    "titleOrange": "Cars for You",
-    "description": "Find your next car from a wide selection of the latest models with flexible financing solutions that fit your budget and deliver anywhere in the kingdom.",
-    "buttonText": "Browse All Cars",
-    "filters": {
-      "mostRequested": "Most Requested",
-      "readyToDeliver": "Ready to Deliver",
-      "noFinancing": "No Financing Offers",
-      "newCars": "New Cars",
-      "discountedCars": "Discounted Cars"
-    }
-  },
-  "hero": {
-    "titleBlue": "Your Dream Car",
-    "titleOrange": "With Financing on Your Terms!",
-    "description": "We've gathered the latest models and best financing offers in one place. We provide options that make the math easy and deliver your car to your doorstep or anywhere in the kingdom.",
-    "primaryButton": "Browse All Cars",
-    "secondaryButton": "Calculate Your Finance",
-    "cards": [
-      {
-        "title": "Eid Offers Are Still On!",
-        "description": "50% discount on the occasion of Eid",
-        "buttonText": "Discover the Offer"
-      },
-      {
-        "title": "Kia Sportage GLS 1.6L",
-        "description": "Sporty hashtag, limited edition",
-        "buttonText": "Order Now",
-        "badge": "NEW ARRIVAL 2026"
-      }
-    ]
-  },
-  "blogPage": {
-    "readMore": "Read More",
-    "hero": {
-      "badge": "Our Blog",
-      "title": "Knoz Motors <span class=\"highlight\">Blog</span>",
-      "description": "Follow the latest car news, tips, and exclusive articles.",
-      "featuredPost": {
-        "category": "Financing Tips",
-        "title": "How to Choose the Right Financing Plan for Your First Car",
-        "description": "Learn the basic steps to evaluate your budget, understand interest rates, and get the best financing offer that suits your personal needs.",
-        "author": {
-          "name": "Admin",
-          "role": "Financial Advisor"
+    "offers": {
+        "titleWhite": "Best Offers,",
+        "titleOrange": "To Make Financing Easier",
+        "buttonText": "All Offers"
+    },
+    "purchaseExperience": {
+        "title": "An Ownership Experience Like No Other",
+        "description": "We are committed to making every car purchase a better experience, from the moment you choose until after delivery.",
+        "features": {
+            "finance": {
+                "title": "Flexible Financing Solutions",
+                "description": "Partnerships with leading banks and companies to offer you the lowest profit margin that suits you."
+            },
+            "ownership": {
+                "title": "Complete It from Wherever You Are",
+                "description": "Fast and easy procedures to own your car with complete convenience."
+            },
+            "options": {
+                "title": "Endless Options",
+                "description": "A wide selection of cars so you can choose the one that suits you."
+            },
+            "prices": {
+                "title": "Unmissable Prices",
+                "description": "The best market prices, with payment options to suit every budget."
+            }
         }
-      }
     },
-    "latestArticles": {
-      "title": "Latest Articles",
-      "loadMore": "Load More Articles",
-      "loading": "Loading..."
+    "featuredCars": {
+        "titleBlue": "The Latest Cars Have Just Arrived",
+        "titleOrange": "For You",
+        "description": "Discover the latest models ready for instant financing, with the lowest monthly installment and the best price in the Kingdom.",
+        "buttonText": "Browse All Cars",
+        "noCars": "No cars match the selected filters"
     },
-    "details": {
-      "metaDescription": "Read our latest articles about cars, financing tips, and industry insights.",
-      "page": {
-        "loading": "Loading...",
-        "error": "Something went wrong. Please try again."
-      },
-      "related": {
-        "title": "Related Articles"
-      }
-    }
-  },
-  "aboutPage": {
-    "hero": {
-      "badge": "Founded in 2026 · Riyadh, Saudi Arabia",
-      "titleWhite": "We Finance",
-      "titleBlue": "Your Dreams",
-      "subtitle": "And make owning your car easier than you imagine",
-      "description": "Knoz is the leading platform in Saudi Arabia for car financing and sales. We connect the best customers with the best financing terms for over 5 years."
+    "rootLayout": {
+        "logoAlt": "Qimmah Najd Cars",
+        "quickLinks": [
+            {
+                "label": "Home",
+                "to": "/"
+            },
+            {
+                "label": "All Cars",
+                "to": "/cars"
+            },
+            {
+                "label": "Our Offers",
+                "to": "/offers"
+            },
+            {
+                "label": "About Us",
+                "to": "/about"
+            },
+            {
+                "label": "Articles",
+                "to": "/blog"
+            }
+        ],
+        "phone": "056 9988 998",
+        "email": "Tese@test.com",
+        "address": "Riyadh, Saudi Arabia",
+        "copyright": "All rights reserved, Qimmah Najd 2026 ©"
     },
-    "stats": [
-      {
-        "value": "+1,200",
-        "label": "Funded Cars",
-        "description": "Happy Customers"
-      },
-      {
-        "value": "+500",
-        "label": "Satisfied Clients",
-        "description": "Individuals & Corporates"
-      },
-      {
-        "value": "+50",
-        "label": "Brands",
-        "description": "Most Famous Global Brands"
-      },
-      {
-        "value": "5",
-        "label": "Years Experience",
-        "description": "In Saudi Market"
-      }
-    ],
-    "story": {
-      "title": "Our story started from a gap in the market.",
-      "paragraphs": [
-        "We noticed that buying a car - whether new or used - is a process full of complexities and concerns. We decided to change this reality by building an integrated digital platform that puts the customer at the center.",
-        "We believe that technology is the key to simplifying the complexities of financing, and providing the transparency that every buyer deserves, transforming the purchase journey from a daunting task into an enjoyable and trusted experience."
-      ],
-      "missionTitle": "Our Mission",
-      "missionText": "Empowering individuals in the region to own their own cars by providing a secure, transparent platform backed by innovative financing solutions that match their needs and aspirations.",
-      "visionTitle": "Our Vision",
-      "visionText": "To become the first and trusted destination for digital solutions in the automotive sector, where technology meets trust to shape the future of mobility in the Middle East."
+    "footer": {
+        "followUs": "Follow Us",
+        "quickLinks": "Quick Links",
+        "contactUs": "Contact Us",
+        "addressLabel": "Address",
+        "emailLabel": "Email Us",
+        "phoneLabel": "Call Us",
+        "salesPhone": "Sales Department",
+        "financePhone": "Finance Department",
+        "aftersalesPhone": "After-Sales Service",
+        "workingDays": "Working Days",
+        "privacyPolicy": "Privacy Policy",
+        "termsAndConditions": "Terms and Conditions",
+        "servicesTitle": "Services",
+        "companyTitle": "Company",
+        "companyDescription": "Your leading destination for luxury and family cars in Saudi Arabia. We offer the best brands at the best prices with the easiest financing solutions.",
+        "services": {
+            "carFinance": "Car Financing",
+            "cashPurchase": "Cash Purchase",
+            "carReservation": "Car Reservation",
+            "customRequest": "Custom Request"
+        }
     },
-    "partners": {
-      "eyebrow": "Trusted by Top Brands",
-      "titleBlack": "Our Strategic",
-      "titleBlue": "Partners",
-      "description": "We are proud of our partnerships with over 120 brands and authorized distributors across the Kingdom"
+    "brandsSection": {
+        "titleBlue": "Search by Brand",
+        "description": "We have brought together a selection of the world's leading car manufacturers, so you can choose a name you trust.",
+        "buttonText": "View All",
+        "searchPlaceholder": "Enter brand name...",
+        "categories": [
+            "All",
+            "Premium",
+            "Economy",
+            "Electric",
+            "Four-Wheel Drive",
+            "Family"
+        ],
+        "noResults": "No brands found"
     },
-    "dealer": {
-      "title": "Are you a distributor or agent?",
-      "description": "Join our partner network and benefit from a customer base of over 52,000 buyers",
-      "primaryButton": "Join as Partner",
-      "secondaryButton": "Contact Us"
+    "homePage": {
+        "fallbackOfferButton": "Get the Offer"
     },
-    "locations": {
-      "titleBlack": "Our",
-      "titleBlue": "Locations",
-      "branchLabel": "Branch",
-      "mainBranch": "Main Branch",
-      "addressLabel": "Address",
-      "phoneLabel": "Phone",
-      "hoursLabel": "Working Hours",
-      "openInMaps": "Open in Maps",
-      "noMap": "No map available",
-      "mapTitle": "Map of {{city}}"
+    "allCarsHero": {
+        "badge": "Limited-Time Offers",
+        "title": {
+            "line1": "Own Your Car Today",
+            "line2Prefix": "Without",
+            "line2Highlight": "Down Payment"
+        },
+        "description": "The strongest offers on the latest models, with prices starting from SAR 1,350 per month. Do not miss the opportunity!",
+        "stats": [
+            {
+                "value": "0%",
+                "label": "Down Payment"
+            },
+            {
+                "value": "+50",
+                "label": "Brand"
+            },
+            {
+                "value": "+500",
+                "label": "Car Available"
+            }
+        ],
+        "button1": "Browse Our Offers",
+        "button2": "Financing Request"
     },
-    "testimonials": {
-      "badge": "Our customers trust us",
-      "titleBlack": "Our Customers'",
-      "titleBlue": "Opinions",
-      "ratingText": "4.9 out of +12,000 reviews",
-      "goToTestimonial": "Go to testimonial {{number}}"
-    }
-  },
-  "offersPage": {
-    "hero": {
-      "badge": "Limited Time Offers",
-      "title": "Eid Exclusive Offer from Knoz",
-      "description": "We offer you a selection of the strongest cars with financing solutions and direct discounts on the latest models for Eid.",
-      "primaryButton": "Discover the Offer",
-      "secondaryButton": "Finance Calculator"
-    },
-    "grid": {
-      "title": "Browse Offers",
-      "categories": {
+    "carsSidebarFilter": {
+        "search": "Search",
+        "title": "Filters",
+        "brands": "Brands",
+        "carType": "Car Type",
+        "otherFilters": "Other Filters",
         "all": "All",
-        "finance": "Financing Offers",
-        "discounts": "Direct Discounts",
-        "models2026": "2026 Models"
-      },
-      "card": {
-        "priceLabel": "Installment starts from",
-        "priceUnit": "/ month",
-        "buttonText": "Discover Offer"
-      },
-      "loadMore": "Show More Offers"
-    }
-  },
-  "carDetails": {
+        "engineSystem": "Engine System",
+        "transmission": "Transmission",
+        "fuelType": "Fuel Type",
+        "maxPrice": "Maximum Price",
+        "priceRange": "Price Range",
+        "from": "From",
+        "to": "To",
+        "sar": "SAR",
+        "mobileToggle": "Filters",
+        "reset": "Reset",
+        "apply": "Apply Filters"
+    },
+    "select": {
+        "search": "Search...",
+        "noResults": "No Results"
+    },
+    "contactCta": {
+        "badge": "Do Not Wait Any Longer",
+        "title": "Like an Offer? Contact Us Now",
+        "description": "Our team is ready to help you 7 days a week",
+        "phoneText": "Call Now"
+    },
+    "allCarsPage": {
+        "noCarsMatch": "No cars match your search",
+        "availableCars": "Car Available",
+        "contactBadge": "Our Team Is Ready to Help",
+        "contactTitleWhite": "Do You Have",
+        "contactTitleOrange": "A Question?",
+        "contactDescription": "Our team is ready to answer all your questions and help you choose your next car",
+        "contactPhone": "Contact Us",
+        "contactWhatsapp": "WhatsApp",
+        "homeOffers": {
+            "fordTerritoryAlt": "Ford Territory Offer",
+            "kiaSportageAlt": "Kia Sportage Offer",
+            "toyotaCamryAlt": "Toyota Camry Offer",
+            "discoverOffer": "Discover the Offer",
+            "viewDetails": "View Details"
+        }
+    },
+    "allCarsFilterBar": {
+        "searchPlaceholder": "Enter the car name, brand, or model...",
+        "all": "All"
+    },
+    "budgetCars": {
+        "titleBlue": "Your Car Within",
+        "titleOrange": "Your Budget",
+        "all": "All",
+        "description": "Choose your next car from a wide selection of the latest models and enjoy flexible financing solutions designed specifically to suit your budget across all cities in the Kingdom.",
+        "buttonText": "Browse All Cars",
+        "ranges": [
+            "3,000 - 4,000 ﷼",
+            "4,000 - 6,000 ﷼",
+            "7,000 - 9,000 ﷼",
+            "More than SAR 9,000"
+        ],
+        "empty": {
+            "title": "No Cars",
+            "subtitle": "There are currently no cars within this price range"
+        }
+    },
+    "financeSolutions": {
+        "titleBlue": "Smart Financing Solutions",
+        "titleOrange": "To Expand Your Fleet Capacity",
+        "description": "We offer companies flexible and comprehensive financing solutions to expand their vehicle fleets, with an integrated service that includes delivery, maintenance, and contract management.",
+        "buttonText": "Contact Our Team for Assistance",
+        "stats": [
+            {
+                "label": "Corporate Client"
+            },
+            {
+                "label": "Car Financed"
+            },
+            {
+                "label": "Financing Partner"
+            }
+        ],
+        "features": [
+            "Financing up to 100% of the car's value",
+            "Car delivery anywhere in the Kingdom",
+            "Free after-sales service and maintenance",
+            "Comprehensive management reports for your requests"
+        ]
+    },
+    "carsShowcase": {
+        "titleBlue": "Selected for You",
+        "titleOrange": "From Our Cars",
+        "description": "Find your next car from a wide selection of the latest models, with flexible financing solutions that fit your budget and deliver it wherever you are in the Kingdom.",
+        "buttonText": "Browse All Cars",
+        "filters": {
+            "mostRequested": "Most Requested",
+            "readyToDeliver": "Ready for Delivery",
+            "noFinancing": "Offers Without Financing",
+            "newCars": "New Cars",
+            "discountedCars": "Discounted Cars"
+        }
+    },
     "hero": {
-      "price": "Price",
-      "originalPrice": "Original Price",
-      "installmentFrom": "Installment starts from",
-      "saving": "You save",
-      "availableColors": "Available Colors",
-      "orderNow": "Order Now",
-      "calculateFinance": "Calculate Financing",
-      "insideView": "Inside",
-      "outsideView": "Outside",
-      "benefitQuality": "Certified Quality",
-      "benefitInstallment": "Flexible Installment",
-      "benefitSecurePayment": "Secure Payment",
-      "metaDescription": "Explore detailed car specifications, price, features, and flexible financing options."
+        "titleBlue": "The Car of a Lifetime Marketplace",
+        "titleOrange": "With Financing That Fits You!",
+        "description": "We have brought together the latest models and the best financing offers in one place. We give you options that simplify the calculation, plus delivery to your doorstep or anywhere in the Kingdom.",
+        "primaryButton": "Browse All Cars",
+        "secondaryButton": "Calculate Your Financing",
+        "menu": "Menu",
+        "searchPlaceholder": "Search for a car by name or brand...",
+        "filter": "Filter",
+        "startsFrom": "Starting From",
+        "cards": [
+            {
+                "title": "Eid Offers Are Still Available!",
+                "description": "50% Discount for Eid",
+                "buttonText": "Discover the Offer"
+            },
+            {
+                "title": "Kia Sportage GLS 1.6L",
+                "description": "Sporty Hatchback, Limited Edition",
+                "buttonText": "Order It Now",
+                "badge": "NEW ARRIVAL 2026"
+            }
+        ],
+        "slides": [
+            {
+                "subtitle": "Luxury Car Dealership",
+                "title": "Your Dream Car Is Waiting for You",
+                "description": "Discover the latest models with the best financing options. We deliver your car to your doorstep anywhere in the Kingdom."
+            },
+            {
+                "subtitle": "Exclusive Offers",
+                "title": "Bring Your Dream Closer Today",
+                "description": "Carefully selected cars at irresistible prices, with flexible financing plans designed for you."
+            },
+            {
+                "subtitle": "Seasonal Offers",
+                "title": "Special Offers This Season",
+                "description": "Do not miss our limited offers on the most requested cars. Financing is now easier than ever."
+            },
+            {
+                "subtitle": "See It in Motion",
+                "title": "Experience the Drive",
+                "description": "See our latest arrivals and experience true luxury."
+            }
+        ]
     },
-    "specs": {
-      "titleBlue": "Car ",
-      "titleOrange": "Details",
-      "tab": {
-        "features": "Main Features",
-        "specifications": "Technical Specifications",
-        "security": "Security Systems"
-      },
-      "labels": {
-        "hp": "Horsepower",
-        "fuel": "Fuel",
-        "seats": "Seats",
-        "gearbox": "Transmission"
-      }
-    },
-    "page": {
-      "loading": "Loading...",
-      "notFound": "Car not found",
-      "error": "Something went wrong. Please try again."
-    },
-    "relatedCars": {
-      "titleBlue": "Similar Cars ",
-      "titleOrange": "for Your Choice",
-      "description": "Compare and discover a selection of similar cars in class and specifications",
-      "buttonText": "Browse All Cars"
-    }
-  },
-  "comparePage": {
-    "compareTable": "Comparison Table",
-    "compareDescription": "Detailed comparison between two cars of your choice",
-    "specLabel": "Specification",
-    "summaryTitle": "Comparison Summary",
-    "carOne": "Car 1",
-    "carTwo": "Car 2",
-    "points": "points",
-    "selectCar": "Select a car",
-    "searchCar": "Search for a car...",
-    "noResults": "No results",
-    "cancel": "Cancel",
-    "loading": "Loading...",
-    "addCar": "Add a car to compare",
-    "remove": "Remove",
-    "monthlyInstallment": "Monthly Installment",
-    "cashPrice": "Cash Price",
-    "sar": "SAR",
-    "vs": "VS",
-    "all": "All",
-    "sections": {
-      "titles": {
-        "prices": "Prices",
-        "performance": "Performance",
-        "design": "Design",
-        "featuresAndSafety": "Features & Safety",
-        "technicalSpecs": "Technical Specs"
-      },
-      "labels": {
-        "price": "Price",
-        "estimatedInstallment": "Estimated Installment",
-        "power": "Power",
-        "topSpeed": "Top Speed",
-        "acceleration": "Acceleration",
-        "type": "Type",
-        "seats": "Seats",
-        "transmission": "Transmission"
-      }
-    }
-  },
-  "contactPage": {
-    "contactUs": {
-      "eyebrow": "Contact Us",
-      "title": "Send us your message",
-      "description": "Fill the form below and one of our specialists will contact you as soon as possible.",
-      "fullNameLabel": "Full Name",
-      "fullNamePlaceholder": "Mohammed Al-Omari",
-      "phoneLabel": "Phone Number",
-      "phonePlaceholder": "+966 5X XXX XXXX",
-      "emailLabel": "Email",
-      "emailPlaceholder": "name@example.com",
-      "countryLabel": "Country",
-      "subjectLabel": "Subject",
-      "subjectPlaceholder": "Write your subject",
-      "messageLabel": "Your Message",
-      "messagePlaceholder": "Write your inquiry here... the more details you provide, the more accurate and faster our response.",
-      "submitText": "Send Message",
-      "submittingText": "Sending...",
-      "privacyNotice": "Your information is protected and will not be shared with any third party.",
-      "charCount": "char",
-      "countries": [
-        {
-          "label": "Saudi Arabia",
-          "value": "saudi-arabia"
+    "blogPage": {
+        "readMore": "Read More",
+        "hero": {
+            "badge": "Featured Article",
+            "title": "<span class=\"highlight\">Qimmah Najd Cars</span> Blog",
+            "description": "Follow the latest automotive news, tips, and exclusive articles.",
+            "allCategories": "All",
+            "defaultAuthor": "Fahad Al-Qahtani",
+            "featuredPost": {
+                "category": "Financing Tips",
+                "title": "How Do You Choose the Right Financing Plan for Your First Car?",
+                "description": "Learn the essential steps for evaluating your budget, understanding interest rates, and obtaining the best financing offer for your personal needs without financial pressure.",
+                "author": {
+                    "name": "Admin",
+                    "role": "Financial Advisor"
+                }
+            }
         },
-        {
-          "label": "UAE",
-          "value": "uae"
+        "latestArticles": {
+            "title": "Latest Articles",
+            "loadMore": "Load More Articles",
+            "loading": "Loading..."
         },
-        {
-          "label": "Kuwait",
-          "value": "kuwait"
+        "sidebar": {
+            "cta": {
+                "title": "Like a Car?",
+                "subtitle": "Calculate Your Monthly Installment Now",
+                "buttonText": "Calculate the Installment"
+            },
+            "tableOfContents": "Table of Contents",
+            "relatedTitle": "Related Articles"
         },
-        {
-          "label": "Qatar",
-          "value": "qatar"
+        "details": {
+            "metaDescription": "Read our latest articles about cars, financing tips, and industry insights.",
+            "page": {
+                "loading": "Loading...",
+                "error": "Something went wrong. Please try again."
+            },
+            "related": {
+                "title": "Similar Articles"
+            },
+            "summary": {
+                "heading": "In Summary"
+            }
         }
-      ],
-      "successToast": "Your message has been sent successfully. We will contact you soon.",
-      "errorToast": "An error occurred while sending. Please try again."
     },
-    "faq": {
-      "eyebrow": "FAQ",
-      "titleBlack": "Have a question?",
-      "titleOrange": "We have the answer",
-      "description": "If you didn't find an answer to your question, feel free to contact our team directly.",
-      "buttonText": "Ask us now",
-      "items": [
-        {
-          "question": "How do I apply for a car finance through Knoz Car?",
-          "answer": "Applying for finance is easy and fast. Start by filling out the finance application form on the website or contact us via WhatsApp. The application usually requires a national ID, salary statement, and bank statement for the last 3 months. The application is reviewed within 24-48 business hours."
+    "aboutPage": {
+        "hero": {
+            "eyebrow": "About Us",
+            "title": "Our Story with Cars",
+            "description": "More than 10 years of trust, quality, and excellence in the Saudi automotive sector.",
+            "badge": "Established in 2026 · Riyadh, Saudi Arabia",
+            "titleWhite": "We Finance",
+            "titleBlue": "Your Dreams",
+            "subtitle": "And Make Owning Your Car Easier Than You Imagine"
         },
-        {
-          "question": "How do I apply for a car finance through Knoz Car?",
-          "answer": "You can choose the suitable car and send the finance application directly, and our team will contact you to complete the required information."
+        "story": {
+            "eyebrow": "About Us",
+            "title": "Not Just a Showroom, but Your Partner in Choosing.",
+            "statLabel": "In Customer Satisfaction",
+            "paragraphs": {
+                "0": "We began our journey with a simple goal: to change the way cars are purchased in the Kingdom. We believed that transparency and trust were more important than any commercial offer.",
+                "1": "Today, we are a destination trusted by thousands of customers because our success is built on their satisfaction and continued loyalty."
+            },
+            "values": {
+                "vision": {
+                    "title": "Our Vision",
+                    "description": "To become the leading destination in Saudi Arabia for luxury and family car enthusiasts."
+                },
+                "mission": {
+                    "title": "Our Mission",
+                    "description": "A selection and purchasing experience that exceeds your expectations, with complete transparency and trust."
+                },
+                "values": {
+                    "title": "Our Values",
+                    "description": "Luxury, honesty, attention to detail, and commitment to our promises."
+                }
+            }
         },
-        {
-          "question": "How do I apply for a car finance through Knoz Car?",
-          "answer": "Yes, we provide multiple financing solutions based on your credit status and suitable monthly budget."
+        "intro": {
+            "titleStart": "About Qimmah",
+            "titleHighlight": "Najd",
+            "description": "For years, we have been redefining the car-buying experience in Saudi Arabia. We are not an ordinary showroom, but a trusted destination that gives customers the best experience."
         },
-        {
-          "question": "How do I apply for a car finance through Knoz Car?",
-          "answer": "After finance approval, the booking and delivery procedures are coordinated according to the available city."
+        "coreValues": {
+            "eyebrow": "What We Believe In",
+            "title": "Our Core Values",
+            "values": {
+                "trust": {
+                    "title": "Trust",
+                    "description": "Every promise we make is a commitment we fulfill. Complete transparency at every step."
+                },
+                "quality": {
+                    "title": "Quality",
+                    "description": "We accept nothing less than exceptional in every car we display and every service we provide."
+                },
+                "speed": {
+                    "title": "Speed",
+                    "description": "We complete your transactions within hours because your time is valuable and should not be wasted."
+                },
+                "care": {
+                    "title": "Care",
+                    "description": "Our customer is not a number, but a partner with whom we build a long-term relationship."
+                }
+            }
+        },
+        "stats": [
+            {
+                "value": "+1,200",
+                "label": "Car Financed",
+                "description": "Happy Customers"
+            },
+            {
+                "value": "+500",
+                "label": "Satisfied Customer",
+                "description": "Individuals and Companies"
+            },
+            {
+                "value": "+50",
+                "label": "Brand",
+                "description": "Leading Global Brands"
+            },
+            {
+                "value": "5",
+                "label": "Years of Experience",
+                "description": "In the Saudi Market"
+            }
+        ],
+        "whyChooseUs": {
+            "title": "Why Choose Qimmah",
+            "title1": "Najd?",
+            "description": "We offer an exceptional car-buying experience built on trust, quality, and outstanding service."
+        },
+        "gallery": {
+            "title": "Photos and Videos from Our Showroom",
+            "logoAlt": "Qimmah Najd Logo"
+        },
+        "partners": {
+            "eyebrow": "Trusted by Leading Brands",
+            "titleBlack": "Our Partners",
+            "titleBlue": "Strategic",
+            "description": "We are proud of our partnerships with more than 120 brands and authorized distributors across the Kingdom."
+        },
+        "dealer": {
+            "title": "Are You a Distributor or Dealer?",
+            "description": "Join our partner network and benefit from a customer base of more than 52,000 buyers.",
+            "primaryButton": "Become a Partner",
+            "secondaryButton": "Call Us"
+        },
+        "locations": {
+            "titleBlack": "Locations",
+            "titleBlue": "Our Presence",
+            "branchLabel": "Branch",
+            "mainBranch": "Main Branch",
+            "addressLabel": "Address",
+            "phoneLabel": "Phone",
+            "hoursLabel": "Working Hours",
+            "openInMaps": "Open in Maps",
+            "noMap": "Map Unavailable",
+            "mapTitle": "Map of {{city}}"
+        },
+        "testimonials": {
+            "badge": "Our Customers Trust Us",
+            "title": "Customer Reviews",
+            "ratingText": "4.9 from 12,000+ Reviews",
+            "goToTestimonial": "Go to Review {{number}}"
         }
-      ]
+    },
+    "offersPage": {
+        "hero": {
+            "badge": "Limited-Time Offers",
+            "title": "Qimmah Najd's Exclusive Eid Offer",
+            "description": "We offer you a selected range of top cars with financing solutions and direct discounts on the latest models for Eid.",
+            "primaryButton": "Discover the Offer",
+            "secondaryButton": "Finance Calculator",
+            "countdownLabel": "Ends In",
+            "countdownDays": "Day",
+            "countdownHours": "Hour",
+            "countdownMinutes": "Minute",
+            "countdownSeconds": "Second"
+        },
+        "grid": {
+            "title": "Browse Offers",
+            "categories": {
+                "all": "All",
+                "finance": "Financing Offers",
+                "discounts": "Direct Discounts",
+                "models2026": "2026 Models"
+            },
+            "card": {
+                "priceLabel": "Installments Start From",
+                "priceUnit": "/ Month",
+                "buttonText": "Discover the Offer",
+                "badgeDiscount": "{{percent}}% Discount",
+                "badgeSeasonal": "Seasonal Offer",
+                "youSave": "You Saved"
+            },
+            "loadMore": "Load More Offers",
+            "loading": "Loading..."
+        }
+    },
+    "carDetails": {
+        "hero": {
+            "price": "Cash Price",
+            "originalPrice": "Original Price",
+            "installmentFrom": "Monthly Installment",
+            "saving": "Save",
+            "availableColors": "Available Colors",
+            "orderNow": "Financing Request",
+            "compare": "Compare",
+            "whatsappContact": "Contact via WhatsApp",
+            "warrantyBadge": "Original Agency Warranty · Delivery Within 48 Hours",
+            "backToGallery": "Back to Gallery",
+            "calculateFinance": "Calculate Its Financing",
+            "insideView": "Interior View",
+            "outsideView": "Exterior View",
+            "benefitQuality": "Certified Quality",
+            "benefitInstallment": "Flexible Installments",
+            "benefitSecurePayment": "Secure Payment",
+            "minDownPayment": "Down Payment Starts From",
+            "freeConsultation": "Free Consultation with No Obligation",
+            "views": "Review",
+            "metaDescription": "View the car's detailed specifications, price, features, and flexible financing options."
+        },
+        "specs": {
+            "titleBlue": "Details ",
+            "titleOrange": "Car",
+            "tab": {
+                "features": "Key Features",
+                "specifications": "Technical Specifications",
+                "security": "Safety Systems"
+            },
+            "labels": {
+                "hp": "Horsepower",
+                "fuel": "Fuel",
+                "seats": "Seats",
+                "gearbox": "Transmission"
+            }
+        },
+        "page": {
+            "loading": "Loading...",
+            "notFound": "Car Not Found",
+            "error": "Something went wrong. Try again."
+        },
+        "relatedCars": {
+            "titleBlue": "Cars Similar to Your Choice",
+            "titleOrange": "For Your Choice",
+            "description": "Compare and discover a selected range of cars similar in category and specifications.",
+            "buttonText": "Browse All Cars"
+        },
+        "recommendations": {
+            "title": "You May Also Like",
+            "details": "Details"
+        }
+    },
+    "comparePage": {
+        "best": "Best",
+        "compareTable": "Comparison Table",
+        "compareDescription": "A detailed comparison between two cars of your choice.",
+        "specLabel": "Specification",
+        "summaryTitle": "Comparison Summary",
+        "summaryBadge": "Best in Comparison",
+        "winnerLabel": "Specifications Winner",
+        "winnerScore": "{{score}} Points Better",
+        "tieResult": "Tie",
+        "scorePrefix": "Outperformed In",
+        "scoreSuffix": "Out of {{total}} Criteria",
+        "tieScorePrefix": "Tied In",
+        "tieScoreSuffix": "Out of {{total}} Criteria",
+        "consultExpert": "Consult Our Expert",
+        "browseMore": "Browse More",
+        "carOne": "First Car",
+        "carTwo": "Second Car",
+        "points": "Point",
+        "selectCar": "Select a Car",
+        "searchCar": "Search for a car...",
+        "noResults": "No Results",
+        "cancel": "Cancel",
+        "loading": "Loading...",
+        "addCar": "Add a Car to Compare",
+        "remove": "Remove",
+        "removeCar": "Remove Car",
+        "bestValue": "Best Value",
+        "monthlyInstallment": "Monthly Installment",
+        "cashPrice": "Cash Price",
+        "sar": "SAR",
+        "vs": "VS",
+        "all": "All",
+        "sections": {
+            "titles": {
+                "prices": "Prices",
+                "performance": "Performance",
+                "design": "Design",
+                "featuresAndSafety": "Features and Safety",
+                "technicalSpecs": "Technical Specifications"
+            },
+            "labels": {
+                "price": "Price",
+                "estimatedInstallment": "Estimated Installment",
+                "power": "Power",
+                "topSpeed": "Top Speed",
+                "acceleration": "Acceleration",
+                "type": "Type",
+                "seats": "Seats",
+                "transmission": "Transmission"
+            }
+        }
+    },
+    "contactPage": {
+        "hero": {
+            "title": "Ready to Serve You",
+            "breadcrumb": "Contact Us"
+        },
+        "contactUs": {
+            "title": "Send an Inquiry",
+            "description": "Send us your message and a specialist will contact you as soon as possible.",
+            "fullNameLabel": "Full Name",
+            "fullNamePlaceholder": "Enter your name here",
+            "phoneLabel": "Mobile Number",
+            "phonePlaceholder": "05XXXXXXXX",
+            "subjectLabel": "Subject",
+            "subjectPlaceholder": "Inquiry About a Car...",
+            "messageLabel": "Message",
+            "messagePlaceholder": "Enter your message here...",
+            "submitText": "Send Message",
+            "submittingText": "Sending...",
+            "successToast": "Your message was sent successfully.",
+            "errorToast": "Unable to send the message.",
+            "openMap": "Open in Google Maps",
+            "noMap": "Map Unavailable"
+        },
+        "contactMethods": {
+            "title": "Contact Us",
+            "whatsappLabel": "WhatsApp",
+            "whatsappValue": "Instant Contact",
+            "whatsappDescription": "Reply Within Minutes",
+            "phoneLabel": "Call Us",
+            "phoneDescription": "Saturday - Thursday",
+            "hoursLabel": "Working Hours",
+            "hoursDescription": "Every Day of the Week",
+            "morning": "AM",
+            "evening": "PM",
+            "timeFrom": "From",
+            "timeTo": "To",
+            "days": {
+                "sat": "Saturday",
+                "sun": "Sunday",
+                "mon": "Monday",
+                "tue": "Tuesday",
+                "wed": "Wednesday",
+                "thu": "Thursday",
+                "fri": "Friday"
+            }
+        },
+        "faq": {
+            "eyebrow": "Frequently Asked Questions",
+            "titleBlack": "Frequently Asked Questions",
+            "titleOrange": "",
+            "description": "Before contacting us, you may find your answer here.",
+            "buttonText": "Ask Us Now",
+            "items": [
+                {
+                    "question": "How Can I Apply for Car Financing Through Qimmah Najd Cars?",
+                    "answer": "Applying for financing is quick and easy. Start by completing the financing form on the website or contact us via WhatsApp. The application usually requires a national ID, salary statement, and bank statement for the last 3 months. Applications are reviewed within 24–48 business hours."
+                },
+                {
+                    "question": "How Can I Apply for Car Financing Through Qimmah Najd Cars?",
+                    "answer": "You can select the suitable car and submit a financing request directly, and our team will contact you to complete the required information."
+                },
+                {
+                    "question": "How Can I Apply for Car Financing Through Qimmah Najd Cars?",
+                    "answer": "Yes, we provide multiple financing solutions based on your credit status and suitable monthly budget."
+                },
+                {
+                    "question": "How Can I Apply for Car Financing Through Qimmah Najd Cars?",
+                    "answer": "After financing approval, reservation and delivery procedures are coordinated according to the available city."
+                }
+            ]
+        },
+        "financeCalculator": {
+            "currency": "SAR",
+            "badge": "Instant Finance Calculator",
+            "titleWhite": "Finance Calculator",
+            "titleOrange": "In Just Seconds",
+            "description": "Calculate your monthly installment accurately and submit your application now.",
+            "infoBoxes": [
+                {
+                    "title": "Calculate Your Monthly Installment Instantly",
+                    "description": "Accurate, updated results with every change."
+                },
+                {
+                    "title": "Compare More Than One Approved Financing Provider",
+                    "description": "Compare Financing Options"
+                },
+                {
+                    "title": "The Best Plan for Your Budget",
+                    "description": "Flexible plans that perfectly suit your financial situation."
+                }
+            ],
+            "cities": {
+                "riyadh": "Riyadh",
+                "jeddah": "Jeddah",
+                "dammam": "Dammam"
+            },
+            "validation": {
+                "selectCar": "Please select a car.",
+                "fillRequired": "Please fill in all required fields."
+            },
+            "step1": {
+                "stepperLabel": "Your Information",
+                "personalInfoTitle": "Your Personal Information",
+                "fullName": "Full Name",
+                "fullNamePlaceholder": "Enter Your Full Name",
+                "phone": "Mobile Number",
+                "phonePlaceholder": "05xxxxxxxx",
+                "email": "Email",
+                "emailPlaceholder": "name@example.com",
+                "city": "City",
+                "salary": "Salary",
+                "salaryPlaceholder": "Enter Salary",
+                "obligations": "Monthly Obligations",
+                "obligationsPlaceholder": "Enter the Value of Your Monthly Obligations",
+                "carLabel": "The Car You Want to Finance",
+                "searchPlaceholder": "Search for a car...",
+                "noResults": "No Search Results",
+                "changeButton": "Change",
+                "selectCar": "Select a Car",
+                "messageLabel": "Your Message",
+                "messagePlaceholder": "Enter your inquiry here... The clearer your details are, the more accurate and faster our response will be.",
+                "privacyNotice": "Your information is protected and will not be shared with any third party.",
+                "submitButton": "View Finance Calculator",
+                "nextButton": "Continue to the Next Step",
+                "consentPrefix": "I Agree to",
+                "consentLink": "Privacy Policy",
+                "consentSuffix": "Allow the Qimmah Najd team to contact me regarding the financing request.",
+                "charCount": "Character"
+            },
+            "step2": {
+                "stepperLabel": "Finance Calculator",
+                "changeData": "Change Information",
+                "welcome": "Welcome",
+                "title": "Car Finance Calculator",
+                "financeDetails": "Financing Details",
+                "carPrice": "Car Price",
+                "riyal": "Riyal",
+                "monthlyPayment": "Monthly Installment",
+                "summaryTitle": "Financing Summary",
+                "downPayment": "Down Payment",
+                "financeAmount": "Financing Amount",
+                "totalFinance": "Total Financing",
+                "totalInterest": "Total Return",
+                "totalProfit": "Total Profit",
+                "financeTerm": "Financing Term",
+                "month": "Month",
+                "purpose": "Purchase",
+                "financingPeriod": "Financing Term",
+                "approvalTime": "Expected Approval Time",
+                "approvalValue": "48 Hours",
+                "disclaimer": "These results are estimates and may vary depending on the financing provider's approval and final terms.",
+                "submitLead": "Submit Financing Request Now",
+                "submitting": "Sending...",
+                "talkToAdvisor": "Speak with a Financing Advisor",
+                "selectedCar": "Selected Car",
+                "changeCar": "Change Car",
+                "downPaymentTitle": "Down Payment",
+                "downPaymentPercent": "Down Payment Percentage",
+                "termTitle": "Financing Term",
+                "bankTitle": "Financing Provider",
+                "bankMeta": "24-Hour Approval · No Fees",
+                "annualRate": "Annual Interest Rate",
+                "successToast": "Financing request submitted successfully.",
+                "errorToast": "An error occurred while sending. Please try again.",
+                "banksError": "Failed to load banks."
+            }
+        }
     },
     "financeCalculator": {
-      "currency": "SAR",
-      "badge": "Instant Finance Calculator",
-      "titleWhite": "Calculate Your",
-      "titleOrange": "Installment in Seconds",
-      "description": "Enter your data once and get instant financing results from multiple accredited financing entities in the Kingdom.",
-      "infoBoxes": [
-        {
-          "title": "Calculate your monthly payment instantly",
-          "description": "Accurate results updated with every change"
+        "badge": "Installment Calculator",
+        "titleWhite": "Calculate Your Installment Easily",
+        "description": "Simple steps to get financing that suits you.",
+        "cities": {
+            "riyadh": "Riyadh",
+            "jeddah": "Jeddah",
+            "dammam": "Dammam"
         },
-        {
-          "title": "Compare multiple accredited financing entities",
-          "description": "Compare financing options"
+        "step1": {
+            "stepperLabel": "Your Information",
+            "personalInfoTitle": "Your Personal Information",
+            "fullName": "Full Name",
+            "fullNamePlaceholder": "Your Name",
+            "phone": "Mobile Number",
+            "phonePlaceholder": "05XXXXXXXX",
+            "email": "Email",
+            "emailPlaceholder": "name@example.com",
+            "city": "City",
+            "cityPlaceholder": "Select City",
+            "nextButton": "Next — Select Car",
+            "cities": [
+                "Riyadh",
+                "Jeddah",
+                "Dammam",
+                "Makkah",
+                "Madinah",
+                "Al Khobar"
+            ]
         },
-        {
-          "title": "Best plan for your budget",
-          "description": "Flexible plans that perfectly fit your financial situation"
+        "step2": {
+            "stepperLabel": "Car Details",
+            "chooseCarTitle": "Select the Car",
+            "chooseCarDescription": "The Car You Selected",
+            "recommendedCars": "Other Cars We Recommend",
+            "otherCars": "Choose Your Car",
+            "chooseAnotherCar": "Choose Another Car from Our Selection",
+            "selectCar": "Select a Car",
+            "nextButton": "Next — Calculator",
+            "searchPlaceholder": "Search by car name or brand...",
+            "backButton": "Back",
+            "riyal": "SAR"
+        },
+        "step3": {
+            "stepperLabel": "Review",
+            "summaryTitle": "Financing Summary",
+            "carPrice": "Car Price",
+            "downPayment": "Down Payment",
+            "financeAmount": "Financing Amount",
+            "paymentPeriod": "Repayment Term",
+            "annualRate": "Estimated Interest Rate",
+            "estimatedMonthlyPayment": "Estimated Monthly Installment",
+            "riyalPerMonth": "Saudi Riyals / Month",
+            "disclaimer": "* Figures are estimates — the financing team will confirm them.",
+            "totalPayment": "Total Repayment",
+            "totalInterest": "Total Interest",
+            "financeDetails": "Financing Details",
+            "monthlyIncome": "Monthly Income (SAR)",
+            "monthlyIncomePlaceholder": "Example: 15000",
+            "monthlyObligations": "Current Monthly Obligations",
+            "monthlyObligationsPlaceholder": "Example: 300 (or zero if none)",
+            "financeTerm": "Financing Term",
+            "years": "Years",
+            "months": "Months",
+            "month": "Month",
+            "submitLead": "Submit Financing Request",
+            "submitting": "Sending...",
+            "successToast": "Financing request submitted successfully.",
+            "errorToast": "Unable to submit the financing request.",
+            "backButton": "Back",
+            "riyal": "SAR"
+        },
+        "success": {
+            "badge": "Submitted",
+            "title": "Your Request Is Under Review!",
+            "message": "Financing request received for {carLabel}",
+            "followUp": "One of our specialists will contact you at {phone} during business hours.",
+            "duringBusinessHours": "During Business Hours.",
+            "whatsapp": "Follow Up on Your Request via WhatsApp",
+            "whatsappMessage": "Hello, I submitted a financing request for ({{carLabel}}) and would like to follow up.",
+            "backToCars": "Back to Browsing Cars"
+        },
+        "validation": {
+            "fillRequired": "Please fill in all required fields."
         }
-      ],
-      "cities": {
-        "riyadh": "Riyadh",
-        "jeddah": "Jeddah",
-        "dammam": "Dammam"
-      },
-      "validation": {
-        "selectCar": "Please select a car",
-        "fillRequired": "Please fill all required fields"
-      },
-      "step1": {
-        "stepperLabel": "Your Info",
-        "fullName": "Full Name",
-        "fullNamePlaceholder": "Mohammed Al-Omari",
-        "phone": "Phone Number",
-        "phonePlaceholder": "+966 5X XXX XXXX",
-        "email": "Email",
-        "emailPlaceholder": "name@example.com",
-        "city": "City",
-        "salary": "Salary",
-        "salaryPlaceholder": "Enter salary",
-        "obligations": "Monthly Obligations",
-        "obligationsPlaceholder": "Enter monthly obligations",
-        "carLabel": "Car to Finance",
-        "searchPlaceholder": "Search for a car...",
-        "noResults": "No results found",
-        "changeButton": "Change",
-        "selectCar": "Select a Car",
-        "messageLabel": "Your Message",
-        "messagePlaceholder": "Write your inquiry here... The more details you provide, the more accurate our response will be.",
-        "privacyNotice": "Your information is protected and will not be shared with any third party",
-        "submitButton": "View Finance Calculator",
-        "charCount": "characters"
-      },
-      "step2": {
-        "stepperLabel": "Finance Calculator",
-        "changeData": "Change Data",
-        "welcome": "Welcome",
-        "title": "Car Finance Calculator",
-        "carPrice": "Car Price",
-        "monthlyPayment": "Monthly Payment",
-        "summaryTitle": "Finance Summary",
-        "downPayment": "Down Payment",
-        "financeAmount": "Finance Amount",
-        "totalFinance": "Total Installment",
-        "totalProfit": "Total Profit",
-        "approvalTime": "Expected Approval Time",
-        "approvalValue": "48 Hours",
-        "disclaimer": "These results are estimates and may vary depending on the financing entity's approval and final terms.",
-        "submitLead": "Apply for Finance Now",
-        "submitting": "Submitting...",
-        "talkToAdvisor": "Talk to a Finance Advisor",
-        "selectedCar": "Selected Car",
-        "changeCar": "Change Car",
-        "downPaymentTitle": "Down Payment",
-        "downPaymentPercent": "Down Payment Percentage",
-        "termTitle": "Finance Period",
-        "month": "Month",
-        "bankTitle": "Financing Entity",
-        "bankMeta": "24h Approval · Free Fees",
-        "annualRate": "Annual Profit Rate",
-        "successToast": "Finance request sent successfully",
-        "errorToast": "An error occurred, please try again",
-        "banksError": "Failed to load banks"
-      }
+    },
+    "mobileNav": {
+        "home": "Home",
+        "newCars": "New Cars",
+        "finance": "Financing Request",
+        "offers": "Offers",
+        "more": "More",
+        "blog": "Blog"
+    },
+    "pageTitles": {
+        "compare": "Compare Cars",
+        "brands": "Brands",
+        "financeCalculator": "Finance Calculator",
+        "notFound": "Page Not Found",
+        "offers": "Special Offers",
+        "orders": "Request a Car",
+        "allCars": "Cars",
+        "allCarsBreadcrumb": "All Cars"
+    },
+    "ordersPage": {
+        "heroTitle1": "Request",
+        "heroTitle2": "Car",
+        "heroDescription": "Choose from our showroom or tell us which car you want, and we will find it for you at the best price in the Kingdom.",
+        "selectCarTitle": "Select the Car",
+        "searchPlaceholder": "Search by car name or brand...",
+        "bestSeller": "Best Seller",
+        "exclusive": "Exclusive",
+        "yourInfoTitle": "Your Information",
+        "selectCarEmpty": "Select a car from the list.",
+        "fullNameLabel": "Full Name",
+        "fullNamePlaceholder": "Your Full Name",
+        "phoneLabel": "Mobile Number",
+        "phonePlaceholder": "05xxxxxxxx",
+        "carTypeLabel": "Car Type",
+        "carTypePlaceholder": "Enter the car name if it is not available in the list.",
+        "paymentLabel": "Preferred Payment Method",
+        "paymentBank": "Bank Financing",
+        "paymentCash": "Cash Payment",
+        "notesLabel": "Additional Notes",
+        "notesPlaceholder": "Preferred color, any special requirements...",
+        "submitting": "Sending...",
+        "submitIdle": "Select a car and enter your information.",
+        "privacyNotice": "Your information is protected · We will contact you within two hours.",
+        "trustProtected": {
+            "title": "Protected Information",
+            "sub": "Your Privacy Is Our Priority"
+        },
+        "trustResponse": {
+            "title": "Response Within Two Hours",
+            "sub": "During Official Working Hours"
+        },
+        "trustPrice": {
+            "title": "Best Price Guarantee",
+            "sub": "We Find the Best Option for You in the Market"
+        },
+        "validationError": "Please enter your name and mobile number.",
+        "successToast": "Your request was submitted successfully. We will contact you soon.",
+        "errorToast": "An error occurred. Please try again."
+    },
+    "campaignBanners": {
+        "discoverMore": "Discover More"
+    },
+    "specialOrder": {
+        "hero": {
+            "badge": "Custom Request",
+            "title": "Request Your Car\nWith the Specifications That Suit You",
+            "subtitle": "Our team helps you get your car with the required specifications."
+        },
+        "stepper": {
+            "step1": "Your Information",
+            "step2": "Car Details",
+            "step3": "Budget"
+        },
+        "step1": {
+            "title": "Your Personal Information",
+            "fullName": "Full Name",
+            "fullNamePlaceholder": "Your Name",
+            "phone": "Mobile Number",
+            "phonePlaceholder": "05XXXXXXXX",
+            "email": "Email",
+            "emailPlaceholder": "name@example.com",
+            "city": "City",
+            "nextButton": "Next — Car Details"
+        },
+        "step2": {
+            "title": "Required Car Details",
+            "brand": "Brand",
+            "model": "Model (Optional)",
+            "modelPlaceholder": "Example: Land Cruiser, X5, Camry...",
+            "color": "Preferred Color",
+            "year": "Model Year",
+            "nextButton": "Next — Budget",
+            "backButton": "Back"
+        },
+        "step3": {
+            "title": "Budget and Financing",
+            "salaryRange": "Salary Range",
+            "notes": "Additional Notes",
+            "notesPlaceholder": "Any special specifications or additional notes...",
+            "submit": "Submit Request",
+            "submitting": "Sending...",
+            "backButton": "Back"
+        },
+        "success": {
+            "badge": "Submitted",
+            "title": "Your Request Is Under Review!",
+            "description": "Financing request received for {carLabel}",
+            "contact": "One of our specialists will contact you at {phone} during business hours.",
+            "whatsapp": "Follow Up on Your Request via WhatsApp",
+            "backToCars": "Back to Browsing Cars",
+            "goBack": "←"
+        },
+        "error": {
+            "submitFailed": "An error occurred while submitting the request. Please try again."
+        }
+    },
+    "ordinaryOrder": {
+        "hero": {
+            "badge": "Request a Car",
+            "title": "Request Your Car\nWith the Specifications That Suit You",
+            "subtitle": "Our team helps you get your car with the required specifications."
+        },
+        "step2": {
+            "title": "Select the Car",
+            "selectedLabel": "The Car You Selected",
+            "notSelected": "You Have Not Selected a Car Yet",
+            "recommendations": "Other Cars We Recommend",
+            "browseMoreLabel": "Choose Your Car",
+            "browseMore": "Choose Another Car from Our Selection",
+            "searchPlaceholder": "Search by car name or brand...",
+            "modalTitle": "Select a Car",
+            "submit": "Submit Request",
+            "submitting": "Sending...",
+            "backButton": "Back"
+        },
+        "notFound": "Could Not Find Your Car?",
+        "specialOrderLink": "Submit a Special Request"
+    },
+    "common": {
+        "previousSlide": "Previous Slide",
+        "nextSlide": "Next Slide",
+        "close": "Close"
     }
-  },
-  "financeCalculator": {
-    "currency": "SAR",
-    "badge": "Instant Finance Calculator",
-    "titleWhite": "Calculate Your",
-    "titleOrange": "Installment in Seconds",
-    "description": "Enter your data once and get instant financing results from multiple accredited financing entities in the Kingdom.",
-    "infoBoxes": [
-      {
-        "title": "Calculate your monthly payment instantly",
-        "description": "Accurate results updated with every change"
-      },
-      {
-        "title": "Compare multiple accredited financing entities",
-        "description": "Compare financing options"
-      },
-      {
-        "title": "Best plan for your budget",
-        "description": "Flexible plans that perfectly fit your financial situation"
-      }
-    ],
-    "cities": {
-      "riyadh": "Riyadh",
-      "jeddah": "Jeddah",
-      "dammam": "Dammam"
-    },
-    "validation": {
-      "selectCar": "Please select a car",
-      "fillRequired": "Please fill all required fields"
-    },
-    "step1": {
-      "stepperLabel": "Your Info",
-      "fullName": "Full Name",
-      "fullNamePlaceholder": "Mohammed Al-Omari",
-      "phone": "Phone Number",
-      "phonePlaceholder": "+966 5X XXX XXXX",
-      "email": "Email",
-      "emailPlaceholder": "name@example.com",
-      "city": "City",
-      "salary": "Salary",
-      "salaryPlaceholder": "Enter salary",
-      "obligations": "Monthly Obligations",
-      "obligationsPlaceholder": "Enter monthly obligations",
-      "carLabel": "Car to Finance",
-      "searchPlaceholder": "Search for a car...",
-      "noResults": "No results found",
-      "changeButton": "Change",
-      "selectCar": "Select a Car",
-      "messageLabel": "Your Message",
-      "messagePlaceholder": "Write your inquiry here... The more details you provide, the more accurate our response will be.",
-      "privacyNotice": "Your information is protected and will not be shared with any third party",
-      "submitButton": "View Finance Calculator",
-      "charCount": "characters"
-    },
-    "step2": {
-      "stepperLabel": "Finance Calculator",
-      "changeData": "Change Data",
-      "welcome": "Welcome",
-      "title": "Car Finance Calculator",
-      "carPrice": "Car Price",
-      "monthlyPayment": "Monthly Payment",
-      "summaryTitle": "Finance Summary",
-      "downPayment": "Down Payment",
-      "financeAmount": "Finance Amount",
-      "totalFinance": "Total Installment",
-      "totalProfit": "Total Profit",
-      "financingPeriod": "Financing Period",
-      "approvalTime": "Expected Approval Time",
-      "approvalValue": "48 Hours",
-      "disclaimer": "These results are estimates and may vary depending on the financing entity's approval and final terms.",
-      "submitLead": "Apply for Finance Now",
-      "submitting": "Submitting...",
-      "talkToAdvisor": "Talk to a Finance Advisor",
-      "selectedCar": "Selected Car",
-      "changeCar": "Change Car",
-      "downPaymentTitle": "Down Payment",
-      "downPaymentPercent": "Down Payment Percentage",
-      "termTitle": "Finance Period",
-      "month": "Month",
-      "bankTitle": "Financing Entity",
-      "bankMeta": "24h Approval · Free Fees",
-      "annualRate": "Annual Profit Rate",
-      "successToast": "Finance request sent successfully",
-      "errorToast": "An error occurred, please try again",
-      "banksError": "Failed to load banks"
-    }
-  },
-  "mobileNav": {
-    "home": "Home",
-    "newCars": "New Cars",
-    "finance": "Request Finance",
-    "offers": "Offers",
-    "more": "More",
-    "blog": "Blog"
-  },
-  "pageTitles": {
-    "compare": "Compare Cars",
-    "brands": "Brands",
-    "financeCalculator": "Finance Calculator",
-    "notFound": "Page Not Found"
-  }
 }

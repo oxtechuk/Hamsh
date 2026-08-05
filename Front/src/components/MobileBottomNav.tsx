@@ -50,7 +50,7 @@ export default function MobileBottomNav() {
                 <NavLink
                   key={item.to}
                   to={item.to}
-                  className="relative -top-4 flex flex-col items-center"
+                  className="relative -top-2 flex flex-col items-center"
                 >
                   <div className="flex h-[54px] w-[54px] items-center justify-center rounded-full bg-[var(--brand-secondary-color)] shadow-[0_6px_20px_rgba(0,0,0,0.28)]">
                     <Icon size={24} strokeWidth={2} className="text-white" />
