@@ -20,7 +20,12 @@ class CarTypeSeeder extends Seeder
         ];
 
         foreach ($types as $type) {
-            CarType::updateOrCreate(['slug' => $type['slug']], $type);
+            $existing = CarType::where('slug', $type['slug'])->first();
+            if ($existing) {
+                $existing->update($type);
+            } else {
+                CarType::create($type);
+            }
         }
     }
 }
