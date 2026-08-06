@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('تسجيل دخول المديرين | Konz') }}</title>
+    <title>{{ __('تسجيل دخول المديرين | نوادر نجد') }}</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -312,15 +312,24 @@
             </div>
         </div>
 
+        @php
+            $siteLogo = $globalSettings['site_logo'] ?? null;
+            $logoUrl = !empty($siteLogo) 
+                ? (str_starts_with($siteLogo, 'http') ? $siteLogo : \Illuminate\Support\Facades\Storage::disk('public')->url($siteLogo))
+                : asset('images/logo_without_bg.png');
+            $siteNameRaw = $globalSettings['site_name'] ?? 'نوادر نجد';
+            $siteName = is_array($siteNameRaw) ? ($siteNameRaw[app()->getLocale()] ?? 'نوادر نجد') : $siteNameRaw;
+        @endphp
+
         <!-- Right Panel: Form Card -->
         <div class="form-panel" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
             
             <div class="form-content-wrapper">
                 <div class="logo-section">
-                    <img src="{{ asset('images/logo_without_bg.png') }}" alt="Konz Logo" style="max-height: 75px; width: auto; filter: drop-shadow(0 4px 10px rgba(41, 155, 224, 0.15));">
+                    <img src="{{ $logoUrl }}" alt="{{ $siteName }}" style="max-height: 85px; width: auto; filter: drop-shadow(0 4px 12px rgba(41, 155, 224, 0.2));">
                     <div class="logo-badge">
                         <i class="bi bi-shield-check"></i>
-                        {{ __('لوحة تحكم المديرين') }}
+                        {{ $siteName }} - {{ __('لوحة التحكم') }}
                     </div>
                 </div>
 
@@ -369,7 +378,7 @@
             </div>
 
             <div class="footer-text">
-                &copy; {{ date('Y') }} <a href="{{ route('store.home') }}">Konz</a> Dashboard. All rights reserved.
+                &copy; {{ date('Y') }} <a href="{{ route('store.home') }}">{{ $siteName }}</a>. {{ __('جميع الحقوق محفوظة.') }}
             </div>
 
         </div>

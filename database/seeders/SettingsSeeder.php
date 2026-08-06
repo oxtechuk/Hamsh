@@ -12,10 +12,10 @@ class SettingsSeeder extends Seeder
         $settings = [
             // ── Basic ──
             'site_name' => [
-                'ar' => 'نوادر',
-                'en' => 'Nawader',
+                'ar' => 'نوادر نجد',
+                'en' => 'Nawader Njed',
             ],
-            'footer_text' => '© 2026 نوادر. جميع الحقوق محفوظة.',
+            'footer_text' => '© 2026 نوادر نجد. جميع الحقوق محفوظة.',
             'auto_assign_bookings' => '0',
 
             // ── Appearance ──
@@ -26,17 +26,17 @@ class SettingsSeeder extends Seeder
             'page_loader_image' => null,
 
             // ── Contact ──
-            'contact_email' => 'info@nawader.sa',
+            'contact_email' => 'info@nawadernjed.sa',
             'contact_phone' => '+966 50 000 0000',
             'contact_whatsapp' => '+966 50 000 0000',
             'contact_address' => 'طريق الملك فهد، الرياض، المملكة العربية السعودية',
 
             // ── Social Media ──
             'social_media' => [
-                ['icon' => 'bi-twitter-x', 'color' => '#000000', 'link' => 'https://x.com/nawader_sa'],
-                ['icon' => 'bi-instagram', 'color' => '#E4405F', 'link' => 'https://instagram.com/nawader_sa'],
-                ['icon' => 'bi-tiktok', 'color' => '#000000', 'link' => 'https://tiktok.com/@nawader_sa'],
-                ['icon' => 'bi-snapchat', 'color' => '#FFFC00', 'link' => 'https://snapchat.com/add/nawader_sa'],
+                ['icon' => 'bi-twitter-x', 'color' => '#000000', 'link' => 'https://x.com/nawader_njed'],
+                ['icon' => 'bi-instagram', 'color' => '#E4405F', 'link' => 'https://instagram.com/nawader_njed'],
+                ['icon' => 'bi-tiktok', 'color' => '#000000', 'link' => 'https://tiktok.com/@nawader_njed'],
+                ['icon' => 'bi-snapchat', 'color' => '#FFFC00', 'link' => 'https://snapchat.com/add/nawader_njed'],
             ],
 
             // ── Promo Popup ──
@@ -44,7 +44,7 @@ class SettingsSeeder extends Seeder
                 'enabled' => false,
                 'image' => null,
                 'title' => 'عرض خاص لهذا الشهر!',
-                'text' => 'احصل على خصم يصل إلى 15% على جميع السيارات المميزة.',
+                'text' => 'احصل على خصم يصل إلى 15% على جميع السيارات المميزة من نوادر نجد.',
                 'link' => '/offers',
                 'button_text' => 'تصفح العروض',
             ],
@@ -53,18 +53,18 @@ class SettingsSeeder extends Seeder
             'store_home_hero' => [
                 'title' => [
                     'badge' => ['ar' => '🔥 أفضل العروض', 'en' => '🔥 Best Deals'],
-                    'text' => ['ar' => 'نوادر للسيارات', 'en' => 'Nawader Cars'],
+                    'text' => ['ar' => 'نوادر نجد للسيارات', 'en' => 'Nawader Njed Cars'],
                 ],
                 'subtitle' => [
                     'badge' => ['ar' => '🚗 اكتشف الآن', 'en' => '🚗 Discover Now'],
                     'text' => [
-                        'ar' => 'أكبر تشكيلة من السيارات الجديدة والمستعملة بأفضل الأسعار وأagusى خيارات التمويل في المملكة العربية السعودية.',
-                        'en' => 'The largest selection of new and used cars at the best prices with top financing options in Saudi Arabia.',
+                        'ar' => 'أكبر تشكيلة من السيارات بأقساط شهرية منافسة وأفضل خيارات التمويل في المملكة العربية السعودية.',
+                        'en' => 'The largest selection of cars with competitive monthly installments and top financing options in Saudi Arabia.',
                     ],
                 ],
                 'description' => [
-                    'ar' => 'نوادر شريكك الموثوق في عالم السيارات. نوفر لك تشكيلة واسعة من أحدث الماركات العالمية مع ضمانات شاملة وخيارات تمويل مرنة تناسب الجميع.',
-                    'en' => 'Nawader is your trusted partner in the automotive world. We offer a wide range of the latest global brands with comprehensive warranties and flexible financing options for everyone.',
+                    'ar' => 'نوادر نجد شريكك الموثوق في عالم السيارات. نوفر لك تشكيلة واسعة من أحدث الماركات العالمية مع ضمانات شاملة وخيارات تمويل مرنة تناسب الجميع.',
+                    'en' => 'Nawader Njed is your trusted partner in the automotive world. We offer a wide range of the latest global brands with comprehensive warranties and flexible financing options.',
                 ],
                 'button_1_text' => ['ar' => 'تصفح السيارات', 'en' => 'Browse Cars'],
                 'button_1_link' => '/cars',
