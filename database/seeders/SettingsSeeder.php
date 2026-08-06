@@ -22,6 +22,7 @@ class SettingsSeeder extends Seeder
             'site_logo' => null,
             'site_favicon' => null,
             'breadcrumb_bg' => null,
+            'default_car_image' => null,
             'page_loader_enabled' => '1',
             'page_loader_image' => null,
 

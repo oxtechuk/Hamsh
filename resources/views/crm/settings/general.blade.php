@@ -126,7 +126,7 @@
                             </div>
                             <div class="card-body p-4">
                                 <div class="row g-4">
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <label class="form-label fw-semibold small text-muted d-block mb-2">{{ __('شعار الموقع (Logo)') }}</label>
                                         <div class="upload-preview rounded-3 mb-2">
                                             @if(isset($settings['site_logo']))
@@ -137,7 +137,7 @@
                                         </div>
                                         <input type="file" name="site_logo" class="form-control bg-light border-0" accept="image/*">
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <label class="form-label fw-semibold small text-muted d-block mb-2">{{ __('أيقونة (Favicon)') }}</label>
                                         <div class="upload-preview rounded-3 mb-2">
                                             @if(isset($settings['site_favicon']))
@@ -148,7 +148,7 @@
                                         </div>
                                         <input type="file" name="site_favicon" class="form-control bg-light border-0" accept="image/*">
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <label class="form-label fw-semibold small text-muted d-block mb-2">{{ __('خلفية الصفحات (Breadcrumb)') }}</label>
                                         <div class="upload-preview rounded-3 mb-2 bg-dark">
                                             @if(isset($settings['breadcrumb_bg']))
@@ -159,10 +159,21 @@
                                         </div>
                                         <input type="file" name="breadcrumb_bg" class="form-control bg-light border-0" accept="image/*">
                                     </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label fw-semibold small text-muted d-block mb-2">{{ __('صورة السيارة الافتراضية') }}</label>
+                                        <div class="upload-preview rounded-3 mb-2 bg-light d-flex align-items-center justify-content-center" style="height:60px;">
+                                            @if(isset($settings['default_car_image']))
+                                                <img src="{{ asset('storage/' . $settings['default_car_image']) }}" alt="Default Car" class="img-fluid rounded-3" style="max-height:50px;">
+                                            @else
+                                                <i class="bi bi-car-front fs-2 opacity-25"></i>
+                                            @endif
+                                        </div>
+                                        <input type="file" name="default_car_image" class="form-control bg-light border-0" accept="image/*">
+                                    </div>
                                     <div class="col-12">
                                         <div class="p-3 bg-info-subtle rounded-3 small text-info">
                                             <i class="bi bi-info-circle-fill me-1"></i>
-                                            {{ __('خلفية الصفحات تظهر في صفحات: من نحن، العروض، المدونة، وغيرها.') }}
+                                            {{ __('تظهر صورة السيارة الافتراضية تلقائياً للسيارات التي لم يتم رفع صورة لها.') }}
                                         </div>
                                     </div>
                                 </div>

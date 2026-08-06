@@ -138,7 +138,12 @@ class Car extends Model
             return $this->images->first()->image_path;
         }
 
-        return null;
+        $defaultImage = app(\App\Services\Cache\BaseCacheService::class)->rememberSetting('default_car_image');
+        if ($defaultImage) {
+            return str_starts_with($defaultImage, 'http') ? $defaultImage : Storage::disk('public')->url($defaultImage);
+        }
+
+        return asset('images/default_car.png');
     }
 
     public function getActiveOfferAttribute()
