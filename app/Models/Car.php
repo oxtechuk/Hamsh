@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Casts\AsImageUrl;
+use App\Services\Cache\BaseCacheService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -138,7 +139,7 @@ class Car extends Model
             return $this->images->first()->image_path;
         }
 
-        $defaultImage = app(\App\Services\Cache\BaseCacheService::class)->rememberSetting('default_car_image');
+        $defaultImage = app(BaseCacheService::class)->rememberSetting('default_car_image');
         if ($defaultImage) {
             return str_starts_with($defaultImage, 'http') ? $defaultImage : Storage::disk('public')->url($defaultImage);
         }
