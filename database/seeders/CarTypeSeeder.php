@@ -4,11 +4,16 @@ namespace Database\Seeders;
 
 use App\Models\CarType;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class CarTypeSeeder extends Seeder
 {
     public function run(): void
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        CarType::truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
         $types = [
             ['slug' => 'sedan', 'name' => ['ar' => 'سيدان', 'en' => 'Sedan'], 'sort_order' => 1],
             ['slug' => 'suv', 'name' => ['ar' => 'SUV', 'en' => 'SUV'], 'sort_order' => 2],
@@ -20,12 +25,7 @@ class CarTypeSeeder extends Seeder
         ];
 
         foreach ($types as $type) {
-            $existing = CarType::where('slug', $type['slug'])->first();
-            if ($existing) {
-                $existing->update($type);
-            } else {
-                CarType::create($type);
-            }
+            CarType::create($type);
         }
     }
 }
