@@ -1,7 +1,7 @@
 @php
     $logo = \App\Models\Setting::where('key', 'site_logo')->first()?->value;
     $siteName = \App\Models\Setting::where('key', 'site_name')->first()?->value;
-    $siteNameText = is_array($siteName) ? ($siteName[app()->getLocale()] ?? ($siteName['ar'] ?? 'GR Motors')) : ($siteName ?? 'GR Motors');
+    $siteNameText = is_array($siteName) ? ($siteName[app()->getLocale()] ?? ($siteName['ar'] ?? 'Nawader ')) : ($siteName ?? 'Nawader ');
     $currentUser = auth()->guard('employee')->user();
     $r = request()->route()?->getName() ?? '';
 
@@ -383,7 +383,7 @@
         @endcan
         <form action="{{ route('crm.logout') }}" method="POST">
             @csrf
-            <button type="submit" class="crm-nav-link w-100" style="background:none;border:none;cursor:pointer;color:#299BE0;">
+            <button type="submit" class="crm-nav-link w-100" style="background:none;border:none;cursor:pointer;color:#b42225;">
                 <i class="bi bi-box-arrow-right"></i>
                 <span>{{ __('تسجيل الخروج') }}</span>
             </button>

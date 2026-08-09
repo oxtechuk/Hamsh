@@ -1,11 +1,11 @@
 @extends('store.layouts.app')
 
-@section('title', __('الصفحة غير موجودة') . ' — GR Motors')
+@section('title', __('الصفحة غير موجودة') . ' — Nawader ')
 
 @section('css')
 <style>
     /* ============================================================
-       404 PAGE — GR MOTORS BRAND
+       404 PAGE — Nawader  BRAND
     ============================================================ */
 
     /* Dark bg for the content area only */

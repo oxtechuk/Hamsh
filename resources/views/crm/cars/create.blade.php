@@ -1,5 +1,5 @@
 @extends('partials.Layouts.crm-master')
-@section('title', __('إضافة سيارة جديدة') . ' | GR Motors')
+@section('title', __('إضافة سيارة جديدة') . ' | Nawader ')
 
 @section('content')
 <div class="container-fluid" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
@@ -467,7 +467,7 @@ drop.addEventListener('drop', e => {
 // ===== Color Rows =====
 let colorCount = 0;
 
-function addColorRow(name = '', hex = '#299BE0', imgSrc = '') {
+function addColorRow(name = '', hex = '#b42225', imgSrc = '') {
     const idx = colorCount++;
     const noMsg = document.getElementById('no-colors-msg');
     if (noMsg) noMsg.style.display = 'none';

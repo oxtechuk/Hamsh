@@ -12,8 +12,8 @@
 
     <style>
         :root {
-            --primary: #299BE0;
-            --primary-dark: #1a7cb5;
+            --primary: #b42225;
+            --primary-dark: #b42225;
             --primary-glow: rgba(41, 155, 224, 0.15);
             --bg-light: #ffffff;
             --bg-gray: #f8fafc;
