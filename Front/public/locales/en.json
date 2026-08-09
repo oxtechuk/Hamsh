@@ -8,6 +8,26 @@
         "emailValue": "oxtech.uk@gmail.com",
         "locationValue": "Ajman 5"
     },
+    "hero": {
+        "titlePrefix": "Choose",
+        "titleHighlight": "Your Car",
+        "titleLine2Prefix": "In a Way",
+        "titleLine2Highlight": "That Suits You",
+        "calculatorButton": "Calculate Installment",
+        "browseButton": "Browse Cars",
+        "description2": "A carefully selected collection of luxury cars with flexible financing options to get your car with ease.",
+        "stats": {
+            "satisfaction": "Client Satisfaction",
+            "yearsValue": "6 Years",
+            "years": "Market Experience",
+            "cars": "Available Cars"
+        },
+        "slider": {
+            "previous": "Previous Car",
+            "next": "Next Car",
+            "goTo": "Go to Car"
+        }
+    },
     "nav": {
         "home": "Home",
         "cars": "Cars",

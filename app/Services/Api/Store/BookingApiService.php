@@ -45,9 +45,10 @@ final class BookingApiService
         $template = Setting::where('key', 'whatsapp_template_new_lead')->value('value');
 
         if (! empty($template) && ! empty($booking->client_phone)) {
+            $carName = is_array($car->name) ? ($car->name['ar'] ?? reset($car->name)) : (string) $car->name;
             $message = str_replace(
                 ['{customer_name}', '{car_name}', '{status}'],
-                [$booking->client_name, $car->name, 'جديد'],
+                [$booking->client_name, $carName, 'جديد'],
                 $template,
             );
             $this->whatsAppService->sendWhatsApp($booking->client_phone, $message);

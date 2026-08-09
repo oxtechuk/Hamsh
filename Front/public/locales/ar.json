@@ -8,6 +8,26 @@
     "emailValue": "oxtech.uk@gmail.com",
     "locationValue": "عجمان 5"
   },
+  "hero": {
+    "titlePrefix": "اختر",
+    "titleHighlight": "سيارتك",
+    "titleLine2Prefix": "بطريقة",
+    "titleLine2Highlight": "تليق فيك",
+    "calculatorButton": "احسب قسطك",
+    "browseButton": "استعرض السيارات",
+    "description2": "مجموعة مختارة بعناية من أفخم السيارات، مع تمويل مرن يوصلك لسيارتك بأقل خطوات وأوضح شروط.",
+    "stats": {
+      "satisfaction": "رضا العملاء",
+      "yearsValue": "6 سنين",
+      "years": "خبرة في السوق",
+      "cars": "سيارة متوفرة"
+    },
+    "slider": {
+      "previous": "السيارة السابقة",
+      "next": "السيارة التالية",
+      "goTo": "الانتقال إلى السيارة"
+    }
+  },
   "nav": {
     "home": "الرئيسية",
     "cars": "السيارات",
