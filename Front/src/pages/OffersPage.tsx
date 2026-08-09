@@ -10,6 +10,7 @@ import { APP_IMAGES } from "../constants/app-images";
 import { offerToCardProps } from "../utils/offers";
 import { useSEO } from "../utils/useSEO";
 import type { OfferData } from "../types/offers.types";
+import { OffersSkeleton } from "../components/skeletons";
 
 // ── Static mock offers for pagination testing ──────────────────────────────
 const MOCK_COUNTDOWN = {
@@ -57,7 +58,7 @@ export default function OffersPage() {
   // TODO: remove mock override when API has enough data
   const USE_MOCK = false;
 
-  const { data: offersResponse } = useQuery({
+  const { data: offersResponse, isLoading } = useQuery({
     queryKey: ["offers", language, page],
     queryFn: () => getOffers(page, 12),
     enabled: !USE_MOCK,
@@ -83,6 +84,10 @@ export default function OffersPage() {
   const totalPages = USE_MOCK
     ? Math.ceil(MOCK_OFFERS.length / MOCK_PER_PAGE)
     : (offersResponse?.meta.last_page ?? 1);
+
+  if (isLoading) {
+    return <OffersSkeleton />;
+  }
 
   return (
     <>

@@ -11,6 +11,7 @@ import { formatPrice } from "../utils/format";
 import { useSEO } from "../utils/useSEO";
 import { getImageUrl } from "../constants/app-images";
 import type { ICarDetailsRecommendation } from "../interfaces/ICarDetailsHeroProps";
+import { CarDetailsSkeleton } from "../components/skeletons";
 
 export default function CarDetailsPage() {
   const { t } = useTranslation();
@@ -47,11 +48,7 @@ export default function CarDetailsPage() {
   );
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center py-20 text-xl font-bold text-gray-500">
-        {t("carDetails.page.loading")}
-      </div>
-    );
+    return <CarDetailsSkeleton />;
   }
 
   if (isError) {

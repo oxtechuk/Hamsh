@@ -118,7 +118,7 @@
             gap: 6px;
             margin-top: 12px;
             padding: 6px 16px;
-            background: rgba(41, 155, 224, 0.08);
+            background: rgb(0 0 0 / 8%);
             border: 1px solid rgba(41, 155, 224, 0.15);
             border-radius: 50px;
             font-size: 12px;

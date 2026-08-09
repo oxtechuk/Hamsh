@@ -13,6 +13,7 @@ import { useSEO } from "../utils/useSEO";
 import type { FilterValues, CarsQueryParams } from "../types/cars.types";
 import { DEFAULT_FILTER_VALUES } from "../types/cars.types";
 import type { CarCardProps } from "../components/CarCard";
+import { CarCardSkeleton } from "../components/skeletons";
 
 const PAGE_SIZE = 6;
 
@@ -83,7 +84,7 @@ export default function AllCarsPage() {
     return params;
   }
 
-  const { data: carsResponse } = useQuery({
+  const { data: carsResponse, isLoading } = useQuery({
     queryKey: ["cars-data", language, filters, currentPage, offerId],
     queryFn: () => getCars(buildParams()),
     staleTime: 5 * 60 * 1000,
@@ -156,7 +157,13 @@ export default function AllCarsPage() {
             resultCount={filteredCars.length}
           />
 
-          {pagedCars.length > 0 ? (
+          {isLoading ? (
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <CarCardSkeleton key={i} />
+              ))}
+            </div>
+          ) : pagedCars.length > 0 ? (
             <CarsResultsGrid
               cars={pagedCars}
               currentPage={safePage}

@@ -1,72 +1,58 @@
+import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 
 import RootLayout from "../pages/RootLayout";
-import HomePage from "../pages/HomePage";
-import NotFoundPage from "../pages/NotFoundPage";
-import AllCarsPage from "../pages/AllCarsPage";
-import CarDetailsPage from "../pages/CarDetailsPage";
-import ComparePage from "../pages/ComparePage";
-import OffersPage from "../pages/OffersPage";
-import AboutPage from "../pages/AboutPage";
-import BlogsPage from "../pages/BlogsPage";
-import BlogDetailsPage from "../pages/BlogDetailsPage";
-import ContactPage from "../pages/ContactPage";
-import FinanceCalculatorPage from "../pages/FinanceCalculatorPage";
-import BrandsPage from "../pages/BrandsPage";
-import SpecialOrderPage from "../pages/SpecialOrderPage";
-import OrdinaryOrderPage from "../pages/OrdinaryOrderPage";
+import PageSkeleton from "../components/skeletons/PageSkeleton";
+
+const HomePage = lazy(() => import("../pages/HomePage"));
+const NotFoundPage = lazy(() => import("../pages/NotFoundPage"));
+const AllCarsPage = lazy(() => import("../pages/AllCarsPage"));
+const CarDetailsPage = lazy(() => import("../pages/CarDetailsPage"));
+const ComparePage = lazy(() => import("../pages/ComparePage"));
+const OffersPage = lazy(() => import("../pages/OffersPage"));
+const AboutPage = lazy(() => import("../pages/AboutPage"));
+const BlogsPage = lazy(() => import("../pages/BlogsPage"));
+const BlogDetailsPage = lazy(() => import("../pages/BlogDetailsPage"));
+const ContactPage = lazy(() => import("../pages/ContactPage"));
+const FinanceCalculatorPage = lazy(() => import("../pages/FinanceCalculatorPage"));
+const BrandsPage = lazy(() => import("../pages/BrandsPage"));
+const SpecialOrderPage = lazy(() => import("../pages/SpecialOrderPage"));
+const OrdinaryOrderPage = lazy(() => import("../pages/OrdinaryOrderPage"));
+
+const withSuspense = (Component: React.LazyExoticComponent<any>) => (
+  <Suspense fallback={<PageSkeleton />}>
+    <Component />
+  </Suspense>
+);
 
 export const router = createBrowserRouter(
   [
     {
       path: "/",
       Component: RootLayout,
-      errorElement: <NotFoundPage />,
+      errorElement: (
+        <Suspense fallback={<PageSkeleton />}>
+          <NotFoundPage />
+        </Suspense>
+      ),
       children: [
         {
           index: true,
-          Component: HomePage,
+          element: withSuspense(HomePage),
         },
-        { path: "/cars", element: <AllCarsPage /> },
-        { path: "/cars/:slug", element: <CarDetailsPage /> },
-        { path: "/compare", element: <ComparePage /> },
-        { path: "/offers", element: <OffersPage /> },
-        {
-          path: "/about",
-          element: <AboutPage />,
-        },
-        {
-          path: "/blog",
-          element: <BlogsPage />,
-        },
-        {
-          path: "/blog/:slug",
-          element: <BlogDetailsPage />,
-        },
-        {
-          path: "/contact",
-          element: <ContactPage />,
-        },
-        {
-          path: "/finance-calculator",
-          element: <FinanceCalculatorPage />,
-        },
-        {
-          path: "/brands",
-          element: <BrandsPage />,
-        },
-        {
-          path: "/orders/special",
-          element: <SpecialOrderPage />,
-        },
-        {
-          path: "/orders/ordinary",
-          element: <OrdinaryOrderPage />,
-        },
-        {
-          path: "*",
-          Component: NotFoundPage,
-        },
+        { path: "/cars", element: withSuspense(AllCarsPage) },
+        { path: "/cars/:slug", element: withSuspense(CarDetailsPage) },
+        { path: "/compare", element: withSuspense(ComparePage) },
+        { path: "/offers", element: withSuspense(OffersPage) },
+        { path: "/about", element: withSuspense(AboutPage) },
+        { path: "/blog", element: withSuspense(BlogsPage) },
+        { path: "/blog/:slug", element: withSuspense(BlogDetailsPage) },
+        { path: "/contact", element: withSuspense(ContactPage) },
+        { path: "/finance-calculator", element: withSuspense(FinanceCalculatorPage) },
+        { path: "/brands", element: withSuspense(BrandsPage) },
+        { path: "/orders/special", element: withSuspense(SpecialOrderPage) },
+        { path: "/orders/ordinary", element: withSuspense(OrdinaryOrderPage) },
+        { path: "*", element: withSuspense(NotFoundPage) },
       ],
     },
   ],

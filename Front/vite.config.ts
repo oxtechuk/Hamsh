@@ -40,5 +40,24 @@ export default defineConfig({
     outDir: "../public",
     assetsDir: "assets/store",
     emptyOutDir: false,
+    chunkSizeWarningLimit: 1000,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            if (id.includes("react") || id.includes("react-dom") || id.includes("react-router")) {
+              return "vendor-react";
+            }
+            if (id.includes("lucide-react") || id.includes("remixicon")) {
+              return "vendor-icons";
+            }
+            if (id.includes("@tanstack") || id.includes("axios")) {
+              return "vendor-query";
+            }
+            return "vendor";
+          }
+        },
+      },
+    },
   },
 });

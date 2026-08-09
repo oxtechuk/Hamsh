@@ -22,7 +22,6 @@ return [
     'allowed_origins' => [
         'https://nawadernajd.com',
         'https://www.nawadernajd.com',
-        'https://nawader.oxtech.uk',
         'http://localhost:3000',
         'http://localhost:5173',
         'http://localhost',

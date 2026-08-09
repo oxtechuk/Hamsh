@@ -31,7 +31,7 @@
         :root {
             --crm-red: #b42225;
             --crm-red-dark: #b42225;
-            --crm-red-light: rgba(41, 155, 224, 0.08);
+            --crm-red-light: rgb(0 0 0 / 8%);
             --crm-sidebar-width: 220px;
             --crm-topbar-height: 64px;
             --crm-bg: #F5F6FA;

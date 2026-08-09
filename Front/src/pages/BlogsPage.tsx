@@ -10,6 +10,7 @@ import { postToCardProps } from "../utils/blog";
 import { localize } from "../utils/localize";
 import { useSEO } from "../utils/useSEO";
 import { STATIC_ARTICLES, STATIC_CATEGORIES } from "../data/blog-static-data";
+import { BlogSkeleton } from "../components/skeletons";
 
 const PER_PAGE = 6;
 
@@ -29,6 +30,7 @@ export default function BlogsPage() {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
+    isLoading,
   } = useInfiniteQuery({
     placeholderData: keepPreviousData,
     queryKey: ["blogs", language, categoryId ?? "all"],
@@ -93,6 +95,10 @@ export default function BlogsPage() {
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   const showStaticFallback = !isApiData && !hasEverHadApiData.current;
+
+  if (isLoading) {
+    return <BlogSkeleton />;
+  }
 
   return (
     <>

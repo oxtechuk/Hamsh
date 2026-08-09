@@ -4,13 +4,28 @@ import BrandSearchInput from "../components/BrandSearchInput";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { useSEO } from "../utils/useSEO";
 import { useBrands } from "../hooks/useBrands";
+import SkeletonBase from "../components/skeletons/SkeletonBase";
 
 export default function BrandsPage() {
   const { t, i18n } = useTranslation();
   useSEO(t("pageTitles.brands"), t("brandsSection.description"));
   const { brandCards, search, setSearch, isLoading } = useBrands();
 
-  if (isLoading) return <LoadingSpinner />;
+  if (isLoading) {
+    return (
+      <section dir={i18n.dir()} className="w-full py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-8">
+          <SkeletonBase width="240px" height="36px" borderRadius="8px" />
+          <SkeletonBase height="50px" borderRadius="12px" className="w-full max-w-md" />
+          <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-5 pt-4">
+            {Array.from({ length: 10 }).map((_, i) => (
+              <SkeletonBase key={i} height="120px" borderRadius="16px" />
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section dir={i18n.dir()} className="w-full py-16">

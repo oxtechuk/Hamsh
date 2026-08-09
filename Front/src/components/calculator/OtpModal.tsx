@@ -27,6 +27,12 @@ export default function OtpModal({ isOpen, phone, onClose, onVerified }: OtpModa
     return () => clearTimeout(timer);
   }, [countdown]);
 
+  useEffect(() => {
+    if (isOpen && phone && !otpSent && !isSending) {
+      handleSendOtp();
+    }
+  }, [isOpen, phone]);
+
   if (!isOpen) return null;
 
   const handleSendOtp = async () => {

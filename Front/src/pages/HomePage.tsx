@@ -17,6 +17,7 @@ import type { IBudgetRange } from "../interfaces/IBudgetRange";
 import type { CarsListResponse } from "../types/cars.types";
 import PurchaseExperienceSection from "../components/PurchaseExperienceSection";
 import BrandsCarousel from "../components/BrandsCarousel";
+import { HomeHeroSkeleton, CarCardSkeleton } from "../components/skeletons";
 
 function RiyalLabel({ text }: { text: string }) {
   return (
@@ -195,8 +196,16 @@ export default function Home() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-[400px] items-center justify-center">
-        <div className="h-10 w-10 animate-spin rounded-full border-4 border-[var(--brand-primary-color)] border-t-transparent" />
+      <div className="space-y-12 py-6">
+        <HomeHeroSkeleton />
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-6">
+          <div className="h-8 w-48 bg-gray-200 animate-pulse rounded-md" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <CarCardSkeleton key={i} />
+            ))}
+          </div>
+        </div>
       </div>
     );
   }

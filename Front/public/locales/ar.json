@@ -1047,5 +1047,46 @@
     "previousSlide": "الشريحة السابقة",
     "nextSlide": "الشريحة التالية",
     "close": "إغلاق"
+  },
+  "financeCalculator": {
+    "badge": "حاسبة الأقساط",
+    "titleWhite": "احسب قسطك بكل سهولة",
+    "description": "خطوات بسيطة للحصول على تمويل يناسبك",
+    "validation": {
+      "fillRequired": "يرجى تعبئة جميع الحقول المطلوبة"
+    },
+    "step1": {
+      "personalInfoTitle": "معلوماتك الشخصية",
+      "fullName": "الاسم الكامل",
+      "fullNamePlaceholder": "اسمك الكريم",
+      "phone": "رقم الجوال",
+      "phonePlaceholder": "05XXXXXXXX",
+      "city": "المدينة",
+      "cityPlaceholder": "اختر المدينة",
+      "nextButton": "التالي — اختر السيارة"
+    },
+    "otp": {
+      "title": "تأكيد رقم الجوال",
+      "subtitle": "يرجى تأكيد رقم الجوال لاستكمال طلب التمويل",
+      "phoneLabel": "رقم الجوال",
+      "sending": "جارٍ إرسال الرمز...",
+      "sendButton": "إرسال رمز التحقق",
+      "codeLabel": "أدخل رمز التحقق (OTP)",
+      "verifying": "جارٍ التحقق...",
+      "verifyButton": "تأكيد الرمز واستكمال الطلب",
+      "resendIn": "يمكنك إعادة طلب الرمز خلال",
+      "seconds": "ثانية",
+      "resendButton": "إعادة إرسال الرمز",
+      "verifyButtonShort": "تأكيد الرقم",
+      "verifiedBadge": "تم تأكيد الرقم",
+      "invalidPhone": "رقم الجوال غير صحيح",
+      "sentSuccess": "تم إرسال رمز التحقق لرقم جوالك",
+      "sendFailed": "فشل إرسال رمز التحقق",
+      "sendError": "حدث خطأ أثناء إرسال رمز التحقق",
+      "enterCode": "يرجى إدخال رمز التحقق",
+      "verifiedSuccess": "تم تأكيد رقم الجوال بنجاح",
+      "invalidCode": "رمز التحقق غير صحيح أو منتهي الصلاحية",
+      "verifyError": "فشل التحقق من الرمز، حاول مرة أخرى"
+    }
   }
 }
