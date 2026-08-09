@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Brand;
 use App\Models\Car;
 use App\Models\CarCategory;
+use App\Models\CarImage;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -14,25 +15,45 @@ class CarSeeder extends Seeder
     {
         // Disable foreign key checks to safely refresh cars table
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        CarImage::truncate();
         Car::truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         // 1. Seed Brands
         $brandsData = [
-            'hyundai' => ['en' => 'Hyundai', 'ar' => 'هيونداي'],
-            'toyota' => ['en' => 'Toyota', 'ar' => 'تويوتا'],
-            'chevrolet' => ['en' => 'Chevrolet', 'ar' => 'شفروليه'],
-            'kia' => ['en' => 'Kia', 'ar' => 'كيا'],
-            'honda' => ['en' => 'Honda', 'ar' => 'هوندا'],
-            'nissan' => ['en' => 'Nissan', 'ar' => 'نيسان'],
+            'hyundai' => [
+                'name' => ['en' => 'Hyundai', 'ar' => 'هيونداي'],
+                'logo' => 'https://upload.wikimedia.org/wikipedia/commons/4/44/Hyundai_Motor_Company_logo.svg',
+            ],
+            'toyota' => [
+                'name' => ['en' => 'Toyota', 'ar' => 'تويوتا'],
+                'logo' => 'https://upload.wikimedia.org/wikipedia/commons/e/e7/Toyota.svg',
+            ],
+            'chevrolet' => [
+                'name' => ['en' => 'Chevrolet', 'ar' => 'شفروليه'],
+                'logo' => 'https://upload.wikimedia.org/wikipedia/commons/1/1e/Chevrolet-logo.png',
+            ],
+            'kia' => [
+                'name' => ['en' => 'Kia', 'ar' => 'كيا'],
+                'logo' => 'https://upload.wikimedia.org/wikipedia/commons/4/47/Kia_logo.svg',
+            ],
+            'honda' => [
+                'name' => ['en' => 'Honda', 'ar' => 'هوندا'],
+                'logo' => 'https://upload.wikimedia.org/wikipedia/commons/7/7b/Honda_Logo.svg',
+            ],
+            'nissan' => [
+                'name' => ['en' => 'Nissan', 'ar' => 'نيسان'],
+                'logo' => 'https://upload.wikimedia.org/wikipedia/commons/2/23/Nissan_2020_logo.svg',
+            ],
         ];
 
         $brands = [];
-        foreach ($brandsData as $slug => $name) {
+        foreach ($brandsData as $slug => $data) {
             $brands[$slug] = Brand::updateOrCreate(
                 ['slug' => $slug],
                 [
-                    'name' => $name,
+                    'name' => $data['name'],
+                    'logo' => $data['logo'],
                     'is_active' => true,
                 ]
             );
@@ -62,6 +83,12 @@ class CarSeeder extends Seeder
                 'cash_price' => 66000,
                 'min_down_payment' => 0,
                 'min_installment' => 940,
+                'thumbnail' => 'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?auto=format&fit=crop&w=1200&q=80',
+                'gallery' => [
+                    ['image_path' => 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1200&q=80', 'type' => 'exterior'],
+                    ['image_path' => 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1200&q=80', 'type' => 'exterior'],
+                    ['image_path' => 'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1200&q=80', 'type' => 'interior'],
+                ],
                 'specs' => [
                     ['label' => 'Engine', 'value' => '1.5L 4-Cylinder'],
                     ['label' => 'Horsepower', 'value' => '115 HP'],
@@ -103,6 +130,11 @@ class CarSeeder extends Seeder
                 'cash_price' => 67500,
                 'min_down_payment' => 0,
                 'min_installment' => 960,
+                'thumbnail' => 'https://images.unsplash.com/photo-1590362891991-f776e747a588?auto=format&fit=crop&w=1200&q=80',
+                'gallery' => [
+                    ['image_path' => 'https://images.unsplash.com/photo-1553440569-bcc63803a83d?auto=format&fit=crop&w=1200&q=80', 'type' => 'exterior'],
+                    ['image_path' => 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=1200&q=80', 'type' => 'interior'],
+                ],
                 'specs' => [
                     ['label' => 'Engine', 'value' => '1.3L 4-Cylinder'],
                     ['label' => 'Horsepower', 'value' => '97 HP'],
@@ -144,6 +176,11 @@ class CarSeeder extends Seeder
                 'cash_price' => 112000,
                 'min_down_payment' => 0,
                 'min_installment' => 1600,
+                'thumbnail' => 'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?auto=format&fit=crop&w=1200&q=80',
+                'gallery' => [
+                    ['image_path' => 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=1200&q=80', 'type' => 'exterior'],
+                    ['image_path' => 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80', 'type' => 'interior'],
+                ],
                 'specs' => [
                     ['label' => 'Engine', 'value' => '2.5L 4-Cylinder'],
                     ['label' => 'Horsepower', 'value' => '204 HP'],
@@ -185,6 +222,11 @@ class CarSeeder extends Seeder
                 'cash_price' => 59000,
                 'min_down_payment' => 0,
                 'min_installment' => 845,
+                'thumbnail' => 'https://images.unsplash.com/photo-1553440569-bcc63803a83d?auto=format&fit=crop&w=1200&q=80',
+                'gallery' => [
+                    ['image_path' => 'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&w=1200&q=80', 'type' => 'exterior'],
+                    ['image_path' => 'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1200&q=80', 'type' => 'interior'],
+                ],
                 'specs' => [
                     ['label' => 'Engine', 'value' => '1.4L Turbo 4-Cylinder'],
                     ['label' => 'Horsepower', 'value' => '153 HP'],
@@ -226,6 +268,11 @@ class CarSeeder extends Seeder
                 'cash_price' => 62000,
                 'min_down_payment' => 0,
                 'min_installment' => 890,
+                'thumbnail' => 'https://images.unsplash.com/photo-1619682817481-e994891cd1f5?auto=format&fit=crop&w=1200&q=80',
+                'gallery' => [
+                    ['image_path' => 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&w=1200&q=80', 'type' => 'exterior'],
+                    ['image_path' => 'https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=1200&q=80', 'type' => 'interior'],
+                ],
                 'specs' => [
                     ['label' => 'Engine', 'value' => '1.6L 4-Cylinder'],
                     ['label' => 'Horsepower', 'value' => '123 HP'],
@@ -267,6 +314,11 @@ class CarSeeder extends Seeder
                 'cash_price' => 76000,
                 'min_down_payment' => 0,
                 'min_installment' => 1090,
+                'thumbnail' => 'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=1200&q=80',
+                'gallery' => [
+                    ['image_path' => 'https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?auto=format&fit=crop&w=1200&q=80', 'type' => 'exterior'],
+                    ['image_path' => 'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?auto=format&fit=crop&w=1200&q=80', 'type' => 'interior'],
+                ],
                 'specs' => [
                     ['label' => 'Engine', 'value' => '2.0L 4-Cylinder'],
                     ['label' => 'Horsepower', 'value' => '147 HP'],
@@ -308,6 +360,11 @@ class CarSeeder extends Seeder
                 'cash_price' => 73000,
                 'min_down_payment' => 0,
                 'min_installment' => 1050,
+                'thumbnail' => 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1200&q=80',
+                'gallery' => [
+                    ['image_path' => 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1200&q=80', 'type' => 'exterior'],
+                    ['image_path' => 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=1200&q=80', 'type' => 'interior'],
+                ],
                 'specs' => [
                     ['label' => 'Engine', 'value' => '1.6L 4-Cylinder'],
                     ['label' => 'Horsepower', 'value' => '128 HP'],
@@ -349,6 +406,11 @@ class CarSeeder extends Seeder
                 'cash_price' => 101000,
                 'min_down_payment' => 0,
                 'min_installment' => 1450,
+                'thumbnail' => 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80',
+                'gallery' => [
+                    ['image_path' => 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=1200&q=80', 'type' => 'exterior'],
+                    ['image_path' => 'https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=1200&q=80', 'type' => 'interior'],
+                ],
                 'specs' => [
                     ['label' => 'Engine', 'value' => '2.5L 4-Cylinder'],
                     ['label' => 'Horsepower', 'value' => '191 HP'],
@@ -390,6 +452,11 @@ class CarSeeder extends Seeder
                 'cash_price' => 96000,
                 'min_down_payment' => 0,
                 'min_installment' => 1375,
+                'thumbnail' => 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=1200&q=80',
+                'gallery' => [
+                    ['image_path' => 'https://images.unsplash.com/photo-1619682817481-e994891cd1f5?auto=format&fit=crop&w=1200&q=80', 'type' => 'exterior'],
+                    ['image_path' => 'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1200&q=80', 'type' => 'interior'],
+                ],
                 'specs' => [
                     ['label' => 'Engine', 'value' => '2.5L 4-Cylinder'],
                     ['label' => 'Horsepower', 'value' => '194 HP'],
@@ -431,6 +498,11 @@ class CarSeeder extends Seeder
                 'cash_price' => 114000,
                 'min_down_payment' => 0,
                 'min_installment' => 1600,
+                'thumbnail' => 'https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?auto=format&fit=crop&w=1200&q=80',
+                'gallery' => [
+                    ['image_path' => 'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=1200&q=80', 'type' => 'exterior'],
+                    ['image_path' => 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80', 'type' => 'interior'],
+                ],
                 'specs' => [
                     ['label' => 'Engine', 'value' => '1.5L Turbo 4-Cylinder'],
                     ['label' => 'Horsepower', 'value' => '192 HP'],
@@ -472,6 +544,11 @@ class CarSeeder extends Seeder
                 'cash_price' => 110000,
                 'min_down_payment' => 0,
                 'min_installment' => 1585,
+                'thumbnail' => 'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?auto=format&fit=crop&w=1200&q=80',
+                'gallery' => [
+                    ['image_path' => 'https://images.unsplash.com/photo-1553440569-bcc63803a83d?auto=format&fit=crop&w=1200&q=80', 'type' => 'exterior'],
+                    ['image_path' => 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=1200&q=80', 'type' => 'interior'],
+                ],
                 'specs' => [
                     ['label' => 'Engine', 'value' => '2.5L 4-Cylinder'],
                     ['label' => 'Horsepower', 'value' => '188 HP'],
@@ -503,7 +580,14 @@ class CarSeeder extends Seeder
         ];
 
         foreach ($cars as $carData) {
-            Car::create($carData);
+            $gallery = $carData['gallery'] ?? [];
+            unset($carData['gallery']);
+
+            $car = Car::create($carData);
+
+            foreach ($gallery as $img) {
+                $car->images()->create($img);
+            }
         }
     }
 }

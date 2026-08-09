@@ -70,8 +70,8 @@
 
                         {{-- Image Holder --}}
                         <div class="car-img-wrapper">
-                            @if($car->thumbnail)
-                                <img src="{{ asset('storage/' . $car->thumbnail) }}" alt="{{ $car->name }}" class="car-img-main">
+                            @if($car->main_image)
+                                <img src="{{ $car->main_image }}" alt="{{ $car->name }}" class="car-img-main">
                             @else
                                 <div class="car-no-img">
                                     <i class="bi bi-car-front"></i>
@@ -80,7 +80,7 @@
                             {{-- Brand Overlay --}}
                             @if($car->brand && $car->brand->logo)
                                 <div class="car-brand-mini">
-                                    <img src="{{ asset('storage/' . $car->brand->logo) }}" alt="{{ $car->brand->name }}">
+                                    <img src="{{ $car->brand->logo }}" alt="{{ $car->brand->name }}">
                                 </div>
                             @endif
                         </div>

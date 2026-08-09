@@ -43,7 +43,7 @@
                                 <td class="px-4 py-3">
                                     @if($brand->logo)
                                         <div class="brand-logo-container p-1 border rounded bg-white shadow-xs" style="width: 50px; height: 50px;">
-                                            <img src="{{ asset('storage/' . $brand->logo) }}" alt="{{ $brand->name }}" width="40" height="40" class="object-fit-contain">
+                                            <img src="{{ $brand->logo }}" alt="{{ $brand->name }}" width="40" height="40" class="object-fit-contain">
                                         </div>
                                     @else
                                         <div class="bg-light rounded d-flex align-items-center justify-content-center border" style="width: 50px; height: 50px;">

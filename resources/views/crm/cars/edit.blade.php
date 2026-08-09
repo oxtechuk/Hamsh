@@ -320,7 +320,7 @@
                                 <label class="form-label">{{ __('الصورة الرئيسية') }}</label>
                                 @if($car->thumbnail)
                                 <div class="d-flex align-items-center gap-3 mb-2 p-2 rounded-3" style="background:#F8F9FC;border:1px solid var(--crm-border);">
-                                    <img src="{{ asset('storage/'.$car->thumbnail) }}" class="car-img-preview" id="thumbPreview">
+                                    <img src="{{ $car->thumbnail }}" class="car-img-preview" id="thumbPreview">
                                     <div>
                                         <div class="fw-bold" style="font-size:12px;">{{ __('الصورة الحالية') }}</div>
                                         <small class="text-muted">{{ __('ارفع صورة جديدة للاستبدال') }}</small>
@@ -336,7 +336,7 @@
                                 <div class="d-flex flex-wrap gap-2 mt-2">
                                     @foreach($car->images->where('type','exterior') as $img)
                                     <div class="position-relative">
-                                        <img src="{{ asset('storage/'.$img->image_path) }}" class="rounded" style="width:70px;height:52px;object-fit:cover;">
+                                        <img src="{{ $img->image_path }}" class="rounded" style="width:70px;height:52px;object-fit:cover;">
                                         <a href="{{ route('crm.cars.delete-image', $img) }}" class="position-absolute top-0 end-0" style="background:#b42225;color:#fff;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:10px;text-decoration:none;" onclick="return confirm('حذف؟')">×</a>
                                     </div>
                                     @endforeach
@@ -350,7 +350,7 @@
                                 <div class="d-flex flex-wrap gap-2 mt-2">
                                     @foreach($car->images->where('type','interior') as $img)
                                     <div class="position-relative">
-                                        <img src="{{ asset('storage/'.$img->image_path) }}" class="rounded" style="width:70px;height:52px;object-fit:cover;">
+                                        <img src="{{ $img->image_path }}" class="rounded" style="width:70px;height:52px;object-fit:cover;">
                                         <a href="{{ route('crm.cars.delete-image', $img) }}" class="position-absolute top-0 end-0" style="background:#b42225;color:#fff;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:10px;text-decoration:none;" onclick="return confirm('حذف؟')">×</a>
                                     </div>
                                     @endforeach
