@@ -113,6 +113,7 @@ class GeneralSettingController extends Controller
             'about_sections',
             'store_booking_sections',
             'main_offer_id',
+            'enable_twilio_otp',
         ];
 
         // Update text/array settings
@@ -125,9 +126,12 @@ class GeneralSettingController extends Controller
             }
         }
 
-        // Checkbox unchecked case for page_loader_enabled and auto_assign_bookings
+        // Checkbox unchecked cases
         if (! $request->has('page_loader_enabled')) {
             Setting::updateOrCreate(['key' => 'page_loader_enabled'], ['value' => '0']);
+        }
+        if (! $request->has('enable_twilio_otp')) {
+            Setting::updateOrCreate(['key' => 'enable_twilio_otp'], ['value' => '0']);
         }
 
         // Handle About Hero Gallery Images

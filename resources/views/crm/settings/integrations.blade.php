@@ -43,6 +43,16 @@
                                     <input type="text" name="twilio_sms_number" class="form-control bg-light border-0 shadow-none py-2 text-start" dir="ltr" value="{{ $settings['twilio_sms_number'] ?? '' }}" placeholder="+1234567890">
                                     <div class="mt-1 small text-muted">{{ __('اختياري، يستخدم للرسائل النصية فقط') }}</div>
                                 </div>
+
+                                <div class="col-12 mt-4 pt-3 border-top">
+                                    <div class="form-check form-switch d-flex align-items-center">
+                                        <input class="form-check-input" type="checkbox" name="enable_twilio_otp" id="enable_twilio_otp" value="1" {{ ($settings['enable_twilio_otp'] ?? '0') == '1' ? 'checked' : '' }} style="width: 2.5em; height: 1.25em; cursor: pointer;">
+                                        <label class="form-check-label fw-bold text-dark mb-0 ms-3" for="enable_twilio_otp" style="cursor: pointer;">
+                                            {{ __('تفعيل كود التحقق (OTP) للعملاء بآلة حاسبة التمويل') }}
+                                        </label>
+                                    </div>
+                                    <div class="text-muted small mt-2 ms-5">{{ __('عند التفعيل، سيطلب من العميل إدخال رمز التحقق المرسل لجواله لتأكيد الرقم قبل إرسال طلب التمويل.') }}</div>
+                                </div>
                             </div>
                         </div>
                     </div>
