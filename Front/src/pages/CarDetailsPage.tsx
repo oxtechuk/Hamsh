@@ -108,7 +108,7 @@ export default function CarDetailsPage() {
           value: color.hex,
           image: color.image,
         }))}
-        orderTo={() => navigate("/finance-calculator", { state: { car } })}
+        orderTo={() => navigate("/orders/ordinary", { state: { car } })}
         financeTo="/finance-calculator"
         specsTabs={tabs}
         recommendations={relatedCars}

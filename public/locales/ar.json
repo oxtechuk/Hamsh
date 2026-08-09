@@ -1112,6 +1112,32 @@
       "dtiLabel": "نسبة الاستقطاع:",
       "exceededWarning": "الالتزامات تتجاوز الحد المباشر للمصرفية.",
       "debtOption": "أرغب في الاستفادة من \"خيار الحلول التمويلية وتوحيد الالتزامات\""
+    },
+    "step3": {
+      "financeDetails": "تفاصيل التمويل",
+      "downPayment": "الدفعة الأولى",
+      "financeTerm": "مدة التمويل",
+      "years": "سنوات",
+      "months": "شهر",
+      "monthlyIncome": "الدخل الشهري (ر.س)",
+      "monthlyIncomePlaceholder": "مثال: 15000",
+      "monthlyObligations": "الالتزامات الشهرية الحالية (ر.س)",
+      "monthlyObligationsPlaceholder": "مثال: 800 (أو صفر إن لم يكن)",
+      "summaryTitle": "ملخص التمويل",
+      "carPrice": "سعر السيارة",
+      "financeAmount": "مبلغ التمويل",
+      "paymentPeriod": "مدة السداد",
+      "annualRate": "نسبة الفائدة التقريبية",
+      "estimatedMonthlyPayment": "القسط الشهري التقريبي",
+      "riyalPerMonth": "ريال سعودي / شهر",
+      "totalPayment": "إجمالي السداد",
+      "totalInterest": "إجمالي الفائدة",
+      "disclaimer": "* الأرقام تقريبية — سيتم التأكيد من فريق التمويل",
+      "successToast": "تم إرسال طلب التمويل بنجاح",
+      "errorToast": "تعذر إرسال طلب التمويل",
+      "submitting": "جارٍ الإرسال...",
+      "submitLead": "تقديم طلب التمويل",
+      "backButton": "رجوع"
     }
   }
 }

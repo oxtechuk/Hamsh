@@ -46,7 +46,7 @@
                         <p class="text-muted mb-0 small">{{ __('عند التفعيل، سيتوجب على العميل في حاسبة التمويل تأكيد رقم جواله عبر رمز OTP قبل تقديم الطلب.') }}</p>
                     </div>
                 </div>
-                <form action="{{ route('calculator.otp.toggle') }}" method="POST" class="d-flex align-items-center gap-2">
+                <form action="{{ route('crm.calculator.otp.toggle') }}" method="POST" class="d-flex align-items-center gap-2">
                     @csrf
                     <div class="form-check form-switch fs-5 mb-0">
                         <input class="form-check-input" type="checkbox" name="enable_twilio_otp" value="1" role="switch" id="enableOtpSwitch" {{ !empty($otpEnabled) ? 'checked' : '' }} onchange="this.form.submit()">
