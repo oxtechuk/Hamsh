@@ -1,3 +1,4 @@
+import { getDynamicBasePath } from "../utils/base-path";
 import { API_ORIGIN } from "./axios.constants";
 
 const STORAGE_PREFIX = `${API_ORIGIN}/storage/`;
@@ -10,7 +11,7 @@ export function getImageUrl(path: string | null): string {
   return `${STORAGE_PREFIX}${path}`;
 }
 
-const base = import.meta.env.BASE_URL;
+const base = getDynamicBasePath();
 const cleanBase = base.endsWith("/") ? base : `${base}/`;
 
 export const APP_IMAGES = {

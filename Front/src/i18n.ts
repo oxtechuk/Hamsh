@@ -1,6 +1,7 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import HttpBackend from "i18next-http-backend";
+import { getDynamicBasePath } from "./utils/base-path";
 
 const savedLang = localStorage.getItem("language") || "ar";
 
@@ -12,7 +13,7 @@ i18n
     fallbackLng: "en",
     debug: true,
     backend: {
-      loadPath: `${import.meta.env.BASE_URL}locales/{{lng}}.json`,
+      loadPath: `${getDynamicBasePath()}locales/{{lng}}.json`,
     },
     interpolation: {
       escapeValue: false,

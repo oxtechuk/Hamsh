@@ -1,5 +1,6 @@
 import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
+import { getDynamicBasePath } from "../utils/base-path";
 
 import RootLayout from "../pages/RootLayout";
 import PageSkeleton from "../components/skeletons/PageSkeleton";
@@ -28,20 +29,11 @@ const withSuspense = (Component: React.LazyExoticComponent<any>) => (
 export const router = createBrowserRouter(
   [
     {
-      path: "/",
-      Component: RootLayout,
-      errorElement: (
-        <Suspense fallback={<PageSkeleton />}>
-          <NotFoundPage />
-        </Suspense>
-      ),
+      element: <RootLayout />,
       children: [
-        {
-          index: true,
-          element: withSuspense(HomePage),
-        },
-        { path: "/cars", element: withSuspense(AllCarsPage) },
+        { path: "/", element: withSuspense(HomePage) },
         { path: "/cars/:slug", element: withSuspense(CarDetailsPage) },
+        { path: "/cars", element: withSuspense(AllCarsPage) },
         { path: "/compare", element: withSuspense(ComparePage) },
         { path: "/offers", element: withSuspense(OffersPage) },
         { path: "/about", element: withSuspense(AboutPage) },
@@ -57,6 +49,6 @@ export const router = createBrowserRouter(
     },
   ],
   {
-    basename: import.meta.env.BASE_URL,
+    basename: getDynamicBasePath(),
   },
 );
