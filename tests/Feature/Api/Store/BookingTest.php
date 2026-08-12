@@ -71,6 +71,7 @@ class BookingTest extends TestCase
             'client_name' => 'Ahmed Ali',
             'client_phone' => '0501234567',
             'client_email' => 'ahmed@example.com',
+            'city' => 'Riyadh',
             'down_payment' => 25000,
             'duration_years' => 5,
             'booking_type' => 'purchase',
@@ -115,6 +116,6 @@ class BookingTest extends TestCase
         $response = $this->postJson(route('store.api.booking.store'), []);
 
         $response->assertStatus(422);
-        $response->assertJsonValidationErrors(['car_id', 'client_name', 'client_phone', 'down_payment', 'duration_years']);
+        $response->assertJsonValidationErrors(['client_name', 'client_phone', 'city', 'brand_name']);
     }
 }

@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { X, ShieldCheck, AlertTriangle, RotateCcw } from "lucide-react";
@@ -263,7 +264,7 @@ export default function CarRequestModal({ isOpen, onClose, car }: CarRequestModa
 
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm" onClick={onClose}>
       <div 
         className="relative w-full max-w-[500px] overflow-hidden rounded-2xl bg-white shadow-2xl transition-all max-h-[90vh] flex flex-col"
@@ -510,6 +511,7 @@ export default function CarRequestModal({ isOpen, onClose, car }: CarRequestModa
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
