@@ -75,6 +75,7 @@ final class SettingApiService
             ],
             'social_media' => $socialMedia,
             'about_branches' => $aboutBranches,
+            'car_popup_enabled' => $settings->get('car_popup_enabled', '0') === '1',
         ];
     }
 

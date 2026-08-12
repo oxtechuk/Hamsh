@@ -1,4 +1,4 @@
-import type { MouseEvent } from "react";
+import { useState, type MouseEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Fuel, Gauge, GitCompare, Settings2 } from "lucide-react";
@@ -8,10 +8,13 @@ import LazyImg from "./LazyImg";
 import { SpecItem } from "./SpecItem";
 import type { ICarCardProps } from "../interfaces/ICarCardProps";
 import { resolveHighlight, contrastTextColor } from "../utils/badge-utils";
+import { useSettingsStore } from "../store/settings.store";
+import CarRequestModal from "./CarRequestModal";
 
 export type { ICarCardProps as CarCardProps };
 
 export default function CarCard({
+  id,
   image,
   brand,
   name,
@@ -28,10 +31,14 @@ export default function CarCard({
   reserveText,
   badgeText,
   badgeColor,
+  rawPrice,
 }: ICarCardProps) {
   const { t, i18n } = useTranslation();
   const direction = i18n.dir();
   const navigate = useNavigate();
+
+  const { settings } = useSettingsStore();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const resolvedBadge = resolveHighlight(badgeText, i18n.language);
 
@@ -44,7 +51,11 @@ export default function CarCard({
     : undefined;
 
   const handleOpenDetails = () => {
-    navigate(detailsTo);
+    if (settings?.car_popup_enabled) {
+      setIsModalOpen(true);
+    } else {
+      navigate(detailsTo);
+    }
   };
 
   const handleCompare = (event: MouseEvent<HTMLButtonElement>) => {
@@ -205,7 +216,8 @@ export default function CarCard({
             onClick={(event) => event.stopPropagation()}
           >
             <Button
-              to={detailsTo}
+              to={settings?.car_popup_enabled ? undefined : detailsTo}
+              onClick={settings?.car_popup_enabled ? () => setIsModalOpen(true) : undefined}
               bgColor="bg-[var(--brand-secondary-color)]"
               textColor="text-white!"
               className={[
@@ -221,6 +233,18 @@ export default function CarCard({
           </div>
         </div>
       </div>
+
+      <CarRequestModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        car={{
+          id,
+          brand,
+          name,
+          year,
+          price: rawPrice ?? 0,
+        }}
+      />
     </article>
   );
 }

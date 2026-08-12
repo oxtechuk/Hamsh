@@ -104,7 +104,7 @@ class GeneralSettingController extends Controller
             'site_name', 'footer_text', 'contact_email', 'contact_phone',
             'contact_whatsapp', 'contact_address', 'bento_cars',
             'hero_ad_1_link', 'hero_ad_2_link', 'auto_assign_bookings',
-            'page_loader_enabled',
+            'page_loader_enabled', 'car_popup_enabled',
             'twilio_sid', 'twilio_auth_token', 'twilio_whatsapp_number', 'twilio_sms_number',
             'whatsapp_template_new_lead', 'whatsapp_template_status_update',
             'google_analytics_id', 'meta_pixel_id',
@@ -132,6 +132,9 @@ class GeneralSettingController extends Controller
         }
         if (! $request->has('enable_twilio_otp')) {
             Setting::updateOrCreate(['key' => 'enable_twilio_otp'], ['value' => '0']);
+        }
+        if (! $request->has('car_popup_enabled')) {
+            Setting::updateOrCreate(['key' => 'car_popup_enabled'], ['value' => '0']);
         }
 
         // Handle About Hero Gallery Images

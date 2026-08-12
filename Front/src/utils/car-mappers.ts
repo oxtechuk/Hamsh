@@ -53,6 +53,7 @@ export function mapCarToCardProps(car: CarItem, lang = "ar"): CarCardProps | nul
             detailsTo: `/cars/${slug}`,
             badgeText: car.highlight?.text_ar ?? car.highlight?.text ?? undefined,
             badgeColor: car.highlight?.color ?? undefined,
+            rawPrice: car.current_price ?? car.cash_price ?? 0,
         };
     } catch {
         return null;
@@ -99,6 +100,7 @@ export function mapRelatedCar(car: CarItem, lang = "ar"): CarCardProps | null {
             detailsTo: `/cars/${slug}`,
             badgeText: car.highlight?.text_ar ?? car.highlight?.text ?? undefined,
             badgeColor: car.highlight?.color ?? undefined,
+            rawPrice: car.current_price ?? car.cash_price ?? 0,
         };
     } catch {
         return null;

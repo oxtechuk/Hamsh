@@ -110,6 +110,18 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-12">
+                                        <div class="d-flex align-items-center justify-content-between p-3 bg-light rounded-3">
+                                            <div>
+                                                <p class="fw-semibold mb-0 small">{{ __('تشغيل البوب اب لكرت السيارة') }}</p>
+                                                <p class="text-muted small mb-0">{{ __('فتح نافذة منبثقة لتقديم طلب تمويل عند الضغط على كرت السيارة بدلاً من الانتقال لصفحة التفاصيل') }}</p>
+                                            </div>
+                                            <div class="form-check form-switch fs-5 mb-0">
+                                                <input type="hidden" name="car_popup_enabled" value="0">
+                                                <input class="form-check-input" type="checkbox" name="car_popup_enabled" value="1" {{ ($settings['car_popup_enabled'] ?? '0') == '1' ? 'checked' : '' }}>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
