@@ -1,0 +1,1099 @@
+{
+  "topbar": {
+    "language": "EN",
+    "phone": "هاتف",
+    "email": "بريد إلكتروني",
+    "location": "الموقع",
+    "phoneValue": "540-907-0453",
+    "emailValue": "oxtech.uk@gmail.com",
+    "locationValue": "عجمان 5"
+  },
+  "hero": {
+    "titlePrefix": "اختر",
+    "titleHighlight": "سيارتك",
+    "titleLine2Prefix": "بطريقة",
+    "titleLine2Highlight": "تليق فيك",
+    "calculatorButton": "احسب قسطك",
+    "browseButton": "استعرض السيارات",
+    "description2": "مجموعة مختارة بعناية من أفخم السيارات، مع تمويل مرن يوصلك لسيارتك بأقل خطوات وأوضح شروط.",
+    "stats": {
+      "satisfaction": "رضا العملاء",
+      "yearsValue": "6 سنين",
+      "years": "خبرة في السوق",
+      "cars": "سيارة متوفرة"
+    },
+    "slider": {
+      "previous": "السيارة السابقة",
+      "next": "السيارة التالية",
+      "goTo": "الانتقال إلى السيارة"
+    }
+  },
+  "nav": {
+    "home": "الرئيسية",
+    "cars": "السيارات",
+    "offers": "العروض",
+    "calculator": "حاسبة التمويل",
+    "orders": "طلب سيارة",
+    "about": "عن الشركة",
+    "blog": "المدونة",
+    "contact": "تواصل معنا"
+  },
+  "carFinder": {
+    "title": "لقي سيارة تناسبك",
+    "brand": "الماركة / الشركة",
+    "brandPlaceholder": "اختر الماركة",
+    "brandOptions": {
+      "toyota": "تويوتا",
+      "hyundai": "هيونداي",
+      "kia": "كيا"
+    },
+    "type": "نوع السيارة",
+    "typePlaceholder": "اختر النوع",
+    "typeOptions": {
+      "sedan": "سيدان",
+      "suv": "SUV",
+      "hatchback": "هاتشباك"
+    },
+    "category": "فئة السيارة",
+    "categoryPlaceholder": "اختر الفئة",
+    "categoryOptions": {
+      "economy": "اقتصادية",
+      "family": "عائلية",
+      "luxury": "فاخرة"
+    },
+    "year": "سنة الصنع / الموديل",
+    "yearPlaceholder": "اختر السنة",
+    "searchPlaceholder": "اكتب اسم السيارة، الماركة، أو الموديل...",
+    "searchButton": "بحث",
+    "resetButton": "إعادة ضبط"
+  },
+  "carCard": {
+    "compare": "أضف للمقارنة",
+    "subtitle": "سيارات عائلية مريحة",
+    "cashPrice": "سعر الكاش",
+    "monthlyPayment": "قسط شهري",
+    "estimated": "تقديري",
+    "reserve": "احجزها الآن",
+    "details": "تفاصيل أكثر",
+    "moreDetails": "تفاصيل أكثر",
+    "startsFrom": "يبدأ من",
+    "month": "شهر",
+    "model": "موديل"
+  },
+  "offers": {
+    "titleWhite": "أفضل عروض،",
+    "titleOrange": "لتسهيل تمويلك",
+    "buttonText": "كل العروض"
+  },
+  "purchaseExperience": {
+    "title": "تجربة اقتناء لا تشبه غيرها",
+    "description": "نلتزم بجعل شرائك كل سيارة تجربة أفضل من لحظة اختيارك حتى ما بعد التسليم.",
+    "features": {
+      "finance": {
+        "title": "حلول تمويلية مرنة",
+        "description": "شراكة مع كبرى البنوك والشركات لتقديم أقل هامش ربح يناسبك."
+      },
+      "ownership": {
+        "title": "خلصها وأنت بمكانك",
+        "description": "إجراءات سريعة وميسرة لامتلاك سيارتك بكل سهولة."
+      },
+      "options": {
+        "title": "خيارات لا حصر لها",
+        "description": "تشكيلة واسعة من السيارات تختار منها اللي يناسبك."
+      },
+      "prices": {
+        "title": "أسعار ما تتفوت",
+        "description": "أفضل عروض الأسعار في السوق، مع خيارات دفع تناسب كل ميزانية."
+      }
+    }
+  },
+  "featuredCars": {
+    "titleBlue": "أحدث السيارات واصلة حديثاً",
+    "titleOrange": "لك",
+    "description": "اكتشف أحدث الموديلات الجاهزة للتمويل الفوري بأقل قسط شهري وبأفضل سعر في المملكة.",
+    "buttonText": "تصفح كل السيارات",
+    "noCars": "لا توجد سيارات تطابق فلتر البحث"
+  },
+  "rootLayout": {
+    "logoAlt": "قمه نجد كار",
+    "quickLinks": [
+      {
+        "label": "الرئيسية",
+        "to": "/"
+      },
+      {
+        "label": "جميع السيارات",
+        "to": "/cars"
+      },
+      {
+        "label": "عروضنا",
+        "to": "/offers"
+      },
+      {
+        "label": "من نحن",
+        "to": "/about"
+      },
+      {
+        "label": "المقالات",
+        "to": "/blog"
+      }
+    ],
+    "phone": "056 9988 998",
+    "email": "Tese@test.com",
+    "address": "الرياض، المملكة العربية السعودية",
+    "copyright": "جميع الحقوق محفوظة، قمة نجد 2026 ©"
+  },
+  "footer": {
+    "followUs": "تابعنا",
+    "quickLinks": "روابط سريعة",
+    "contactUs": "تواصل معنا",
+    "addressLabel": "العنوان",
+    "emailLabel": "راسلنا",
+    "phoneLabel": "اتصل بنا",
+    "salesPhone": "قسم المبيعات",
+    "financePhone": "قسم التمويل",
+    "aftersalesPhone": "خدمة ما بعد البيع",
+    "workingDays": "أيام العمل",
+    "privacyPolicy": "سياسة الخصوصية",
+    "termsAndConditions": "الشروط والأحكام",
+    "servicesTitle": "الخدمات",
+    "companyTitle": "الشركة",
+    "companyDescription": "وجهتك الأولى للسيارات الفاخرة والعائلية في المملكة العربية السعودية. نقدم أفضل الماركات بأفضل الأسعار وأيسر حلول التمويل.",
+    "services": {
+      "carFinance": "تمويل السيارات",
+      "cashPurchase": "شراء نقدي",
+      "carReservation": "حجز السيارات",
+      "customRequest": "طلب مخصص"
+    }
+  },
+  "brandsSection": {
+    "titleBlue": "ابحث حسب علامتك التجارية",
+    "description": "جمعنا لك نخبة من أكبر شركات السيارات حول العالم، لتختار منها الاسم اللي تثق فيه.",
+    "buttonText": "عرض الكل",
+    "searchPlaceholder": "اكتب اسم الماركة...",
+    "categories": [
+      "الكل",
+      "فارهة",
+      "إقتصادية",
+      "كهربائية",
+      "دفع رباعي",
+      "عائلية"
+    ],
+    "noResults": "لا توجد ماركات"
+  },
+  "homePage": {
+    "fallbackOfferButton": "احصل على العرض"
+  },
+  "allCarsHero": {
+    "badge": "عروض محدودة الوقت",
+    "title": {
+      "line1": "امتلك سيارتك اليوم",
+      "line2Prefix": "بدون",
+      "line2Highlight": "دفعة أولى"
+    },
+    "description": "أقوى العروض على أحدث الموديلات بأسعار تبدأ من 1,350 رس شهرياً. لا تفوت الفرصة!",
+    "stats": [
+      {
+        "value": "0%",
+        "label": "دفعة أولى"
+      },
+      {
+        "value": "+50",
+        "label": "علامة تجارية"
+      },
+      {
+        "value": "+500",
+        "label": "سيارة متاحة"
+      }
+    ],
+    "button1": "تصفح عروضنا",
+    "button2": "طلب تمويل"
+  },
+  "carsSidebarFilter": {
+    "search": "البحث",
+    "title": "الفلاتر",
+    "brands": "الماركات",
+    "carType": "نوع السيارة",
+    "otherFilters": "فلاتر أخرى",
+    "all": "الكل",
+    "engineSystem": "نظام المحرك",
+    "transmission": "ناقل الحركة",
+    "fuelType": "نوع الوقود",
+    "maxPrice": "الحد الأقصى للسعر",
+    "priceRange": "نطاق السعر",
+    "from": "من",
+    "to": "إلى",
+    "sar": "ر.س",
+    "mobileToggle": "الفلاتر",
+    "reset": "إعادة ضبط",
+    "apply": "تطبيق الفلاتر"
+  },
+  "select": {
+    "search": "بحث...",
+    "noResults": "لا توجد نتائج"
+  },
+  "contactCta": {
+    "badge": "لا تنتظر أكثر",
+    "title": "هل أعجبك عرض؟ تواصل معنا الآن",
+    "description": "فريقنا جاهز لمساعدتك ٧ أيام في الأسبوع",
+    "phoneText": "اطلب الان"
+  },
+  "allCarsPage": {
+    "noCarsMatch": "لا توجد سيارات مطابقة للبحث",
+    "availableCars": "سيارة متاحة",
+    "contactBadge": "فريقنا جاهز للمساعدة",
+    "contactTitleWhite": "هل لديك",
+    "contactTitleOrange": "استفسار؟",
+    "contactDescription": "فريقنا جاهز للإجابة على جميع أسئلتك ومساعدتك في اختيار السيارة التالية",
+    "contactPhone": "تواصل معنا",
+    "contactWhatsapp": "واتساب",
+    "homeOffers": {
+      "fordTerritoryAlt": "عرض فورد تيريتوري",
+      "kiaSportageAlt": "عرض كيا سبورتاج",
+      "toyotaCamryAlt": "عرض تويوتا كامري",
+      "discoverOffer": "اكتشف العرض",
+      "viewDetails": "عرض التفاصيل"
+    }
+  },
+  "allCarsFilterBar": {
+    "searchPlaceholder": "اكتب اسم السيارة، الماركة، أو الموديل...",
+    "all": "الكل"
+  },
+  "budgetCars": {
+    "titleBlue": "سيارتك على",
+    "titleOrange": "قد ميزانيتك",
+    "all": "الكل",
+    "description": "اختر سيارتك القادمة من بين تشكيلة واسعة من أحدث الموديلات، واستمتع بحلول تمويلية مرنة صُممت خصيصًا لتناسب ميزانيتك في جميع مدن المملكة.",
+    "buttonText": "تصفح كل السيارات",
+    "ranges": [
+      "3,000 - 4,000 ﷼",
+      "4,000 - 6,000 ﷼",
+      "7,000 - 9,000 ﷼",
+      "أكثر من 9,000 ﷼"
+    ],
+    "empty": {
+      "title": "لا توجد سيارات",
+      "subtitle": "لا توجد سيارات ضمن هذا النطاق السعري حالياً"
+    }
+  },
+  "financeSolutions": {
+    "titleBlue": "حلول تمويلية ذكية",
+    "titleOrange": "لتوسيع طاقة أسطولك",
+    "description": "نقدم للشركات حلول تمويل مرنة وشاملة لتوسيع أسطول سياراتك، مع خدمة متكاملة تشمل التوصيل والصيانة وإدارة العقود.",
+    "buttonText": "تواصل مع فريقنا لمساعدتك",
+    "stats": [
+      {
+        "label": "عميل من الشركات"
+      },
+      {
+        "label": "سيارة تم تمويلها"
+      },
+      {
+        "label": "شريك تمويلي"
+      }
+    ],
+    "features": [
+      "تمويل يصل إلى 100% من قيمة السيارة",
+      "توصيل السيارة في أي مكان في المملكة",
+      "خدمة ما بعد البيع والصيانة المجانية",
+      "تقارير إدارية شاملة عن طلباتك"
+    ]
+  },
+  "carsShowcase": {
+    "titleBlue": "اخترنا لك",
+    "titleOrange": "من سياراتنا",
+    "description": "لقي سيارتك الجاية من تشكيلة واسعة لأحدث الموديلات وبحلول تمويلية مرنة تخدمك على قد ميزانيتك وتوصلك وين ما كنت بالمملكة.",
+    "buttonText": "تصفح كل السيارات",
+    "filters": {
+      "mostRequested": "الأكثر طلبًا",
+      "readyToDeliver": "جاهزة للتسليم",
+      "noFinancing": "عروض بلا تمويل",
+      "newCars": "سيارات جديدة",
+      "discountedCars": "سيارات مخفضة"
+    }
+  },
+  "hero": {
+    "titleBlue": "سوق سيارة العمر",
+    "titleOrange": "وبتمويل على جوّك!",
+    "description": "جمعنا لك أحدث الموديلات وأفضل عروض التمويل في مكان واحد. نقدّم لك خيارات تسهّل عليك الحسبة وتوصيل يوصل سيارتك إلى باب بيتك أو في أي مكان بالمملكة.",
+    "primaryButton": "تصفح كل السيارات",
+    "secondaryButton": "احسب تمويلك",
+    "menu": "القائمة",
+    "searchPlaceholder": "ابحث عن سيارة بالاسم أو العلامة التجارية...",
+    "filter": "تصفية",
+    "startsFrom": "تبدأ من",
+    "cards": [
+      {
+        "title": "عروض العيد.. لسه مستمرة معاك!",
+        "description": "خصم 50% بمناسبة العيد السعيد",
+        "buttonText": "اكتشف العرض"
+      },
+      {
+        "title": "كيا سبورتاج GLS 1.6L",
+        "description": "هاشتاج رياضية، إصدار محدود",
+        "buttonText": "اطلبها الحين",
+        "badge": "NEW ARRIVAL 2026"
+      }
+    ],
+    "slides": [
+      {
+        "subtitle": "وكالة سيارات فاخرة",
+        "title": "سيارة أحلامك في انتظارك",
+        "description": "اكتشف أحدث الموديلات مع أفضل خيارات التمويل. نوصّل سيارتك إلى بابك في أي مكان بالمملكة."
+      },
+      {
+        "subtitle": "عروض حصرية",
+        "title": "قدّب حلمك اليوم",
+        "description": "سيارات مختارة بعناية بأسعار لا تُقاوم وخطط تمويل مرنة صُمّمت لك."
+      },
+      {
+        "subtitle": "عروض الموسم",
+        "title": "عروض خاصة هذا الموسم",
+        "description": "لا تفوّت عروضنا المحدودة على الأكثر طلباً. التمويل صار أسهل من أي وقت."
+      },
+      {
+        "subtitle": "شاهدّها بالحركة",
+        "title": "اختبر السيرة",
+        "description": "شاهد أحدث وصولاتنا واشعر بمعنى الفخامة."
+      }
+    ]
+  },
+  "blogPage": {
+    "readMore": "اقرأ المزيد",
+    "hero": {
+      "badge": "مقال مميز",
+      "title": "مدونة <span class=\"highlight\">قمه نجد كار</span>",
+      "description": "تابع أحدث أخبار السيارات، النصائح، والمقالات الحصرية.",
+      "allCategories": "الكل",
+      "defaultAuthor": "فهد القحطاني",
+      "featuredPost": {
+        "category": "نصائح التمويل",
+        "title": "كيف تختار خطة التمويل المناسبة لسيارتك الأولى؟",
+        "description": "تعرّف على الخطوات الأساسية لتقييم ميزانيتك، وفهم نسب الفائدة وكيفية الحصول على أفضل عرض تمويلي يتناسب مع احتياجاتك الشخصية دون ضغوط مالية.",
+        "author": {
+          "name": "Admin",
+          "role": "مستشار مالي"
+        }
+      }
+    },
+    "latestArticles": {
+      "title": "أحدث المقالات",
+      "loadMore": "عرض المزيد من المقالات",
+      "loading": "جاري التحميل..."
+    },
+    "sidebar": {
+      "cta": {
+        "title": "تعجبك سيارة؟",
+        "subtitle": "احسب قسطك الشهري الآن",
+        "buttonText": "احسب القسط"
+      },
+      "tableOfContents": "جدول المحتويات",
+      "relatedTitle": "مقالات ذات صلة"
+    },
+    "details": {
+      "metaDescription": "اقرأ أحدث مقالاتنا عن السيارات، نصائح التمويل، ورؤى الصناعة.",
+      "page": {
+        "loading": "جارٍ التحميل...",
+        "error": "حدث خطأ ما. يرجى المحاولة مرة أخرى."
+      },
+      "related": {
+        "title": "مقالات مشابهة"
+      },
+      "summary": {
+        "heading": "خلاصة القول"
+      }
+    }
+  },
+  "aboutPage": {
+    "hero": {
+      "eyebrow": "من نحن",
+      "title": "قصتنا مع السيارات",
+      "description": "أكثر من ١٠ سنوات من الثقة والجودة والتميز في قطاع السيارات السعودي.",
+      "badge": "تأسست عام 2026 · الرياض، المملكة العربية السعودية",
+      "titleWhite": "نحن نُموّل",
+      "titleBlue": "أحلامك",
+      "subtitle": "ونجعل امتلاك سيارتك أسهل مما تتصور"
+    },
+    "story": {
+      "eyebrow": "من نحن",
+      "title": "مو مجرد معرض، بل شريكك في الاختيار.",
+      "statLabel": "في رضا العملاء",
+      "paragraphs": {
+        "0": "بدأنا رحلتنا بهدف بسيط: نغير طريقة شراء السيارات في المملكة. كنا نؤمن أن الشفافية والثقة أهم من أي عرض تجاري.",
+        "1": "اليوم، وجهة يثق فيها آلاف العملاء لأن نجاحنا مبني على رضاهم واستمرارهم معنا."
+      },
+      "values": {
+        "vision": {
+          "title": "رؤيتنا",
+          "description": "نكون الوجهة الأولى في السعودية لعشاق السيارات الفاخرة والعائلية."
+        },
+        "mission": {
+          "title": "رسالتنا",
+          "description": "تجربة اختيار وشراء ترتقي بتوقعاتك، بشفافية وثقة كاملة."
+        },
+        "values": {
+          "title": "قيمنا",
+          "description": "الفخامة، الصدق، الاهتمام بالتفاصيل، والالتزام بوعودنا."
+        }
+      }
+    },
+    "intro": {
+      "titleStart": "عن قمة",
+      "titleHighlight": "نجد",
+      "description": "منذ أعوام، ونحن نعيد تعريف تجربة شراء السيارات في المملكة العربية السعودية. ليس معرضًا عاديًا، بل وجهة تثق بها وتمنح عملاءها أفضل تجربة."
+    },
+    "coreValues": {
+      "eyebrow": "ما نؤمن به",
+      "title": "قيمنا الجوهرية",
+      "values": {
+        "trust": {
+          "title": "الثقة",
+          "description": "كل وعد نقطعه هو التزام نفي به. الشفافية الكاملة في كل خطوة."
+        },
+        "quality": {
+          "title": "الجودة",
+          "description": "لا نقبل بأقل من الاستثنائي في كل سيارة نعرضها وكل خدمة نقدمها."
+        },
+        "speed": {
+          "title": "السرعة",
+          "description": "نُتم معاملاتك في ساعات، لأن وقتك ثمين ولا يجب إضاعته."
+        },
+        "care": {
+          "title": "الاهتمام",
+          "description": "عميلنا ليس رقمًا، هو شريك نبني معه علاقة طويلة الأمد."
+        }
+      }
+    },
+    "stats": [
+      {
+        "value": "+1,200",
+        "label": "سيارة ممولة",
+        "description": "عملاء سعداء"
+      },
+      { "value": "+500", "label": "عميل راضٍ", "description": "أفراد وشركات" },
+      {
+        "value": "+50",
+        "label": "علامة تجارية",
+        "description": "أشهر الماركات العالمية"
+      },
+      { "value": "5", "label": "سنوات خبرة", "description": "في السوق السعودي" }
+    ],
+    "whyChooseUs": {
+      "title": "لماذا تختار قمة",
+      "title1": "نجد؟",
+      "description": "نقدم لك تجربة شراء سيارة استثنائية مبنية على الثقة والجودة والخدمة المتميزة"
+    },
+    "gallery": {
+      "title": "صور وفيديوهات من معرضنا",
+      "logoAlt": "شعار قمة نجد"
+    },
+    "partners": {
+      "eyebrow": "موثوقون من كبار العلامات",
+      "titleBlack": "شركاؤنا",
+      "titleBlue": "الاستراتيجيون",
+      "description": "نفخر بشراكاتنا مع أكثر من 120 علامة تجارية وموزع معتمد على مستوى المملكة"
+    },
+    "dealer": {
+      "title": "هل أنت موزع أو وكيل؟",
+      "description": "انضم لشبكة شركائنا واستفد من قاعدة عملاء تتجاوز 52 ألف مشتري",
+      "primaryButton": "انضم كشريك",
+      "secondaryButton": "اتصل بنا"
+    },
+    "locations": {
+      "titleBlack": "أماكن",
+      "titleBlue": "تواجدنا",
+      "branchLabel": "فرع",
+      "mainBranch": "الفرع الرئيسي",
+      "addressLabel": "العنوان",
+      "phoneLabel": "الهاتف",
+      "hoursLabel": "ساعات العمل",
+      "openInMaps": "افتح في الخرائط",
+      "noMap": "لا تتوفر خريطة",
+      "mapTitle": "خريطة {{city}}"
+    },
+    "testimonials": {
+      "badge": "عملاؤنا يثقون بنا",
+      "title": "آراء عملائنا",
+      "ratingText": "4.9 من +12,000 تقييم",
+      "goToTestimonial": "انتقل إلى التقييم {{number}}"
+    }
+  },
+  "offersPage": {
+    "hero": {
+      "badge": "عروض محدودة الوقت",
+      "title": "عرض قمه نجد الحصري بمناسبة العيد",
+      "description": "نقدم لك مجموعة مختارة من أقوى السيارات بعروض وحلول تمويلية وخصومات مباشرة على أحدث الموديلات بمناسبة العيد.",
+      "primaryButton": "اكتشف العرض",
+      "secondaryButton": "حاسبة التمويل",
+      "countdownLabel": "ينتهي في",
+      "countdownDays": "يوم",
+      "countdownHours": "ساعة",
+      "countdownMinutes": "دقيقة",
+      "countdownSeconds": "ثانية"
+    },
+    "grid": {
+      "title": "تصفح العروض",
+      "categories": {
+        "all": "الكل",
+        "finance": "عروض التمويل",
+        "discounts": "خصومات مباشرة",
+        "models2026": "موديلات 2026"
+      },
+      "card": {
+        "priceLabel": "يبدأ القسط من",
+        "priceUnit": "/ شهر",
+        "buttonText": "اكتشف العرض",
+        "badgeDiscount": "خصم {{percent}}%",
+        "badgeSeasonal": "عرض موسمي",
+        "youSave": "وفرت"
+      },
+      "loadMore": "عرض المزيد من العروض",
+      "loading": "جاري التحميل..."
+    }
+  },
+  "carDetails": {
+    "hero": {
+      "price": "سعر الكاش",
+      "originalPrice": "السعر الأصلي",
+      "installmentFrom": "القسط الشهري",
+      "saving": "وفر",
+      "availableColors": "الألوان المتاحة",
+      "orderNow": "طلب التمويل",
+      "compare": "مقارنة",
+      "whatsappContact": "تواصل عبر واتساب",
+      "warrantyBadge": "ضمان الوكالة الأصلي · تسليم في ٤٨ ساعة",
+      "backToGallery": "العودة للمعرض",
+      "calculateFinance": "احسب تمويلها",
+      "insideView": "من الداخل",
+      "outsideView": "من الخارج",
+      "benefitQuality": "جودة معتمدة",
+      "benefitInstallment": "تقسيط مرن",
+      "benefitSecurePayment": "دفع آمن",
+      "minDownPayment": "الدفعة الأولى تبدأ من",
+      "freeConsultation": "استشارة مجانية بدون أي التزام",
+      "views": "تقييم",
+      "metaDescription": "استعرض مواصفات السيارة بالتفصيل، السعر، المميزات، وخيارات التمويل المرنة."
+    },
+    "specs": {
+      "titleBlue": "تفاصيل ",
+      "titleOrange": "السيارة",
+      "tab": {
+        "features": "الميزات الرئيسية",
+        "specifications": "المواصفات الفنية",
+        "security": "أنظمة الأمان"
+      },
+      "labels": {
+        "hp": "الحصان",
+        "fuel": "الوقود",
+        "seats": "المقاعد",
+        "gearbox": "ناقل الحركة"
+      }
+    },
+    "page": {
+      "loading": "جاري التحميل...",
+      "notFound": "السيارة غير موجودة",
+      "error": "حدث خطأ ما. حاول مرة أخرى"
+    },
+    "relatedCars": {
+      "titleBlue": "سيارات مشابهة لإختيارك",
+      "titleOrange": "لإختيارك",
+      "description": "قارن واكتشف مجموعة مختارة من السيارات المشابهة في الفئة والمواصفات",
+      "buttonText": "تصفح كافة السيارات"
+    },
+    "recommendations": {
+      "title": "قد يعجبك أيضاً",
+      "details": "التفاصيل"
+    }
+  },
+  "comparePage": {
+    "best": "الأفضل",
+    "compareTable": "جدول المقارنة",
+    "compareDescription": "مقارنة تفصيلية بين سيارتين من اختيارك",
+    "specLabel": "المواصفة",
+    "summaryTitle": "ملخص المقارنة",
+    "summaryBadge": "الأفضل في المقارنة",
+    "winnerLabel": "الفائز بالمواصفات",
+    "winnerScore": "{{score}} نقطة أفضل",
+    "tieResult": "تعادل",
+    "scorePrefix": "تفوقت في",
+    "scoreSuffix": "من {{total}} معيار",
+    "tieScorePrefix": "تعادلتا في",
+    "tieScoreSuffix": "من {{total}} معيار",
+    "consultExpert": "استشر خبيرنا",
+    "browseMore": "تصفح المزيد",
+    "carOne": "السيارة الأولى",
+    "carTwo": "السيارة الثانية",
+    "points": "نقطة",
+    "selectCar": "اختر سيارة",
+    "searchCar": "ابحث عن سيارة...",
+    "noResults": "لا توجد نتائج",
+    "cancel": "إلغاء",
+    "loading": "جاري التحميل...",
+    "addCar": "أضف سيارة للمقارنة",
+    "remove": "إزالة",
+    "removeCar": "إزالة السيارة",
+    "bestValue": "أفضل قيمة",
+    "monthlyInstallment": "قسط شهري",
+    "cashPrice": "سعر الكاش",
+    "sar": "رس",
+    "vs": "VS",
+    "all": "الكل",
+    "sections": {
+      "titles": {
+        "prices": "الأسعار",
+        "performance": "الأداء",
+        "design": "التصميم",
+        "featuresAndSafety": "المميزات والأمان",
+        "technicalSpecs": "المواصفات التقنية"
+      },
+      "labels": {
+        "price": "السعر",
+        "estimatedInstallment": "القسط التقريبي",
+        "power": "القوة",
+        "topSpeed": "السرعة القصوى",
+        "acceleration": "التسارع",
+        "type": "نوع",
+        "seats": "المقاعد",
+        "transmission": "ناقل الحركة"
+      }
+    }
+  },
+  "contactPage": {
+    "hero": {
+      "title": "جاهزين نخدمك",
+      "breadcrumb": "تواصل معنا"
+    },
+    "contactUs": {
+      "title": "أرسل استفسارًا",
+      "description": "أرسل لنا رسالتك وسيتواصل معك أحد المختصين في أقرب وقت",
+      "fullNameLabel": "الاسم الكامل",
+      "fullNamePlaceholder": "اكتب اسمك هنا",
+      "phoneLabel": "رقم الجوال",
+      "phonePlaceholder": "05XXXXXXXX",
+      "subjectLabel": "الموضوع",
+      "subjectPlaceholder": "استفسار عن سيارة...",
+      "messageLabel": "الرسالة",
+      "messagePlaceholder": "اكتب رسالتك هنا...",
+      "submitText": "إرسال الرسالة",
+      "submittingText": "جارٍ الإرسال...",
+      "successToast": "تم إرسال رسالتك بنجاح",
+      "errorToast": "تعذر إرسال الرسالة",
+      "openMap": "فتح في خرائط جوجل",
+      "noMap": "لا تتوفر خريطة"
+    },
+    "contactMethods": {
+      "title": "تواصل معنا",
+      "whatsappLabel": "واتساب",
+      "whatsappValue": "تواصل فوري",
+      "whatsappDescription": "رد خلال دقائق",
+      "phoneLabel": "اتصل بنا",
+      "phoneDescription": "السبت - الخميس",
+      "hoursLabel": "ساعات العمل",
+      "hoursDescription": "طوال أيام الأسبوع",
+      "morning": "صباحا",
+      "evening": "مساءا",
+      "timeFrom": "من",
+      "timeTo": "الى",
+      "days": {
+        "sat": "السبت",
+        "sun": "الأحد",
+        "mon": "الاثنين",
+        "tue": "الثلاثاء",
+        "wed": "الأربعاء",
+        "thu": "الخميس",
+        "fri": "الجمعة"
+      }
+    },
+    "faq": {
+      "eyebrow": "الأسئلة الشائعة",
+      "titleBlack": "الأسئلة الشائعة",
+      "titleOrange": "",
+      "description": "قبل التواصل معنا، ربما تجد إجابتك هنا",
+      "buttonText": "اسألنا الآن",
+      "items": [
+        {
+          "question": "كيف يمكنني التقدم بطلب تمويل سيارة عبر قمه نجد كار؟",
+          "answer": "التقدم بطلب التمويل سهل وسريع. ابدأ بتعبئة نموذج التمويل على الموقع أو تواصل معنا عبر واتساب. يحتاج الطلب عادة إلى الهوية الوطنية، كشف الراتب، وسجل بنكي لآخر 3 أشهر. يتم مراجعة الطلب خلال 24-48 ساعة عمل."
+        },
+        {
+          "question": "كيف يمكنني التقدم بطلب تمويل سيارة عبر قمه نجد كار؟",
+          "answer": "يمكنك اختيار السيارة المناسبة ثم إرسال طلب التمويل مباشرة، وسيقوم فريقنا بالتواصل معك لاستكمال البيانات المطلوبة."
+        },
+        {
+          "question": "كيف يمكنني التقدم بطلب تمويل سيارة عبر قمه نجد كار؟",
+          "answer": "نعم، نوفر حلول تمويل متعددة حسب حالتك الائتمانية والميزانية الشهرية المناسبة لك."
+        },
+        {
+          "question": "كيف يمكنني التقدم بطلب تمويل سيارة عبر قمه نجد كار؟",
+          "answer": "بعد الموافقة على التمويل، يتم تنسيق إجراءات الحجز والتسليم حسب المدينة المتاحة."
+        }
+      ]
+    },
+    "financeCalculator": {
+      "currency": "ر.س",
+      "badge": "حاسبة التمويل الفورية",
+      "titleWhite": "حاسبة التمويل",
+      "titleOrange": "في ثواني فقط",
+      "description": "احسب قسطك الشهري بدقة وقدّم طلبك الآن",
+      "infoBoxes": [
+        {
+          "title": "احسب قسطك الشهري فوراً",
+          "description": "نتائج دقيقة محدثة طبقاً مع كل تغيير"
+        },
+        {
+          "title": "قارن بين أكثر من جهة تمويل معتمدة",
+          "description": "قارن خيارات التمويل"
+        },
+        {
+          "title": "أفضل خطة لميزانيتك",
+          "description": "خطط مرنة تناسب وضعك المالي تماماً"
+        }
+      ],
+      "cities": {
+        "riyadh": "الرياض",
+        "jeddah": "جدة",
+        "dammam": "الدمام"
+      },
+      "validation": {
+        "selectCar": "يرجى اختيار السيارة",
+        "fillRequired": "يرجى تعبئة جميع الحقول المطلوبة"
+      },
+      "step1": {
+        "stepperLabel": "بياناتك",
+        "personalInfoTitle": "بياناتك الشخصية",
+        "fullName": "الاسم بالكامل",
+        "fullNamePlaceholder": "أدخل اسمك الكامل",
+        "phone": "رقم الجوال",
+        "phonePlaceholder": "05xxxxxxxx",
+        "email": "البريد الإلكتروني",
+        "emailPlaceholder": "name@example.com",
+        "city": "المدينة",
+        "salary": "الراتب",
+        "salaryPlaceholder": "ادخل الراتب",
+        "obligations": "الالتزامات الشهرية",
+        "obligationsPlaceholder": "أدخل قيمة الالتزامات الشهرية",
+        "carLabel": "السيارة التي تريد تمويلها",
+        "searchPlaceholder": "ابحث عن سيارة...",
+        "noResults": "لا توجد نتائج للبحث",
+        "changeButton": "تغيير",
+        "selectCar": "اختر سيارة",
+        "messageLabel": "رسالتك",
+        "messagePlaceholder": "اكتب استفسارك هنا... كلما كانت تفاصيلك أوضح، كان ردّنا أدق وأسرع.",
+        "privacyNotice": "معلوماتك محمية ولن نشاركها مع أي طرف ثالث",
+        "submitButton": "عرض حاسبة التمويل",
+        "nextButton": "متابعة للخطوة التالية",
+        "consentPrefix": "أوافق على",
+        "consentLink": "سياسة الخصوصية",
+        "consentSuffix": "بأن يتواصل معي فريق قمة نجد بخصوص طلب التمويل",
+        "charCount": "حرف"
+      },
+      "step2": {
+        "stepperLabel": "حاسبة التمويل",
+        "changeData": "تغيير البيانات",
+        "welcome": "مرحبا بك",
+        "title": "حاسبة تمويل السيارات",
+        "financeDetails": "تفاصيل التمويل",
+        "carPrice": "سعر السيارة",
+        "riyal": "ريال",
+        "monthlyPayment": "القسط الشهري",
+        "summaryTitle": "ملخص التمويل",
+        "downPayment": "الدفعة الأولى",
+        "financeAmount": "قيمة التمويل",
+        "totalFinance": "إجمالي التمويل",
+        "totalInterest": "العائد الإجمالي",
+        "totalProfit": "إجمالي الأرباح",
+        "financeTerm": "مدة التمويل",
+        "month": "شهر",
+        "purpose": "شراء",
+        "financingPeriod": "مدة التمويل",
+        "approvalTime": "وقت الموافقة المتوقع",
+        "approvalValue": "48 ساعة",
+        "disclaimer": "هذه النتائج تقديرية وقد تختلف حسب موافقة جهة التمويل والشروط النهائية.",
+        "submitLead": "تقديم طلب التمويل الآن",
+        "submitting": "جارٍ الإرسال...",
+        "talkToAdvisor": "تحدث مع مستشار تمويل",
+        "selectedCar": "السيارة المختارة",
+        "changeCar": "تغيير السيارة",
+        "downPaymentTitle": "الدفعة الأولى",
+        "downPaymentPercent": "نسبة الدفعة الأولى",
+        "termTitle": "مدة التمويل",
+        "bankTitle": "جهة التمويل",
+        "bankMeta": "موافقة 24 ساعة · رسوم مجاناً",
+        "annualRate": "نسبة الفائدة السنوية",
+        "successToast": "تم إرسال طلب التمويل بنجاح",
+        "errorToast": "حدث خطأ أثناء الإرسال، حاول مرة أخرى",
+        "banksError": "فشل تحميل البنوك"
+      },
+      "acceptance": {
+        "enterSalary": "يرجى إدخال الراتب والالتزامات لغرض احتساب نسبة القبول",
+        "excellent": "ممتاز — فرصة إمكانية قبول عالية جداً",
+        "good": "جيد — ضمن نطاق التمويل المصرفي المسموح به",
+        "warning": "حدي — قريب من الحد الأقصى لنسبة الاستقطاع",
+        "exceeded": "تجاوز الحد المباشر للمصرفية",
+        "employerSector": "جهة العمل",
+        "title": "مؤشر إمكانية القبول:",
+        "dtiLabel": "نسبة الاستقطاع:",
+        "exceededWarning": "الالتزامات تتجاوز الحد المباشر للمصرفية.",
+        "debtOption": "أرغب في الاستفادة من \"خيار الحلول التمويلية وتوحيد الالتزامات\""
+      }
+    }
+  },
+  "financeCalculator": {
+    "badge": "حاسبة الأقساط",
+    "titleWhite": "احسب قسطك بكل سهولة",
+    "description": "خطوات بسيطة للحصول على تمويل يناسبك",
+    "cities": {
+      "riyadh": "الرياض",
+      "jeddah": "جدة",
+      "dammam": "الدمام"
+    },
+    "step1": {
+      "stepperLabel": "معلوماتك",
+      "personalInfoTitle": "معلوماتك الشخصية",
+      "fullName": "الاسم الكامل",
+      "fullNamePlaceholder": "اسمك الكريم",
+      "phone": "رقم الجوال",
+      "phonePlaceholder": "05XXXXXXXX",
+      "email": "البريد الإلكتروني",
+      "emailPlaceholder": "name@example.com",
+      "city": "المدينة",
+      "cityPlaceholder": "اختر المدينة",
+      "nextButton": "التالي — اختر السيارة",
+      "cities": [
+        "الرياض",
+        "جدة",
+        "الدمام",
+        "مكة المكرمة",
+        "المدينة المنورة",
+        "الخبر"
+      ]
+    },
+    "step2": {
+      "stepperLabel": "تفاصيل السيارة",
+      "chooseCarTitle": "اختر السيارة",
+      "chooseCarDescription": "السيارة التي اخترتها",
+      "recommendedCars": "سيارات أخرى من ترشيحنا",
+      "otherCars": "إختار سيارتك",
+      "chooseAnotherCar": "إختار سيارة أخرى من سيارتنا",
+      "selectCar": "اختر سيارة",
+      "nextButton": "التالي — الحاسبة",
+      "searchPlaceholder": "ابحث باسم السيارة أو الماركة...",
+      "backButton": "رجوع",
+      "riyal": "ر.س"
+    },
+    "step3": {
+      "stepperLabel": "المراجعة",
+      "summaryTitle": "ملخص التمويل",
+      "carPrice": "سعر السيارة",
+      "downPayment": "الدفعة الأولى",
+      "financeAmount": "مبلغ التمويل",
+      "paymentPeriod": "مدة السداد",
+      "annualRate": "نسبة الفائدة التقريبية",
+      "estimatedMonthlyPayment": "القسط الشهري التقريبي",
+      "riyalPerMonth": "ريال سعودي / شهر",
+      "disclaimer": "* الأرقام تقريبية — سيتم التأكيد من فريق التمويل",
+      "totalPayment": "إجمالي السداد",
+      "totalInterest": "إجمالي الفائدة",
+      "financeDetails": "تفاصيل التمويل",
+      "monthlyIncome": "الدخل الشهري (ر.س)",
+      "monthlyIncomePlaceholder": "مثال: 15000",
+      "monthlyObligations": "الالتزامات الشهرية الحالية",
+      "monthlyObligationsPlaceholder": "مثال: 300 (أو صفر إن لم يكن)",
+      "financeTerm": "مدة التمويل",
+      "years": "سنوات",
+      "months": "شهرًا",
+      "month": "شهر",
+      "submitLead": "تقديم طلب التمويل",
+      "submitting": "جارٍ الإرسال...",
+      "successToast": "تم إرسال طلب التمويل بنجاح",
+      "errorToast": "تعذر إرسال طلب التمويل",
+      "backButton": "رجوع",
+      "riyal": "ر.س"
+    },
+    "success": {
+      "badge": "تم الإرسال",
+      "title": "طلبك في المراجعة!",
+      "message": "تم استلام طلب تمويل {carLabel}",
+      "followUp": "سيتواصل معك أحد متخصصينا على {phone} خلال ساعات العمل.",
+      "duringBusinessHours": "خلال ساعات العمل.",
+      "whatsapp": "تابع طلبك عبر واتساب",
+      "whatsappMessage": "مرحباً، أرسلت طلب تمويل ({{carLabel}}) وأود المتابعة.",
+      "backToCars": "العودة لتصفح السيارات"
+    },
+    "otp": {
+      "title": "تأكيد رقم الجوال",
+      "subtitle": "يرجى تأكيد رقم الجوال لاستكمال طلب التمويل",
+      "phoneLabel": "رقم الجوال",
+      "sending": "جارٍ إرسال الرمز...",
+      "sendButton": "إرسال رمز التحقق",
+      "codeLabel": "أدخل رمز التحقق (OTP)",
+      "verifying": "جارٍ التحقق...",
+      "verifyButton": "تأكيد الرمز واستكمال الطلب",
+      "resendIn": "يمكنك إعادة طلب الرمز خلال",
+      "seconds": "ثانية",
+      "resendButton": "إعادة إرسال الرمز",
+      "verifyButtonShort": "تأكيد الرقم",
+      "verifiedBadge": "تم تأكيد الرقم",
+      "invalidPhone": "رقم الجوال غير صحيح",
+      "sentSuccess": "تم إرسال رمز التحقق لرقم جوالك",
+      "sendFailed": "فشل إرسال رمز التحقق",
+      "sendError": "حدث خطأ أثناء إرسال رمز التحقق",
+      "enterCode": "يرجى إدخال رمز التحقق",
+      "verifiedSuccess": "تم تأكيد رقم الجوال بنجاح",
+      "invalidCode": "رمز التحقق غير صحيح أو منتهي الصلاحية",
+      "verifyError": "فشل التحقق من الرمز، حاول مرة أخرى"
+    },
+    "acceptance": {
+      "enterSalary": "يرجى إدخال الراتب والالتزامات لغرض احتساب نسبة القبول",
+      "excellent": "ممتاز — فرصة إمكانية قبول عالية جداً",
+      "good": "جيد — ضمن نطاق التمويل المصرفي المسموح به",
+      "warning": "حدي — قريب من الحد الأقصى لنسبة الاستقطاع",
+      "exceeded": "تجاوز الحد المباشر للمصرفية",
+      "employerSector": "جهة العمل",
+      "title": "مؤشر إمكانية القبول:",
+      "dtiLabel": "نسبة الاستقطاع:",
+      "exceededWarning": "الالتزامات تتجاوز الحد المباشر للمصرفية.",
+      "debtOption": "أرغب في الاستفادة من \"خيار الحلول التمويلية وتوحيد الالتزامات\""
+    },
+    "validation": {
+      "fillRequired": "يرجى تعبئة جميع الحقول المطلوبة"
+    }
+  },
+  "mobileNav": {
+    "home": "الرئيسية",
+    "newCars": "سيارات جديدة",
+    "finance": "طلب تمويل",
+    "offers": "العروض",
+    "more": "المزيد",
+    "blog": "المدونة"
+  },
+  "pageTitles": {
+    "compare": "مقارنة السيارات",
+    "brands": "الماركات",
+    "financeCalculator": "حاسبة التمويل",
+    "notFound": "الصفحة غير موجودة",
+    "offers": "عروض خاصة",
+    "orders": "طلب سيارة",
+    "allCars": "السيارات",
+    "allCarsBreadcrumb": "جميع السيارات"
+  },
+  "ordersPage": {
+    "heroTitle1": "طلب",
+    "heroTitle2": "سيارة",
+    "heroDescription": "اختر من معرضنا أو أخبرنا بالسيارة التي تريدها وسنجدها لك بأفضل سعر في المملكة.",
+    "selectCarTitle": "اختر السيارة",
+    "searchPlaceholder": "ابحث باسم السيارة أو الماركة...",
+    "bestSeller": "الأكثر مبيعاً",
+    "exclusive": "حصري",
+    "yourInfoTitle": "بياناتك",
+    "selectCarEmpty": "اختر سيارة من القائمة",
+    "fullNameLabel": "الاسم بالكامل",
+    "fullNamePlaceholder": "اسمك الكامل",
+    "phoneLabel": "رقم الجوال",
+    "phonePlaceholder": "05xxxxxxxx",
+    "carTypeLabel": "نوع السيارة",
+    "carTypePlaceholder": "اكتب اسم السيارة في حالة عدم وجودها بالقائمة",
+    "paymentLabel": "طريقة الدفع المفضلة",
+    "paymentBank": "تمويل بنكي",
+    "paymentCash": "دفع كاش",
+    "notesLabel": "ملاحظات إضافية",
+    "notesPlaceholder": "اللون المفضل، أي متطلبات خاصة...",
+    "submitting": "جاري الإرسال...",
+    "submitIdle": "اختر سيارة وأدخل بياناتك",
+    "privacyNotice": "معلوماتك محمية · سيتم التواصل خلال ساعتين",
+    "trustProtected": { "title": "بيانات محمية", "sub": "خصوصيتك أولويتنا" },
+    "trustResponse": {
+      "title": "رد خلال ساعتين",
+      "sub": "في أوقات الدوام الرسمي"
+    },
+    "trustPrice": { "title": "ضمان أفضل سعر", "sub": "نجد لك الأنسب في السوق" },
+    "validationError": "يرجى تعبئة الاسم ورقم الجوال",
+    "successToast": "تم إرسال طلبك بنجاح، سنتواصل معك قريباً",
+    "errorToast": "حدث خطأ، يرجى المحاولة مجدداً"
+  },
+  "campaignBanners": {
+    "discoverMore": "اكتشف المزيد"
+  },
+  "specialOrder": {
+    "hero": {
+      "badge": "طلب مخصص",
+      "title": "اطلب سيارتك\nبـالمواصفات اللي تناسبك",
+      "subtitle": "فريقنا يساعدك تجيب سيارتك بالمواصفات المطلوبة"
+    },
+    "stepper": {
+      "step1": "معلوماتك",
+      "step2": "تفاصيل السيارة",
+      "step3": "الميزانية"
+    },
+    "step1": {
+      "title": "معلوماتك الشخصية",
+      "fullName": "الاسم الكامل",
+      "fullNamePlaceholder": "اسمك الكريم",
+      "phone": "رقم الجوال",
+      "phonePlaceholder": "05XXXXXXXX",
+      "email": "البريد الإلكتروني",
+      "emailPlaceholder": "name@example.com",
+      "city": "المدينة",
+      "nextButton": "التالي — تفاصيل السيارة"
+    },
+    "step2": {
+      "title": "تفاصيل السيارة المطلوبة",
+      "brand": "العلامة التجارية",
+      "model": "الموديل (اختياري)",
+      "modelPlaceholder": "مثال: لاند كروزر، X5، Camry...",
+      "color": "اللون المفضل",
+      "year": "سنة الموديل",
+      "nextButton": "التالي — الميزانية",
+      "backButton": "رجوع"
+    },
+    "step3": {
+      "title": "الميزانية والتمويل",
+      "salaryRange": "نطاق الراتب",
+      "notes": "ملاحظات إضافية",
+      "notesPlaceholder": "أي مواصفات خاصة أو ملاحظات إضافية...",
+      "submit": "إرسال الطلب",
+      "submitting": "جارٍ الإرسال...",
+      "backButton": "رجوع"
+    },
+    "success": {
+      "badge": "تم الإرسال",
+      "title": "طلبك في المراجعة!",
+      "description": "تم استلام طلب تمويل {carLabel}",
+      "contact": "سيتواصل معك أحد متخصصينا على {phone} خلال ساعات العمل.",
+      "whatsapp": "تابع طلبك عبر واتساب",
+      "backToCars": "العودة لتصفح السيارات",
+      "goBack": "←"
+    },
+    "error": {
+      "submitFailed": "حدث خطأ أثناء إرسال الطلب، يرجى المحاولة مجدداً"
+    }
+  },
+  "ordinaryOrder": {
+    "hero": {
+      "badge": "طلب سيارة",
+      "title": "اطلب سيارتك\nبالمواصفات اللي تناسبك",
+      "subtitle": "فريقنا يساعدك تجيب سيارتك بالمواصفات المطلوبة"
+    },
+    "step2": {
+      "title": "اختر السيارة",
+      "selectedLabel": "السيارة التي اخترتها",
+      "notSelected": "لم تختر سيارة بعد",
+      "recommendations": "سيارات أخرى من ترشيحنا",
+      "browseMoreLabel": "إختار سيارتك",
+      "browseMore": "إختار سيارة أخرى من سيارتنا",
+      "searchPlaceholder": "ابحث باسم السيارة أو الماركة...",
+      "modalTitle": "اختر سيارة",
+      "submit": "إرسال الطلب",
+      "submitting": "جارٍ الإرسال...",
+      "backButton": "رجوع"
+    },
+    "notFound": "لم تجد سيارتك؟",
+    "specialOrderLink": "قدم طلب خاص"
+  },
+  "common": {
+    "previousSlide": "الشريحة السابقة",
+    "nextSlide": "الشريحة التالية",
+    "close": "إغلاق",
+    "breadcrumb": "مسار التنقل"
+  }
+}
