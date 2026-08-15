@@ -239,6 +239,10 @@
         "phoneText": "Call Now"
     },
     "allCarsPage": {
+        "eyebrow": "Car Showroom",
+        "title": "Explore Our Collection",
+        "countText": "{{count}} Cars Available",
+        "allCategories": "All",
         "noCarsMatch": "No cars match your search",
         "availableCars": "Car Available",
         "contactBadge": "Our Team Is Ready to Help",

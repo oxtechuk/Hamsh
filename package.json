@@ -3,7 +3,9 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "dev": "npm run development",
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview",
         "development": "mix",
         "watch": "mix watch",
         "watch-poll": "mix watch -- --watch-options-poll=1000",
@@ -23,6 +25,9 @@
         "@babel/plugin-transform-runtime": "^7.23.9",
         "@babel/preset-env": "^7.23.9",
         "@tailwindcss/vite": "^4.0.0",
+        "@types/react": "^19.2.17",
+        "@types/react-dom": "^19.2.3",
+        "@vitejs/plugin-react": "^6.0.5",
         "@vitejs/plugin-vue": "^6.0.6",
         "@vue/compiler-sfc": "^3.5.32",
         "browser-sync": "^2.29.3",
@@ -37,6 +42,7 @@
         "sass": "^1.62.1",
         "sass-loader": "^12.6.0",
         "tailwindcss": "^4.0.0",
+        "typescript": "~6.0.2",
         "vite": "^8.0.0",
         "vue": "^3.5.32",
         "vue-i18n": "^9.14.5",
@@ -45,11 +51,22 @@
         "webpack-cli": "^4.10.0"
     },
     "dependencies": {
+        "@tanstack/react-query": "^5.101.1",
         "axios": "^1.15.0",
         "bootstrap": "^5.3.6",
         "bootstrap-icons": "^1.13.1",
+        "i18next": "^26.3.2",
+        "i18next-http-backend": "^4.0.0",
+        "lucide-react": "^1.21.0",
+        "react": "^19.2.7",
+        "react-dom": "^19.2.7",
+        "react-i18next": "^17.0.8",
+        "react-icons": "^5.6.0",
+        "react-router-dom": "^7.18.0",
+        "react-toastify": "^11.1.0",
         "remixicon": "^4.6.0",
         "vue-router": "^4.6.4",
-        "vue-toastification": "^2.0.0-rc.5"
+        "vue-toastification": "^2.0.0-rc.5",
+        "zustand": "^5.0.14"
     }
 }
