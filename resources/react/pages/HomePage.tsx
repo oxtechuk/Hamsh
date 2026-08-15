@@ -8,7 +8,7 @@ import BudgetCarsSection from "../components/BudgetCarsSection";
 import { getHomePageData, getBrands, getCars } from "../services/api";
 import { useLanguageStore } from "../store/language.store";
 import type { HomeCarItem, BrandInfo } from "../types/home.types";
-import type { CarCardProps } from "../components/CarCard";
+import type { ICarCardProps } from "../interfaces/ICarCardProps";
 import { formatPrice } from "../utils/format";
 import { localize } from "../utils/localize";
 import { useSEO } from "../utils/useSEO";
@@ -68,7 +68,7 @@ function RiyalLabel({ text }: { text: string }) {
 function mapHomeCarToCardProps(
   car: HomeCarItem,
   lang: string,
-): CarCardProps | null {
+): ICarCardProps | null {
   try {
     const slug = car.slug?.trim();
     if (!slug) return null;
@@ -160,7 +160,7 @@ export default function Home() {
     () =>
       (data?.featured_cars ?? [])
         .map((car) => mapHomeCarToCardProps(car, language))
-        .filter(Boolean) as CarCardProps[],
+        .filter(Boolean) as ICarCardProps[],
     [data?.featured_cars, language],
   );
 
@@ -168,7 +168,7 @@ export default function Home() {
     () =>
       (data?.highlighted_cars ?? [])
         .map((car) => mapHomeCarToCardProps(car, language))
-        .filter(Boolean) as CarCardProps[],
+        .filter(Boolean) as ICarCardProps[],
     [data?.highlighted_cars, language],
   );
 
@@ -225,7 +225,7 @@ export default function Home() {
         .map((car) =>
           mapHomeCarToCardProps(car as unknown as HomeCarItem, language),
         )
-        .filter(Boolean) as CarCardProps[];
+        .filter(Boolean) as ICarCardProps[];
     }
     return highlightedCars;
   }, [activeBudgetRange, budgetCarsData, highlightedCars, language]);

@@ -1,9 +1,10 @@
-import type { CarCardProps } from "../components/CarCard";
+import { APP_IMAGES } from "../constants/app-images";
+import type { ICarCardProps } from "../interfaces/ICarCardProps";
 
-export const sampleCars: CarCardProps[] = [
+export const sampleCars: ICarCardProps[] = [
   {
     id: 1,
-    image: "/images/car1.png",
+    image: APP_IMAGES.CAR1,
     brand: "Toyota",
     name: "Camry",
     year: "2024",
@@ -18,7 +19,7 @@ export const sampleCars: CarCardProps[] = [
   },
   {
     id: 2,
-    image: "/images/car-placeholder.png",
+    image: APP_IMAGES.CAR_PLACEHOLDER,
     brand: "Hyundai",
     name: "Tucson",
     year: "2024",
@@ -32,7 +33,7 @@ export const sampleCars: CarCardProps[] = [
   },
   {
     id: 3,
-    image: "/images/car-placeholder.png",
+    image: APP_IMAGES.CAR_PLACEHOLDER,
     brand: "Kia",
     name: "Sportage",
     year: "2024",
@@ -48,7 +49,7 @@ export const sampleCars: CarCardProps[] = [
   },
   {
     id: 4,
-    image: "/images/car1.png",
+    image: APP_IMAGES.CAR1,
     brand: "BMW",
     name: "X5",
     year: "2023",
@@ -62,7 +63,7 @@ export const sampleCars: CarCardProps[] = [
   },
   {
     id: 5,
-    image: "/images/car-placeholder.png",
+    image: APP_IMAGES.CAR_PLACEHOLDER,
     brand: "Mercedes",
     name: "C200",
     year: "2024",
@@ -76,7 +77,7 @@ export const sampleCars: CarCardProps[] = [
   },
   {
     id: 6,
-    image: "/images/car-placeholder.png",
+    image: APP_IMAGES.CAR_PLACEHOLDER,
     brand: "Nissan",
     name: "Altima",
     year: "2024",

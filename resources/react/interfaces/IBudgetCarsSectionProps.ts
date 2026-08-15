@@ -1,4 +1,4 @@
-import type { CarCardProps } from "../components/CarCard";
+import type { ICarCardProps } from "./ICarCardProps";
 import type { IBudgetRange } from "./IBudgetRange";
 
 export interface IBudgetCarsSectionProps {
@@ -6,7 +6,7 @@ export interface IBudgetCarsSectionProps {
     description: string;
     buttonText: string;
     buttonTo: string;
-    cars: CarCardProps[];
+    cars: ICarCardProps[];
     ranges?: IBudgetRange[];
     activeRange?: string;
     onRangeChange?: (value: string) => void;

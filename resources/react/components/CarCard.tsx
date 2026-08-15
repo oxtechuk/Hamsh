@@ -4,9 +4,8 @@ import { useNavigate } from "react-router-dom";
 
 import LazyImg from "./LazyImg";
 import type { ICarCardProps } from "../interfaces/ICarCardProps";
+import { buildCarSpecPills } from "../utils/car-card-utils";
 import { resolveHighlight } from "../utils/badge-utils";
-
-export type { ICarCardProps as CarCardProps };
 
 export default function CarCard({
     image,
@@ -36,7 +35,7 @@ export default function CarCard({
               text: resolvedBadge.text,
               color: badgeColor ?? resolvedBadge.color ?? "#DFA655",
           }
-        : { text: "حصري", color: "#DFA655" };
+        : { text: t("carCard.exclusive"), color: "#DFA655" };
 
     const handleOpenDetails = () => {
         navigate(detailsTo);
@@ -49,16 +48,7 @@ export default function CarCard({
         );
     };
 
-    // Spec pills matching reference screenshot layout
-    const specPills = [
-        transmission || "أوتوماتيك",
-        fuelType || "بنزين",
-        seats
-            ? typeof seats === "string" && seats.includes("ح")
-                ? seats
-                : `${seats} مقاعد`
-            : "V8 3.5L Twin-Turbo",
-    ].filter(Boolean);
+    const specPills = buildCarSpecPills(t, transmission, fuelType, seats);
 
     return (
         <article
@@ -99,11 +89,11 @@ export default function CarCard({
                     {/* Brand & Meta Row */}
                     <div className="flex items-center justify-between gap-2">
                         <p className="truncate text-[13px] font-bold text-[#DFA655]">
-                            {brand || "لكزس"}
+                            {brand || t("carCard.defaultBrand")}
                         </p>
                         <p className="shrink-0 text-[12px] font-medium text-[#888888]">
-                            {type ? `${type} · ` : "فاخر SUV · "}
-                            {year || "2024"}
+                            {type ? `${type} · ` : `${t("carCard.defaultType")} · `}
+                            {year || t("carCard.defaultYear")}
                         </p>
                     </div>
 
@@ -117,9 +107,9 @@ export default function CarCard({
 
                     {/* Spec Pills */}
                     <div className="mt-3.5 mb-4 flex flex-wrap items-center gap-1.5">
-                        {specPills.map((pill, idx) => (
+                        {specPills.map((pill, index) => (
                             <span
-                                key={idx}
+                                key={index}
                                 className="inline-flex items-center justify-center rounded-[6px] bg-[#F5F2EC] px-3 py-0 text-[12px] font-semibold text-[#475467]"
                             >
                                 {pill}
@@ -134,7 +124,7 @@ export default function CarCard({
                         {/* Cash price */}
                         <div className="text-start">
                             <p className="text-[12px] font-medium ">
-                                {t("carCard.cashPrice", "السعر النقدي")}
+                                {t("carCard.cashPrice")}
                             </p>
                             <p className="mt-0.5 text-[22px] sm:text-[24px] font-black text-[#111111]">
                                 {price}
@@ -145,10 +135,7 @@ export default function CarCard({
                         {monthlyPrice ? (
                             <div>
                                 <p className="text-[12px] font-medium">
-                                    {t(
-                                        "carCard.monthlyPayment",
-                                        "قسط شهري يبدأ من",
-                                    )}
+                                    {t("carCard.monthlyPayment")}
                                 </p>
                                 <p className="mt-0.5 text-[18px] sm:text-[19px] font-extrabold text-[#DFA655]">
                                     {monthlyPrice}
@@ -170,7 +157,7 @@ export default function CarCard({
                             onClick={handleOpenDetails}
                             className="flex h-[44px] w-full items-center justify-center rounded-[4px] bg-[#DFA655] text-[15px] font-bold text-white shadow-xs transition hover:bg-[#c89345] active:scale-95 cursor-pointer"
                         >
-                            {reserveText ?? t("carCard.details", "التفاصيل")}
+                            {reserveText ?? t("carCard.details")}
                         </button>
 
                         {/* Compare Button */}
@@ -179,8 +166,7 @@ export default function CarCard({
                             onClick={handleCompare}
                             className="flex h-[44px] w-full items-center justify-center rounded-[4px] border border-[#D0D5DD] bg-white text-[14px] font-bold text-[#344054] transition hover:bg-gray-50 active:scale-95 cursor-pointer"
                         >
-                            {compareText ??
-                                t("carCard.compare", "أضف للمقارنة")}
+                            {compareText ?? t("carCard.compare")}
                         </button>
                     </div>
                 </div>

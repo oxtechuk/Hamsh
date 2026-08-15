@@ -105,10 +105,7 @@ export default function AllCarsHero({
                 type="search"
                 value={searchValue}
                 onChange={(event) => onSearchChange(event.target.value)}
-                placeholder={t(
-                  "carsPage.search.placeholder",
-                  "ابحث عن سيارة...",
-                )}
+                placeholder={t("carsPage.search.placeholder")}
                 className={[
                   "h-[56px] w-full",
                   "bg-white px-4 pe-12",
@@ -135,7 +132,7 @@ export default function AllCarsHero({
             >
               <ChevronDown size={16} strokeWidth={1.7} />
 
-              {sortLabel ?? t("carsPage.sort.label", "ترتيب حسب")}
+              {sortLabel ?? t("carsPage.sort.label")}
             </button>
 
             {/* Filters */}
@@ -153,7 +150,7 @@ export default function AllCarsHero({
             >
               <SlidersHorizontal size={17} strokeWidth={1.8} />
 
-              {filterLabel ?? t("carsPage.filters", "الفلاتر")}
+              {filterLabel ?? t("carsPage.filters")}
             </button>
           </div>
         </div>
@@ -161,4 +158,3 @@ export default function AllCarsHero({
     </section>
   );
 }
-

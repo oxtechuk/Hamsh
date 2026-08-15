@@ -1,10 +1,10 @@
-import type { CarCardProps } from "../components/CarCard";
+import type { ICarCardProps } from "./ICarCardProps";
 
 export interface IFeaturedCarsSectionProps {
   titleBlue: string;
   buttonText: string;
   buttonTo: string;
-  cars: CarCardProps[];
+  cars: ICarCardProps[];
   backgroundImage?: string;
   className?: string;
   itemsPerPage?: number;

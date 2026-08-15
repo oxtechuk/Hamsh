@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 
-import type { IAllCarsSearchBarProps } from "../interfaces/IAllCarsSearchBarProps";
+import type { IAllCarsSearchBarProps } from "../../interfaces/IAllCarsSearchBarProps";
 
 export default function AllCarsSearchBar({
   resultCount,

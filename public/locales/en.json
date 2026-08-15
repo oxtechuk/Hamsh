@@ -74,11 +74,40 @@
         "monthlyPayment": "Monthly Installment",
         "estimated": "Estimated",
         "reserve": "Reserve It Now",
-        "details": "More Details",
+        "details": "Details",
         "moreDetails": "More Details",
         "startsFrom": "Starting From",
         "month": "Month",
-        "model": "Model"
+        "model": "Model",
+        "exclusive": "Exclusive",
+        "defaultBrand": "Lexus",
+        "defaultType": "Luxury SUV",
+        "defaultYear": "2024",
+        "fallbackEngine": "V8 3.5L Twin-Turbo",
+        "seatsCount": "{{count}} Seats",
+        "automatic": "Automatic",
+        "gasoline": "Gasoline"
+    },
+    "carsPage": {
+        "filters": "Filters",
+        "search": {
+            "placeholder": "Search for a car..."
+        },
+        "sort": {
+            "label": "Sort By"
+        }
+    },
+    "allCarsHero": {
+        "badge": "Latest Offers",
+        "title": {
+            "line1": "Cars Showroom",
+            "line2Prefix": "Choose Your Car",
+            "line2Highlight": "With Ease"
+        },
+        "description": "Browse the latest available models with best prices and easiest financing plans.",
+        "button1": "Browse Cars",
+        "button2": "Finance Calculator",
+        "offerAlt": "All cars offer"
     },
     "offers": {
         "titleWhite": "Best Offers,",

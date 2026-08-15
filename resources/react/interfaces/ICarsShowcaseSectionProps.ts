@@ -1,4 +1,4 @@
-import type { CarCardProps } from "../components/CarCard";
+import type { ICarCardProps } from "./ICarCardProps";
 
 export interface ICarsShowcaseSectionProps {
   titleBlue: string;
@@ -6,5 +6,5 @@ export interface ICarsShowcaseSectionProps {
   description: string;
   buttonText: string;
   buttonTo: string;
-  cars: CarCardProps[];
+  cars: ICarCardProps[];
 }

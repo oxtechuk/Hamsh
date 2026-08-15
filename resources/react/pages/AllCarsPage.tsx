@@ -1,24 +1,18 @@
-import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { useQuery } from "@tanstack/react-query";
-import AllCarsSearchBar from "../components/AllCarsSearchBar";
-import CarsResultsGrid from "../components/CarsResultsGrid";
-import { getCars, getCarsMeta } from "../services/api/cars.service";
-import { useLanguageStore } from "../store/language.store";
-import { mapCarToCardProps } from "../utils/car-mappers";
-import { useSEO } from "../utils/useSEO";
-import type { CarCardProps } from "../components/CarCard";
-import AllCarsHero from "../components/all-cars-pagee/AllCarsHero";
+import AllCarsHero from "../components/all-cars-page/AllCarsHero";
+import AllCarsSearchBar from "../components/all-cars-page/AllCarsSearchBar";
+import CarsResultsGrid from "../components/all-cars-page/CarsResultsGrid";
+import EmptyCarsState from "../components/all-cars-page/EmptyCarsState";
+import { useAllCars } from "../hooks/useAllCars";
 import { useCarsFilter } from "../hooks/useCarsFilter";
-import { filterStaticCars } from "../utils/car-filter-utils";
-import type { ICarsHeroCategory } from "../interfaces/ICarsHeroCategory";
+import { useCarsPagination } from "../hooks/useCarsPagination";
+import { useSEO } from "../utils/useSEO";
 
 const PAGE_SIZE = 6;
 
 export default function AllCarsPage() {
     const { t, i18n } = useTranslation();
     useSEO(t("nav.cars"), t("allCarsHero.description"));
-    const language = useLanguageStore((s) => s.language);
 
     const {
         filters,
@@ -29,100 +23,44 @@ export default function AllCarsPage() {
         handleFilterChange,
     } = useCarsFilter();
 
-    const { data: carsMeta } = useQuery({
-        queryKey: ["cars-meta", language],
-        queryFn: getCarsMeta,
-        staleTime: 5 * 60 * 1000,
+    const { heroCategories, allCars } = useAllCars({
+        filters,
+        currentPage,
+        offerId,
+        buildQueryParams,
     });
 
-    const heroCategories = useMemo<ICarsHeroCategory[]>(() => {
-        const defaultAll: ICarsHeroCategory = {
-            label: t("allCarsPage.allCategories", "الكل"),
-            value: "all",
-        };
-
-        if (!carsMeta?.filter_categories || carsMeta.filter_categories.length === 0) {
-            return [defaultAll];
-        }
-
-        const dynamicCategories = carsMeta.filter_categories.map((cat) => ({
-            label: cat.name,
-            value: String(cat.id),
-        }));
-
-        return [defaultAll, ...dynamicCategories];
-    }, [carsMeta, t]);
-
-    const { data: carsResponse } = useQuery({
-        queryKey: ["cars-data", language, filters, currentPage, offerId],
-        queryFn: () => getCars(buildQueryParams()),
-        staleTime: 5 * 60 * 1000,
-        retry: 1,
-    });
-
-    const allCars = useMemo(() => {
-        let rawCars = carsResponse?.data;
-        const isUsingStatic = !rawCars || rawCars.length === 0;
-
-        if (isUsingStatic) {
-            rawCars = filterStaticCars(filters);
-        }
-
-        return (rawCars || [])
-            .map((car) => mapCarToCardProps(car, language))
-            .filter(Boolean) as CarCardProps[];
-    }, [carsResponse, language, filters]);
-
-    const filteredCars = useMemo(() => {
-        let result = allCars.slice();
-
-        if (filters.transmission !== "all") {
-            result = result.filter(
-                (c) => c.transmission === filters.transmission,
-            );
-        }
-        if (filters.fuelType !== "all") {
-            result = result.filter((c) => c.fuelType === filters.fuelType);
-        }
-
-        return result;
-    }, [allCars, filters]);
-
-    const totalPages = Math.max(1, Math.ceil(filteredCars.length / PAGE_SIZE));
-    const safePage = Math.min(currentPage, totalPages);
-    const pagedCars = filteredCars.slice(
-        (safePage - 1) * PAGE_SIZE,
-        safePage * PAGE_SIZE,
+    const { filteredCars, totalPages, safePage, pagedCars } = useCarsPagination(
+        allCars,
+        filters,
+        currentPage,
+        PAGE_SIZE,
     );
 
     return (
         <main dir={i18n.dir()}>
             <AllCarsHero
-                eyebrow={t("allCarsPage.eyebrow", "معرض السيارات")}
-                title={t("allCarsPage.title", "اكتشف مجموعتنا")}
+                eyebrow={t("allCarsPage.eyebrow")}
+                title={t("allCarsPage.title")}
                 countText={t("allCarsPage.countText", {
                     count: filteredCars.length,
-                    defaultValue: `${filteredCars.length} سيارة متاحة`,
                 })}
                 categories={heroCategories}
                 activeCategory={
                     filters.categoryId !== null ? String(filters.categoryId) : "all"
                 }
-                onCategoryChange={(val) =>
+                onCategoryChange={(value) =>
                     handleFilterChange({
                         ...filters,
-                        categoryId: val === "all" ? null : Number(val),
+                        categoryId: value === "all" ? null : Number(value),
                     })
                 }
                 searchValue={filters.search}
-                onSearchChange={(val) =>
-                    handleFilterChange({ ...filters, search: val })
+                onSearchChange={(value) =>
+                    handleFilterChange({ ...filters, search: value })
                 }
-                onSearch={() => {
-                    // search action
-                }}
-                sortLabel={t("carsPage.sort.label", "ترتيب حسب")}
-                filterLabel={t("carsPage.filters", "الفلاتر")}
+                sortLabel={t("carsPage.sort.label")}
+                filterLabel={t("carsPage.filters")}
             />
             <section className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
                 <div className="min-w-0 flex-1">
@@ -136,11 +74,7 @@ export default function AllCarsPage() {
                             onPageChange={setCurrentPage}
                         />
                     ) : (
-                        <div className="py-20 text-center">
-                            <p className="text-lg font-medium text-[#9CA3AF]">
-                                {t("allCarsPage.noCarsMatch", "لا توجد سيارات مطابقة للبحث")}
-                            </p>
-                        </div>
+                        <EmptyCarsState />
                     )}
                 </div>
             </section>

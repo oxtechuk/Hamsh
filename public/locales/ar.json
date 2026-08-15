@@ -58,7 +58,36 @@
         "moreDetails": "التفاصيل",
         "startsFrom": "يبدأ من",
         "month": "شهر",
-        "model": "موديل"
+        "model": "موديل",
+        "exclusive": "حصري",
+        "defaultBrand": "لكزس",
+        "defaultType": "فاخر SUV",
+        "defaultYear": "2024",
+        "fallbackEngine": "V8 3.5L Twin-Turbo",
+        "seatsCount": "{{count}} مقاعد",
+        "automatic": "أوتوماتيك",
+        "gasoline": "بنزين"
+    },
+    "carsPage": {
+        "filters": "الفلاتر",
+        "search": {
+            "placeholder": "ابحث عن سيارة..."
+        },
+        "sort": {
+            "label": "ترتيب حسب"
+        }
+    },
+    "allCarsHero": {
+        "badge": "أحدث العروض",
+        "title": {
+            "line1": "معرض السيارات",
+            "line2Prefix": "اختر سيارتك",
+            "line2Highlight": "بكل سهولة"
+        },
+        "description": "تصفح أحدث الموديلات المتوفرة بأفضل الأسعار وأسهل خطط التمويل.",
+        "button1": "تصفح السيارات",
+        "button2": "حاسبة التمويل",
+        "offerAlt": "عرض معرض السيارات"
     },
     "offers": {
         "titleWhite": "أفضل عروض،",
@@ -219,6 +248,10 @@
         "phoneText": "اطلب الان"
     },
     "allCarsPage": {
+        "eyebrow": "معرض السيارات",
+        "title": "اكتشف مجموعتنا",
+        "countText": "{{count}} سيارة متاحة",
+        "allCategories": "الكل",
         "noCarsMatch": "لا توجد سيارات مطابقة للبحث",
         "availableCars": "سيارة متاحة",
         "contactBadge": "فريقنا جاهز للمساعدة",

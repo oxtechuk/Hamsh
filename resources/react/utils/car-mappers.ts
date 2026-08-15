@@ -1,7 +1,7 @@
 import { APP_IMAGES, getImageUrl } from "../constants/app-images";
 import { formatPrice } from "./format";
 import { localize } from "./localize";
-import type { CarCardProps } from "../components/CarCard";
+import type { ICarCardProps } from "../interfaces/ICarCardProps";
 import type { CarItem } from "../types/home.types";
 import type { CarDetails } from "../types/cars.types";
 import type { ITab } from "../interfaces/ICarDetailsSpecsProps";
@@ -29,7 +29,10 @@ export function getSpecValue(
     return "";
 }
 
-export function mapCarToCardProps(car: CarItem, lang = "ar"): CarCardProps | null {
+export function mapCarToCardProps(
+    car: CarItem,
+    lang = "ar",
+): ICarCardProps | null {
     try {
         const slug = car.slug?.trim();
         if (!slug) return null;
@@ -75,7 +78,10 @@ export function specValue(car: CarItem, key: string, altKey?: string): string {
     return "";
 }
 
-export function mapRelatedCar(car: CarItem, lang = "ar"): CarCardProps | null {
+export function mapRelatedCar(
+    car: CarItem,
+    lang = "ar",
+): ICarCardProps | null {
     try {
         const slug = car.slug?.trim();
         if (!slug) return null;
