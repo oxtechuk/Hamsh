@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import { Check, Scale } from "lucide-react";
 import { formatPrice } from "../../utils/format";
 import { useCarDetails } from "../../hooks/useCarDetails";
@@ -8,6 +9,8 @@ import CarDetailsRecommendations from "../CarDetailsRecommendations";
 
 export default function CarDetailsHero({
     title,
+    description,
+    slug,
     images,
     price,
     monthlyInstallment,
@@ -151,13 +154,17 @@ export default function CarDetailsHero({
                                 >
                                     {t("carDetails.actions.bookVisit")}
                                 </a>
-                                <a
-                                    href="/compare"
+                                <Link
+                                    to={
+                                        slug
+                                            ? `/compare?slug=${encodeURIComponent(slug)}`
+                                            : "/compare"
+                                    }
                                     aria-label={t("carDetails.actions.compare")}
                                     className="flex h-[48px] w-[48px] shrink-0 items-center justify-center  border border-[#D0D5DD] text-[#344054] transition hover:bg-gray-50 active:scale-95"
                                 >
                                     <Scale size={20} />
-                                </a>
+                                </Link>
                             </div>
                         </div>
                     </div>

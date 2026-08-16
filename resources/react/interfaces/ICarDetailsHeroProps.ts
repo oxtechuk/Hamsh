@@ -13,6 +13,7 @@ export type { ICarDetailsRecommendationItem as ICarDetailsRecommendation };
 export interface ICarDetailsHeroProps {
   title: string;
   description: string;
+  slug?: string;
   images: string[];
   exteriorImages?: string[];
   interiorImages?: string[];

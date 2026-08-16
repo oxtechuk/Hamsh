@@ -83,6 +83,7 @@ export default function CarDetailsPage() {
         })}
       </script>
       <CarDetailsHero
+        slug={slug}
         title={localize(car.name, language)}
         description={localize(car.description, language)}
         brand={localize(car.brand?.name, language)}
