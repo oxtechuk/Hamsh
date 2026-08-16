@@ -36,7 +36,7 @@ export default function CarDetailsPage() {
       car?.related_cars
         ?.filter((c) => c.slug?.trim())
         .map((c) => mapRelatedCar(c, language))
-        .filter(Boolean) ?? [],
+        .filter((c): c is NonNullable<typeof c> => c !== null) ?? [],
     [car?.related_cars, language],
   );
 

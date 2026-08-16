@@ -1,5 +1,6 @@
-import type { ITab } from "./ICarDetailsSpecsProps";
+import type { ICarCardProps } from "./ICarCardProps";
 import type { ICarDetailsRecommendationItem } from "./ICarDetailsRecommendationsProps";
+import type { ITab } from "./ICarDetailsSpecsProps";
 
 export interface ICarColor {
   name: string;
@@ -32,6 +33,6 @@ export interface ICarDetailsHeroProps {
   specs?: Record<string, string | null>;
   specifications?: Array<{ id?: number; name: string; value?: string | null }>;
   featuresList?: Array<{ id?: number; name: string; value?: string | null }>;
-  recommendations?: ICarDetailsRecommendationItem[];
+  recommendations?: (ICarDetailsRecommendationItem | ICarCardProps)[];
 }
 

@@ -644,6 +644,27 @@
         "recommendations": {
             "title": "You May Also Like",
             "details": "Details"
+        },
+        "techSpecs": {
+            "title": "Technical Specifications",
+            "power": "Power",
+            "fuel": "Fuel",
+            "capacity": "Capacity",
+            "transmission": "Transmission"
+        },
+        "features": {
+            "title": "Features & Equipment"
+        },
+        "actions": {
+            "bookVisit": "Book a Visit",
+            "orderNow": "Request Financing",
+            "compare": "Compare",
+            "nextImage": "Next Image",
+            "prevImage": "Previous Image",
+            "goToSlide": "Go to slide {{number}}",
+            "backToGallery": "Back to Gallery",
+            "nextCars": "Next",
+            "prevCars": "Previous"
         }
     },
     "comparePage": {

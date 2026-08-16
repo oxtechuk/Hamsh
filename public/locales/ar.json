@@ -574,9 +574,9 @@
     },
     "carDetails": {
         "hero": {
-            "price": "سعر الكاش",
+            "price": "السعر النقدي",
             "originalPrice": "السعر الأصلي",
-            "installmentFrom": "القسط الشهري",
+            "installmentFrom": "قسط شهري يبدأ من",
             "saving": "وفر",
             "availableColors": "الألوان المتاحة",
             "orderNow": "طلب التمويل",
@@ -622,8 +622,29 @@
             "buttonText": "تصفح كافة السيارات"
         },
         "recommendations": {
-            "title": "قد يعجبك أيضاً",
+            "title": "سيارات مشابهة",
             "details": "التفاصيل"
+        },
+        "techSpecs": {
+            "title": "المواصفات التقنية",
+            "power": "الطاقة",
+            "fuel": "الوقود",
+            "capacity": "السعة",
+            "transmission": "ناقل الحركة"
+        },
+        "features": {
+            "title": "المميزات والتجهيزات"
+        },
+        "actions": {
+            "bookVisit": "احجز زيارة",
+            "orderNow": "اطلب التمويل",
+            "compare": "مقارنة",
+            "nextImage": "الصورة التالية",
+            "prevImage": "الصورة السابقة",
+            "goToSlide": "انتقل للصورة {{number}}",
+            "backToGallery": "العودة للمعرض",
+            "nextCars": "التالي",
+            "prevCars": "السابق"
         }
     },
     "comparePage": {
@@ -816,7 +837,7 @@
                 "financeDetails": "تفاصيل التمويل",
                 "carPrice": "سعر السيارة",
                 "riyal": "ريال",
-                "monthlyPayment": "القسط الشهري",
+                "monthlyPayment": "قسط شهري يبدأ من",
                 "summaryTitle": "ملخص التمويل",
                 "downPayment": "الدفعة الأولى",
                 "financeAmount": "قيمة التمويل",

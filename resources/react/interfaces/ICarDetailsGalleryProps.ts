@@ -10,6 +10,6 @@ export interface ICarDetailsGalleryProps {
   isShowingColorImage: boolean;
   selectedColor: ICarColor | null;
   onClearColor: () => void;
-  viewType: "inside" | "outside";
-  onViewChange: (type: "inside" | "outside") => void;
+  viewType?: "inside" | "outside";
+  onViewChange?: (type: "inside" | "outside") => void;
 }
