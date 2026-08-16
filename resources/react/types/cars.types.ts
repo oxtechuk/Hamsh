@@ -76,7 +76,7 @@ export interface CarDetails {
   is_current_year: boolean;
   type: string;
   colors: CarColorWithImage[];
-  specs: Record<string, string | null>;
+  specs: CarSpec[] | Record<string, string | null>;
   description: string;
   features: string;
   is_featured: boolean;

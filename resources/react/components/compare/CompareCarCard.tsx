@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { APP_IMAGES, getImageUrl } from "../../constants/app-images";
 import type { ICompareCarCardProps } from "../../interfaces/ICompareCarCardProps";
 import LazyImg from "../LazyImg";
+import CompareSpec from "./CompareSpec";
 
 export default function CompareCarCard({
     car,
@@ -17,21 +18,45 @@ export default function CompareCarCard({
     const imageSrc = getImageUrl(car.main_image) || APP_IMAGES.CAR_PLACEHOLDER;
 
     const getSpec = (key: string, fallback: string = "") => {
-        if (car.specs && car.specs[key]) return String(car.specs[key]);
+        const normalizedKey = key.toLowerCase();
+        const specs = car.specs;
+
+        const specKeyMap: Record<string, string> = {
+            horsepower: "hp",
+            fuel: "fuel",
+            fueltype: "fuel",
+            transmission: "gearbox",
+            gearbox: "gearbox",
+            seats: "seats",
+        };
+
+        if (specs) {
+            if (Array.isArray(specs)) {
+                const found = specs.find(
+                    (s) =>
+                        s.label.toLowerCase().includes(normalizedKey) ||
+                        normalizedKey.includes(s.label.toLowerCase()),
+                );
+                if (found?.value) return String(found.value);
+            } else if (typeof specs === "object") {
+                const mappedKey = specKeyMap[normalizedKey] ?? key;
+                const direct =
+                    specs[mappedKey] ?? specs[key] ?? specs[normalizedKey];
+                if (direct) return String(direct);
+            }
+        }
+
         const found = car.specifications.find(
             (s) =>
-                s.name.toLowerCase().includes(key.toLowerCase()) ||
-                (s.value && s.name.includes(key)),
+                s.name.toLowerCase().includes(normalizedKey) ||
+                normalizedKey.includes(s.name.toLowerCase()),
         );
         return found?.value || found?.name || fallback;
     };
 
     const carType = car.type || car.category?.name || "";
-
     const fuelType = getSpec("fuel");
-
     const transmission = getSpec("transmission");
-
     const horsepower = getSpec("horsepower") || null;
 
     const handleRemove = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -43,8 +68,8 @@ export default function CompareCarCard({
         <article
             dir={i18n.dir()}
             className={[
-                "relative flex h-[401px] w-[464px]",
-                "flex-col overflow-hidden",
+                "relative flex h-[401px] w-full max-w-[464px]",
+                "mx-auto flex-col overflow-hidden",
                 "border border-[#E4E1DA]",
                 "bg-white",
                 "shadow-[0_3px_12px_rgba(15,23,42,0.04)]",
@@ -53,13 +78,14 @@ export default function CompareCarCard({
             {/* Image */}
             <div
                 className={[
-                    "relative h-[266px] w-full shrink-0 overflow-hidden",
+                    "relative h-[220px] w-full shrink-0 overflow-hidden",
                     "bg-[#F0F0F0]",
+                    "sm:h-[266px]",
                 ].join(" ")}
             >
                 <LazyImg
                     src={imageSrc}
-                    alt={`${brandName} ${carName}`}
+                    alt={carName}
                     className="h-full w-full object-cover"
                 />
 
@@ -70,7 +96,7 @@ export default function CompareCarCard({
                     aria-label={t("comparePage.removeCar")}
                     title={t("comparePage.removeCar")}
                     className={[
-                        "absolute start-5 top-5 z-20",
+                        "absolute end-5 top-5 z-20",
                         "flex h-[46px] w-[46px]",
                         "items-center justify-center",
                         "rounded-full",
@@ -98,7 +124,7 @@ export default function CompareCarCard({
                         )}
 
                         <h2
-                            title={`${brandName} ${carName}`}
+                            title={carName}
                             className={[
                                 "mt-1 line-clamp-1",
                                 "text-[17px] font-extrabold",
@@ -107,7 +133,7 @@ export default function CompareCarCard({
                                 "sm:text-[18px]",
                             ].join(" ")}
                         >
-                            {brandName} {carName}
+                            {carName}
                         </h2>
                     </div>
 
@@ -138,48 +164,15 @@ export default function CompareCarCard({
 
                     <CompareSpec
                         value={fuelType || "—"}
-                        label={t("comparePage.fuel", "الوقود")}
+                        label={t("comparePage.fuel")}
                     />
 
                     <CompareSpec
                         value={transmission || "—"}
-                        label={t("comparePage.transmission", "ناقل الحركة")}
+                        label={t("comparePage.transmission")}
                     />
                 </div>
             </div>
         </article>
-    );
-}
-
-interface CompareSpecProps {
-    value: string;
-    label: string;
-    highlighted?: boolean;
-}
-
-function CompareSpec({ value, label, highlighted = false }: CompareSpecProps) {
-    return (
-        <div
-            className={[
-                "flex min-h-[52px]",
-                "flex-col items-center justify-center",
-                "px-2 text-center",
-                "border-s border-[#E8E3DA]",
-                "first:border-s-0",
-            ].join(" ")}
-        >
-            <span
-                className={[
-                    "text-[16px] font-extrabold leading-none",
-                    highlighted
-                        ? "text-[var(--brand-primary-color)]"
-                        : "text-[var(--brand-secondary-color)]",
-                ].join(" ")}
-            >
-                {value}
-            </span>
-
-            <span className="mt-0.5 text-[10px] text-[#747B89]">{label}</span>
-        </div>
     );
 }

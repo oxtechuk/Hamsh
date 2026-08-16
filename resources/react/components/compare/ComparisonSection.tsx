@@ -58,10 +58,10 @@ export default function ComparisonSection({
             key={`${row.label}-${index}`}
             className={[
               "grid grid-cols-[1fr_1fr_1fr]",
-              "border-b border-[#E8E3D9]",
+              "border-b border-[#F5F2EC]",
               "last:border-b-0",
               alternate
-                ? "bg-[#F1EDE4]"
+                ? "bg-[#F5F2EC]"
                 : "bg-white",
             ].join(" ")}
           >

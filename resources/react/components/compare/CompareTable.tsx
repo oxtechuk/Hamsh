@@ -22,19 +22,21 @@ export default function CompareTable({
             className="mx-auto w-full max-w-[1280px] pb-20"
         >
             {/* Comparison table */}
-            <div className="overflow-hidden border border-[#E8E3D9] bg-white">
-                {sections.map((section, sectionIndex) => (
-                    <ComparisonSection
-                        key={`${section.title}-${sectionIndex}`}
-                        title={section.title}
-                        rows={section.rows}
-                        car1Name={car1Name}
-                        car2Name={car2Name}
-                        carOneLabel={t("comparePage.carOne")}
-                        carTwoLabel={t("comparePage.carTwo")}
-                        hideHeader={sectionIndex > 0}
-                    />
-                ))}
+            <div className="overflow-x-auto border border-[#E8E3D9] bg-white">
+                <div className="min-w-[640px]">
+                    {sections.map((section, sectionIndex) => (
+                        <ComparisonSection
+                            key={`${section.title}-${sectionIndex}`}
+                            title={section.title}
+                            rows={section.rows}
+                            car1Name={car1Name}
+                            car2Name={car2Name}
+                            carOneLabel={t("comparePage.carOne")}
+                            carTwoLabel={t("comparePage.carTwo")}
+                            hideHeader={sectionIndex > 0}
+                        />
+                    ))}
+                </div>
             </div>
 
             {/* Actions */}
@@ -51,7 +53,7 @@ export default function CompareTable({
                         "hover:brightness-95",
                     ].join(" ")}
                 >
-                    {t("comparePage.requestFinance", "اطلب التمويل")}
+                    {t("comparePage.requestFinance")}
                 </button>
 
                 <button
@@ -68,7 +70,7 @@ export default function CompareTable({
                         "hover:text-white",
                     ].join(" ")}
                 >
-                    {t("comparePage.backToCars", "عودة للسيارات")}
+                    {t("comparePage.backToCars")}
                 </button>
             </div>
         </section>

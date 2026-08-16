@@ -680,6 +680,11 @@
         "sar": "رس",
         "vs": "VS",
         "all": "الكل",
+        "fuel": "الوقود",
+        "transmission": "ناقل الحركة",
+        "getItNow": "احصل عليها الآن",
+        "requestFinance": "اطلب التمويل",
+        "backToCars": "عودة للسيارات",
         "sections": {
             "titles": {
                 "prices": "الأسعار",

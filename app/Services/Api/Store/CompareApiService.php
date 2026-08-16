@@ -82,9 +82,9 @@ final class CompareApiService
 
     private function performanceSection(array $cars): array
     {
-        $hps = array_map(fn (Car $car) => $car->specs['hp'] ?? null, $cars);
-        $maxSpeeds = array_map(fn (Car $car) => $car->specs['max_speed'] ?? null, $cars);
-        $accelerations = array_map(fn (Car $car) => $car->specs['acceleration'] ?? null, $cars);
+        $hps = array_map(fn (Car $car) => $this->specValue($car, 'hp'), $cars);
+        $maxSpeeds = array_map(fn (Car $car) => $this->specValue($car, 'max_speed'), $cars);
+        $accelerations = array_map(fn (Car $car) => $this->specValue($car, 'acceleration'), $cars);
 
         return [
             'title' => __('store-api.compare.sections.performance'),
@@ -99,8 +99,8 @@ final class CompareApiService
     private function designSection(array $cars): array
     {
         $types = array_map(fn (Car $car) => $car->type, $cars);
-        $seats = array_map(fn (Car $car) => $car->specs['seats'] ?? null, $cars);
-        $gearboxes = array_map(fn (Car $car) => $car->specs['gearbox'] ?? null, $cars);
+        $seats = array_map(fn (Car $car) => $this->specValue($car, 'seats'), $cars);
+        $gearboxes = array_map(fn (Car $car) => $this->specValue($car, 'gearbox'), $cars);
 
         return [
             'title' => __('store-api.compare.sections.design'),
@@ -110,6 +110,49 @@ final class CompareApiService
                 $this->row(__('store-api.compare.labels.gearbox'), $gearboxes, 'text'),
             ],
         ];
+    }
+
+    private function specValue(Car $car, string $key): ?string
+    {
+        $specs = $car->specs ?? [];
+
+        if (! is_array($specs) || $specs === []) {
+            return null;
+        }
+
+        // Object format: ['hp' => 'HP 300']
+        if (! array_is_list($specs)) {
+            $value = $specs[$key] ?? null;
+
+            return $value !== null && $value !== '' ? (string) $value : null;
+        }
+
+        // Array format: [['label' => 'Horsepower', 'value' => '188 HP']]
+        $labels = [
+            'hp' => ['horsepower', 'hp', 'power'],
+            'max_speed' => ['max speed', 'top speed', 'maximum speed'],
+            'acceleration' => ['acceleration', '0-100', '0 to 100'],
+            'seats' => ['seats', 'seating capacity'],
+            'gearbox' => ['transmission', 'gearbox'],
+            'fuel' => ['fuel', 'fuel type'],
+        ];
+        $needles = $labels[$key] ?? [$key];
+
+        foreach ($specs as $spec) {
+            if (! is_array($spec)) {
+                continue;
+            }
+            $label = strtolower((string) ($spec['label'] ?? $spec['name'] ?? ''));
+            foreach ($needles as $needle) {
+                if (str_contains($label, $needle)) {
+                    $value = $spec['value'] ?? null;
+
+                    return $value !== null && $value !== '' ? (string) $value : null;
+                }
+            }
+        }
+
+        return null;
     }
 
     private function checkSection(string $title, string $relation, array $cars): ?array

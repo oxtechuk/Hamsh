@@ -700,6 +700,11 @@
         "sar": "SAR",
         "vs": "VS",
         "all": "All",
+        "fuel": "Fuel",
+        "transmission": "Transmission",
+        "getItNow": "Get It Now",
+        "requestFinance": "Request Finance",
+        "backToCars": "Back to Cars",
         "sections": {
             "titles": {
                 "prices": "Prices",
