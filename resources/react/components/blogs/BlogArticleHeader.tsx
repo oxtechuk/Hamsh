@@ -14,7 +14,7 @@ export default function BlogArticleHeader({
 }: BlogArticleHeaderProps) {
   return (
     <header className="relative w-full overflow-hidden">
-      <div className="relative min-h-[330px] w-full overflow-hidden sm:min-h-[410px] lg:min-h-[520px]">
+      <div className="relative min-h-[180px] w-full overflow-hidden sm:min-h-[220px] lg:min-h-[260px]">
         <LazyImg
           src={image}
           alt={title}
@@ -36,7 +36,7 @@ export default function BlogArticleHeader({
 
         {/* Content */}
         <div className="absolute inset-x-0 bottom-0">
-          <div className="mx-auto max-w-[1180px] px-5 pb-10 sm:px-8 sm:pb-12 lg:px-12 lg:pb-14">
+          <div className="mx-auto max-w-7xl px-4 pb-10 sm:px-6 sm:pb-12 lg:px-8 lg:pb-14">
             {category && (
               <p className="text-start text-[12px] font-bold text-[var(--brand-primary-color)] sm:text-[13px]">
                 {category}

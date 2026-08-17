@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useRef } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useInfiniteQuery, keepPreviousData } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
@@ -10,8 +10,6 @@ import { useLanguageStore } from "../store/language.store";
 import { postToCardProps } from "../utils/blog";
 import { localize } from "../utils/localize";
 import { useSEO } from "../utils/useSEO";
-import { APP_IMAGES, getImageUrl } from "../constants/app-images";
-import { STATIC_ARTICLES, STATIC_CATEGORIES } from "../data/blog-static-data";
 
 const PER_PAGE = 6;
 
@@ -23,8 +21,6 @@ export default function BlogsPage() {
     const [activeCategory, setActiveCategory] = useState(
         searchParams.get("category") || "all",
     );
-    const [staticPage, setStaticPage] = useState(1);
-    const hasEverHadApiData = useRef(false);
 
     const categoryId =
         activeCategory === "all" ? undefined : Number(activeCategory);
@@ -46,12 +42,9 @@ export default function BlogsPage() {
                 : undefined,
     });
 
-    const isApiData = !!blogResponse?.pages?.[0]?.data?.length;
-    if (isApiData) hasEverHadApiData.current = true;
-
     const categories = useMemo(() => {
         const apiCategories = blogResponse?.pages?.[0]?.meta.categories ?? [];
-        if (!apiCategories.length) return STATIC_CATEGORIES;
+        if (!apiCategories.length) return [];
         return [
             { label: t("blogPage.hero.allCategories"), value: "all" },
             ...apiCategories.map((c) => ({
@@ -68,26 +61,9 @@ export default function BlogsPage() {
             .map((post) => postToCardProps(post, language, t));
     }, [blogResponse, language, t]);
 
-    const filteredStatic = useMemo(() => {
-        if (activeCategory === "all") return STATIC_ARTICLES;
-        return STATIC_ARTICLES.filter((a) => {
-            const cat = STATIC_CATEGORIES.find(
-                (c) => c.value === activeCategory,
-            );
-            return cat ? a.category === cat.label : true;
-        });
-    }, [activeCategory]);
-
-    const staticTotalPages = Math.ceil(filteredStatic.length / PER_PAGE);
-    const staticPageArticles = filteredStatic.slice(
-        (staticPage - 1) * PER_PAGE,
-        staticPage * PER_PAGE,
-    );
-
     const handleCategoryChange = useCallback(
         (val: string) => {
             setActiveCategory(val);
-            setStaticPage(1);
             if (val === "all") {
                 setSearchParams({});
             } else {
@@ -97,53 +73,24 @@ export default function BlogsPage() {
         [setSearchParams],
     );
 
-    const handlePageChange = useCallback((page: number) => {
-        setStaticPage(page);
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    }, []);
-
     const handleLoadMore = useCallback(() => {
         if (hasNextPage && !isFetchingNextPage) fetchNextPage();
     }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-    const showStaticFallback = !isApiData && !hasEverHadApiData.current;
+    const featuredPosts = useMemo(() => {
+        const posts = blogResponse?.pages?.[0]?.meta.featured_posts ?? [];
+        return posts.map((post) => postToCardProps(post, language, t));
+    }, [blogResponse, language, t]);
 
-    const featuredArticle = useMemo(() => {
-        const articles = isApiData ? apiArticles : STATIC_ARTICLES;
-        return articles.length ? articles[0] : undefined;
-    }, [apiArticles, isApiData]);
-
-    const relatedArticles = useMemo(() => {
-        const articles = isApiData ? apiArticles : STATIC_ARTICLES;
-        return articles.slice(1, 5);
-    }, [apiArticles, isApiData]);
+    const featuredArticle = featuredPosts[0];
+    const relatedArticles = featuredPosts.slice(1, 5);
 
     return (
         <>
             <BlogsPageHero
-                badgeText={
-                    localize(
-                        blogResponse?.pages?.[0]?.meta.hero.badge,
-                        language,
-                    ) || t("blogPage.hero.badge")
-                }
-                title={
-                    localize(
-                        blogResponse?.pages?.[0]?.meta.hero.title,
-                        language,
-                    ) || t("blogPage.hero.title")
-                }
-                description={
-                    localize(
-                        blogResponse?.pages?.[0]?.meta.hero.subtitle,
-                        language,
-                    ) || t("blogPage.hero.description")
-                }
-                image={
-                    getImageUrl(
-                        blogResponse?.pages?.[0]?.meta.hero.image ?? null,
-                    ) || APP_IMAGES.BLOG_PLACEHOLDER
-                }
+                badgeText={t("blogPage.hero.badge")}
+                title={t("blogPage.hero.title")}
+                description={t("blogPage.hero.description")}
                 categories={categories}
                 activeCategory={activeCategory}
                 onCategoryChange={handleCategoryChange}
@@ -153,6 +100,15 @@ export default function BlogsPage() {
                 <FeaturedBlogsSection
                     featured={featuredArticle}
                     related={relatedArticles}
+                />
+            )}
+
+            {apiArticles.length > 0 && (
+                <LatestArticlesSection
+                    articles={apiArticles}
+                    hasMore={hasNextPage}
+                    onLoadMore={handleLoadMore}
+                    loadMoreText={t("blogPage.loadMore")}
                 />
             )}
         </>

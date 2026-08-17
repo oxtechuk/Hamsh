@@ -20,38 +20,15 @@ export default function BlogsPageHero({
     return (
         <section
             dir={direction}
-            className="relative flex h-[270px] w-full flex-col overflow-hidden bg-[var(--brand-secondary-color)] text-white"
+            className="relative flex min-h-[270px] w-full flex-col overflow-hidden bg-[#1A1F2E] text-white"
         >
-            {image && (
-                <>
-                    <LazyImg
-                        src={image}
-                        alt={title}
-                        className="absolute inset-0 h-full w-full object-cover"
-                    />
-
-                    {/* Dark overlays */}
-                    <div className="absolute inset-0 bg-black/20" />
-
-                    <div
-                        className={[
-                            "absolute inset-0",
-                            "bg-gradient-to-t",
-                            "from-[#1B2234]/90",
-                            "via-[#1B2234]/30",
-                            "to-black/5",
-                        ].join(" ")}
-                    />
-                </>
-            )}
-
             <div className="relative z-10 mx-auto flex w-full max-w-[1440px] flex-1 flex-col px-5 sm:px-8 lg:px-12 xl:px-[70px]">
                 {/* Hero content */}
                 <div className="flex flex-1 items-center">
                     <div className="max-w-[620px] text-start">
                         {/* Eyebrow */}
                         <p className="text-[13px] font-medium text-[var(--brand-primary-color)]">
-                            {badgeText || t("blogPage.hero.badge", "مجلة هامش")}
+                            {badgeText || t("blogPage.hero.badge")}
                         </p>
 
                         {/* Title */}
@@ -109,7 +86,7 @@ export default function BlogsPageHero({
                                     {isActive && (
                                         <span
                                             className={[
-                                                "absolute bottom-0 left-1/2",
+                                                "absolute bottom-0 start-1/2",
                                                 "h-[2px] w-[58px]",
                                                 "-translate-x-1/2",
                                                 "bg-[var(--brand-primary-color)]",

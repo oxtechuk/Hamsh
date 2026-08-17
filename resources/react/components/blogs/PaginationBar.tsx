@@ -1,4 +1,6 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import type { IPaginationBarProps } from "../../interfaces/IPaginationBarProps";
+import { useLanguageStore } from "../../store/language.store";
 
 function buildPages(current: number, total: number): (number | "...")[] {
   if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
@@ -19,17 +21,13 @@ function buildPages(current: number, total: number): (number | "...")[] {
   return pages;
 }
 
-interface IPaginationBarProps {
-  currentPage: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
-}
-
 export default function PaginationBar({
   currentPage,
   totalPages,
   onPageChange,
 }: IPaginationBarProps) {
+  const direction = useLanguageStore((s) => s.direction);
+
   if (totalPages <= 1) return null;
 
   const pageSlots = buildPages(currentPage, totalPages);
@@ -37,8 +35,11 @@ export default function PaginationBar({
   const btnBase =
     "flex h-[52px] w-[52px] items-center justify-center rounded-[10px] border-2 border-[#C5232B] text-[#C5232B] text-[16px] font-bold transition select-none";
 
+  const PrevIcon = direction === "rtl" ? ChevronRight : ChevronLeft;
+  const NextIcon = direction === "rtl" ? ChevronLeft : ChevronRight;
+
   return (
-    <div dir="ltr" className="mt-12 flex items-center justify-center gap-2">
+    <div dir={direction} className="mt-12 flex items-center justify-center gap-2">
       <button
         type="button"
         disabled={currentPage === 1}
@@ -48,7 +49,7 @@ export default function PaginationBar({
           "disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[#C5232B] hover:text-white",
         ].join(" ")}
       >
-        <ChevronLeft size={20} strokeWidth={2.5} />
+        <PrevIcon size={20} strokeWidth={2.5} />
       </button>
 
       {pageSlots.map((slot, i) =>
@@ -85,7 +86,7 @@ export default function PaginationBar({
           "disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[#C5232B] hover:text-white",
         ].join(" ")}
       >
-        <ChevronRight size={20} strokeWidth={2.5} />
+        <NextIcon size={20} strokeWidth={2.5} />
       </button>
     </div>
   );

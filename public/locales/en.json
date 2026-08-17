@@ -435,6 +435,13 @@
             "summary": {
                 "heading": "In Summary"
             }
+        },
+        "loadMore": "Load More Articles",
+        "readTime": {
+            "lessThanMinute": "Less than a minute",
+            "oneMinute": "1 min read",
+            "twoMinutes": "2 min read",
+            "minutes": "{{count}} min read"
         }
     },
     "aboutPage": {

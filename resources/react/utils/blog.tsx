@@ -13,20 +13,17 @@ export function formatBlogDate(iso: string, language: string): string {
   });
 }
 
-export function formatBlogReadTime(minutes: number, language: string): string {
-  if (language === "ar") {
-    if (minutes < 1) return "أقل من دقيقة";
-    if (minutes === 1) return "دقيقة واحدة";
-    if (minutes === 2) return "دقيقتان";
-    return `${minutes} دقائق`;
-  }
-  return `${minutes} min read`;
+export function formatBlogReadTime(minutes: number, t: TFunction): string {
+  if (minutes < 1) return t("blogPage.readTime.lessThanMinute");
+  if (minutes === 1) return t("blogPage.readTime.oneMinute");
+  if (minutes === 2) return t("blogPage.readTime.twoMinutes");
+  return t("blogPage.readTime.minutes", { count: minutes });
 }
 
 export function postToCardProps(
   post: IBlogPost,
   language: string,
-  t: TFunction
+  t: TFunction,
 ) {
   return {
     id: post.id,
@@ -35,7 +32,7 @@ export function postToCardProps(
       post.categories.map((c) => localize(c.name, language)).join(", ") ||
       t("blogPage.hero.featuredPost.category"),
     date: formatBlogDate(post.published_at, language),
-    readTime: formatBlogReadTime(post.reading_time, language),
+    readTime: formatBlogReadTime(post.reading_time, t),
     title: localize(post.title, language) || t("blogPage.hero.featuredPost.title"),
     description: localize(post.excerpt, language) || t("blogPage.hero.featuredPost.description"),
     authorName:

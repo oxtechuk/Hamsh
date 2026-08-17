@@ -15,7 +15,7 @@ export default function BlogDetailsHero({
     const direction = useLanguageStore((s) => s.direction);
     return (
         <section dir={direction} className="w-full pt-12 pb-8">
-            <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="mx-auto max-w-3xl text-start">
                     <span className="inline-flex min-h-[44px] items-center rounded-full bg-[var(--brand-secondary-color)] px-7 text-[18px] text-[var(--brand-primary-color)] whitespace-nowrap">
                         {category}

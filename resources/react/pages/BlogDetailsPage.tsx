@@ -3,18 +3,19 @@ import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
+import ArticleMeta from "../components/blogs/ArticleMeta";
 import BlogArticleContent from "../components/blogs/BlogArticleContent";
 import BlogArticleHeader from "../components/blogs/BlogArticleHeader";
-import SummaryQuoteCard from "../components/blogs/SummaryQuoteCard";
-import BlogDetailsLoading from "../components/blogs/BlogDetailsLoading";
 import BlogDetailsError from "../components/blogs/BlogDetailsError";
+import BlogDetailsLoading from "../components/blogs/BlogDetailsLoading";
+import SummaryQuoteCard from "../components/blogs/SummaryQuoteCard";
 
 import { getBlogBySlug } from "../services/api";
 import { useLanguageStore } from "../store/language.store";
 import { formatBlogDate, formatBlogReadTime } from "../utils/blog";
 import { useSEO } from "../utils/useSEO";
 import { localize } from "../utils/localize";
-import { getImageUrl } from "../constants/app-images";
+import { getImageUrl, APP_IMAGES } from "../constants/app-images";
 
 export default function BlogDetailsPage() {
     const { t } = useTranslation();
@@ -24,7 +25,6 @@ export default function BlogDetailsPage() {
     const { slug } = useParams<{ slug: string }>();
 
     const language = useLanguageStore((state) => state.language);
-
     const direction = useLanguageStore((state) => state.direction);
 
     const {
@@ -43,8 +43,8 @@ export default function BlogDetailsPage() {
     );
 
     const readTime = useMemo(
-        () => (blog ? formatBlogReadTime(blog.reading_time, language) : ""),
-        [blog, language],
+        () => (blog ? formatBlogReadTime(blog.reading_time, t) : ""),
+        [blog, t],
     );
 
     if (isLoading) {
@@ -57,20 +57,19 @@ export default function BlogDetailsPage() {
 
     const category =
         blog.categories
-            .map((category) => localize(category.name, language))
+            .map((c) => localize(c.name, language))
             .join(", ") || "";
 
     const title = localize(blog.title, language);
 
     const authorName =
         localize(blog.employee?.name, language) ||
-        t("blogPage.hero.defaultAuthor", "فهد العتيبي");
+        t("blogPage.hero.defaultAuthor");
 
-    const image = getImageUrl(blog.thumbnail) || "/images/blog.png";
+    const image = getImageUrl(blog.thumbnail) || APP_IMAGES.BLOG_PLACEHOLDER;
 
     return (
         <main dir={direction} className="w-full bg-[var(--background)]">
-            {/* Hero */}
             <BlogArticleHeader
                 category={category}
                 title={title}
@@ -80,20 +79,16 @@ export default function BlogDetailsPage() {
                 image={image}
             />
 
-            {/* Article */}
             <section className="w-full py-10 sm:py-12 lg:py-14">
-                <div className="mx-auto max-w-[1180px] px-5 sm:px-8 lg:px-12">
-                    {/* Metadata */}
+                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <ArticleMeta
                         authorName={authorName}
                         date={date}
                         readTime={readTime}
                     />
 
-                    {/* Separator */}
                     <div className="mt-5 h-px w-full bg-[#E5DED1]" />
 
-                    {/* Content */}
                     <div className="mt-10">
                         <BlogArticleContent
                             content={blog.content}
@@ -101,7 +96,6 @@ export default function BlogDetailsPage() {
                         />
                     </div>
 
-                    {/* Summary */}
                     {blog.summary && (
                         <div className="my-10">
                             <SummaryQuoteCard summary={blog.summary} />
@@ -110,37 +104,5 @@ export default function BlogDetailsPage() {
                 </div>
             </section>
         </main>
-    );
-}
-
-interface ArticleMetaProps {
-    authorName: string;
-    date: string;
-    readTime: string;
-}
-
-function ArticleMeta({ authorName, date, readTime }: ArticleMetaProps) {
-    return (
-        <div className="flex flex-wrap items-center justify-start gap-x-5 gap-y-3 text-[12px] text-[#687084]">
-            {authorName && (
-                <span className="font-bold text-[#303A54]">{authorName}</span>
-            )}
-
-            {date && (
-                <>
-                    <span className="h-[4px] w-[4px] rounded-full bg-[var(--brand-primary-color)]" />
-
-                    <span>{date}</span>
-                </>
-            )}
-
-            {readTime && (
-                <>
-                    <span className="h-[4px] w-[4px] rounded-full bg-[var(--brand-primary-color)]" />
-
-                    <span>{readTime}</span>
-                </>
-            )}
-        </div>
     );
 }
