@@ -4,59 +4,33 @@ import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { getCountdownParts, padTime } from "../../utils/countdown";
+import { formatPrice } from "../../utils/format";
 
 import type { IOffersPageHeroProps } from "../../interfaces/IOffersPageHeroProps";
+import type { ITimeUnitProps } from "../../interfaces/ITimeUnitProps";
 import LazyImg from "../LazyImg";
-
-/* -------------------------------------------------------------------------- */
-/* Static fallbacks — not currently provided by backend                        */
-/* -------------------------------------------------------------------------- */
-
-const STATIC_DATA = {
-    breadcrumbHome: "الرئيسية",
-    breadcrumbOffers: "السيارات",
-
-    pageTitleBlack: "عروض",
-    pageTitleGold: "استثنائية",
-
-    pageDescription: "لا تفوّت فرصة اقتناء سيارة أحلامك بسعر مميز",
-
-    featuredTitle: "عرض الربيع المميز",
-
-    featuredDescription: "خصم يصل إلى 20,000 ر.س",
-
-    oldPrice: 285000,
-
-    mostRequestedBadge: "الأكثر طلبًا",
-
-    buttonText: "استفد من العرض",
-};
 
 /* -------------------------------------------------------------------------- */
 /* Countdown                                                                  */
 /* -------------------------------------------------------------------------- */
 
-interface TimeUnitProps {
-    value: number;
-    label: string;
-}
-
-function TimeUnit({ value, label }: TimeUnitProps) {
+function TimeUnit({ value, label, locale }: ITimeUnitProps) {
     return (
         <div
             className={[
-                "flex min-w-0 flex-1 flex-col",
-                "items-center justify-center",
+                "flex flex-col",
+                "items-center justify-center gap-1",
+                "h-[56px] w-full min-w-0",
+                "sm:h-[64px]",
                 "bg-[#EEE9DF]",
-                "px-2 py-4",
-                "sm:min-h-[82px]",
+                "px-1 sm:px-2",
             ].join(" ")}
         >
-            <strong className="text-[22px] font-extrabold leading-none text-[#20283A] sm:text-[24px]">
-                {padTime(value)}
+            <strong className="text-[18px] font-extrabold leading-none text-[#20283A] sm:text-[22px] lg:text-[24px]">
+                {padTime(value, locale)}
             </strong>
 
-            <span className="mt-2 text-[10px] text-[#697083] sm:text-[11px]">
+            <span className="text-[9px] text-[#697083] sm:text-[10px] lg:text-[11px]">
                 {label}
             </span>
         </div>
@@ -107,7 +81,12 @@ export default function OffersPageHero({
             );
         }
 
-        return endsAt ? new Date(endsAt) : null;
+        if (endsAt) {
+            const parsed = new Date(endsAt);
+            return Number.isNaN(parsed.getTime()) ? null : parsed;
+        }
+
+        return null;
     }, [countdown, endsAt]);
 
     const [timeLeft, setTimeLeft] = useState(() =>
@@ -138,70 +117,53 @@ export default function OffersPageHero({
     }, [target]);
 
     /* ---------------------------------------------------------------------- */
-    /* Dynamic + static fallback values                                       */
+    /* Dynamic values                                                         */
     /* ---------------------------------------------------------------------- */
 
-    const pageTitleBlack =
-        title2?.trim() ||
-        t("offersPage.hero.titleBlack", STATIC_DATA.pageTitleBlack);
+    const pageTitleBlack = title2?.trim() ?? "";
 
-    const pageTitleGold =
-        title1?.trim() ||
-        t("offersPage.hero.titleGold", STATIC_DATA.pageTitleGold);
+    const pageTitleGold = title1?.trim() ?? "";
 
-    const pageDescription =
-        description?.trim() ||
-        t("offersPage.hero.pageDescription", STATIC_DATA.pageDescription);
+    const pageDescription = description?.trim() ?? "";
 
-    /*
-     * The backend currently doesn't provide a separate featured-offer heading,
-     * so this uses carLabel if available and a static fallback otherwise.
-     */
-    const featuredTitle =
-        carLabel?.trim() ||
-        t("offersPage.hero.featuredTitle", STATIC_DATA.featuredTitle);
+    const featuredTitle = carLabel?.trim() ?? "";
 
     const featuredDescription = discountPercent
-        ? t("offersPage.hero.discountPercent", {
-              percent: discountPercent,
-              defaultValue: `خصم ${discountPercent}%`,
-          })
-        : t(
-              "offersPage.hero.featuredDescription",
-              STATIC_DATA.featuredDescription,
-          );
+        ? t("offersPage.hero.discount", { percent: discountPercent })
+        : "";
 
-    const resolvedButtonText =
-        primaryButtonText?.trim() ||
-        t("offersPage.hero.button", STATIC_DATA.buttonText);
+    const resolvedButtonText = primaryButtonText?.trim() ?? "";
 
     const resolvedButtonTo = primaryButtonTo?.trim() || "/offers";
 
     const currentPrice =
         specialPrice && Number(specialPrice) > 0
             ? Number(specialPrice)
-            : 265000;
+            : 0;
 
-    const oldPrice = STATIC_DATA.oldPrice;
+    const oldPrice =
+        currentPrice > 0 && discountPercent
+            ? Math.round(currentPrice * (1 + discountPercent / 100))
+            : 0;
 
     return (
         <section
             dir={direction}
             className="w-full bg-[var(--background)] pb-12 pt-8 sm:pb-16 sm:pt-10 lg:pb-20 lg:pt-12"
         >
-            <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 {/* ================================================================ */}
                 {/* Page heading                                                     */}
                 {/* ================================================================ */}
 
-                <div className="text-start">
+                <div className="flex flex-col justify-center text-start py-2">
                     {/* Breadcrumb */}
                     <nav className="flex items-center gap-2 text-[12px] sm:text-[13px]">
                         <NavLink
                             to="/"
                             className="font-semibold text-[#303A54] transition hover:text-[var(--brand-primary-color)]"
                         >
-                            {t("nav.home", STATIC_DATA.breadcrumbHome)}
+                            {t("nav.home")}
                         </NavLink>
 
                         <ChevronLeft
@@ -214,18 +176,18 @@ export default function OffersPageHero({
                         />
 
                         <span className="text-[var(--brand-primary-color)]">
-                            {t("nav.cars", STATIC_DATA.breadcrumbOffers)}
+                            {t("nav.cars")}
                         </span>
                     </nav>
 
                     {/* Heading */}
                     <h1
                         className={[
-                            "mt-5 text-[32px]",
+                            "mt-2 text-[30px]",
                             "font-extrabold leading-tight",
                             "text-[#20283A]",
-                            "sm:text-[38px]",
-                            "lg:text-[42px]",
+                            "sm:text-[34px]",
+                            "lg:text-[38px]",
                         ].join(" ")}
                     >
                         <span>{pageTitleBlack}</span>{" "}
@@ -234,7 +196,7 @@ export default function OffersPageHero({
                         </span>
                     </h1>
 
-                    <p className="mt-3 max-w-[620px] text-[14px] leading-7 text-[#59647A] sm:text-[15px]">
+                    <p className="mt-2 max-w-[620px] text-[14px] leading-6 text-[#59647A] sm:text-[15px]">
                         {pageDescription}
                     </p>
                 </div>
@@ -245,29 +207,53 @@ export default function OffersPageHero({
 
                 <div
                     className={[
-                        "mt-10 grid overflow-hidden",
+                        "mt-8 grid overflow-hidden",
                         "border border-[#E9E3D8]",
                         "bg-white",
                         "shadow-[0_10px_34px_rgba(32,40,58,0.06)]",
                         "lg:mt-12",
-                        "lg:grid-cols-[0.92fr_1.08fr]",
+                        "lg:h-[435px]",
+                        "lg:grid-cols-2",
                     ].join(" ")}
                 >
                     {/* ============================================================ */}
-                    {/* Offer information                                           */}
+                    {/* Image                                                       */}
                     {/* ============================================================ */}
 
                     <div
                         className={[
-                            "order-2 flex flex-col justify-center",
-                            "px-6 py-8",
-                            "sm:px-10 sm:py-10",
+                            "relative order-1",
+                            "min-h-[220px]",
+                            "overflow-hidden",
+                            "bg-[#EDE8DE]",
+                            "sm:min-h-[340px]",
                             "lg:order-1",
-                            "lg:px-14 lg:py-12",
+                            "lg:min-h-[435px]",
+                        ].join(" ")}
+                    >
+                        <LazyImg
+                            src={image}
+                            alt={featuredTitle}
+                            className="absolute inset-0 h-full w-full object-contains"
+                        />
+
+                        {/* Most requested badge */}
+                        <div className="absolute start-5 top-5 z-10 bg-[var(--brand-primary-color)] px-4 py-2 text-[12px] font-bold text-[#20283A]">
+                            {badgeText?.trim() ||
+                                t("offersPage.hero.mostRequested")}
+                        </div>
+                    </div>
+                    <div
+                        className={[
+                            "order-2 flex flex-col justify-center",
+                            "px-5 py-6",
+                            "sm:px-8 sm:py-8",
+                            "lg:order-1",
+                            "lg:px-12 lg:py-8",
                         ].join(" ")}
                     >
                         <div className="text-start">
-                            <h2 className="text-[27px] font-extrabold leading-tight text-[#20283A] sm:text-[31px] lg:text-[34px]">
+                            <h2 className="text-[25px] font-extrabold leading-tight text-[#20283A] sm:text-[29px] lg:text-[31px]">
                                 {featuredTitle}
                             </h2>
 
@@ -280,71 +266,51 @@ export default function OffersPageHero({
                         {target && (
                             <div
                                 dir="ltr"
-                                className="mt-7 grid grid-cols-4 gap-2 sm:gap-3"
+                                className="mt-5 grid grid-cols-4 gap-2 sm:gap-3"
                             >
                                 <TimeUnit
                                     value={timeLeft.days}
-                                    label={t(
-                                        "offersPage.hero.countdownDays",
-                                        "يوم",
-                                    )}
+                                    label={t("offersPage.hero.countdownDays")}
+                                    locale={i18n.language}
                                 />
 
                                 <TimeUnit
                                     value={timeLeft.hours}
-                                    label={t(
-                                        "offersPage.hero.countdownHours",
-                                        "ساعة",
-                                    )}
+                                    label={t("offersPage.hero.countdownHours")}
+                                    locale={i18n.language}
                                 />
 
                                 <TimeUnit
                                     value={timeLeft.minutes}
-                                    label={t(
-                                        "offersPage.hero.countdownMinutes",
-                                        "دق",
-                                    )}
+                                    label={t("offersPage.hero.countdownMinutes")}
+                                    locale={i18n.language}
                                 />
 
                                 <TimeUnit
                                     value={timeLeft.seconds}
-                                    label={t(
-                                        "offersPage.hero.countdownSeconds",
-                                        "ث",
-                                    )}
+                                    label={t("offersPage.hero.countdownSeconds")}
+                                    locale={i18n.language}
                                 />
                             </div>
                         )}
 
                         {/* Divider */}
-                        <div className="my-7 h-px w-full bg-[#E9E1D4]" />
+                        <div className="my-5 h-px w-full bg-[#E9E1D4]" />
 
                         {/* Price */}
                         <div className="text-start">
                             {oldPrice > currentPrice && (
-                                <p
-                                    dir="ltr"
-                                    className="w-fit text-[13px] text-[#6D7484] line-through"
-                                >
-                                    {oldPrice.toLocaleString()}{" "}
-                                    {t("common.riyal", "ر.س")}
+                                <p className="relative w-fit text-[13px] text-[#6D7484]">
+                                    {formatPrice(oldPrice, "#6D7484")}
+                                    <span
+                                        aria-hidden="true"
+                                        className="pointer-events-none absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-[#6D7484]"
+                                    />
                                 </p>
                             )}
 
-                            <p
-                                dir="ltr"
-                                className={[
-                                    "mt-2 w-fit",
-                                    "text-[38px]",
-                                    "font-extrabold leading-none",
-                                    "text-[#20283A]",
-                                    "sm:text-[44px]",
-                                ].join(" ")}
-                            >
-                                {currentPrice.toLocaleString()}{" "}
-                                <span className="text-[28px]">
-                                    {t("common.riyal", "ر.س")}
-                                </span>
+                            <p className="mt-2 w-fit text-[34px] font-extrabold leading-none text-[#20283A] sm:text-[40px]">
+                                {formatPrice(currentPrice, "#20283A")}
                             </p>
                         </div>
 
@@ -352,7 +318,7 @@ export default function OffersPageHero({
                         <NavLink
                             to={resolvedButtonTo}
                             className={[
-                                "mt-7 flex h-[54px]",
+                                "mt-5 flex h-[50px]",
                                 "w-full items-center justify-center",
                                 "bg-[var(--brand-primary-color)]",
                                 "px-6",
@@ -364,57 +330,6 @@ export default function OffersPageHero({
                         >
                             {resolvedButtonText}
                         </NavLink>
-                    </div>
-
-                    {/* ============================================================ */}
-                    {/* Image                                                       */}
-                    {/* ============================================================ */}
-
-                    <div
-                        className={[
-                            "relative order-1",
-                            "min-h-[320px]",
-                            "overflow-hidden",
-                            "bg-[#EDE8DE]",
-                            "sm:min-h-[420px]",
-                            "lg:order-2",
-                            "lg:min-h-[510px]",
-                        ].join(" ")}
-                    >
-                        <LazyImg
-                            src={image}
-                            alt={featuredTitle}
-                            className="absolute inset-0 h-full w-full object-cover"
-                        />
-
-                        {/* Most requested badge */}
-                        <div className="absolute end-5 top-5 z-10 bg-[var(--brand-primary-color)] px-4 py-2 text-[12px] font-bold text-[#20283A]">
-                            {badgeText?.trim() ||
-                                t(
-                                    "offersPage.hero.mostRequested",
-                                    STATIC_DATA.mostRequestedBadge,
-                                )}
-                        </div>
-
-                        {/* Decorative pagination dots */}
-                        <div
-                            dir="ltr"
-                            className="absolute bottom-5 left-1/2 z-10 flex -translate-x-1/2 items-center gap-3"
-                        >
-                            {[0, 1, 2].map((dot) => (
-                                <span
-                                    key={dot}
-                                    className={[
-                                        "h-[10px] w-[10px]",
-                                        "rounded-full",
-                                        dot === 0
-                                            ? "bg-[#8F7AC7]"
-                                            : "bg-[#A796CA]/75",
-                                        "border border-white/50",
-                                    ].join(" ")}
-                                />
-                            ))}
-                        </div>
                     </div>
                 </div>
             </div>

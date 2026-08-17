@@ -22,6 +22,7 @@ export interface IOfferListCardProps {
   countdown?: IOfferCountdown;
   endsAtLabel?: string;
   savings?: number;
+  discountPercent?: number;
   minInstallment?: number;
   buttonText: string;
   buttonTo: string;

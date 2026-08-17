@@ -550,7 +550,10 @@
             "countdownDays": "يوم",
             "countdownHours": "ساعة",
             "countdownMinutes": "دقيقة",
-            "countdownSeconds": "ثانية"
+            "countdownSeconds": "ثانية",
+            "mostRequested": "الأكثر طلبًا",
+            "discount": "خصم {{percent}}%",
+            "vehiclesOnly": "{{count}} مركبات فقط"
         },
         "grid": {
             "title": "تصفح العروض",
@@ -570,7 +573,8 @@
             },
             "loadMore": "عرض المزيد من العروض",
             "loading": "جاري التحميل..."
-        }
+        },
+        "bentoTitle": "سيارات العرض"
     },
     "carDetails": {
         "hero": {
@@ -1144,6 +1148,7 @@
         "specialOrderLink": "قدم طلب خاص"
     },
     "common": {
+        "riyal": "ر.س",
         "previousSlide": "الشريحة السابقة",
         "nextSlide": "الشريحة التالية",
         "close": "إغلاق",

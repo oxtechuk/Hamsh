@@ -5,8 +5,15 @@ export interface ICountdownParts {
   seconds: number;
 }
 
-export function padTime(n: number): string {
-  return String(n).padStart(2, "0");
+const ARABIC_DIGITS = ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"];
+
+function toArabicNumerals(str: string): string {
+  return str.replace(/\d/g, (d) => ARABIC_DIGITS[Number(d)]);
+}
+
+export function padTime(n: number, locale?: string): string {
+  const padded = String(n).padStart(2, "0");
+  return locale?.startsWith("ar") ? toArabicNumerals(padded) : padded;
 }
 
 export function getCountdownParts(target: Date): ICountdownParts {

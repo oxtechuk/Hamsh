@@ -570,7 +570,10 @@
             "countdownDays": "Day",
             "countdownHours": "Hour",
             "countdownMinutes": "Minute",
-            "countdownSeconds": "Second"
+            "countdownSeconds": "Second",
+            "mostRequested": "Most Requested",
+            "discount": "{{percent}}% Discount",
+            "vehiclesOnly": "{{count}} vehicles only"
         },
         "grid": {
             "title": "Browse Offers",
@@ -590,7 +593,8 @@
             },
             "loadMore": "Load More Offers",
             "loading": "Loading..."
-        }
+        },
+        "bentoTitle": "Offer Cars"
     },
     "carDetails": {
         "hero": {
@@ -1117,6 +1121,7 @@
         "specialOrderLink": "Submit a Special Request"
     },
     "common": {
+        "riyal": "SAR",
         "previousSlide": "Previous Slide",
         "nextSlide": "Next Slide",
         "close": "Close"

@@ -33,7 +33,7 @@ export interface OfferData {
   starts_at: string;
   ends_at: string;
   is_active: boolean;
-  cars_count: number;
+  cars_count?: number;
   countdown?: {
     days: number;
     hours: number;
@@ -41,6 +41,31 @@ export interface OfferData {
     seconds: number;
     is_expired: boolean;
   } | null;
+}
+
+export interface OfferBentoCar {
+  id: number;
+  name: { ar: string; en: string };
+  slug: { ar: string; en: string };
+  model: string;
+  year: string;
+  type: string;
+  colors: { hex: string; name: string }[];
+  cash_price: number;
+  min_down_payment: number;
+  min_installment: number;
+  description: { ar: string; en: string };
+  specs: { label: string; value: string }[];
+  features: { ar: string; en: string };
+  thumbnail: string | null;
+  main_image: string | null;
+  brand: {
+    id: number;
+    name: { ar: string; en: string };
+    slug: string;
+    logo: string | null;
+  };
+  offers: OfferData[];
 }
 
 export interface OffersMeta {
@@ -61,6 +86,7 @@ export interface OffersMeta {
     features: unknown[];
   };
   main_gallery: string[];
+  bento_cars: OfferBentoCar[];
   main_offer: OfferData | null;
 }
 
