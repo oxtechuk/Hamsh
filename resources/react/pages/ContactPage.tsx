@@ -1,12 +1,17 @@
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
 
 import FaqSection from "../components/contact-us/FaqSection";
 import ContactMethodsSection from "../components/contact-us/ContactMethodsSection";
 import ContactForm from "../components/contact-us/ContactForm";
 import ContactPageLayout from "../components/ContactPageLayout";
+import AboutTestimonialsSection from "../components/about/AboutTestimonialsSection";
 
 import { useSEO } from "../utils/useSEO";
 import { useContactForm } from "../hooks/useContactForm";
+import { useLanguageStore } from "../store/language.store";
+import { getContactPageData } from "../services/api";
 
 import type { IFaqItem } from "../interfaces/IFaqItem";
 
@@ -75,6 +80,7 @@ const STATIC_BRANCHES: ContactBranchItem[] = [
 
 export default function ContactPage() {
   const { t } = useTranslation();
+  const language = useLanguageStore((state) => state.language);
 
   const {
     values,
@@ -89,10 +95,30 @@ export default function ContactPage() {
     t("contactPage.contactUs.description"),
   );
 
+  const { data: contactData } = useQuery({
+    queryKey: ["contact-page", language],
+    queryFn: getContactPageData,
+  });
+
+  const testimonials = useMemo(() => {
+    return (contactData?.data?.testimonials ?? []).map((item) => ({
+      id: item.id,
+      quote: item.content,
+      customerName: item.name,
+      customerCar: item.title,
+      rating: item.rating,
+    }));
+  }, [contactData]);
+
   return (
     <main className="w-full bg-[var(--background)]">
       {/* Top intro + contact methods */}
       <ContactMethodsSection />
+
+      {/* Testimonials */}
+      {testimonials.length > 0 && (
+        <AboutTestimonialsSection testimonials={testimonials} />
+      )}
 
       {/* Form + FAQ / branches */}
       <ContactPageLayout

@@ -37,7 +37,7 @@ export default function ContactMethodsSection() {
       dir={direction}
       className="w-full bg-[var(--background)] pb-14 pt-8 sm:pb-16 lg:pb-20"
     >
-      <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
         <nav className="flex items-center justify-start gap-2 text-[12px]">
           <NavLink

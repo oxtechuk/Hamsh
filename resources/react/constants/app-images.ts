@@ -43,4 +43,5 @@ export const APP_IMAGES = {
   GALLERY_G1: `${cleanBase}images/about_image_1.png`,
   GALLERY_G2: `${cleanBase}images/about_image_2.png`,
   CONTACT_MAP: `${cleanBase}images/contact/map.webp`,
+  ABOUT_VISION: `${cleanBase}images/about_vision.png`,
 } as const;

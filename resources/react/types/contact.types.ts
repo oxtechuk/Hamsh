@@ -20,9 +20,20 @@ export interface IContactPageHero {
   image: string | null;
 }
 
+export interface IContactTestimonial {
+  id: number;
+  name: string;
+  title: string;
+  content: string;
+  image: string | null;
+  review_image: string | null;
+  rating: number;
+}
+
 export interface IContactPageData {
   hero: IContactPageHero;
   branches: IContactBranch[];
+  testimonials: IContactTestimonial[];
 }
 
 export interface IContactPageApiResponse {

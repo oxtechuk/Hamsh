@@ -5,17 +5,8 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-interface AboutValueItem {
-  id: string | number;
-  title: string;
-  description: string;
-  icon?: "belonging" | "excellence" | "transparency";
-}
-
-interface AboutValuesSectionProps {
-  values: AboutValueItem[];
-  className?: string;
-}
+import type { IAboutValueItem } from "../../interfaces/IAboutValueItem";
+import type { IAboutValuesSectionProps } from "../../interfaces/IAboutValuesSectionProps";
 
 const VALUE_ICONS = {
   belonging: UsersRound,
@@ -26,7 +17,7 @@ const VALUE_ICONS = {
 export default function AboutValuesSection({
   values,
   className = "",
-}: AboutValuesSectionProps) {
+}: IAboutValuesSectionProps) {
   const { i18n } = useTranslation();
 
   if (!values.length) {
@@ -43,9 +34,9 @@ export default function AboutValuesSection({
       ].join(" ")}
     >
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {values.slice(0, 3).map((value, index) => {
-            const fallbackIcons: AboutValueItem["icon"][] = [
+            const fallbackIcons: IAboutValueItem["icon"][] = [
               "belonging",
               "excellence",
               "transparency",

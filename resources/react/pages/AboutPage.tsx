@@ -1,304 +1,158 @@
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { NavLink } from "react-router-dom";
+import { ChevronLeft } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 
 import { useLanguageStore } from "../store/language.store";
 import { useSEO } from "../utils/useSEO";
 import { getAboutPageData } from "../services/api";
+import { APP_IMAGES } from "../constants/app-images";
+
+import {
+  FALLBACK_STATS,
+  FALLBACK_TESTIMONIALS,
+  FALLBACK_CORE_VALUES,
+} from "../constants/about-data";
 
 import type { IAboutData } from "../interfaces/IAboutData";
+import type { IAboutStatViewModel } from "../interfaces/IAboutStatViewModel";
+import type { IAboutTestimonialViewModel } from "../interfaces/IAboutTestimonialViewModel";
+import type { IAboutCoreValueViewModel } from "../interfaces/IAboutCoreValueViewModel";
+
+import AboutStatementSection from "../components/about/AboutStatementSection";
+import AboutStatsSection from "../components/about/AboutStatsSection";
 import AboutVisionSection from "../components/about/AboutVisionSection";
 import AboutValuesSection from "../components/about/AboutValuesSection";
 import AboutTestimonialsSection from "../components/about/AboutTestimonialsSection";
 
-interface AboutStatViewModel {
-    id: string | number;
-    value: string;
-    label: string;
-    description: string;
-}
-
-interface AboutTestimonialViewModel {
-    id: string | number;
-    quote: string;
-    customerName: string;
-    customerCar?: string;
-    rating?: number;
-}
-
-interface AboutCoreValueViewModel {
-    id: string | number;
-    title: string;
-    description: string;
-    icon?: "belonging" | "excellence" | "transparency";
-}
-
-const STATIC_STATS: AboutStatViewModel[] = [
-    {
-        id: 1,
-        value: "+12",
-        label: "سنة خبرة",
-        description: "في السوق السعودي",
-    },
-    {
-        id: 2,
-        value: "+5000",
-        label: "عميل راضٍ",
-        description: "من جميع أنحاء المملكة",
-    },
-    {
-        id: 3,
-        value: "+24",
-        label: "علامة تجارية",
-        description: "خيارات استثنائية",
-    },
-    {
-        id: 4,
-        value: "98%",
-        label: "رضاء عملائنا",
-        description: "تجربة مميزة معنا",
-    },
-];
-
-const STATIC_TESTIMONIALS: AboutTestimonialViewModel[] = [
-    {
-        id: 1,
-        quote: "أفضل تجربة شراء سيارات على الإطلاق. الفريق كان محترفاً وساعدني في اختيار السيارة المثالية بكل صدق.",
-        customerName: "محمد العتيبي",
-        customerCar: "تويوتا هايلكس",
-        rating: 5,
-    },
-    {
-        id: 2,
-        quote: "عملية سلسة من البداية إلى النهاية، وسعر عادل مقارنة بالسوق. أنصح أي شخص يبحث عن الموثوقية بالتعامل معهم.",
-        customerName: "خالد الشمري",
-        customerCar: "نيسان باترول",
-        rating: 5,
-    },
-    {
-        id: 3,
-        quote: "التزامهم بالوعود وشفافيتهم في التفاصيل جعلتني عميلاً دائماً. تجربة تستحق أن تُروى.",
-        customerName: "عبدالله القحطاني",
-        customerCar: "لكزس ES",
-        rating: 5,
-    },
-];
-
-const STATIC_CORE_VALUES: AboutCoreValueViewModel[] = [
-    {
-        id: 1,
-        title: "الاهتمام",
-        description: "نمنح كل عميل اهتماماً كاملاً من أول اتصال حتى ما بعد التسليم.",
-        icon: "belonging",
-    },
-    {
-        id: 2,
-        title: "السرعة",
-        description: "نجهّز طلبك ونسلّمه في أسرع وقت ممكن دون التنازل عن الجودة.",
-        icon: "excellence",
-    },
-    {
-        id: 3,
-        title: "الجودة",
-        description: "نلتزم بأعلى معايير الجودة في كل مرحلة، من الفحص حتى التسليم.",
-        icon: "transparency",
-    },
-    {
-        id: 4,
-        title: "ثقة",
-        description: "نبني علاقة دائمة مع عملائنا تقوم على الثقة والصدق.",
-    },
-];
-
 export default function AboutPage() {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
 
-    const language = useLanguageStore((state) => state.language);
+  const language = useLanguageStore((state) => state.language);
+  const direction = useLanguageStore((state) => state.direction);
 
-    const direction = useLanguageStore((state) => state.direction);
+  useSEO(t("nav.about"), t("aboutPage.hero.description"));
 
-    useSEO(t("nav.about"), t("aboutPage.hero.description"));
+  const { data: aboutData } = useQuery<IAboutData>({
+    queryKey: ["about", language],
+    queryFn: getAboutPageData,
+  });
 
-    const { data: aboutData } = useQuery<IAboutData>({
-        queryKey: ["about", language],
-        queryFn: getAboutPageData,
-    });
+  const stats = useMemo<IAboutStatViewModel[]>(() => {
+    const apiStats = aboutData?.about_stats ?? [];
 
-    const stats = useMemo<AboutStatViewModel[]>(() => {
-        const apiStats = aboutData?.about_stats ?? [];
-
-        if (!apiStats.length) {
-            return STATIC_STATS;
-        }
-
-        return apiStats.slice(0, 4).map((stat, index) => ({
-            id: index + 1,
-            value: stat.value,
-            label: stat.label,
-            description: STATIC_STATS[index]?.description ?? "",
-        }));
-    }, [aboutData]);
-
-    const testimonials = useMemo<AboutTestimonialViewModel[]>(() => {
-        const apiTestimonials = aboutData?.testimonials ?? [];
-
-        if (!apiTestimonials.length) {
-            return STATIC_TESTIMONIALS;
-        }
-
-        return apiTestimonials.slice(0, 3).map((item) => ({
-            id: item.id,
-            quote: item.content,
-            customerName: item.name,
-            customerCar: item.job_title,
-            rating: item.rating,
-        }));
-    }, [aboutData]);
-
-    const coreValues = useMemo<AboutCoreValueViewModel[]>(() => {
-        const apiItems = aboutData?.core_values?.items ?? [];
-
-        if (!apiItems.length) {
-            return STATIC_CORE_VALUES;
-        }
-
-        return apiItems.slice(0, 3).map((item, index) => ({
-            id: item.title || index,
-            title: item.title,
-            description: item.description || STATIC_CORE_VALUES[index]?.description || "",
-        }));
-    }, [aboutData]);
-
-    const quote =
-        aboutData?.hero?.subtitle ||
-        t(
-            "aboutPage.statement",
-            "نؤمن بأن اقتناء سيارتك المثالية ينبغي أن يكون تجربة تُروى، لا مجرد صفقة تُبرم",
-        );
-
-    return (
-        <main dir={direction} className="w-full bg-[var(--background)]">
-            <AboutStatementSection quote={quote} />
-
-            <AboutStatsSection stats={stats} />
-
-            <AboutVisionSection
-                image="/images/about_vision.png"
-                eyebrow="رؤيتنا"
-                titleLine1="أكثر من وكالة."
-                titleHighlight="وجهة"
-                titleLine2="لعشاق السيارات."
-                description="منذ تأسيسنا عام 2014، انطلقنا بهدف واحد: تقديم تجربة سيارات تستحق أن تُذكر. اليوم، نفخر بخدمة آلاف العملاء في المملكة بمعايير تفوق التوقعات."
-            />
-
-            <AboutTestimonialsSection
-                title={t("aboutPage.testimonials.title", "يتحدثون عن تجربتهم")}
-                testimonials={testimonials}
-            />
-
-            <AboutValuesSection values={coreValues} />
-        </main>
-    );
-}
-
-/* -------------------------------------------------------------------------- */
-/* Statement                                                                  */
-/* -------------------------------------------------------------------------- */
-
-interface AboutStatementSectionProps {
-    quote: string;
-}
-
-function AboutStatementSection({ quote }: AboutStatementSectionProps) {
-    return (
-        <section className="w-full bg-[var(--brand-secondary-color)]">
-            <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-                <div
-                    className={[
-                        "flex min-h-[205px]",
-                        "items-center justify-center",
-                        "py-12 text-center",
-                        "sm:min-h-[230px]",
-                    ].join(" ")}
-                >
-                    <blockquote className="max-w-[820px]">
-                        <p
-                            className={[
-                                "text-[22px] font-medium",
-                                "leading-[1.8]",
-                                "text-[var(--brand-primary-color)]",
-                                "sm:text-[26px]",
-                                "lg:text-[29px]",
-                            ].join(" ")}
-                        >
-                            “{quote}”
-                        </p>
-                    </blockquote>
-                </div>
-            </div>
-        </section>
-    );
-}
-
-/* -------------------------------------------------------------------------- */
-/* Stats                                                                      */
-/* -------------------------------------------------------------------------- */
-
-interface AboutStatsSectionProps {
-    stats: AboutStatViewModel[];
-}
-
-function AboutStatsSection({ stats }: AboutStatsSectionProps) {
-    if (!stats.length) {
-        return null;
+    if (!apiStats.length) {
+      return FALLBACK_STATS.map((stat) => ({
+        ...stat,
+        label: t(stat.label),
+        description: t(stat.description),
+      }));
     }
 
-    return (
-        <section className="w-full bg-[var(--background)]">
-            <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-                <div className="grid grid-cols-2 lg:grid-cols-4">
-                    {stats.map((stat, index) => (
-                        <article
-                            key={stat.id}
-                            className={[
-                                "relative flex min-h-[155px]",
-                                "flex-col items-center justify-center",
-                                "px-4 py-8 text-center",
-                                index > 0
-                                    ? "lg:border-s lg:border-[#E6DFD2]"
-                                    : "",
-                                index % 2 !== 0
-                                    ? "max-lg:border-s max-lg:border-[#E6DFD2]"
-                                    : "",
-                                index >= 2
-                                    ? "max-lg:border-t max-lg:border-[#E6DFD2]"
-                                    : "",
-                            ].join(" ")}
-                        >
-                            <strong
-                                className={[
-                                    "text-[30px] font-extrabold",
-                                    "leading-none",
-                                    "text-[var(--brand-primary-color)]",
-                                    "sm:text-[34px]",
-                                ].join(" ")}
-                            >
-                                {stat.value}
-                            </strong>
+    return apiStats.slice(0, 4).map((stat, index) => ({
+      id: index + 1,
+      value: stat.value,
+      label: stat.label,
+      description: t(`aboutPage.stats.${index}.description`, ""),
+    }));
+  }, [aboutData, t]);
 
-                            <p className="mt-3 text-[12px] font-bold text-[#303A54]">
-                                {stat.label}
-                            </p>
+  const testimonials = useMemo<IAboutTestimonialViewModel[]>(() => {
+    const apiTestimonials = aboutData?.testimonials ?? [];
 
-                            {stat.description && (
-                                <p className="mt-1 text-[9px] leading-5 text-[#777F90]">
-                                    {stat.description}
-                                </p>
-                            )}
-                        </article>
-                    ))}
-                </div>
-            </div>
-        </section>
-    );
+    if (!apiTestimonials.length) {
+      return FALLBACK_TESTIMONIALS.map((item) => ({
+        ...item,
+        quote: t(item.quote),
+        customerName: t(item.customerName),
+        customerCar: t(item.customerCar ?? ""),
+      }));
+    }
+
+    return apiTestimonials.slice(0, 3).map((item) => ({
+      id: item.id,
+      quote: item.content,
+      customerName: item.name,
+      customerCar: item.job_title,
+      rating: item.rating,
+    }));
+  }, [aboutData, t]);
+
+  const coreValues = useMemo<IAboutCoreValueViewModel[]>(() => {
+    const apiItems = aboutData?.core_values?.items ?? [];
+
+    if (!apiItems.length) {
+      return FALLBACK_CORE_VALUES.map((item) => ({
+        ...item,
+        title: t(item.title),
+        description: t(item.description),
+      }));
+    }
+
+    return apiItems.slice(0, 3).map((item, index) => ({
+      id: item.title || index,
+      title: item.title,
+      description: item.description || "",
+    }));
+  }, [aboutData, t]);
+
+  const quote =
+    aboutData?.hero?.subtitle ||
+    t("aboutPage.statement");
+
+  const visionEyebrow = t("aboutPage.vision.eyebrow");
+  const visionTitleLine1 = t("aboutPage.vision.titleLine1");
+  const visionTitleHighlight = t("aboutPage.vision.titleHighlight");
+  const visionTitleLine2 = t("aboutPage.vision.titleLine2");
+  const visionDescription = t("aboutPage.vision.description");
+
+  return (
+    <main dir={direction} className="w-full bg-[var(--background)]">
+      {/* Breadcrumb */}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-6 pb-6">
+        <nav aria-label="breadcrumb" className="flex items-center gap-2 text-[12px] sm:text-[13px]">
+          <NavLink
+            to="/"
+            className="font-semibold text-[#303A54] transition hover:text-[var(--brand-primary-color)]"
+          >
+            {t("nav.home")}
+          </NavLink>
+
+          <ChevronLeft
+            size={14}
+            strokeWidth={1.6}
+            className={[
+              "text-[#6F7480]",
+              direction === "ltr" ? "rotate-180" : "",
+            ].join(" ")}
+          />
+
+          <span className="text-[var(--brand-primary-color)]">
+            {t("nav.about")}
+          </span>
+        </nav>
+      </div>
+
+      <AboutStatementSection quote={quote} />
+
+      <AboutStatsSection stats={stats} />
+
+      <AboutVisionSection
+        image={APP_IMAGES.ABOUT_VISION}
+        eyebrow={visionEyebrow}
+        titleLine1={visionTitleLine1}
+        titleHighlight={visionTitleHighlight}
+        titleLine2={visionTitleLine2}
+        description={visionDescription}
+      />
+
+      <AboutTestimonialsSection
+        title={t("aboutPage.testimonials.title")}
+        testimonials={testimonials}
+      />
+
+      <AboutValuesSection values={coreValues} />
+    </main>
+  );
 }

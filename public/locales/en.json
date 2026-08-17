@@ -445,6 +445,14 @@
         }
     },
     "aboutPage": {
+        "statement": "We believe that acquiring your ideal car should be a story worth telling, not just a deal to close",
+        "vision": {
+            "eyebrow": "Our Vision",
+            "titleLine1": "More Than an Agency.",
+            "titleHighlight": "A Destination",
+            "titleLine2": "for Car Enthusiasts.",
+            "description": "Since our founding in 2014, we set out with one goal: to deliver a car experience worth remembering. Today, we are proud to serve thousands of customers across the Kingdom with standards that exceed expectations."
+        },
         "hero": {
             "eyebrow": "About Us",
             "title": "Our Story with Cars",
@@ -563,7 +571,42 @@
             "badge": "Our Customers Trust Us",
             "title": "Customer Reviews",
             "ratingText": "4.9 from 12,000+ Reviews",
-            "goToTestimonial": "Go to Review {{number}}"
+            "goToTestimonial": "Go to Review {{number}}",
+            "items": {
+                "0": {
+                    "quote": "The best car buying experience ever. The team was professional and helped me choose the perfect car with complete honesty.",
+                    "customerName": "Mohammed Al-Otaibi",
+                    "customerCar": "Toyota Hilux"
+                },
+                "1": {
+                    "quote": "A seamless process from start to finish, with a fair price compared to the market. I recommend anyone looking for reliability to deal with them.",
+                    "customerName": "Khalid Al-Shamri",
+                    "customerCar": "Nissan Patrol"
+                },
+                "2": {
+                    "quote": "Their commitment to promises and transparency in details made me a loyal customer. An experience worth sharing.",
+                    "customerName": "Abdullah Al-Qahtani",
+                    "customerCar": "Lexus ES"
+                }
+            }
+        },
+        "fallbackCoreValues": {
+            "care": {
+                "title": "Care",
+                "description": "We give every customer complete attention from the first contact until after delivery."
+            },
+            "speed": {
+                "title": "Speed",
+                "description": "We prepare your order and deliver it in the shortest time possible without compromising quality."
+            },
+            "quality": {
+                "title": "Quality",
+                "description": "We adhere to the highest quality standards at every stage, from inspection to delivery."
+            },
+            "trust": {
+                "title": "Trust",
+                "description": "We build a lasting relationship with our customers based on trust and honesty."
+            }
         }
     },
     "offersPage": {
