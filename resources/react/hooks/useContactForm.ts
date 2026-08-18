@@ -1,19 +1,19 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 import { submitContactForm } from "../services/api/contact.service";
 import type { IContactFormValues } from "../interfaces/IContactFormValues";
 
 const EMPTY_FORM: IContactFormValues = {
     fullName: "",
-    email: "",
     phone: "",
-    country: "",
     subject: "",
     message: "",
 };
 
 export function useContactForm() {
+    const { t } = useTranslation();
     const [values, setValues] = useState<IContactFormValues>(EMPTY_FORM);
-    const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const set = <K extends keyof IContactFormValues>(
@@ -21,32 +21,28 @@ export function useContactForm() {
         v: IContactFormValues[K],
     ) => setValues((p: IContactFormValues) => ({ ...p, [k]: v }));
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = useCallback(async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
-        setSubmitStatus("idle");
         try {
             await submitContactForm({
                 name: values.fullName,
                 phone: values.phone,
-                email: values.email,
                 subject: values.subject,
-                country: values.country,
                 message: values.message,
             });
-            setSubmitStatus("success");
+            toast.success(t("contactPage.contactUs.successToast"));
             setValues(EMPTY_FORM);
         } catch {
-            setSubmitStatus("error");
+            toast.error(t("contactPage.contactUs.errorToast"));
         } finally {
             setIsSubmitting(false);
         }
-    };
+    }, [values, t]);
 
     return {
         values,
         set,
-        submitStatus,
         isSubmitting,
         handleSubmit,
     };

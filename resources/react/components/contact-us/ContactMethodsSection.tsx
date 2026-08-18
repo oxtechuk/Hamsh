@@ -1,36 +1,23 @@
-import {
-  MapPin,
-  MessageCircle,
-  Phone,
-} from "lucide-react";
+import { MapPin, MessageCircle, Phone } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { useLanguageStore } from "../../store/language.store";
 import { useSettingsStore } from "../../store/settings.store";
+import ContactMethodCard from "./ContactMethodCard";
+
+function normalizePhone(phone: string): string {
+  return phone.replace(/[^\d+]/g, "");
+}
 
 export default function ContactMethodsSection() {
   const { t } = useTranslation();
+  const direction = useLanguageStore((state) => state.direction);
+  const settings = useSettingsStore((state) => state.settings);
 
-  const direction = useLanguageStore(
-    (state) => state.direction,
-  );
-
-  const settings = useSettingsStore(
-    (state) => state.settings,
-  );
-
-  const phone =
-    settings?.contact?.phone ??
-    "800 XXX XXXX";
-
-  const whatsapp =
-    settings?.contact?.whatsapp ??
-    "966500000000";
-
-  const address =
-    settings?.contact?.address ??
-    "الرياض - حي العليا - طريق الملك فهد";
+  const phone = settings?.contact?.phone ?? t("contactPage.hero.defaultPhone");
+  const whatsapp = settings?.contact?.whatsapp ?? t("contactPage.hero.defaultWhatsapp");
+  const address = settings?.contact?.address ?? t("contactPage.hero.defaultAddress");
 
   return (
     <section
@@ -39,169 +26,54 @@ export default function ContactMethodsSection() {
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
-        <nav className="flex items-center justify-start gap-2 text-[12px]">
+        <nav className="flex items-start justify-start gap-2 text-[12px]">
           <NavLink
             to="/"
             className="font-semibold text-[#303A54]"
           >
-            {t("nav.home", "الرئيسية")}
+            {t("nav.home")}
           </NavLink>
 
-          <span className="text-[#7A8290]">
-            ‹
-          </span>
+          <span className="text-[#7A8290]">/</span>
 
           <span className="text-[var(--brand-primary-color)]">
-            {t(
-              "contactPage.hero.breadcrumb",
-              "تواصل معنا",
-            )}
+            {t("contactPage.hero.breadcrumb")}
           </span>
         </nav>
 
         {/* Heading */}
         <h1 className="mt-5 text-start text-[32px] font-extrabold leading-tight text-[#20283A] sm:text-[38px] lg:text-[42px]">
-          <span>
-            {t(
-              "contactPage.hero.titlePrefix",
-              "نحن هنا من",
-            )}
-          </span>{" "}
+          <span>{t("contactPage.hero.titlePrefix")}</span>{" "}
           <span className="text-[var(--brand-primary-color)]">
-            {t(
-              "contactPage.hero.titleHighlight",
-              "أجلك",
-            )}
+            {t("contactPage.hero.titleHighlight")}
           </span>
         </h1>
 
         {/* Contact methods */}
         <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
-          {/* Direct visit */}
           <ContactMethodCard
-            icon={
-              <MapPin
-                size={30}
-                strokeWidth={1.6}
-              />
-            }
-            title={t(
-              "contactPage.methods.visit.title",
-              "زيارة مباشرة",
-            )}
+            icon={<MapPin size={30} strokeWidth={1.6} />}
+            title={t("contactPage.contactMethods.visitTitle")}
             description={address}
           />
 
-          {/* Phone */}
           <ContactMethodCard
-            icon={
-              <Phone
-                size={30}
-                strokeWidth={1.6}
-              />
-            }
-            title={t(
-              "contactPage.methods.phone.title",
-              "الهاتف",
-            )}
-            description={`${t(
-              "contactPage.methods.phone.hours",
-              "أوقات العمل",
-            )}، ${phone}`}
+            icon={<Phone size={30} strokeWidth={1.6} />}
+            title={t("contactPage.contactMethods.phoneLabel")}
+            description={`${t("contactPage.contactMethods.hoursLabel")}، ${phone}`}
             href={`tel:${normalizePhone(phone)}`}
+            transparent
           />
 
-          {/* WhatsApp */}
           <ContactMethodCard
-            icon={
-              <MessageCircle
-                size={30}
-                strokeWidth={1.6}
-              />
-            }
-            title={t(
-              "contactPage.methods.whatsapp.title",
-              "واتساب",
-            )}
-            description={t(
-              "contactPage.methods.whatsapp.description",
-              "تواصل فوري على مدار الساعة",
-            )}
-            href={`https://wa.me/${normalizePhone(
-              whatsapp,
-            ).replace("+", "")}`}
+            icon={<MessageCircle size={30} strokeWidth={1.6} />}
+            title={t("contactPage.contactMethods.whatsappLabel")}
+            description={t("contactPage.contactMethods.whatsappDescription")}
+            href={`https://wa.me/${normalizePhone(whatsapp).replace("+", "")}`}
             external
           />
         </div>
       </div>
     </section>
   );
-}
-
-interface ContactMethodCardProps {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-  href?: string;
-  external?: boolean;
-}
-
-function ContactMethodCard({
-  icon,
-  title,
-  description,
-  href,
-  external = false,
-}: ContactMethodCardProps) {
-  const content = (
-    <div
-      className={[
-        "flex min-h-[185px] flex-col",
-        "items-center justify-center",
-        "bg-white px-6 py-8",
-        "text-center",
-        "transition duration-300",
-        "hover:-translate-y-1",
-        "hover:shadow-[0_12px_28px_rgba(48,58,84,0.08)]",
-      ].join(" ")}
-    >
-      <div className="text-[var(--brand-primary-color)]">
-        {icon}
-      </div>
-
-      <h3 className="mt-5 text-[21px] font-extrabold text-[#20283A]">
-        {title}
-      </h3>
-
-      <p className="mt-2 text-[12px] leading-6 text-[#687084]">
-        {description}
-      </p>
-    </div>
-  );
-
-  if (!href) {
-    return content;
-  }
-
-  return (
-    <a
-      href={href}
-      target={
-        external ? "_blank" : undefined
-      }
-      rel={
-        external
-          ? "noopener noreferrer"
-          : undefined
-      }
-    >
-      {content}
-    </a>
-  );
-}
-
-function normalizePhone(
-  phone: string,
-): string {
-  return phone.replace(/[^\d+]/g, "");
 }

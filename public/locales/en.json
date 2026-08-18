@@ -782,7 +782,12 @@
     "contactPage": {
         "hero": {
             "title": "Ready to Serve You",
-            "breadcrumb": "Contact Us"
+            "breadcrumb": "Contact Us",
+            "titlePrefix": "We Are Here For",
+            "titleHighlight": "You",
+            "defaultPhone": "800 XXX XXXX",
+            "defaultWhatsapp": "966500000000",
+            "defaultAddress": "Riyadh - Al Olaya District - King Fahd Road"
         },
         "contactUs": {
             "title": "Send an Inquiry",
@@ -804,6 +809,7 @@
         },
         "contactMethods": {
             "title": "Contact Us",
+            "visitTitle": "Direct Visit",
             "whatsappLabel": "WhatsApp",
             "whatsappValue": "Instant Contact",
             "whatsappDescription": "Reply Within Minutes",
@@ -849,6 +855,24 @@
                     "answer": "After financing approval, reservation and delivery procedures are coordinated according to the available city."
                 }
             ]
+        },
+        "branches": {
+            "title": "Branch Information",
+            "riyadh": {
+                "city": "Riyadh",
+                "address": "Al Olaya District - King Fahd Road",
+                "hours": "Saturday - Thursday: 9:00 AM - 10:00 PM"
+            },
+            "jeddah": {
+                "city": "Jeddah",
+                "address": "Al Tahliya District - Prince Sultan Street",
+                "hours": "Saturday - Thursday: 10:00 AM - 11:00 PM"
+            },
+            "dammam": {
+                "city": "Dammam",
+                "address": "Al Shati District - King Abdulaziz Road",
+                "hours": "Sunday - Thursday: 9:00 AM - 9:00 PM"
+            }
         },
         "financeCalculator": {
             "currency": "SAR",
@@ -1174,6 +1198,7 @@
         "riyal": "SAR",
         "previousSlide": "Previous Slide",
         "nextSlide": "Next Slide",
-        "close": "Close"
+        "close": "Close",
+        "breadcrumb": "Breadcrumb"
     }
 }

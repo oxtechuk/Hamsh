@@ -9,8 +9,6 @@ export interface IContactApiResponse {
 export interface IContactFormData {
   name: string;
   phone: string;
-  email: string;
   subject: string;
-  country: string;
   message: string;
 }

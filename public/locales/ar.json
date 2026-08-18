@@ -762,7 +762,12 @@
     "contactPage": {
         "hero": {
             "title": "جاهزين نخدمك",
-            "breadcrumb": "تواصل معنا"
+            "breadcrumb": "تواصل معنا",
+            "titlePrefix": "نحن هنا من",
+            "titleHighlight": "أجلك",
+            "defaultPhone": "800 XXX XXXX",
+            "defaultWhatsapp": "966500000000",
+            "defaultAddress": "الرياض - حي العليا - طريق الملك فهد"
         },
         "contactUs": {
             "title": "أرسل استفسارًا",
@@ -775,7 +780,7 @@
             "subjectPlaceholder": "استفسار عن سيارة...",
             "messageLabel": "الرسالة",
             "messagePlaceholder": "اكتب رسالتك هنا...",
-            "submitText": "إرسال الرسالة",
+            "submitText": "إرسال",
             "submittingText": "جارٍ الإرسال...",
             "successToast": "تم إرسال رسالتك بنجاح",
             "errorToast": "تعذر إرسال الرسالة",
@@ -784,6 +789,7 @@
         },
         "contactMethods": {
             "title": "تواصل معنا",
+            "visitTitle": "زيارة مباشرة",
             "whatsappLabel": "واتساب",
             "whatsappValue": "تواصل فوري",
             "whatsappDescription": "رد خلال دقائق",
@@ -829,6 +835,24 @@
                     "answer": "بعد الموافقة على التمويل، يتم تنسيق إجراءات الحجز والتسليم حسب المدينة المتاحة."
                 }
             ]
+        },
+        "branches": {
+            "title": "معلومات الفروع",
+            "riyadh": {
+                "city": "الرياض",
+                "address": "حي العليا - طريق الملك فهد",
+                "hours": "السبت - الخميس: 9:00 ص - 10:00 م"
+            },
+            "jeddah": {
+                "city": "جدة",
+                "address": "حي التحلية - شارع الأمير سلطان",
+                "hours": "السبت - الخميس: 10:00 ص - 11:00 م"
+            },
+            "dammam": {
+                "city": "الدمام",
+                "address": "حي الشاطئ - طريق الملك عبدالعزيز",
+                "hours": "الأحد - الخميس: 9:00 ص - 9:00 م"
+            }
         },
         "financeCalculator": {
             "currency": "ر.س",
@@ -1202,6 +1226,6 @@
         "previousSlide": "الشريحة السابقة",
         "nextSlide": "الشريحة التالية",
         "close": "إغلاق",
-        "breadcrumb": "مسار التنقل"
+        "breadcrumb": "Breadcrumb"
     }
 }

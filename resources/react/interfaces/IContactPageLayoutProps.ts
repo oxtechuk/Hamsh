@@ -1,9 +1,8 @@
 import type { ReactNode } from "react";
+import type { IContactBranchItem } from "./IContactBranchItem";
 
 export interface IContactPageLayoutProps {
   form: ReactNode;
-  map: ReactNode;
-  faq?: ReactNode;
-  bottomContent?: ReactNode;
-  className?: string;
+  faq: ReactNode;
+  branches?: IContactBranchItem[];
 }

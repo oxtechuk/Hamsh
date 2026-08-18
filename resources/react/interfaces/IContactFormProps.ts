@@ -5,7 +5,6 @@ export interface IContactFormProps {
     description: string;
     values: IContactFormValues;
     set: <K extends keyof IContactFormValues>(k: K, v: IContactFormValues[K]) => void;
-    submitStatus: "idle" | "success" | "error";
     isSubmitting: boolean;
     onSubmit: (e: React.FormEvent) => void;
 }
