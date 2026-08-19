@@ -7,39 +7,22 @@ import { useLanguageStore } from "../../store/language.store";
 import { useSettingsStore } from "../../store/settings.store";
 import type { ISpecialOrderSuccessProps } from "../../interfaces/ISpecialOrderSuccessProps";
 
-interface SpecialOrderSuccessProps extends ISpecialOrderSuccessProps {
-  requestNumber?: string;
-}
-
 export default function SpecialOrderSuccess({
   carLabel,
   requestNumber = "HMX-9752",
-}: SpecialOrderSuccessProps) {
+}: ISpecialOrderSuccessProps) {
   const { t } = useTranslation();
 
-  const direction = useLanguageStore(
-    (state) => state.direction,
-  );
+  const direction = useLanguageStore((state) => state.direction);
 
-  const settings = useSettingsStore(
-    (state) => state.settings,
-  );
+  const settings = useSettingsStore((state) => state.settings);
 
   const navigate = useNavigate();
 
-  const whatsappNum =
-    settings?.contact?.whatsapp?.replace(/\D/g, "") ?? "";
+  const whatsappNum = settings?.contact?.whatsapp?.replace(/\D/g, "") ?? "";
 
   const whatsappMessage = encodeURIComponent(
-    t(
-      "specialOrder.success.whatsappMessage",
-      {
-        carLabel,
-        requestNumber,
-        defaultValue:
-          "مرحباً، أرسلت طلب سيارة مخصصة رقم {{requestNumber}} للسيارة {{carLabel}} وأرغب في متابعة الطلب.",
-      },
-    ),
+    t("specialOrder.success.whatsappMessage", { carLabel, requestNumber }),
   );
 
   const whatsappHref = whatsappNum
@@ -51,7 +34,6 @@ export default function SpecialOrderSuccess({
       dir={direction}
       className="mx-auto flex w-full max-w-[520px] flex-col items-center px-4 py-8 text-center sm:py-12"
     >
-      {/* Success check */}
       <div className="flex h-[74px] items-center justify-center">
         <Check
           size={64}
@@ -60,7 +42,6 @@ export default function SpecialOrderSuccess({
         />
       </div>
 
-      {/* Title */}
       <h1
         className={[
           "mt-2",
@@ -70,27 +51,16 @@ export default function SpecialOrderSuccess({
           "sm:text-[36px]",
         ].join(" ")}
       >
-        {t(
-          "specialOrder.success.title",
-          "تم استلام طلبك!",
-        )}
+        {t("specialOrder.success.title")}
       </h1>
 
-      {/* Description */}
       <p className="mt-5 max-w-[390px] text-[13px] leading-7 text-[#59647A] sm:text-[14px]">
-        {t(
-          "specialOrder.success.description",
-          "سيتواصل معك فريق هامش المتخصص خلال 24 ساعة لمناقشة تفاصيل طلبك.",
-        )}
+        {t("specialOrder.success.description")}
       </p>
 
-      {/* Request number */}
       <div className="mt-7 min-w-[170px] bg-white px-6 py-4 shadow-[0_3px_12px_rgba(48,58,84,0.05)]">
         <p className="text-[10px] text-[#70798A]">
-          {t(
-            "specialOrder.success.requestNumberLabel",
-            "رقم الطلب",
-          )}
+          {t("specialOrder.success.requestNumberLabel")}
         </p>
 
         <p
@@ -101,7 +71,6 @@ export default function SpecialOrderSuccess({
         </p>
       </div>
 
-      {/* Actions */}
       <div className="mt-9 w-full max-w-[390px]">
         <a
           href={whatsappHref}
@@ -120,10 +89,7 @@ export default function SpecialOrderSuccess({
         >
           <SiWhatsapp size={19} />
 
-          {t(
-            "specialOrder.success.whatsapp",
-            "تابع طلبك عبر واتساب",
-          )}
+          {t("specialOrder.success.whatsapp")}
         </a>
 
         <button
@@ -140,10 +106,7 @@ export default function SpecialOrderSuccess({
             "hover:border-[#303A54]",
           ].join(" ")}
         >
-          {t(
-            "specialOrder.success.backToCars",
-            "العودة لتصفح السيارات",
-          )}
+          {t("specialOrder.success.backToCars")}
 
           <span className="text-[15px]">
             {direction === "rtl" ? "←" : "→"}

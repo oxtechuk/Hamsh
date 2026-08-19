@@ -1,13 +1,15 @@
 import type { FormEvent } from "react";
 import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
 
 import { useLanguageStore } from "../../store/language.store";
+import { getSpecialOrderOptions } from "../../services/api";
 import type { ISpecialOrderStepTwoProps } from "../../interfaces/ISpecialOrderStepTwoProps";
 
 const fieldCls = [
     "h-[52px] w-full",
     "border-0",
-    "bg-white px-4",
+    "bg-white px-4 font-semibold!",
     "text-[13px] text-[#303A54]",
     "outline-none",
     "shadow-[0_7px_18px_rgba(48,58,84,0.06)]",
@@ -16,7 +18,7 @@ const fieldCls = [
     "focus:ring-1 focus:ring-[var(--brand-primary-color)]",
 ].join(" ");
 
-const labelCls = "mb-2 block text-start text-[11px] font-medium text-[#303A54]";
+const labelCls = "mb-2 block text-start text-[12px] font-bold text-[#303A54]";
 
 export default function SpecialOrderStepTwo({
     data,
@@ -26,6 +28,17 @@ export default function SpecialOrderStepTwo({
 }: ISpecialOrderStepTwoProps) {
     const { t } = useTranslation();
     const direction = useLanguageStore((state) => state.direction);
+
+    const { data: options } = useQuery({
+        queryKey: ["special-order-options"],
+        queryFn: getSpecialOrderOptions,
+        staleTime: 10 * 60 * 1000,
+    });
+
+    const brandOptions = options?.brands ?? [];
+    const modelOptions = options?.models ?? [];
+    const yearOptions = options?.years ?? [];
+    const colorOptions = options?.colors ?? [];
 
     const canContinue =
         data.brand.trim() &&
@@ -45,7 +58,6 @@ export default function SpecialOrderStepTwo({
 
     return (
         <section dir={direction} className="w-full">
-            {/* Title */}
             <h2
                 className={[
                     "text-start",
@@ -54,99 +66,109 @@ export default function SpecialOrderStepTwo({
                     "sm:text-[30px]",
                 ].join(" ")}
             >
-                {t("specialOrder.step2.title", "تفاصيل السيارة")}
+                {t("specialOrder.step2.title")}
             </h2>
 
             <form onSubmit={handleSubmit} className="mt-8 space-y-5">
-                {/* Brand */}
                 <div>
                     <label className={labelCls}>
-                        {t("specialOrder.step2.brand", "العلامة التجارية")}
+                        {t("specialOrder.step2.brand")}
                     </label>
 
-                    <input
-                        type="text"
+                    <select
                         value={data.brand}
                         onChange={(event) =>
                             onChange("brand", event.target.value)
                         }
-                        placeholder={t(
-                            "specialOrder.step2.brandPlaceholder",
-                            "مثال: تويوتا، BMW",
-                        )}
                         className={fieldCls}
                         required
-                    />
+                    >
+                        <option value="" disabled>
+                            {t("specialOrder.step2.brandPlaceholder")}
+                        </option>
+                        {brandOptions.map((brand) => (
+                            <option key={brand.id} value={brand.name}>
+                                {brand.name}
+                            </option>
+                        ))}
+                    </select>
                 </div>
 
-                {/* Model */}
                 <div>
                     <label className={labelCls}>
-                        {t("specialOrder.step2.model", "الطراز")}
+                        {t("specialOrder.step2.model")}
                     </label>
 
-                    <input
-                        type="text"
+                    <select
                         value={data.model}
                         onChange={(event) =>
                             onChange("model", event.target.value)
                         }
-                        placeholder={t(
-                            "specialOrder.step2.modelPlaceholder",
-                            "مثال: لاند كروزر، X7",
-                        )}
                         className={fieldCls}
                         required
-                    />
+                    >
+                        <option value="" disabled>
+                            {t("specialOrder.step2.modelPlaceholder")}
+                        </option>
+                        {modelOptions.map((model) => (
+                            <option key={model} value={model}>
+                                {model}
+                            </option>
+                        ))}
+                    </select>
                 </div>
 
-                {/* Preferred color */}
                 <div>
                     <label className={labelCls}>
-                        {t("specialOrder.step2.color", "تفضيل اللون")}
+                        {t("specialOrder.step2.color")}
                     </label>
 
-                    <input
-                        type="text"
+                    <select
                         value={data.color}
                         onChange={(event) =>
                             onChange("color", event.target.value)
                         }
-                        placeholder={t(
-                            "specialOrder.step2.colorPlaceholder",
-                            "مثال: أبيض، أسود، رمادي...",
-                        )}
                         className={fieldCls}
                         required
-                    />
+                    >
+                        <option value="" disabled>
+                            {t("specialOrder.step2.colorPlaceholder")}
+                        </option>
+                        {colorOptions.map((color) => (
+                            <option key={color} value={color}>
+                                {color}
+                            </option>
+                        ))}
+                    </select>
                 </div>
 
-                {/* Year */}
                 <div>
                     <label className={labelCls}>
-                        {t("specialOrder.step2.year", "سنة الطراز")}
+                        {t("specialOrder.step2.year")}
                     </label>
 
-                    <input
-                        type="text"
+                    <select
                         value={data.year}
                         onChange={(event) =>
                             onChange("year", event.target.value)
                         }
-                        placeholder={t(
-                            "specialOrder.step2.yearPlaceholder",
-                            "مثال: 2026",
-                        )}
-                        inputMode="numeric"
                         className={fieldCls}
                         required
-                    />
+                    >
+                        <option value="" disabled>
+                            {t("specialOrder.step2.yearPlaceholder")}
+                        </option>
+                        {yearOptions.map((year) => (
+                            <option key={year} value={year}>
+                                {year}
+                            </option>
+                        ))}
+                    </select>
                 </div>
 
-                {/* Notes */}
                 <div>
                     <label className={labelCls}>
-                        {t("specialOrder.step2.notes", "ملاحظات إضافية")}
+                        {t("specialOrder.step2.notes")}
                     </label>
 
                     <textarea
@@ -154,10 +176,7 @@ export default function SpecialOrderStepTwo({
                         onChange={(event) =>
                             onChange("notes", event.target.value)
                         }
-                        placeholder={t(
-                            "specialOrder.step2.notesPlaceholder",
-                            "أي تفاصيل أخرى...",
-                        )}
+                        placeholder={t("specialOrder.step2.notesPlaceholder")}
                         rows={5}
                         className={[
                             "min-h-[125px] w-full resize-none",
@@ -173,7 +192,6 @@ export default function SpecialOrderStepTwo({
                     />
                 </div>
 
-                {/* Navigation */}
                 <div className="flex items-center gap-3 pt-3">
                     <button
                         type="submit"
@@ -183,14 +201,14 @@ export default function SpecialOrderStepTwo({
                             "items-center justify-center",
                             "bg-[var(--brand-primary-color)]",
                             "px-6",
-                            "text-[14px] font-bold text-[#20283A]",
+                            "text-[14px] font-bold! text-[#20283A]",
                             "transition duration-300",
                             "hover:brightness-95",
                             "disabled:cursor-not-allowed",
                             "disabled:opacity-40",
                         ].join(" ")}
                     >
-                        {t("specialOrder.step2.nextButton", "التالي ←")}
+                        {t("specialOrder.step2.nextButton")}
                     </button>
 
                     <button
@@ -207,7 +225,7 @@ export default function SpecialOrderStepTwo({
                             "hover:bg-[#FAFAF8]",
                         ].join(" ")}
                     >
-                        {t("specialOrder.step2.backButton", "السابق")}
+                        {t("specialOrder.step2.backButton")}
                     </button>
                 </div>
             </form>

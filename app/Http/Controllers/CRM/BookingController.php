@@ -30,7 +30,10 @@ class BookingController extends Controller
             $query->where('assigned_to', $request->employee_id);
         }
         if (! auth()->user()->hasRole('admin')) {
-            $query->where('assigned_to', \auth()->id());
+            $query->where(function ($q) {
+                $q->where('assigned_to', \auth()->id())
+                    ->orWhereNull('assigned_to');
+            });
         }
         // بحث
         if ($request->filled('search')) {

@@ -6,6 +6,7 @@ import { getCities } from "../../services/api";
 import { useLanguageStore } from "../../store/language.store";
 
 import type { ISpecialOrderStepOneProps } from "../../interfaces/ISpecialOrderStepOneProps";
+import type { IFieldGroupProps } from "../../interfaces/IFieldGroupProps";
 
 const STATIC_CITIES = [
     "الرياض",
@@ -33,16 +34,15 @@ const STATIC_CITIES = [
 ];
 
 const fieldCls = [
-    "h-[50px] w-full",
+    "h-[52px] w-full",
     "border-0",
-    "bg-white px-4",
-    "text-[12px] text-[#303A54]",
+    "bg-white px-4 font-semibold!",
+    "text-[13px] text-[#303A54]",
     "outline-none",
-    "shadow-[0_6px_18px_rgba(48,58,84,0.06)]",
-    "placeholder:text-[#A8ABB2]",
+    "shadow-[0_7px_18px_rgba(48,58,84,0.06)]",
+    "placeholder:text-[#A5A8B0]",
     "transition duration-300",
-    "focus:ring-1",
-    "focus:ring-[var(--brand-primary-color)]",
+    "focus:ring-1 focus:ring-[var(--brand-primary-color)]",
 ].join(" ");
 
 export default function SpecialOrderStepOne({
@@ -86,7 +86,6 @@ export default function SpecialOrderStepOne({
 
     return (
         <section dir={direction} className="w-full">
-            {/* Title */}
             <h2
                 className={[
                     "text-start",
@@ -96,42 +95,32 @@ export default function SpecialOrderStepOne({
                     "sm:text-[30px]",
                 ].join(" ")}
             >
-                {t("specialOrder.step1.title", "بياناتك الشخصية")}
+                {t("specialOrder.step1.title")}
             </h2>
 
             <form onSubmit={handleSubmit} className="mt-7 space-y-[17px]">
-                {/* Full name */}
-                <FieldGroup
-                    label={t("specialOrder.step1.fullName", "الاسم الكامل")}
-                >
+                <FieldGroup label={t("specialOrder.step1.fullName")}>
                     <input
                         type="text"
                         value={data.fullName}
                         onChange={(event) =>
                             onChange("fullName", event.target.value)
                         }
-                        placeholder={t(
-                            "specialOrder.step1.fullNamePlaceholder",
-                            "اسمك",
-                        )}
+                        placeholder={t("specialOrder.step1.fullNamePlaceholder")}
                         autoComplete="name"
                         className={fieldCls}
                         required
                     />
                 </FieldGroup>
 
-                {/* Phone */}
-                <FieldGroup label={t("specialOrder.step1.phone", "رقم الجوال")}>
+                <FieldGroup label={t("specialOrder.step1.phone")}>
                     <input
                         type="tel"
                         value={data.phone}
                         onChange={(event) =>
                             onChange("phone", event.target.value)
                         }
-                        placeholder={t(
-                            "specialOrder.step1.phonePlaceholder",
-                            "05XXXXXXXX",
-                        )}
+                        placeholder={t("specialOrder.step1.phonePlaceholder")}
                         inputMode="tel"
                         autoComplete="tel"
                         dir="ltr"
@@ -140,21 +129,15 @@ export default function SpecialOrderStepOne({
                     />
                 </FieldGroup>
 
-                {/* Optional Email */}
                 {!hideEmail && (
-                    <FieldGroup
-                        label={t(
-                            "specialOrder.step1.email",
-                            "البريد الإلكتروني",
-                        )}
-                    >
+                    <FieldGroup label={t("specialOrder.step1.email")}>
                         <input
                             type="email"
                             value={data.email}
                             onChange={(event) =>
                                 onChange("email", event.target.value)
                             }
-                            placeholder="name@example.com"
+                            placeholder={t("specialOrder.step1.emailPlaceholder")}
                             dir="ltr"
                             className={`${fieldCls} text-end`}
                             required
@@ -162,35 +145,28 @@ export default function SpecialOrderStepOne({
                     </FieldGroup>
                 )}
 
-                {/* City */}
-                <FieldGroup label={t("specialOrder.step1.city", "المدينة")}>
-                    <input
-                        list="special-order-cities"
+                <FieldGroup label={t("specialOrder.step1.city")}>
+                    <select
                         value={data.city}
                         onChange={(event) =>
                             onChange("city", event.target.value)
                         }
-                        placeholder={t(
-                            "specialOrder.step1.cityPlaceholder",
-                            "مثال: الرياض",
-                        )}
                         className={fieldCls}
                         required
-                    />
-
-                    <datalist id="special-order-cities">
+                    >
+                        <option value="" disabled>
+                            {t("specialOrder.step1.cityPlaceholder")}
+                        </option>
                         {cityOptions.map((city) => (
-                            <option key={city} value={city} />
+                            <option key={city} value={city}>
+                                {city}
+                            </option>
                         ))}
-                    </datalist>
+                    </select>
                 </FieldGroup>
 
-                {/* Salary + Obligations */}
                 <div className="grid grid-cols-2 gap-4">
-                    {/* Salary */}
-                    <FieldGroup
-                        label={t("specialOrder.step1.salary", "الراتب")}
-                    >
+                    <FieldGroup label={t("specialOrder.step1.salary")}>
                         <input
                             type="number"
                             min={0}
@@ -200,7 +176,6 @@ export default function SpecialOrderStepOne({
                             }
                             placeholder={t(
                                 "specialOrder.step1.salaryPlaceholder",
-                                "مثال: 2000 ر.س",
                             )}
                             inputMode="numeric"
                             className={fieldCls}
@@ -208,13 +183,7 @@ export default function SpecialOrderStepOne({
                         />
                     </FieldGroup>
 
-                    {/* Obligations */}
-                    <FieldGroup
-                        label={t(
-                            "specialOrder.step1.obligations",
-                            "الالتزامات",
-                        )}
-                    >
+                    <FieldGroup label={t("specialOrder.step1.obligations")}>
                         <input
                             type="number"
                             min={0}
@@ -224,7 +193,6 @@ export default function SpecialOrderStepOne({
                             }
                             placeholder={t(
                                 "specialOrder.step1.obligationsPlaceholder",
-                                "مثال: 800 ر.س",
                             )}
                             inputMode="numeric"
                             className={fieldCls}
@@ -233,7 +201,6 @@ export default function SpecialOrderStepOne({
                     </FieldGroup>
                 </div>
 
-                {/* Next */}
                 <button
                     type="submit"
                     disabled={!canContinue}
@@ -242,7 +209,7 @@ export default function SpecialOrderStepOne({
                         "items-center justify-center",
                         "bg-[var(--brand-primary-color)]",
                         "px-6",
-                        "text-[13px] font-bold",
+                        "text-[13px] font-bold!",
                         "text-[#20283A]",
                         "transition duration-300",
                         "hover:brightness-95",
@@ -250,29 +217,17 @@ export default function SpecialOrderStepOne({
                         "disabled:opacity-40",
                     ].join(" ")}
                 >
-                    {t("specialOrder.step1.nextButton", "التالي ←")}
+                    {t("specialOrder.step1.nextButton")}
                 </button>
             </form>
         </section>
     );
 }
 
-interface FieldGroupProps {
-    label: string;
-    children: React.ReactNode;
-}
-
-function FieldGroup({ label, children }: FieldGroupProps) {
+function FieldGroup({ label, children }: IFieldGroupProps) {
     return (
         <div className="w-full">
-            <label
-                className={[
-                    "mb-[7px] block",
-                    "text-start",
-                    "text-[10px] font-medium",
-                    "text-[#303A54]",
-                ].join(" ")}
-            >
+            <label className="mb-2 block text-start text-[12px] font-bold text-[#303A54]">
                 {label}
             </label>
 

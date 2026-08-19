@@ -1,6 +1,7 @@
 export { default as api } from "./http";
 export { getHomePageData, getFinanceSettings } from "./home.service";
-export { getCars, getCarsMeta, searchCars } from "./cars.service";
+export { getCars, getCarsMeta, searchCars, getSpecialOrderOptions } from "./cars.service";
+export type { ISpecialOrderOptions } from "./cars.service";
 export { getBlogs, getBlogBySlug } from "./blogs.service";
 export { getOffers } from "./offers.service";
 export { getAboutPageData } from "./about.service";

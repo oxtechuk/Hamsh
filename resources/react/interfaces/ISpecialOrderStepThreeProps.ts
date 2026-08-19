@@ -1,8 +1,12 @@
-import type { ISpecialOrderBudget } from "./ISpecialOrderTypes";
+import type {
+  ISpecialOrderPersonalInfo,
+  ISpecialOrderCarDetails,
+} from "./ISpecialOrderTypes";
 
 export interface ISpecialOrderStepThreeProps {
-  data: ISpecialOrderBudget;
-  onChange: <K extends keyof ISpecialOrderBudget>(k: K, v: ISpecialOrderBudget[K]) => void;
+  personal: ISpecialOrderPersonalInfo;
+  car: ISpecialOrderCarDetails;
+  budget?: string;
   onBack: () => void;
   onSubmit: () => void;
   submitting: boolean;

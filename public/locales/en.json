@@ -1138,15 +1138,23 @@
         "discoverMore": "Discover More"
     },
     "specialOrder": {
+        "breadcrumb": {
+            "home": "Home"
+        },
         "hero": {
             "badge": "Custom Request",
             "title": "Request Your Car\nWith the Specifications That Suit You",
             "subtitle": "Our team helps you get your car with the required specifications."
         },
+        "pageTitle": {
+            "prefix": "Your Car",
+            "highlight": "Your Way"
+        },
         "stepper": {
-            "step1": "Your Information",
-            "step2": "Car Details",
-            "step3": "Budget"
+            "title": "Build Your Car",
+            "personal": "Your Information",
+            "car": "Car Details",
+            "review": "Review Request"
         },
         "step1": {
             "title": "Your Personal Information",
@@ -1157,35 +1165,60 @@
             "email": "Email",
             "emailPlaceholder": "name@example.com",
             "city": "City",
+            "cityPlaceholder": "e.g. Riyadh",
+            "salary": "Salary",
+            "salaryPlaceholder": "e.g. 2000 SAR",
+            "obligations": "Obligations",
+            "obligationsPlaceholder": "e.g. 800 SAR",
             "nextButton": "Next — Car Details"
         },
         "step2": {
             "title": "Required Car Details",
             "brand": "Brand",
-            "model": "Model (Optional)",
+            "brandPlaceholder": "Example: Toyota, BMW",
+            "model": "Model",
             "modelPlaceholder": "Example: Land Cruiser, X5, Camry...",
             "color": "Preferred Color",
+            "colorPlaceholder": "Example: White, Black, Gray...",
             "year": "Model Year",
-            "nextButton": "Next — Budget",
+            "yearPlaceholder": "Example: 2026",
+            "notes": "Additional Notes",
+            "notesPlaceholder": "Any other details...",
+            "nextButton": "Next — Review Request",
             "backButton": "Back"
         },
         "step3": {
-            "title": "Budget and Financing",
-            "salaryRange": "Salary Range",
-            "notes": "Additional Notes",
-            "notesPlaceholder": "Any special specifications or additional notes...",
+            "title": "Review Request",
+            "review": {
+                "name": "Name",
+                "phone": "Mobile",
+                "city": "City",
+                "brand": "Brand",
+                "model": "Model",
+                "color": "Color",
+                "budget": "Budget",
+                "year": "Model Year"
+            },
+            "edit": "Edit",
             "submit": "Submit Request",
-            "submitting": "Sending...",
-            "backButton": "Back"
+            "submitting": "Sending..."
         },
         "success": {
             "badge": "Submitted",
-            "title": "Your Request Is Under Review!",
-            "description": "Financing request received for {carLabel}",
-            "contact": "One of our specialists will contact you at {phone} during business hours.",
-            "whatsapp": "Follow Up on Your Request via WhatsApp",
-            "backToCars": "Back to Browsing Cars",
-            "goBack": "←"
+            "title": "Your Request Is Received!",
+            "description": "The Hamsh specialist team will contact you within 24 hours to discuss your request details.",
+            "whatsappMessage": "Hello, I submitted custom car request #{{requestNumber}} for {{carLabel}} and I'd like to follow up.",
+            "requestNumberLabel": "Request Number",
+            "whatsapp": "Follow Up via WhatsApp",
+            "backToCars": "Back to Browsing Cars"
+        },
+        "notes": {
+            "transmission": "Transmission",
+            "fuelType": "Fuel Type",
+            "carNotes": "Car Details",
+            "generalNotes": "Notes",
+            "salary": "Salary",
+            "obligations": "Obligations"
         },
         "error": {
             "submitFailed": "An error occurred while submitting the request. Please try again."

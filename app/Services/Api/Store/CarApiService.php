@@ -98,6 +98,11 @@ final class CarApiService
             ->get();
     }
 
+    public function specialOrderOptions(): array
+    {
+        return $this->cache->rememberSpecialOrderOptions();
+    }
+
     public function listMeta(): array
     {
         $featuredOffer = Offer::active()

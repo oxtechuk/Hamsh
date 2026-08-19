@@ -57,3 +57,17 @@ export async function getCarsMeta(): Promise<CarsMetaData> {
   const response = await api.get<ApiResponse<CarsMetaData>>("store/cars/meta");
   return response.data.data;
 }
+
+export interface ISpecialOrderOptions {
+  brands: { id: number; name: string }[];
+  models: string[];
+  years: string[];
+  colors: string[];
+}
+
+export async function getSpecialOrderOptions(): Promise<ISpecialOrderOptions> {
+  const response = await api.get<ApiResponse<ISpecialOrderOptions>>(
+    "store/special-order/options",
+  );
+  return response.data.data;
+}

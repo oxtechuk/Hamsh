@@ -8,6 +8,7 @@ use App\Models\Car;
 use App\Models\CarCategory;
 use App\Models\CarType;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class CarCacheService extends BaseCacheService
 {
@@ -95,8 +96,66 @@ class CarCacheService extends BaseCacheService
         return $result;
     }
 
+    public function rememberSpecialOrderOptions(): array
+    {
+        return $this->remember('cars.special_order_options', function () {
+            $rows = DB::table('cars')
+                ->join('brands', 'brands.id', '=', 'cars.brand_id')
+                ->where('cars.is_active', true)
+                ->select('brands.id as brand_id', 'brands.name as brand_name', 'cars.model', 'cars.year', 'cars.color', 'cars.colors')
+                ->get();
+
+            $locale = app()->getLocale();
+
+            $brands = [];
+            $models = [];
+            $years = [];
+            $colors = [];
+
+            foreach ($rows as $row) {
+                if (! isset($brands[$row->brand_id])) {
+                    $name = json_decode((string) $row->brand_name, true) ?: [];
+                    $brands[$row->brand_id] = [
+                        'id' => (int) $row->brand_id,
+                        'name' => $name[$locale] ?? $name['ar'] ?? $name['en'] ?? '',
+                    ];
+                }
+
+                if (filled($row->model)) {
+                    $models[trim($row->model)] = true;
+                }
+
+                if (filled($row->year)) {
+                    $years[(string) $row->year] = true;
+                }
+
+                if (filled($row->color)) {
+                    $colors[trim($row->color)] = true;
+                }
+
+                $colorList = json_decode((string) $row->colors, true);
+                if (is_array($colorList)) {
+                    foreach ($colorList as $colorItem) {
+                        $name = is_array($colorItem) ? ($colorItem['name'] ?? null) : $colorItem;
+                        if (filled($name)) {
+                            $colors[trim((string) $name)] = true;
+                        }
+                    }
+                }
+            }
+
+            return [
+                'brands' => collect($brands)->sortBy('name')->values()->all(),
+                'models' => collect(array_keys($models))->sort()->values()->all(),
+                'years' => collect(array_keys($years))->sortDesc()->values()->all(),
+                'colors' => collect(array_keys($colors))->sort()->values()->all(),
+            ];
+        }, self::TTL_LONG);
+    }
+
     public function forgetCars(): void
     {
         Cache::forget('cars.filters');
+        Cache::forget('cars.special_order_options');
     }
 }

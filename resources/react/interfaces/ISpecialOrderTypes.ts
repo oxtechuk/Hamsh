@@ -34,10 +34,3 @@ export interface ISpecialOrderStepperProps {
     activeStep: ISpecialOrderStep;
     steps?: IOrderStepperStep[];
 }
-
-export interface ISpecialOrderStepCircleProps {
-    number: number;
-    label: string;
-    active: boolean;
-    done: boolean;
-}

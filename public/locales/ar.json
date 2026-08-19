@@ -1158,15 +1158,23 @@
         "discoverMore": "اكتشف المزيد"
     },
     "specialOrder": {
+        "breadcrumb": {
+            "home": "الرئيسية"
+        },
         "hero": {
             "badge": "طلب مخصص",
             "title": "اطلب سيارتك\nبـالمواصفات اللي تناسبك",
             "subtitle": "فريقنا يساعدك تجيب سيارتك بالمواصفات المطلوبة"
         },
+        "pageTitle": {
+            "prefix": "سيارتك",
+            "highlight": "بمواصفاتك"
+        },
         "stepper": {
-            "step1": "معلوماتك",
-            "step2": "تفاصيل السيارة",
-            "step3": "الميزانية"
+            "title": "سيارة على كيفك",
+            "personal": "بياناتك الشخصية",
+            "car": "اختيار السيارة",
+            "review": "مراجعة الطلب"
         },
         "step1": {
             "title": "بياناتك الشخصية",
@@ -1177,35 +1185,60 @@
             "email": "البريد الإلكتروني",
             "emailPlaceholder": "name@example.com",
             "city": "المدينة",
-            "nextButton": "التالي — تفاصيل السيارة"
+            "cityPlaceholder": "مثال: الرياض",
+            "salary": "الراتب",
+            "salaryPlaceholder": "مثال: 2000 ر.س",
+            "obligations": "الالتزامات",
+            "obligationsPlaceholder": "مثال: 800 ر.س",
+            "nextButton": "التالي ←"
         },
         "step2": {
             "title": "تفاصيل السيارة المطلوبة",
             "brand": "العلامة التجارية",
-            "model": "الموديل (اختياري)",
+            "brandPlaceholder": "مثال: تويوتا، BMW",
+            "model": "الطراز",
             "modelPlaceholder": "مثال: لاند كروزر، X5، Camry...",
             "color": "اللون المفضل",
+            "colorPlaceholder": "مثال: أبيض، أسود، رمادي...",
             "year": "سنة الموديل",
-            "nextButton": "التالي — الميزانية",
+            "yearPlaceholder": "مثال: 2026",
+            "notes": "ملاحظات إضافية",
+            "notesPlaceholder": "أي تفاصيل أخرى...",
+            "nextButton": "التالي ←",
             "backButton": "السابق"
         },
         "step3": {
-            "title": "الميزانية والتمويل",
-            "salaryRange": "نطاق الراتب",
-            "notes": "ملاحظات إضافية",
-            "notesPlaceholder": "أي مواصفات خاصة أو ملاحظات إضافية...",
+            "title": "مراجعة الطلب",
+            "review": {
+                "name": "الاسم",
+                "phone": "الجوال",
+                "city": "المدينة",
+                "brand": "العلامة",
+                "model": "الطراز",
+                "color": "اللون",
+                "budget": "الميزانية",
+                "year": "سنة الطراز"
+            },
+            "edit": "تعديل",
             "submit": "إرسال الطلب",
-            "submitting": "جارٍ الإرسال...",
-            "backButton": "السابق"
+            "submitting": "جارٍ الإرسال..."
         },
         "success": {
             "badge": "تم الإرسال",
             "title": "تم استلام طلبك!",
-            "description": "تم استلام طلب تمويل {carLabel}",
-            "contact": "سيتواصل معك أحد متخصصينا على {phone} خلال ساعات العمل.",
+            "description": "سيتواصل معك فريق هامش المتخصص خلال 24 ساعة لمناقشة تفاصيل طلبك.",
+            "whatsappMessage": "مرحباً، أرسلت طلب سيارة مخصصة رقم {{requestNumber}} للسيارة {{carLabel}} وأرغب في متابعة الطلب.",
+            "requestNumberLabel": "رقم الطلب",
             "whatsapp": "تابع طلبك عبر واتساب",
-            "backToCars": "العودة لتصفح السيارات",
-            "goBack": "←"
+            "backToCars": "العودة لتصفح السيارات"
+        },
+        "notes": {
+            "transmission": "ناقل الحركة",
+            "fuelType": "نوع الوقود",
+            "carNotes": "تفاصيل السيارة",
+            "generalNotes": "ملاحظات",
+            "salary": "الراتب",
+            "obligations": "الالتزامات"
         },
         "error": {
             "submitFailed": "حدث خطأ أثناء إرسال الطلب، يرجى المحاولة مجدداً"

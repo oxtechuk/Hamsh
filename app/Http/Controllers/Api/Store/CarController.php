@@ -109,4 +109,12 @@ final class CarController extends ApiBaseController
             'Brands retrieved successfully'
         );
     }
+
+    public function specialOrderOptions()
+    {
+        return $this->respondSuccess(
+            $this->carService->specialOrderOptions(),
+            'Special order options retrieved successfully'
+        );
+    }
 }
