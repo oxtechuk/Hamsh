@@ -1,10 +1,4 @@
-import type { ReactNode } from "react";
-
-interface IInfoBoxProps {
-  icon: ReactNode;
-  title: string;
-  description: string;
-}
+import type { IInfoBoxProps } from "../../interfaces/IInfoBoxProps";
 
 export default function InfoBox({ icon, title, description }: IInfoBoxProps) {
   return (

@@ -1,12 +1,7 @@
 import { ChevronDown } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { INPUT_CLASSES } from "../../constants/calculator.constants";
-
-interface ISelectBoxProps {
-  placeholder: string;
-  value: string;
-  onChange: (value: string) => void;
-}
+import type { ISelectBoxProps } from "../../interfaces/ISelectBoxProps";
 
 export default function SelectBox({ placeholder, value, onChange }: ISelectBoxProps) {
   const { t } = useTranslation();

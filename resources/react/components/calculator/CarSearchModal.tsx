@@ -7,12 +7,7 @@ import { APP_IMAGES, getImageUrl } from "../../constants/app-images";
 import { useLanguageStore } from "../../store/language.store";
 
 import type { CarItem } from "../../types/home.types";
-
-interface ICarSearchModalProps {
-  cars: CarItem[];
-  onSelect: (car: CarItem) => void;
-  onClose: () => void;
-}
+import type { ICarSearchModalProps } from "../../interfaces/ICarSearchModalProps";
 
 export default function CarSearchModal({ cars, onSelect, onClose }: ICarSearchModalProps) {
   const [query, setQuery] = useState("");
@@ -32,7 +27,7 @@ export default function CarSearchModal({ cars, onSelect, onClose }: ICarSearchMo
       <div dir={direction} className="w-full max-w-[500px] rounded-[16px] bg-white p-5 shadow-xl">
         <div className="mb-4 flex items-center justify-between">
           <h3 className="text-[16px] font-extrabold text-[#111111]">
-            {t("financeCalculator.step2.chooseCarTitle", "اختر سيارة")}
+            {t("financeCalculator.step2.chooseCarTitle")}
           </h3>
           <button type="button" onClick={onClose} className="text-[#9CA3AF] hover:text-[#111111]">
             <X size={20} />
@@ -44,7 +39,7 @@ export default function CarSearchModal({ cars, onSelect, onClose }: ICarSearchMo
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder={t("financeCalculator.step2.searchPlaceholder", "ابحث باسم السيارة أو الماركة...")}
+            placeholder={t("financeCalculator.step2.searchPlaceholder")}
             className="h-[46px] w-full rounded-[8px] border border-[#E5E7EB] bg-[#F9FAFB] pe-10 px-4 text-[14px] outline-none focus:border-[#C5232B] focus:ring-2 focus:ring-[#C5232B]/10"
           />
           <Search size={15} className="pointer-events-none absolute end-3 top-1/2 -translate-y-1/2 text-[#9CA3AF]" />
@@ -69,7 +64,7 @@ export default function CarSearchModal({ cars, onSelect, onClose }: ICarSearchMo
                 </p>
                 {car.current_price ? (
                   <p className="text-[12px] text-[#C5232B]">
-                    {car.current_price.toLocaleString()} {t("financeCalculator.step2.riyal", "ر.س")}
+                    {car.current_price.toLocaleString()} {t("financeCalculator.step2.riyal")}
                   </p>
                 ) : null}
               </div>

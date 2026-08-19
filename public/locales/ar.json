@@ -965,8 +965,17 @@
     },
     "financeCalculator": {
         "badge": "حاسبة الأقساط",
-        "titleWhite": "احسب قسطك بكل سهولة",
+        "titleWhite": "تمويل ",
+        "titleOrange": "يناسبك",
         "description": "خطوات بسيطة للحصول على تمويل يناسبك",
+        "sidebar": {
+            "estimatedInstallment": "القسط التقريبي",
+            "riyalPerMonth": "ريال / شهر"
+        },
+        "breadcrumb": {
+            "home": "الرئيسية",
+            "calculator": "الحاسبة"
+        },
         "cities": {
             "riyadh": "الرياض",
             "jeddah": "جدة",
@@ -974,7 +983,7 @@
         },
         "step1": {
             "stepperLabel": "معلوماتك",
-            "personalInfoTitle": "معلوماتك الشخصية",
+            "personalInfoTitle": "بياناتك الشخصية",
             "fullName": "الاسم الكامل",
             "fullNamePlaceholder": "اسمك الكريم",
             "phone": "رقم الجوال",
@@ -983,15 +992,11 @@
             "emailPlaceholder": "name@example.com",
             "city": "المدينة",
             "cityPlaceholder": "اختر المدينة",
-            "nextButton": "التالي — اختر السيارة",
-            "cities": [
-                "الرياض",
-                "جدة",
-                "الدمام",
-                "مكة المكرمة",
-                "المدينة المنورة",
-                "الخبر"
-            ]
+            "salary": "الراتب",
+            "salaryPlaceholder": "ادخل الراتب",
+            "obligations": "الالتزامات الشهرية",
+            "obligationsPlaceholder": "أدخل قيمة الالتزامات الشهرية",
+            "nextButton": "التالي ←"
         },
         "step2": {
             "stepperLabel": "تفاصيل السيارة",
@@ -1001,18 +1006,22 @@
             "otherCars": "إختار سيارتك",
             "chooseAnotherCar": "إختار سيارة أخرى من سيارتنا",
             "selectCar": "اختر سيارة",
-            "nextButton": "التالي — الحاسبة",
+            "nextButton": "التالي ←",
             "searchPlaceholder": "ابحث باسم السيارة أو الماركة...",
-            "backButton": "رجوع",
+            "backButton": "السابق",
             "riyal": "ر.س"
         },
         "step3": {
             "stepperLabel": "المراجعة",
+            "title": "احسب قسطك الشهري",
+            "monthlyPayment": "القسط الشهري التقريبي",
             "summaryTitle": "ملخص التمويل",
             "carPrice": "سعر السيارة",
             "downPayment": "الدفعة الأولى",
+            "downPaymentAmount": "مبلغ الدفعة",
             "financeAmount": "مبلغ التمويل",
             "paymentPeriod": "مدة السداد",
+            "term": "مدة التمويل",
             "annualRate": "نسبة الفائدة التقريبية",
             "estimatedMonthlyPayment": "القسط الشهري التقريبي",
             "riyalPerMonth": "ريال سعودي / شهر",
@@ -1028,21 +1037,24 @@
             "years": "سنوات",
             "months": "شهرًا",
             "month": "شهر",
+            "installment": "قسط",
             "submitLead": "تقديم طلب التمويل",
             "submitting": "جارٍ الإرسال...",
             "successToast": "تم إرسال طلب التمويل بنجاح",
             "errorToast": "تعذر إرسال طلب التمويل",
-            "backButton": "رجوع",
+            "backButton": "السابق",
             "riyal": "ر.س"
         },
         "success": {
             "badge": "تم الإرسال",
-            "title": "طلبك في المراجعة!",
+            "title": "تم استلام طلبك!",
             "message": "تم استلام طلب تمويل {carLabel}",
             "followUp": "سيتواصل معك أحد متخصصينا على {phone} خلال ساعات العمل.",
+            "followUpSimple": "سيتواصل معك فريق التمويل في هامش خلال 24 ساعة.",
             "duringBusinessHours": "خلال ساعات العمل.",
+            "requestNumber": "رقم الطلب:",
             "whatsapp": "تابع طلبك عبر واتساب",
-            "whatsappMessage": "مرحباً، أرسلت طلب تمويل ({{carLabel}}) وأود المتابعة.",
+            "whatsappMessage": "مرحباً، أرسلت طلب تمويل رقم {{requestNumber}} لسيارة {{carLabel}} وأرغب في متابعة الطلب.",
             "backToCars": "العودة لتصفح السيارات"
         },
         "otp": {
@@ -1157,7 +1169,7 @@
             "step3": "الميزانية"
         },
         "step1": {
-            "title": "معلوماتك الشخصية",
+            "title": "بياناتك الشخصية",
             "fullName": "الاسم الكامل",
             "fullNamePlaceholder": "اسمك الكريم",
             "phone": "رقم الجوال",
@@ -1175,7 +1187,7 @@
             "color": "اللون المفضل",
             "year": "سنة الموديل",
             "nextButton": "التالي — الميزانية",
-            "backButton": "رجوع"
+            "backButton": "السابق"
         },
         "step3": {
             "title": "الميزانية والتمويل",
@@ -1184,11 +1196,11 @@
             "notesPlaceholder": "أي مواصفات خاصة أو ملاحظات إضافية...",
             "submit": "إرسال الطلب",
             "submitting": "جارٍ الإرسال...",
-            "backButton": "رجوع"
+            "backButton": "السابق"
         },
         "success": {
             "badge": "تم الإرسال",
-            "title": "طلبك في المراجعة!",
+            "title": "تم استلام طلبك!",
             "description": "تم استلام طلب تمويل {carLabel}",
             "contact": "سيتواصل معك أحد متخصصينا على {phone} خلال ساعات العمل.",
             "whatsapp": "تابع طلبك عبر واتساب",
@@ -1216,7 +1228,7 @@
             "modalTitle": "اختر سيارة",
             "submit": "إرسال الطلب",
             "submitting": "جارٍ الإرسال...",
-            "backButton": "رجوع"
+            "backButton": "السابق"
         },
         "notFound": "لم تجد سيارتك؟",
         "specialOrderLink": "قدم طلب خاص"

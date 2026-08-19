@@ -31,9 +31,9 @@ export default function Stepper({ activeStep }: IStepperProps) {
   const { t } = useTranslation();
 
   const steps = [
-    { number: 1, label: t("financeCalculator.step1.stepperLabel", "معلوماتك") },
-    { number: 2, label: t("financeCalculator.step2.stepperLabel", "تفاصيل السيارة") },
-    { number: 3, label: t("financeCalculator.step3.stepperLabel", "المراجعة") },
+    { number: 1, label: t("financeCalculator.step1.stepperLabel") },
+    { number: 2, label: t("financeCalculator.step2.stepperLabel") },
+    { number: 3, label: t("financeCalculator.step3.stepperLabel") },
   ];
 
   return (

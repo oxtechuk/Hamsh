@@ -1,14 +1,11 @@
 import LazyImg from "../LazyImg";
 import { APP_IMAGES, getImageUrl } from "../../constants/app-images";
+import { useTranslation } from "react-i18next";
 import type { CarItem } from "../../types/home.types";
-
-interface ICarGridCardProps {
-  car: CarItem;
-  selected: boolean;
-  onSelect: () => void;
-}
+import type { ICarGridCardProps } from "../../interfaces/ICarGridCardProps";
 
 export default function CarGridCard({ car, selected, onSelect }: ICarGridCardProps) {
+  const { t } = useTranslation();
   return (
     <button
       type="button"
@@ -32,7 +29,7 @@ export default function CarGridCard({ car, selected, onSelect }: ICarGridCardPro
         </p>
         {car.current_price ? (
           <p className="text-[12px] font-bold text-[var(--brand-primary-color)]">
-            {car.current_price.toLocaleString()} ر.س
+            {car.current_price.toLocaleString()} {t("financeCalculator.step2.riyal")}
           </p>
         ) : null}
       </div>

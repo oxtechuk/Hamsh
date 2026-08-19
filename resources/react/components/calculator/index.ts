@@ -8,5 +8,6 @@ export { default as StepTwoSkeleton } from "./StepTwoSkeleton";
 export { default as DarkSummaryRow } from "./DarkSummaryRow";
 export { default as FinanceSliderStyles } from "./FinanceSliderStyles";
 export { default as CalculatorSuccess } from "./CalculatorSuccess";
+export { default as CalculatorSidebar } from "./CalculatorSidebar";
 export { default as FinanceSummaryCard } from "./FinanceSummaryCard";
 export { default as FinanceDetailsForm } from "./FinanceDetailsForm";

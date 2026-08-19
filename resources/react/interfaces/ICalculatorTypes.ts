@@ -7,7 +7,8 @@ export interface IBankItem {
 
 export interface ICalculateRequest {
   car_id: number;
-  down_payment_percentage: number;
+  price: number;
+  down_payment: number;
   period_months: number;
 }
 

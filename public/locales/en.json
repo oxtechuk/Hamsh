@@ -974,7 +974,16 @@
     "financeCalculator": {
         "badge": "Installment Calculator",
         "titleWhite": "Calculate Your Installment Easily",
+        "titleOrange": "That Suits You",
         "description": "Simple steps to get financing that suits you.",
+        "sidebar": {
+            "estimatedInstallment": "Estimated Installment",
+            "riyalPerMonth": "SAR / Month"
+        },
+        "breadcrumb": {
+            "home": "Home",
+            "calculator": "Calculator"
+        },
         "cities": {
             "riyadh": "Riyadh",
             "jeddah": "Jeddah",
@@ -991,6 +1000,10 @@
             "emailPlaceholder": "name@example.com",
             "city": "City",
             "cityPlaceholder": "Select City",
+            "salary": "Salary",
+            "salaryPlaceholder": "Enter Salary",
+            "obligations": "Monthly Obligations",
+            "obligationsPlaceholder": "Enter the Value of Your Monthly Obligations",
             "nextButton": "Next — Select Car",
             "cities": [
                 "Riyadh",
@@ -1016,11 +1029,15 @@
         },
         "step3": {
             "stepperLabel": "Review",
+            "title": "Calculate Your Monthly Installment",
+            "monthlyPayment": "Estimated Monthly Installment",
             "summaryTitle": "Financing Summary",
             "carPrice": "Car Price",
             "downPayment": "Down Payment",
+            "downPaymentAmount": "Down Payment Amount",
             "financeAmount": "Financing Amount",
             "paymentPeriod": "Repayment Term",
+            "term": "Financing Term",
             "annualRate": "Estimated Interest Rate",
             "estimatedMonthlyPayment": "Estimated Monthly Installment",
             "riyalPerMonth": "Saudi Riyals / Month",
@@ -1048,9 +1065,11 @@
             "title": "Your Request Is Under Review!",
             "message": "Financing request received for {carLabel}",
             "followUp": "One of our specialists will contact you at {phone} during business hours.",
+            "followUpSimple": "Our financing team will contact you within 24 hours.",
             "duringBusinessHours": "During Business Hours.",
+            "requestNumber": "Request Number:",
             "whatsapp": "Follow Up on Your Request via WhatsApp",
-            "whatsappMessage": "Hello, I submitted a financing request for ({{carLabel}}) and would like to follow up.",
+            "whatsappMessage": "Hello, I submitted a financing request number {{requestNumber}} for car {{carLabel}} and would like to follow up on the request.",
             "backToCars": "Back to Browsing Cars"
         },
         "validation": {

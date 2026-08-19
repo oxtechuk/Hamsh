@@ -1,11 +1,5 @@
 import { useTranslation } from "react-i18next";
-import type { ReactNode } from "react";
-
-interface IFormFieldProps {
-  label: string;
-  required?: boolean;
-  children: ReactNode;
-}
+import type { IFormFieldProps } from "../../interfaces/IFormFieldProps";
 
 export default function FormField({ label, required, children }: IFormFieldProps) {
   const { i18n } = useTranslation();
@@ -15,7 +9,7 @@ export default function FormField({ label, required, children }: IFormFieldProps
     <label className="block">
       <span
         className={`mb-3 block text-[15px] font-extrabold text-[#07111F] ${
-          isRTL ? "text-right" : "text-left"
+          isRTL ? "text-end" : "text-start"
         }`}
       >
         {label}

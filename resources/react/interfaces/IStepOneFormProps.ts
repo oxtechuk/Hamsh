@@ -6,5 +6,6 @@ export interface IStepOneFormProps {
   selectedCarId?: number;
   selectedCar?: ISelectedCar;
   onCarSelect?: (car: CarItem) => void;
+  initialInfo?: IPersonalInfo | null;
   onNext: (info: IPersonalInfo) => void;
 }

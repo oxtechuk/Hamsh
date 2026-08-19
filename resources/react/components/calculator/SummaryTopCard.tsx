@@ -1,10 +1,4 @@
-import type { ReactNode } from "react";
-
-interface ISummaryTopCardProps {
-  title: string;
-  value: string | ReactNode;
-  variant: "blue" | "orange";
-}
+import type { ISummaryTopCardProps } from "../../interfaces/ISummaryTopCardProps";
 
 export default function SummaryTopCard({ title, value, variant }: ISummaryTopCardProps) {
   const isBlue = variant === "blue";

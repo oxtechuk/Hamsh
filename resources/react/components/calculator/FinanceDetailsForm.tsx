@@ -4,6 +4,7 @@ import { TERM_OPTIONS } from "../../constants/calculator.constants";
 import { useLanguageStore } from "../../store/language.store";
 import LazyImg from "../LazyImg";
 import { fmt } from "../../utils/format";
+import type { IFinanceDetailsFormProps } from "../../interfaces/IFinanceDetailsFormProps";
 
 const DOWN_PAYMENT_MIN = 10;
 const DOWN_PAYMENT_MAX = 40;
@@ -16,28 +17,6 @@ const fieldCls = [
   "outline-none placeholder:text-[#9CA3AF]",
   "transition focus:border-[var(--brand-primary-color)] focus:ring-2 focus:ring-[var(--brand-primary-color)]/10",
 ].join(" ");
-
-interface IFinanceDetailsFormProps {
-  selectedCar: {
-    id: number;
-    brand: string;
-    name: string;
-    model: string;
-    price: number;
-    tag: string;
-    image: string;
-  };
-  carPrice: number;
-  downPaymentPercent: number;
-  setDownPaymentPercent: (v: number) => void;
-  term: number;
-  setTerm: (v: number) => void;
-  monthlyIncome: string;
-  setMonthlyIncome: (v: string) => void;
-  monthlyObligations: string;
-  setMonthlyObligations: (v: string) => void;
-  riyal: string;
-}
 
 export default function FinanceDetailsForm({
   selectedCar,
@@ -69,7 +48,7 @@ export default function FinanceDetailsForm({
   return (
     <div className="rounded-[16px] border border-[#E7E7E7] bg-white px-6 py-7 shadow-sm">
       <h2 className="text-start text-[22px] font-extrabold text-[#111111]">
-        {t("financeCalculator.step3.financeDetails", "تفاصيل التمويل")}
+        {t("financeCalculator.step3.financeDetails")}
       </h2>
 
       <div className="mt-4 flex items-center gap-3 rounded-[10px] bg-[#EFEFEF] px-4 py-3">
@@ -93,7 +72,7 @@ export default function FinanceDetailsForm({
       <div className="mt-5">
         <div className="mb-2 flex items-center justify-between text-[13px]">
           <span className="font-bold text-[#111111]">
-            {t("financeCalculator.step3.downPayment", "الدفعة الأولى")}
+            {t("financeCalculator.step3.downPayment")}
           </span>
           <strong className="text-[var(--brand-primary-color)]">
             {downPaymentPercent}% — {fmt(downPayment)} {riyal}
@@ -118,11 +97,11 @@ export default function FinanceDetailsForm({
       <div className="mt-5">
         <div className="mb-2 flex items-center justify-between text-[13px]">
           <span className="font-bold text-[#111111]">
-            {t("financeCalculator.step3.financeTerm", "مدة التمويل")}
+            {t("financeCalculator.step3.financeTerm")}
           </span>
           <strong className="text-[var(--brand-primary-color)] font-extrabold">
-            {term / 12} {t("financeCalculator.step3.years", "سنوات")} ({term}{" "}
-            {t("financeCalculator.step3.months", "شهر")})
+            {term / 12} {t("financeCalculator.step3.years")} ({term}{" "}
+            {t("financeCalculator.step3.months")})
           </strong>
         </div>
         <div className="grid grid-cols-4 gap-2">
@@ -146,7 +125,7 @@ export default function FinanceDetailsForm({
 
       <div className="mt-5">
         <label className="mb-1.5 block text-start text-[13px] font-bold text-[#111111]">
-          {t("financeCalculator.step3.monthlyIncome", "الدخل الشهري (ر.س)")}
+          {t("financeCalculator.step3.monthlyIncome")}
           <span className="ms-1">*</span>
         </label>
         <input
@@ -154,10 +133,7 @@ export default function FinanceDetailsForm({
           min={0}
           value={monthlyIncome}
           onChange={(e) => setMonthlyIncome(e.target.value)}
-          placeholder={t(
-            "financeCalculator.step3.monthlyIncomePlaceholder",
-            "مثال: 15000",
-          )}
+          placeholder={t("financeCalculator.step3.monthlyIncomePlaceholder")}
           inputMode="numeric"
           dir="ltr"
           className={`${fieldCls} text-end`}
@@ -166,10 +142,7 @@ export default function FinanceDetailsForm({
 
       <div className="mt-4">
         <label className="mb-1.5 block text-start text-[13px] font-bold text-[#111111]">
-          {t(
-            "financeCalculator.step3.monthlyObligations",
-            "الالتزامات الشهرية الحالية",
-          )}
+          {t("financeCalculator.step3.monthlyObligations")}
           <span className="ms-1 ">*</span>
         </label>
         <input
@@ -177,10 +150,7 @@ export default function FinanceDetailsForm({
           min={0}
           value={monthlyObligations}
           onChange={(e) => setMonthlyObligations(e.target.value)}
-          placeholder={t(
-            "financeCalculator.step3.monthlyObligationsPlaceholder",
-            "مثال: 300 (أو صفر إن لم يكن)",
-          )}
+          placeholder={t("financeCalculator.step3.monthlyObligationsPlaceholder")}
           inputMode="numeric"
           dir="ltr"
           className={`${fieldCls} text-end`}

@@ -1,6 +1,4 @@
-interface IFinanceSliderStylesProps {
-  direction?: string;
-}
+import type { IFinanceSliderStylesProps } from "../../interfaces/IFinanceSliderStylesProps";
 
 export default function FinanceSliderStyles({ direction = "ltr" }: IFinanceSliderStylesProps) {
   const gradientDir = direction === "rtl" ? "to left" : "to right";

@@ -1,13 +1,10 @@
 export interface ICalculatorLeadRequest {
   name: string;
   phone: string;
-  email: string;
-  city: string;
-  purpose: string;
   car_ids: number[];
-  notes: string;
-  monthly_obligations: number;
   salary: number;
+  city: string;
+  monthly_obligations: number;
 }
 
 export interface ICalculatorLeadResponse {
