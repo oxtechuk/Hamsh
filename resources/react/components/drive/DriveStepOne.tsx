@@ -3,13 +3,10 @@ import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 
 import { getCities } from "../../services/api";
-import type { IDrivePersonalInfo } from "../../pages/DrivePage";
+import { useLanguageStore } from "../../store/language.store";
 
-interface DriveStepOneProps {
-    data: IDrivePersonalInfo;
-    onChange: (key: keyof IDrivePersonalInfo, value: string) => void;
-    onNext: () => void;
-}
+import type { IDriveStepOneProps } from "../../interfaces/IDriveStepOneProps";
+import type { IFieldGroupProps } from "../../interfaces/IFieldGroupProps";
 
 const STATIC_CITIES = [
     "الرياض",
@@ -34,8 +31,9 @@ export default function DriveStepOne({
     data,
     onChange,
     onNext,
-}: DriveStepOneProps) {
+}: IDriveStepOneProps) {
     const { t } = useTranslation();
+    const direction = useLanguageStore((state) => state.direction);
 
     const { data: citiesData = [] } = useQuery({
         queryKey: ["cities"],
@@ -64,75 +62,80 @@ export default function DriveStepOne({
     };
 
     return (
-        <section className="w-full">
+        <section dir={direction} className="w-full">
             <h2 className="text-start text-[27px] font-extrabold text-[#20283A] sm:text-[30px]">
-                {t("drivePage.step1.title", "بياناتك الشخصية")}
+                {t("drivePage.step1.title")}
             </h2>
 
             <form onSubmit={handleSubmit} className="mt-7 space-y-[17px]">
-                <FieldGroup label="الاسم الكامل">
+                <FieldGroup label={t("drivePage.step1.fullName")}>
                     <input
                         value={data.fullName}
                         onChange={(event) =>
                             onChange("fullName", event.target.value)
                         }
-                        placeholder="اسمك"
+                        placeholder={t("drivePage.step1.fullNamePlaceholder")}
                         className={fieldCls}
                     />
                 </FieldGroup>
 
-                <FieldGroup label="رقم الجوال">
+                <FieldGroup label={t("drivePage.step1.phone")}>
                     <input
                         type="tel"
                         value={data.phone}
                         onChange={(event) =>
                             onChange("phone", event.target.value)
                         }
-                        placeholder="05XXXXXXXX"
+                        placeholder={t("drivePage.step1.phonePlaceholder")}
                         dir="ltr"
                         className={`${fieldCls} text-end`}
                     />
                 </FieldGroup>
 
-                <FieldGroup label="المدينة">
-                    <input
-                        list="drive-cities"
+                <FieldGroup label={t("drivePage.step1.city")}>
+                    <select
                         value={data.city}
                         onChange={(event) =>
                             onChange("city", event.target.value)
                         }
-                        placeholder="مثال: الرياض"
                         className={fieldCls}
-                    />
-
-                    <datalist id="drive-cities">
+                    >
+                        <option value="" disabled>
+                            {t("drivePage.step1.cityPlaceholder")}
+                        </option>
                         {cityOptions.map((city) => (
-                            <option key={city} value={city} />
+                            <option key={city} value={city}>
+                                {city}
+                            </option>
                         ))}
-                    </datalist>
+                    </select>
                 </FieldGroup>
 
                 <div className="grid grid-cols-2 gap-4">
-                    <FieldGroup label="الراتب">
+                    <FieldGroup label={t("drivePage.step1.salary")}>
                         <input
                             type="number"
                             value={data.salary}
                             onChange={(event) =>
                                 onChange("salary", event.target.value)
                             }
-                            placeholder="مثال: 2000 ر.س"
+                            placeholder={t(
+                                "drivePage.step1.salaryPlaceholder",
+                            )}
                             className={fieldCls}
                         />
                     </FieldGroup>
 
-                    <FieldGroup label="الالتزامات">
+                    <FieldGroup label={t("drivePage.step1.obligations")}>
                         <input
                             type="number"
                             value={data.obligations}
                             onChange={(event) =>
                                 onChange("obligations", event.target.value)
                             }
-                            placeholder="مثال: 800 ر.س"
+                            placeholder={t(
+                                "drivePage.step1.obligationsPlaceholder",
+                            )}
                             className={fieldCls}
                         />
                     </FieldGroup>
@@ -145,29 +148,23 @@ export default function DriveStepOne({
                         "mt-7 flex h-[52px] w-full",
                         "items-center justify-center",
                         "bg-[var(--brand-primary-color)]",
-                        "text-[13px] font-bold text-[#20283A]",
+                        "text-[13px] font-bold! text-[#20283A]",
                         "transition duration-300",
                         "hover:brightness-95",
                         "disabled:opacity-40",
                     ].join(" ")}
                 >
-                    {t("drivePage.step1.next", "التالي ←")}
+                    {t("drivePage.step1.nextButton")}
                 </button>
             </form>
         </section>
     );
 }
 
-function FieldGroup({
-    label,
-    children,
-}: {
-    label: string;
-    children: React.ReactNode;
-}) {
+function FieldGroup({ label, children }: IFieldGroupProps) {
     return (
-        <div>
-            <label className="mb-[7px] block text-start text-[10px] font-medium text-[#303A54]">
+        <div className="w-full">
+            <label className="mb-2 block text-start text-[12px] font-bold text-[#303A54]">
                 {label}
             </label>
 

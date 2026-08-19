@@ -5,17 +5,12 @@ import { useTranslation } from "react-i18next";
 
 import { useLanguageStore } from "../../store/language.store";
 import { useSettingsStore } from "../../store/settings.store";
-
-interface DriveSuccessProps {
-    carLabel?: string;
-    clientPhone?: string;
-    requestNumber?: string;
-}
+import type { IDriveSuccessProps } from "../../interfaces/IDriveSuccessProps";
 
 export default function DriveSuccess({
     carLabel = "",
     requestNumber = "TF-7956",
-}: DriveSuccessProps) {
+}: IDriveSuccessProps) {
     const { t } = useTranslation();
 
     const direction = useLanguageStore((state) => state.direction);
@@ -28,12 +23,7 @@ export default function DriveSuccess({
         settings?.contact?.whatsapp?.replace(/\D/g, "") ?? "";
 
     const whatsappMessage = encodeURIComponent(
-        t("drivePage.success.whatsappMessage", {
-            carLabel,
-            requestNumber,
-            defaultValue:
-                "مرحباً، أرسلت طلب تجربة قيادة رقم {{requestNumber}} للسيارة {{carLabel}} وأرغب في متابعة الطلب.",
-        }),
+        t("drivePage.success.whatsappMessage", { carLabel, requestNumber }),
     );
 
     const whatsappHref = whatsappNumber
@@ -45,7 +35,6 @@ export default function DriveSuccess({
             dir={direction}
             className="mx-auto flex w-full max-w-[520px] flex-col items-center px-4 py-10 text-center sm:py-14"
         >
-            {/* Check */}
             <div
                 className={[
                     "flex h-[72px] w-[72px]",
@@ -61,7 +50,6 @@ export default function DriveSuccess({
                 />
             </div>
 
-            {/* Title */}
             <h1
                 className={[
                     "mt-7",
@@ -70,29 +58,21 @@ export default function DriveSuccess({
                     "sm:text-[34px]",
                 ].join(" ")}
             >
-                {t("drivePage.success.title", "تم استلام طلبك!")}
+                {t("drivePage.success.title")}
             </h1>
 
-            {/* Message */}
             <p className="mt-5 max-w-[390px] text-[13px] leading-7 text-[#59647A] sm:text-[14px]">
-                {t(
-                    "drivePage.success.description",
-                    "سيتواصل معك فريق هامش خلال 24 ساعة لتأكيد موعد تجربة القيادة.",
-                )}
+                {t("drivePage.success.description")}
             </p>
 
-            {/* Request number */}
             <p
                 dir="ltr"
                 className="mt-6 text-[18px] font-bold text-[var(--brand-primary-color)]"
             >
-                <span>
-                    {t("drivePage.success.requestNumber", "رقم الطلب:")}
-                </span>{" "}
+                <span>{t("drivePage.success.requestNumber")}</span>{" "}
                 <span>{requestNumber}</span>
             </p>
 
-            {/* Actions */}
             <div className="mt-9 w-full max-w-[390px]">
                 <a
                     href={whatsappHref}
@@ -110,7 +90,7 @@ export default function DriveSuccess({
                 >
                     <SiWhatsapp size={19} />
 
-                    {t("drivePage.success.whatsapp", "تابع طلبك عبر واتساب")}
+                    {t("drivePage.success.whatsapp")}
                 </a>
 
                 <button
@@ -128,7 +108,7 @@ export default function DriveSuccess({
                         "hover:border-[#303A54]",
                     ].join(" ")}
                 >
-                    {t("drivePage.success.backToCars", "العودة لتصفح السيارات")}
+                    {t("drivePage.success.backToCars")}
 
                     <span className="text-[15px]">
                         {direction === "rtl" ? "←" : "→"}

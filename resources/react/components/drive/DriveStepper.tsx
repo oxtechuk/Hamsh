@@ -1,32 +1,25 @@
 import { Check } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-interface DriveStepperProps {
-    activeStep: 1 | 2;
-}
+import type {
+    IDriveStepperProps,
+    IDriveStepperStep,
+} from "../../interfaces/IDriveTypes";
 
-export default function DriveStepper({ activeStep }: DriveStepperProps) {
+export default function DriveStepper({ activeStep }: IDriveStepperProps) {
     const { t } = useTranslation();
 
-    const steps = [
-        {
-            number: 1,
-            label: t("drivePage.stepper.personal", "بياناتك الشخصية"),
-        },
-        {
-            number: 2,
-            label: t("drivePage.stepper.car", "اختيار السيارة"),
-        },
+    const steps: IDriveStepperStep[] = [
+        { number: 1, label: t("drivePage.stepper.personal") },
+        { number: 2, label: t("drivePage.stepper.car") },
     ];
 
     return (
         <div className="w-full">
-            {/* Small sidebar title */}
             <p className="mb-8 text-start text-[11px] font-medium text-[var(--brand-primary-color)]">
-                {t("drivePage.stepper.title", "تجربة قيادة")}
+                {t("drivePage.stepper.title")}
             </p>
 
-            {/* Steps */}
             <ul className="space-y-5">
                 {steps.map((item) => {
                     const isCompleted = activeStep > item.number;
@@ -35,30 +28,14 @@ export default function DriveStepper({ activeStep }: DriveStepperProps) {
                     return (
                         <li
                             key={item.number}
-                            className="flex items-center justify-between gap-5"
+                            className="flex items-center justify-start gap-3"
                         >
-                            {/* Label */}
                             <span
                                 className={[
-                                    "text-[12px]",
-                                    isActive
-                                        ? "font-bold text-[#20283A]"
-                                        : isCompleted
-                                          ? "font-medium text-[#20283A]"
-                                          : "text-[#697083]",
-                                ].join(" ")}
-                            >
-                                {item.label}
-                            </span>
-
-                            {/* Step number / check */}
-                            <span
-                                className={[
-                                    "flex h-[32px] w-[32px] shrink-0",
-                                    "items-center justify-center",
+                                    "flex h-[32px] w-[32px]",
+                                    "shrink-0 items-center justify-center",
                                     "border text-[11px]",
                                     "transition duration-300",
-
                                     isCompleted
                                         ? [
                                               "border-[var(--brand-primary-color)]",
@@ -69,7 +46,7 @@ export default function DriveStepper({ activeStep }: DriveStepperProps) {
                                           ? [
                                                 "border-[var(--brand-primary-color)]",
                                                 "bg-white",
-                                                "font-bold",
+                                                "font-bold!",
                                                 "text-[var(--brand-primary-color)]",
                                             ].join(" ")
                                           : [
@@ -84,6 +61,19 @@ export default function DriveStepper({ activeStep }: DriveStepperProps) {
                                 ) : (
                                     String(item.number).padStart(2, "0")
                                 )}
+                            </span>
+
+                            <span
+                                className={[
+                                    "text-[12px]",
+                                    isActive
+                                        ? "font-bold text-[#20283A]"
+                                        : isCompleted
+                                          ? "font-bold text-[#20283A]"
+                                          : "text-[#697083]",
+                                ].join(" ")}
+                            >
+                                {item.label}
                             </span>
                         </li>
                     );

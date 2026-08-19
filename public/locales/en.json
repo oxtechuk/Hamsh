@@ -1224,6 +1224,57 @@
             "submitFailed": "An error occurred while submitting the request. Please try again."
         }
     },
+    "drivePage": {
+        "breadcrumb": {
+            "home": "Home",
+            "current": "Test Drive"
+        },
+        "title": {
+            "prefix": "Request",
+            "highlight": "Test Drive"
+        },
+        "stepper": {
+            "title": "Test Drive",
+            "personal": "Your Information",
+            "car": "Choose Car"
+        },
+        "step1": {
+            "title": "Your Personal Information",
+            "fullName": "Full Name",
+            "fullNamePlaceholder": "Your Name",
+            "phone": "Mobile Number",
+            "phonePlaceholder": "05XXXXXXXX",
+            "city": "City",
+            "cityPlaceholder": "e.g. Riyadh",
+            "salary": "Salary",
+            "salaryPlaceholder": "e.g. 2000 SAR",
+            "obligations": "Obligations",
+            "obligationsPlaceholder": "e.g. 800 SAR",
+            "nextButton": "Next ←"
+        },
+        "step2": {
+            "title": "Choose Your Car",
+            "description": "The car you selected",
+            "chooseCar": "Choose a Car",
+            "back": "Back",
+            "submit": "Next ←"
+        },
+        "success": {
+            "title": "Your Request Is Received!",
+            "description": "The Hamsh team will contact you within 24 hours to confirm your test drive appointment.",
+            "requestNumber": "Request Number:",
+            "whatsappMessage": "Hello, I submitted test drive request #{{requestNumber}} for {{carLabel}} and I'd like to follow up.",
+            "whatsapp": "Follow Up via WhatsApp",
+            "backToCars": "Back to Browsing Cars"
+        },
+        "notes": {
+            "salary": "Salary",
+            "obligations": "Obligations"
+        },
+        "error": {
+            "submitFailed": "An error occurred while submitting the request. Please try again."
+        }
+    },
     "ordinaryOrder": {
         "hero": {
             "badge": "Request a Car",

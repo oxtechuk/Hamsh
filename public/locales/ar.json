@@ -1244,6 +1244,57 @@
             "submitFailed": "حدث خطأ أثناء إرسال الطلب، يرجى المحاولة مجدداً"
         }
     },
+    "drivePage": {
+        "breadcrumb": {
+            "home": "الرئيسية",
+            "current": "تجربة قيادة"
+        },
+        "title": {
+            "prefix": "طلب",
+            "highlight": "تجربة قيادة"
+        },
+        "stepper": {
+            "title": "تجربة قيادة",
+            "personal": "بياناتك الشخصية",
+            "car": "اختيار السيارة"
+        },
+        "step1": {
+            "title": "بياناتك الشخصية",
+            "fullName": "الاسم الكامل",
+            "fullNamePlaceholder": "اسمك",
+            "phone": "رقم الجوال",
+            "phonePlaceholder": "05XXXXXXXX",
+            "city": "المدينة",
+            "cityPlaceholder": "مثال: الرياض",
+            "salary": "الراتب",
+            "salaryPlaceholder": "مثال: 2000 ر.س",
+            "obligations": "الالتزامات",
+            "obligationsPlaceholder": "مثال: 800 ر.س",
+            "nextButton": "التالي ←"
+        },
+        "step2": {
+            "title": "اختر سيارتك",
+            "description": "السيارة التي اخترتها",
+            "chooseCar": "اختر سيارة",
+            "back": "السابق",
+            "submit": "التالي ←"
+        },
+        "success": {
+            "title": "تم استلام طلبك!",
+            "description": "سيتواصل معك فريق هامش خلال 24 ساعة لتأكيد موعد تجربة القيادة.",
+            "requestNumber": "رقم الطلب:",
+            "whatsappMessage": "مرحباً، أرسلت طلب تجربة قيادة رقم {{requestNumber}} للسيارة {{carLabel}} وأرغب في متابعة الطلب.",
+            "whatsapp": "تابع طلبك عبر واتساب",
+            "backToCars": "العودة لتصفح السيارات"
+        },
+        "notes": {
+            "salary": "الراتب",
+            "obligations": "الالتزامات"
+        },
+        "error": {
+            "submitFailed": "حدث خطأ أثناء إرسال الطلب، يرجى المحاولة مجدداً"
+        }
+    },
     "ordinaryOrder": {
         "hero": {
             "badge": "طلب سيارة",
