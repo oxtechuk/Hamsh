@@ -25,10 +25,15 @@ function NativeSelect({
   className,
   chevronClassName,
 }: ISelectProps) {
+  const { i18n } = useTranslation();
+  const isRTL = i18n.dir() === "rtl";
+
   return (
     <div className="relative">
       {icon && (
-        <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2">
+        <span
+          className={`pointer-events-none absolute top-1/2 -translate-y-1/2 ${isRTL ? "left-4" : "right-4"}`}
+        >
           {icon}
         </span>
       )}
@@ -53,7 +58,7 @@ function NativeSelect({
 
       <ChevronDown
         size={18}
-        className={`pointer-events-none absolute top-1/2 -translate-y-1/2 ${chevronClassName ?? "left-4"}`}
+        className={`pointer-events-none absolute top-1/2 -translate-y-1/2 ${chevronClassName ?? (isRTL ? "left-4" : "right-4")}`}
         style={{ color: icon ? "#7A8AA0" : "inherit" }}
       />
     </div>
@@ -192,7 +197,7 @@ function SearchableSelect({
 
       <ChevronDown
         size={18}
-        className={`pointer-events-none absolute top-1/2 -translate-y-1/2 transition-transform duration-150 ease-out ${open ? "rotate-180" : ""} ${chevronClassName ?? (isRTL ? "right-4" : "left-4")}`}
+        className={`pointer-events-none absolute top-1/2 -translate-y-1/2 transition-transform duration-150 ease-out ${open ? "rotate-180" : ""} ${chevronClassName ?? (isRTL ? "left-4" : "right-4")}`}
         style={{ color: icon ? "#7A8AA0" : "inherit" }}
       />
 

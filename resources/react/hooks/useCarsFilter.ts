@@ -14,8 +14,9 @@ export function useCarsFilter() {
     const categoryId = searchParams.get("category_id");
     const year = searchParams.get("year");
     const q = searchParams.get("q");
+    const sort = searchParams.get("sort");
 
-    if (!brands && !type && !categoryId && !year && !q) {
+    if (!brands && !type && !categoryId && !year && !q && !sort) {
       return DEFAULT_FILTER_VALUES;
     }
 
@@ -26,6 +27,7 @@ export function useCarsFilter() {
       categoryId: categoryId ? Number(categoryId) : null,
       year: year ?? "",
       search: q ?? "",
+      sort: (sort as IFilterValues["sort"]) ?? "",
     };
   }, [searchParams]);
 
@@ -60,6 +62,9 @@ export function useCarsFilter() {
     }
     if (filters.search) {
       params.q = filters.search;
+    }
+    if (filters.sort) {
+      params.sort = filters.sort;
     }
     if (offerId) {
       params.offer_id = Number(offerId);

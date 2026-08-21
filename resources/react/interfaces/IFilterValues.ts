@@ -1,3 +1,5 @@
+export type SortValue = "" | "price_asc" | "price_desc" | "year_desc" | "year_asc";
+
 export interface IFilterValues {
   brandId: number | null;
   type: string;
@@ -9,6 +11,7 @@ export interface IFilterValues {
   transmission: string;
   fuelType: string;
   search: string;
+  sort: SortValue;
 }
 
 export const DEFAULT_FILTER_VALUES: IFilterValues = {
@@ -22,4 +25,5 @@ export const DEFAULT_FILTER_VALUES: IFilterValues = {
   transmission: "all",
   fuelType: "all",
   search: "",
+  sort: "",
 };

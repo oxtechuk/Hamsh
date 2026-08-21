@@ -4,15 +4,13 @@ import type { ITopBarProps } from "../interfaces/ITopBar";
 import { useSettingsStore } from "../store/settings.store";
 
 export default function TopBar({
-  phone: propPhone,
-  email: propEmail,
   location,
   onLanguageToggle,
 }: ITopBarProps) {
   const { t, i18n } = useTranslation();
   const settings = useSettingsStore((s) => s.settings);
-  const phone = settings?.contact?.phone || propPhone;
-  const email = settings?.contact?.email || propEmail;
+  const phone = settings?.contact?.phone;
+  const email = settings?.contact?.email;
 
   return (
     <div className="hidden md:block fixed top-0 left-0 right-0 z-50 w-full bg-[#1F0808] text-white text-xs sm:text-sm">
@@ -36,15 +34,19 @@ export default function TopBar({
 
           {/* Right Side */}
           <div className="flex items-center gap-3 sm:gap-6 order-first sm:order-none" dir={i18n.dir()}>
-            <span className="flex items-center gap-1.5 sm:gap-3 whitespace-nowrap min-w-0">
-              <Phone size={14} strokeWidth={2.5} className="shrink-0 sm:size-[18px]" />
-              <span className="truncate max-w-[80px] sm:max-w-none">{phone}</span>
-            </span>
+            {phone && (
+              <span className="flex items-center gap-1.5 sm:gap-3 whitespace-nowrap min-w-0">
+                <Phone size={14} strokeWidth={2.5} className="shrink-0 sm:size-[18px]" />
+                <span className="truncate max-w-[80px] sm:max-w-none">{phone}</span>
+              </span>
+            )}
 
-            <span className="flex items-center gap-1.5 sm:gap-3 whitespace-nowrap min-w-0">
-              <Mail size={14} strokeWidth={2.5} className="shrink-0 sm:size-[18px]" />
-              <span className="truncate max-w-[80px] sm:max-w-none">{email}</span>
-            </span>
+            {email && (
+              <span className="flex items-center gap-1.5 sm:gap-3 whitespace-nowrap min-w-0">
+                <Mail size={14} strokeWidth={2.5} className="shrink-0 sm:size-[18px]" />
+                <span className="truncate max-w-[80px] sm:max-w-none">{email}</span>
+              </span>
+            )}
           </div>
         </div>
       </div>

@@ -38,7 +38,7 @@ export default function RootLayout() {
     { label: t("nav.calculator"), path: "/finance-calculator" },
     { label: t("nav.about"), path: "/about" },
     { label: t("nav.blog"), path: "/blog" },
-    { label: t("nav.orders"), path: "/orders/ordinary" },
+    { label: t("nav.orders"), path: "/orders/special" },
   ];
 
   return (
@@ -51,8 +51,6 @@ export default function RootLayout() {
       />
 
       <TopBar
-        phone={t("topbar.phoneValue")}
-        email={t("topbar.emailValue")}
         location={t("topbar.locationValue")}
         onLanguageToggle={() => setLanguage(language === "en" ? "ar" : "en")}
       />
@@ -99,8 +97,6 @@ export default function RootLayout() {
             url: "https://www.instagram.com",
           },
         ]}
-        phone={t("rootLayout.phone")}
-        email={t("rootLayout.email")}
         address={t("rootLayout.address")}
         copyright={t("rootLayout.copyright")}
       />

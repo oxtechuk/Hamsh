@@ -5,6 +5,7 @@ import { useSearchParams } from "react-router-dom";
 import BlogsPageHero from "../components/blogs/BlogsPageHero";
 import FeaturedBlogsSection from "../components/blogs/FeaturedBlogsSection";
 import LatestArticlesSection from "../components/blogs/LatestArticlesSection";
+import BlogsPageSkeleton from "../components/BlogsPageSkeleton";
 import { getBlogs } from "../services/api";
 import { useLanguageStore } from "../store/language.store";
 import { postToCardProps } from "../utils/blog";
@@ -30,6 +31,7 @@ export default function BlogsPage() {
         fetchNextPage,
         hasNextPage,
         isFetchingNextPage,
+        isPending,
     } = useInfiniteQuery({
         placeholderData: keepPreviousData,
         queryKey: ["blogs", language, categoryId ?? "all"],
@@ -85,6 +87,10 @@ export default function BlogsPage() {
     const featuredArticle = featuredPosts[0];
     const relatedArticles = featuredPosts.slice(1, 5);
 
+    if (isPending) {
+        return <BlogsPageSkeleton />;
+    }
+
     return (
         <>
             <BlogsPageHero
@@ -103,14 +109,14 @@ export default function BlogsPage() {
                 />
             )}
 
-            {apiArticles.length > 0 && (
+            {/* {apiArticles.length > 0 && (
                 <LatestArticlesSection
                     articles={apiArticles}
                     hasMore={hasNextPage}
                     onLoadMore={handleLoadMore}
                     loadMoreText={t("blogPage.loadMore")}
                 />
-            )}
+            )} */}
         </>
     );
 }

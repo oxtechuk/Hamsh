@@ -4,8 +4,6 @@
         "phone": "Phone",
         "email": "Email",
         "location": "Location",
-        "phoneValue": "540-907-0453",
-        "emailValue": "oxtech.uk@gmail.com",
         "locationValue": "Ajman 5"
     },
     "hero": {
@@ -91,10 +89,29 @@
     "carsPage": {
         "filters": "Filters",
         "search": {
-            "placeholder": "Search for a car..."
+            "title": "Search for Your Ideal Car",
+            "placeholder": "Search by name, brand, model, or specifications...",
+            "button": "Search",
+            "searching": "Searching...",
+            "reset": "Reset",
+            "brandLabel": "Brand",
+            "brandPlaceholder": "All Brands",
+            "typeLabel": "Car Type",
+            "typePlaceholder": "All Types",
+            "categoryLabel": "Car Category",
+            "categoryPlaceholder": "All Categories",
+            "yearLabel": "Model Year",
+            "yearPlaceholder": "All Models"
         },
         "sort": {
-            "label": "Sort By"
+            "label": "Sort By",
+            "options": {
+                "latest": "Newest",
+                "priceAsc": "Price: Low to High",
+                "priceDesc": "Price: High to Low",
+                "yearDesc": "Year: Newest",
+                "yearAsc": "Year: Oldest"
+            }
         }
     },
     "allCarsHero": {
@@ -167,8 +184,6 @@
                 "to": "/blog"
             }
         ],
-        "phone": "056 9988 998",
-        "email": "Tese@test.com",
         "address": "Riyadh, Saudi Arabia",
         "copyright": "All rights reserved, Qimmah Najd 2026 ©"
     },
@@ -200,6 +215,7 @@
         "description": "We have brought together a selection of the world's leading car manufacturers, so you can choose a name you trust.",
         "buttonText": "View All",
         "searchPlaceholder": "Enter brand name...",
+        "all": "All",
         "categories": [
             "All",
             "Premium",
@@ -346,6 +362,11 @@
         }
     },
     "hero": {
+        "slider": {
+            "prev": "Previous",
+            "next": "Next",
+            "goTo": "Go to slide"
+        },
         "titleBlue": "The Car of a Lifetime Marketplace",
         "titleOrange": "With Financing That Fits You!",
         "description": "We have brought together the latest models and the best financing offers in one place. We give you options that simplify the calculation, plus delivery to your doorstep or anywhere in the Kingdom.",
@@ -609,6 +630,14 @@
             }
         }
     },
+    "homeOffers": {
+        "previous": "Previous Offer",
+        "next": "Next Offer",
+        "goTo": "Go to Offer",
+        "viewOffer": "Discover Offer",
+        "browseCars": "Browse Cars",
+        "discoverOffers": "Discover Offers"
+    },
     "offersPage": {
         "hero": {
             "badge": "Limited-Time Offers",
@@ -647,6 +676,40 @@
         "bentoTitle": "Offer Cars"
     },
     "carDetails": {
+        "modal": {
+            "placeOrder": "Place Order",
+            "title": "Place Order",
+            "stepperBasicInfo": "Basic Information",
+            "stepperFinancialDetails": "Financial Details",
+            "step1Subtitle": "Enter your contact information",
+            "fullNamePlaceholder": "e.g. Mohammed Abdullah",
+            "step2Title": "Financial Details",
+            "step2Subtitle": "This information helps us design the best financing offer",
+            "salaryLabel": "Monthly Salary (SAR)",
+            "salaryPlaceholder": "e.g. 2000",
+            "workSectorLabel": "Work Sector",
+            "workSector": {
+                "government": "Government",
+                "private": "Private",
+                "retired": "Retired",
+                "freelance": "Freelance"
+            },
+            "obligationsLabel": "Monthly Obligations (SAR)",
+            "obligationsPlaceholder": "e.g. 2000",
+            "eligibilityLabel": "Approval Likelihood:",
+            "nextButton": "Next",
+            "backButton": "Back",
+            "submitButton": "Submit Request",
+            "submitting": "Sending...",
+            "successTitle": "Your Request Has Been Received!",
+            "successDescription": "Thank you {{name}}, one of our advisors will contact you within 24 hours to complete your {{carLabel}} request.",
+            "closeButton": "Close",
+            "notes": {
+                "salary": "Salary",
+                "workSector": "Work Sector",
+                "obligations": "Obligations"
+            }
+        },
         "hero": {
             "price": "Cash Price",
             "originalPrice": "Original Price",
@@ -785,8 +848,6 @@
             "breadcrumb": "Contact Us",
             "titlePrefix": "We Are Here For",
             "titleHighlight": "You",
-            "defaultPhone": "800 XXX XXXX",
-            "defaultWhatsapp": "966500000000",
             "defaultAddress": "Riyadh - Al Olaya District - King Fahd Road"
         },
         "contactUs": {

@@ -102,7 +102,7 @@ export function FilterContent({
           onChange={(e) => setFilter("priceMax", Number(e.target.value))}
           className="price-slider h-[4px] w-full cursor-pointer appearance-none rounded-full"
           style={{
-            background: `linear-gradient(to left, var(--brand-secondary-color) 0%, var(--brand-secondary-color) ${
+            background: `linear-gradient(to ${i18n.dir() === "rtl" ? "left" : "right"}, var(--brand-secondary-color) 0%, var(--brand-secondary-color) ${
               (filters.priceMax / MAX_PRICE) * 100
             }%, #E5E7EB ${(filters.priceMax / MAX_PRICE) * 100}%, #E5E7EB 100%)`,
           }}

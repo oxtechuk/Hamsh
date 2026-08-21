@@ -170,6 +170,26 @@ export interface OfferItem {
   [key: string]: unknown;
 }
 
+export interface ActiveOfferCountdown {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+  is_expired: boolean;
+}
+
+export interface ActiveOffer {
+  id: number;
+  title: string;
+  description: string;
+  image: string | null;
+  offer_category: string | null;
+  user_rated_count: number;
+  installment_starts_from: number;
+  ends_at: string;
+  countdown: ActiveOfferCountdown;
+}
+
 export interface HomeStats {
   cars: number;
   brands: number;
@@ -254,4 +274,5 @@ export interface HomePageData {
   filter_brand_types?: FilterCategory[];
   filter_years?: (string | { year: string })[];
   filter_prices?: FilterPrice[];
+  active_offers?: ActiveOffer[];
 }

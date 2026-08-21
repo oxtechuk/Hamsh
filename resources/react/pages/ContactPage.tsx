@@ -6,6 +6,7 @@ import FaqSection from "../components/contact-us/FaqSection";
 import ContactMethodsSection from "../components/contact-us/ContactMethodsSection";
 import ContactForm from "../components/contact-us/ContactForm";
 import ContactPageLayout from "../components/ContactPageLayout";
+import ContactPageSkeleton from "../components/ContactPageSkeleton";
 
 import { useSEO } from "../utils/useSEO";
 import { useContactForm } from "../hooks/useContactForm";
@@ -23,12 +24,12 @@ export default function ContactPage() {
 
   useSEO(t("nav.contact"), t("contactPage.contactUs.description"));
 
-  const { data: faqs = [] } = useQuery({
+  const { data: faqs = [], isPending: isFaqsPending } = useQuery({
     queryKey: ["faqs", language],
     queryFn: getFaqs,
   });
 
-  const { data: aboutData } = useQuery({
+  const { data: aboutData, isPending: isAboutPending } = useQuery({
     queryKey: ["about-page", language],
     queryFn: getAboutPageData,
   });
@@ -40,6 +41,10 @@ export default function ContactPage() {
       name: b.name,
     }));
   }, [aboutData]);
+
+  if (isFaqsPending || isAboutPending) {
+    return <ContactPageSkeleton />;
+  }
 
   return (
     <main className="w-full bg-[var(--background)]">

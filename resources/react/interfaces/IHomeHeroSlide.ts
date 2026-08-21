@@ -3,4 +3,5 @@ export interface IHomeHeroSlide {
   image: string;
   alt?: string;
   detailsTo?: string;
+  buttonText?: string;
 }

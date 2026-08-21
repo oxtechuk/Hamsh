@@ -1,7 +1,5 @@
-import { Send, Phone } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-import { useSettingsStore } from "../../store/settings.store";
 import type { IContactFormProps } from "../../interfaces/IContactFormProps";
 import FormField from "./FormField";
 
@@ -25,11 +23,6 @@ export default function ContactForm({
     onSubmit,
 }: IContactFormProps) {
     const { t, i18n } = useTranslation();
-    const settings = useSettingsStore((state) => state.settings);
-
-    const phone =
-        settings?.contact?.phone ?? t("contactPage.hero.defaultPhone");
-    const phoneHref = `tel:${phone.replace(/[^\d+]/g, "")}`;
 
     return (
         <section

@@ -7,8 +7,8 @@ import ArticleMeta from "../components/blogs/ArticleMeta";
 import BlogArticleContent from "../components/blogs/BlogArticleContent";
 import BlogArticleHeader from "../components/blogs/BlogArticleHeader";
 import BlogDetailsError from "../components/blogs/BlogDetailsError";
-import BlogDetailsLoading from "../components/blogs/BlogDetailsLoading";
 import SummaryQuoteCard from "../components/blogs/SummaryQuoteCard";
+import BlogDetailsPageSkeleton from "../components/BlogDetailsPageSkeleton";
 
 import { getBlogBySlug } from "../services/api";
 import { useLanguageStore } from "../store/language.store";
@@ -48,7 +48,7 @@ export default function BlogDetailsPage() {
     );
 
     if (isLoading) {
-        return <BlogDetailsLoading />;
+        return <BlogDetailsPageSkeleton />;
     }
 
     if (isError || !blog) {

@@ -246,6 +246,7 @@ final class CarApiService
             'price_asc' => $query->orderBy('cash_price'),
             'price_desc' => $query->orderByDesc('cash_price'),
             'year_desc' => $query->orderByDesc('year'),
+            'year_asc' => $query->orderBy('year'),
             default => $query->latest('id'),
         };
     }

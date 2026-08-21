@@ -9,7 +9,7 @@ import { X, Info, Phone, Newspaper, Languages, MapPin, Mail, ShoppingBag } from 
 import LazyImg from "./LazyImg";
 
 const menuLinks = [
-  { labelKey: "nav.orders", to: "/orders", icon: ShoppingBag },
+  { labelKey: "nav.orders", to: "/orders/special", icon: ShoppingBag },
   { labelKey: "nav.about", to: "/about", icon: Info },
   { labelKey: "nav.contact", to: "/contact", icon: Phone },
   { labelKey: "mobileNav.blog", to: "/blog", icon: Newspaper },

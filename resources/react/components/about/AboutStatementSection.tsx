@@ -4,9 +4,9 @@ export default function AboutStatementSection({
     quote,
 }: IAboutStatementSectionProps) {
     return (
-        <section className="w-full bg-[#1A1F2E] py-16 sm:py-20 lg:py-24">
+        <section className="w-full bg-[#1A1F2E] py-10 sm:py-12 lg:py-14">
             <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-                <div className="flex min-h-[150px] items-center justify-center text-center sm:min-h-[150px]">
+                <div className="flex items-center justify-center text-center">
                     <blockquote className="max-w-[820px]">
                         <p
                             className={[

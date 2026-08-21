@@ -15,8 +15,8 @@ export default function ContactMethodsSection() {
   const direction = useLanguageStore((state) => state.direction);
   const settings = useSettingsStore((state) => state.settings);
 
-  const phone = settings?.contact?.phone ?? t("contactPage.hero.defaultPhone");
-  const whatsapp = settings?.contact?.whatsapp ?? t("contactPage.hero.defaultWhatsapp");
+  const phone = settings?.contact?.phone;
+  const whatsapp = settings?.contact?.whatsapp;
   const address = settings?.contact?.address ?? t("contactPage.hero.defaultAddress");
 
   return (
@@ -51,27 +51,33 @@ export default function ContactMethodsSection() {
 
         {/* Contact methods */}
         <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
-          <ContactMethodCard
-            icon={<MapPin size={30} strokeWidth={1.6} />}
-            title={t("contactPage.contactMethods.visitTitle")}
-            description={address}
-          />
+          {address && (
+            <ContactMethodCard
+              icon={<MapPin size={30} strokeWidth={1.6} />}
+              title={t("contactPage.contactMethods.visitTitle")}
+              description={address}
+            />
+          )}
 
-          <ContactMethodCard
-            icon={<Phone size={30} strokeWidth={1.6} />}
-            title={t("contactPage.contactMethods.phoneLabel")}
-            description={`${t("contactPage.contactMethods.hoursLabel")}، ${phone}`}
-            href={`tel:${normalizePhone(phone)}`}
-            transparent
-          />
+          {phone && (
+            <ContactMethodCard
+              icon={<Phone size={30} strokeWidth={1.6} />}
+              title={t("contactPage.contactMethods.phoneLabel")}
+              description={`${t("contactPage.contactMethods.hoursLabel")}، ${phone}`}
+              href={`tel:${normalizePhone(phone)}`}
+              transparent
+            />
+          )}
 
-          <ContactMethodCard
-            icon={<MessageCircle size={30} strokeWidth={1.6} />}
-            title={t("contactPage.contactMethods.whatsappLabel")}
-            description={t("contactPage.contactMethods.whatsappDescription")}
-            href={`https://wa.me/${normalizePhone(whatsapp).replace("+", "")}`}
-            external
-          />
+          {whatsapp && (
+            <ContactMethodCard
+              icon={<MessageCircle size={30} strokeWidth={1.6} />}
+              title={t("contactPage.contactMethods.whatsappLabel")}
+              description={t("contactPage.contactMethods.whatsappDescription")}
+              href={`https://wa.me/${normalizePhone(whatsapp).replace("+", "")}`}
+              external
+            />
+          )}
         </div>
       </div>
     </section>

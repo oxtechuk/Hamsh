@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import BrandCard from "../components/BrandCard";
 import BrandSearchInput from "../components/BrandSearchInput";
-import LoadingSpinner from "../components/LoadingSpinner";
+import BrandsPageSkeleton from "../components/BrandsPageSkeleton";
 import { useSEO } from "../utils/useSEO";
 import { useBrands } from "../hooks/useBrands";
 
@@ -10,7 +10,7 @@ export default function BrandsPage() {
   useSEO(t("pageTitles.brands"), t("brandsSection.description"));
   const { brandCards, search, setSearch, isLoading } = useBrands();
 
-  if (isLoading) return <LoadingSpinner />;
+  if (isLoading) return <BrandsPageSkeleton />;
 
   return (
     <section dir={i18n.dir()} className="w-full py-16">

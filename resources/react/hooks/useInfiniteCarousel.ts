@@ -1,5 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+import type {
+  IUseInfiniteCarouselOptions,
+  IUseInfiniteCarouselReturn,
+} from "../interfaces/IUseInfiniteCarousel";
+
 const GAP = 28;
 
 function getVisible(width: number): number {
@@ -8,33 +13,12 @@ function getVisible(width: number): number {
   return 1;
 }
 
-interface UseInfiniteCarouselOptions<T> {
-  items: T[];
-  autoPlayInterval?: number;
-  isRTL?: boolean;
-  visibleCount?: number;
-}
-
-interface UseInfiniteCarouselReturn<T> {
-  track: T[];
-  containerRef: React.RefObject<HTMLDivElement | null>;
-  cardWidth: number;
-  translateX: number;
-  animated: boolean;
-  canLoop: boolean;
-  isPaused: boolean;
-  setIsPaused: (paused: boolean) => void;
-  next: () => void;
-  prev: () => void;
-  onTransitionEnd: () => void;
-}
-
 export function useInfiniteCarousel<T>({
   items,
   autoPlayInterval = 4000,
   isRTL = false,
   visibleCount,
-}: UseInfiniteCarouselOptions<T>): UseInfiniteCarouselReturn<T> {
+}: IUseInfiniteCarouselOptions<T>): IUseInfiniteCarouselReturn<T> {
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
   const [responsiveVisible, setResponsiveVisible] = useState(() =>
@@ -70,7 +54,7 @@ export function useInfiniteCarousel<T>({
   const cardWidth = Math.floor(
     (effectiveWidth - GAP * (visible - 1)) / visible,
   );
-  const step = cardWidth + (visible > 1 ? GAP : 0);
+  const step = cardWidth + GAP;
 
   const track = useMemo(() => {
     if (n === 0) return [];

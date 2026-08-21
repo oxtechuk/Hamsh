@@ -2,7 +2,7 @@ import { Star } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import SlideArrow from "../SlideArrow";
-import { useInfiniteCarousel } from "../../hooks/useInfiniteCarousel";
+import { useInfiniteCarousel, GAP } from "../../hooks/useInfiniteCarousel";
 
 import type { IAboutTestimonialItem } from "../../interfaces/IAboutTestimonialsSectionProps";
 
@@ -48,16 +48,17 @@ export default function AboutTestimonialsSection({
       onMouseLeave={() => setIsPaused(false)}
       onFocus={() => setIsPaused(true)}
       onBlur={() => setIsPaused(false)}
+      onTouchStart={() => setIsPaused(true)}
     >
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <h2 className="text-[24px] font-bold text-[var(--brand-primary-color)] sm:text-[28px] lg:text-[32px]">
+        <div className="mb-8 flex flex-col gap-4 sm:mb-10 sm:flex-row sm:items-center sm:justify-between">
+          <h2 className="text-[22px] font-bold text-[var(--brand-primary-color)] sm:text-[28px] lg:text-[32px]">
             {title ?? t("aboutPage.testimonials.title")}
           </h2>
 
           {canLoop && (
-            <div dir="ltr" className="flex items-center gap-4">
+            <div dir="ltr" className="flex items-center justify-center gap-4">
               <SlideArrow
                 direction="prev"
                 onClick={isRTL ? next : prev}
@@ -73,10 +74,11 @@ export default function AboutTestimonialsSection({
         </div>
 
         {/* Carousel */}
-        <div ref={containerRef} className="overflow-hidden">
+        <div ref={containerRef} className="w-full overflow-hidden px-6 sm:px-0">
           <div
             className="flex"
             style={{
+              columnGap: `${GAP}px`,
               transform: `translateX(${translateX}px)`,
               transition: animated ? "transform 300ms ease-in-out" : "none",
             }}
@@ -106,18 +108,18 @@ function TestimonialCard({
   const rating = Math.min(Math.max(testimonial.rating ?? 5, 0), 5);
 
   return (
-    <article className="flex min-h-[300px] flex-col bg-white px-7 py-7">
-      <div className="text-start text-[36px] font-serif leading-none text-[var(--brand-primary-color)]">
+    <article className="flex min-h-[260px] flex-col bg-white px-5 py-6 sm:min-h-[300px] sm:px-7 sm:py-7">
+      <div className="text-end text-[30px] font-serif leading-none text-[var(--brand-primary-color)] sm:text-[36px]">
         &ldquo;
       </div>
 
-      <p className="mt-5 flex-1 text-start text-[14px] leading-8 text-[#20283A]">
+      <p className="mt-4 flex-1 text-start text-[13px] leading-7 text-[#20283A] sm:mt-5 sm:text-[14px] sm:leading-8">
         {testimonial.quote}
       </p>
 
       <div className="my-5 h-px w-full bg-[#E5E7EB]" />
 
-      <div className="flex flex-col items-end gap-2">
+      <div className="flex flex-col items-start gap-2">
         <div dir="ltr" className="flex items-center gap-1">
           {Array.from({ length: 5 }).map((_, index) => (
             <Star

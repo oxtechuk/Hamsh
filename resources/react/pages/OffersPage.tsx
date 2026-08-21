@@ -1,9 +1,10 @@
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import CarCard from "../components/CarCard";
 import OffersGridSection from "../components/offers-page/OffersGridSection";
 import OffersPageHero from "../components/offers-page/OffersPageHero";
+import OffersPageSkeleton from "../components/OffersPageSkeleton";
 import { getOffers } from "../services/api";
 import { useLanguageStore } from "../store/language.store";
 import { APP_IMAGES } from "../constants/app-images";
@@ -17,9 +18,10 @@ export default function OffersPage() {
     const language = useLanguageStore((s) => s.language);
     const [page, setPage] = useState(1);
 
-    const { data: offersResponse } = useQuery({
+    const { data: offersResponse, isPending } = useQuery({
         queryKey: ["offers", language, page],
         queryFn: () => getOffers(page, 12),
+        placeholderData: keepPreviousData,
     });
 
     const offers = useMemo(
@@ -43,6 +45,10 @@ export default function OffersPage() {
 
     const currentPage = offersResponse?.meta.current_page ?? page;
     const totalPages = offersResponse?.meta.last_page ?? 1;
+
+    if (isPending) {
+        return <OffersPageSkeleton />;
+    }
 
     return (
         <>

@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\BlogPost;
 use App\Models\Brand;
+use App\Models\BrandType;
 use App\Models\CalculatorBank;
 use App\Models\CalculatorFactor;
 use App\Models\Car;
@@ -16,6 +17,7 @@ use App\Models\Specification;
 use App\Models\Testimonial;
 use App\Observers\BlogPostObserver;
 use App\Observers\BrandObserver;
+use App\Observers\BrandTypeObserver;
 use App\Observers\CalculatorBankObserver;
 use App\Observers\CalculatorFactorObserver;
 use App\Observers\CarCategoryObserver;
@@ -72,6 +74,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Car::observe(CarObserver::class);
         Brand::observe(BrandObserver::class);
+        BrandType::observe(BrandTypeObserver::class);
         BlogPost::observe(BlogPostObserver::class);
         Setting::observe(SettingObserver::class);
         Offer::observe(OfferObserver::class);

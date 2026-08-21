@@ -6,8 +6,6 @@ export interface IFooterProps {
   logoAlt?: string;
   quickLinks: IFooterLink[];
   socialLinks?: ISocialLink[];
-  phone?: string;
-  email?: string;
   address?: string;
   copyright?: string;
 }

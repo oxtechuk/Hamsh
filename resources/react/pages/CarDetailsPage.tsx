@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { useLanguageStore } from "../store/language.store";
 import CarDetailsHero from "../components/car-details/CarDetailsHero";
+import CarDetailsPageSkeleton from "../components/CarDetailsPageSkeleton";
 import { getCarBySlug } from "../services/api/cars.service";
 import { buildTabs, mapRelatedCar } from "../utils/car-mappers";
 import { localize } from "../utils/localize";
@@ -41,11 +42,7 @@ export default function CarDetailsPage() {
   );
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center py-20 text-xl font-bold text-gray-500">
-        {t("carDetails.page.loading")}
-      </div>
-    );
+    return <CarDetailsPageSkeleton />;
   }
 
   if (isError) {

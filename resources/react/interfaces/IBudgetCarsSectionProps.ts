@@ -9,5 +9,6 @@ export interface IBudgetCarsSectionProps {
     cars: ICarCardProps[];
     ranges?: IBudgetRange[];
     activeRange?: string;
+    itemsPerPage?: number;
     onRangeChange?: (value: string) => void;
 }

@@ -25,8 +25,6 @@ export default function Footer({
   logoAlt = "Logo",
   quickLinks,
   socialLinks: propSocialLinks,
-  phone: propPhone,
-  email: propEmail,
   address: propAddress,
   copyright: propCopyright,
 }: IFooterProps) {
@@ -47,15 +45,13 @@ export default function Footer({
 
   const phone =
     settings?.contact?.phone ??
-    settings?.contact?.sales_phone ??
-    propPhone;
+    settings?.contact?.sales_phone;
 
   const whatsapp =
     settings?.contact?.whatsapp ?? "";
 
   const email =
-    settings?.contact?.email ??
-    propEmail;
+    settings?.contact?.email;
 
   const address =
     settings?.contact?.address ??

@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { getCars, getCarsMeta } from "../services/api/cars.service";
 import { filterStaticCars } from "../utils/car-filter-utils";
@@ -51,11 +51,31 @@ export function useAllCars({
     return [defaultAll, ...dynamicCategories];
   }, [carsMeta, t]);
 
-  const { data: carsResponse } = useQuery({
+  const filterBrands = useMemo(
+    () => carsMeta?.filter_brands ?? [],
+    [carsMeta],
+  );
+
+  const filterTypes = useMemo(
+    () =>
+      (carsMeta?.filter_types ?? []).map((type) => ({
+        id: type.id,
+        label: localize(type.name, language),
+      })),
+    [carsMeta, language],
+  );
+
+  const filterYears = useMemo(
+    () => carsMeta?.filter_years ?? [],
+    [carsMeta],
+  );
+
+  const { data: carsResponse, isPending: isCarsPending } = useQuery({
     queryKey: ["cars-data", language, filters, currentPage, offerId],
     queryFn: () => getCars(buildQueryParams()),
     staleTime: 5 * 60 * 1000,
     retry: 1,
+    placeholderData: keepPreviousData,
   });
 
   const allCars = useMemo<ICarCardProps[]>(() => {
@@ -71,5 +91,12 @@ export function useAllCars({
       .filter(Boolean) as ICarCardProps[];
   }, [carsResponse, language, filters]);
 
-  return { heroCategories, allCars };
+  return {
+    heroCategories,
+    allCars,
+    filterBrands,
+    filterTypes,
+    filterYears,
+    isPending: isCarsPending,
+  };
 }

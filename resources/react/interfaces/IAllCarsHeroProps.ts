@@ -1,4 +1,5 @@
 import type { ICarsHeroCategory } from "./ICarsHeroCategory";
+import type { SortValue } from "./IFilterValues";
 
 export interface IAllCarsHeroProps {
   eyebrow?: string;
@@ -10,8 +11,8 @@ export interface IAllCarsHeroProps {
   searchValue: string;
   onSearchChange: (value: string) => void;
   onSearch?: () => void;
-  sortLabel?: string;
-  onSortClick?: () => void;
+  sortValue: SortValue;
+  onSortChange: (value: SortValue) => void;
   filterLabel?: string;
   onFilterClick?: () => void;
   className?: string;

@@ -4,8 +4,6 @@
         "phone": "هاتف",
         "email": "بريد إلكتروني",
         "location": "الموقع",
-        "phoneValue": "540-907-0453",
-        "emailValue": "oxtech.uk@gmail.com",
         "locationValue": "عجمان 5"
     },
     "nav": {
@@ -71,10 +69,29 @@
     "carsPage": {
         "filters": "الفلاتر",
         "search": {
-            "placeholder": "ابحث عن سيارة..."
+            "title": "إبحث عن سيارتك المثالية",
+            "placeholder": "ابحث عن سيارة بالاسم، العلامة التجارية، الموديل، أو المواصفات...",
+            "button": "بحث",
+            "searching": "جاري البحث...",
+            "reset": "إعادة تعيين",
+            "brandLabel": "العلامة التجارية",
+            "brandPlaceholder": "جميع العلامات",
+            "typeLabel": "نوع السيارة",
+            "typePlaceholder": "جميع الأنواع",
+            "categoryLabel": "فئة السيارة",
+            "categoryPlaceholder": "جميع الفئات",
+            "yearLabel": "سنة الصنع",
+            "yearPlaceholder": "جميع الموديلات"
         },
         "sort": {
-            "label": "ترتيب حسب"
+            "label": "ترتيب حسب",
+            "options": {
+                "latest": "الأحدث",
+                "priceAsc": "السعر: من الأقل إلى الأعلى",
+                "priceDesc": "السعر: من الأعلى إلى الأقل",
+                "yearDesc": "سنة الصنع: الأحدث",
+                "yearAsc": "سنة الصنع: الأقدم"
+            }
         }
     },
     "allCarsHero": {
@@ -117,7 +134,7 @@
         }
     },
     "featuredCars": {
-        "titleBlue": "أحدث السيارات واصلة حديثاً",
+        "titleBlue": "الأكثر طلباً",
         "titleOrange": "لك",
         "description": "اكتشف أحدث الموديلات الجاهزة للتمويل الفوري بأقل قسط شهري وبأفضل سعر في المملكة.",
         "buttonText": "تصفح كل السيارات",
@@ -147,8 +164,6 @@
                 "to": "/blog"
             }
         ],
-        "phone": "056 9988 998",
-        "email": "Tese@test.com",
         "address": "الرياض، المملكة العربية السعودية",
         "copyright": "جميع الحقوق محفوظة، قمة نجد 2026 ©"
     },
@@ -180,6 +195,7 @@
         "description": "جمعنا لك نخبة من أكبر شركات السيارات حول العالم، لتختار منها الاسم اللي تثق فيه.",
         "buttonText": "عرض الكل",
         "searchPlaceholder": "اكتب اسم الماركة...",
+        "all": "الكل",
         "categories": [
             "الكل",
             "فارهة",
@@ -326,6 +342,11 @@
         }
     },
     "hero": {
+        "slider": {
+            "prev": "السابق",
+            "next": "التالي",
+            "goTo": "الانتقال إلى العرض"
+        },
         "titleBlue": "سوق سيارة العمر",
         "titleOrange": "وبتمويل على جوّك!",
         "description": "جمعنا لك أحدث الموديلات وأفضل عروض التمويل في مكان واحد. نقدّم لك خيارات تسهّل عليك الحسبة وتوصيل يوصل سيارتك إلى باب بيتك أو في أي مكان بالمملكة.",
@@ -589,6 +610,14 @@
             }
         }
     },
+    "homeOffers": {
+        "previous": "العرض السابق",
+        "next": "العرض التالي",
+        "goTo": "الانتقال إلى العرض",
+        "viewOffer": "اكتشف العرض",
+        "browseCars": "استعرض السيارات",
+        "discoverOffers": "اكتشف العروض"
+    },
     "offersPage": {
         "hero": {
             "badge": "عروض محدودة الوقت",
@@ -627,6 +656,40 @@
         "bentoTitle": "سيارات العرض"
     },
     "carDetails": {
+        "modal": {
+            "placeOrder": "تقديم طلب",
+            "title": "تقديم طلب",
+            "stepperBasicInfo": "البيانات الأساسية",
+            "stepperFinancialDetails": "التفاصيل المالية",
+            "step1Subtitle": "أدخل معلومات التواصل الخاصة بك",
+            "fullNamePlaceholder": "مثال: محمد عبدالله",
+            "step2Title": "التفاصيل المالية",
+            "step2Subtitle": "تساعدنا هذه البيانات في تصميم أفضل عرض تمويلي",
+            "salaryLabel": "الراتب الشهري (ريال)",
+            "salaryPlaceholder": "مثال: 2000",
+            "workSectorLabel": "قطاع العمل",
+            "workSector": {
+                "government": "حكومي",
+                "private": "خاص",
+                "retired": "متقاعد",
+                "freelance": "عمل حر"
+            },
+            "obligationsLabel": "الالتزامات الشهرية (ريال)",
+            "obligationsPlaceholder": "مثال: 2000",
+            "eligibilityLabel": "مؤشر إمكانية القبول:",
+            "nextButton": "التالي",
+            "backButton": "السابق",
+            "submitButton": "إرسال الطلب",
+            "submitting": "جارٍ الإرسال...",
+            "successTitle": "تم استلام طلبك!",
+            "successDescription": "شكراً {{name}}، سيتواصل معك أحد مستشارينا خلال 24 ساعة لاستكمال إجراءات طلب {{carLabel}}.",
+            "closeButton": "إغلاق",
+            "notes": {
+                "salary": "الراتب",
+                "workSector": "قطاع العمل",
+                "obligations": "الالتزامات"
+            }
+        },
         "hero": {
             "price": "السعر النقدي",
             "originalPrice": "السعر الأصلي",
@@ -765,8 +828,6 @@
             "breadcrumb": "تواصل معنا",
             "titlePrefix": "نحن هنا من",
             "titleHighlight": "أجلك",
-            "defaultPhone": "800 XXX XXXX",
-            "defaultWhatsapp": "966500000000",
             "defaultAddress": "الرياض - حي العليا - طريق الملك فهد"
         },
         "contactUs": {

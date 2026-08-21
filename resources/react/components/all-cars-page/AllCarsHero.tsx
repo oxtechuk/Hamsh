@@ -1,6 +1,16 @@
+import { useEffect, useRef, useState } from "react";
 import { Search, SlidersHorizontal, ChevronDown } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { IAllCarsHeroProps } from "../../interfaces/IAllCarsHeroProps";
+import type { SortValue } from "../../interfaces/IFilterValues";
+
+const SORT_OPTIONS: { value: SortValue; labelKey: string }[] = [
+  { value: "", labelKey: "carsPage.sort.options.latest" },
+  { value: "price_asc", labelKey: "carsPage.sort.options.priceAsc" },
+  { value: "price_desc", labelKey: "carsPage.sort.options.priceDesc" },
+  { value: "year_desc", labelKey: "carsPage.sort.options.yearDesc" },
+  { value: "year_asc", labelKey: "carsPage.sort.options.yearAsc" },
+];
 
 export default function AllCarsHero({
   eyebrow,
@@ -15,8 +25,8 @@ export default function AllCarsHero({
   onSearchChange,
   onSearch,
 
-  sortLabel,
-  onSortClick,
+  sortValue,
+  onSortChange,
 
   filterLabel,
   onFilterClick,
@@ -24,11 +34,29 @@ export default function AllCarsHero({
   className = "",
 }: IAllCarsHeroProps) {
   const { t, i18n } = useTranslation();
+  const [sortOpen, setSortOpen] = useState(false);
+  const sortRef = useRef<HTMLDivElement>(null);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     onSearch?.();
   };
+
+  const activeSortOption =
+    SORT_OPTIONS.find((option) => option.value === sortValue) ?? SORT_OPTIONS[0];
+
+  useEffect(() => {
+    if (!sortOpen) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (sortRef.current && !sortRef.current.contains(event.target as Node)) {
+        setSortOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [sortOpen]);
 
   return (
     <section dir={i18n.dir()} className={`w-full bg-[#1A1F2E] ${className}`}>
@@ -117,23 +145,58 @@ export default function AllCarsHero({
             </form>
 
             {/* Sort */}
-            <button
-              type="button"
-              onClick={onSortClick}
-              className={[
-                "flex h-[56px] min-w-[150px]",
-                "items-center justify-center gap-2",
-                "border-t border-[#ECECEC]",
-                "bg-white px-5",
-                "text-[13px] font-medium text-[#303A54]",
-                "transition hover:bg-[#F8F8F8]",
-                "lg:border-s lg:border-t-0",
-              ].join(" ")}
-            >
-              <ChevronDown size={16} strokeWidth={1.7} />
+            <div ref={sortRef} className="relative min-w-[150px]">
+              <button
+                type="button"
+                onClick={() => setSortOpen((open) => !open)}
+                className={[
+                  "flex h-[56px] w-full min-w-[150px]",
+                  "items-center justify-center gap-2",
+                  "border-t border-[#ECECEC]",
+                  "bg-white px-5",
+                  "text-[13px] font-medium text-[#303A54]",
+                  "transition hover:bg-[#F8F8F8]",
+                  "lg:border-s lg:border-t-0",
+                ].join(" ")}
+              >
+                <ChevronDown
+                  size={16}
+                  strokeWidth={1.7}
+                  className={`transition-transform duration-150 ${sortOpen ? "rotate-180" : ""}`}
+                />
 
-              {sortLabel ?? t("carsPage.sort.label")}
-            </button>
+                {t(activeSortOption.labelKey)}
+              </button>
+
+              {sortOpen && (
+                <div
+                  className={[
+                    "absolute top-full z-30 mt-1 w-[220px]",
+                    "border border-[#ECECEC] bg-white shadow-lg",
+                    i18n.dir() === "rtl" ? "start-0" : "end-0",
+                  ].join(" ")}
+                >
+                  {SORT_OPTIONS.map((option) => (
+                    <button
+                      key={option.value || "latest"}
+                      type="button"
+                      onClick={() => {
+                        onSortChange(option.value);
+                        setSortOpen(false);
+                      }}
+                      className={[
+                        "block w-full px-4 py-2.5 text-start text-[13px] transition hover:bg-[#F8F8F8]",
+                        option.value === sortValue
+                          ? "font-bold text-[var(--brand-secondary-color)]"
+                          : "text-[#303A54]",
+                      ].join(" ")}
+                    >
+                      {t(option.labelKey)}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
 
             {/* Filters */}
             <button

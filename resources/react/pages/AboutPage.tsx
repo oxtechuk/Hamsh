@@ -25,6 +25,7 @@ import AboutStatsSection from "../components/about/AboutStatsSection";
 import AboutVisionSection from "../components/about/AboutVisionSection";
 import AboutValuesSection from "../components/about/AboutValuesSection";
 import AboutTestimonialsSection from "../components/about/AboutTestimonialsSection";
+import AboutPageSkeleton from "../components/AboutPageSkeleton";
 
 export default function AboutPage() {
   const { t } = useTranslation();
@@ -34,7 +35,7 @@ export default function AboutPage() {
 
   useSEO(t("nav.about"), t("aboutPage.hero.description"));
 
-  const { data: aboutData } = useQuery<IAboutData>({
+  const { data: aboutData, isPending } = useQuery<IAboutData>({
     queryKey: ["about", language],
     queryFn: getAboutPageData,
   });
@@ -50,7 +51,7 @@ export default function AboutPage() {
       }));
     }
 
-    return apiStats.slice(0, 4).map((stat, index) => ({
+    return apiStats.map((stat, index) => ({
       id: index + 1,
       value: stat.value,
       label: stat.label,
@@ -70,7 +71,7 @@ export default function AboutPage() {
       }));
     }
 
-    return apiTestimonials.slice(0, 3).map((item) => ({
+    return apiTestimonials.map((item) => ({
       id: item.id,
       quote: item.content,
       customerName: item.name,
@@ -90,7 +91,7 @@ export default function AboutPage() {
       }));
     }
 
-    return apiItems.slice(0, 3).map((item, index) => ({
+    return apiItems.map((item, index) => ({
       id: item.title || index,
       title: item.title,
       description: item.description || "",
@@ -106,6 +107,10 @@ export default function AboutPage() {
   const visionTitleHighlight = t("aboutPage.vision.titleHighlight");
   const visionTitleLine2 = t("aboutPage.vision.titleLine2");
   const visionDescription = t("aboutPage.vision.description");
+
+  if (isPending) {
+    return <AboutPageSkeleton />;
+  }
 
   return (
     <main dir={direction} className="w-full bg-[var(--background)]">

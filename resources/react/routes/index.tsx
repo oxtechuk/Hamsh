@@ -1,21 +1,39 @@
+import { lazy, Suspense, type ReactNode } from "react";
 import { createBrowserRouter } from "react-router-dom";
 
 import RootLayout from "../pages/RootLayout";
 import HomePage from "../pages/HomePage";
 import NotFoundPage from "../pages/NotFoundPage";
-import AllCarsPage from "../pages/AllCarsPage";
-import CarDetailsPage from "../pages/CarDetailsPage";
-import ComparePage from "../pages/ComparePage";
-import OffersPage from "../pages/OffersPage";
-import AboutPage from "../pages/AboutPage";
-import BlogsPage from "../pages/BlogsPage";
-import BlogDetailsPage from "../pages/BlogDetailsPage";
-import ContactPage from "../pages/ContactPage";
-import FinanceCalculatorPage from "../pages/FinanceCalculatorPage";
-import BrandsPage from "../pages/BrandsPage";
-import SpecialOrderPage from "../pages/SpecialOrderPage";
-import OrdinaryOrderPage from "../pages/OrdinaryOrderPage";
-import DrivePage from "../pages/DrivePage";
+
+import AllCarsPageSkeleton from "../components/AllCarsPageSkeleton";
+import CarDetailsPageSkeleton from "../components/CarDetailsPageSkeleton";
+import ComparePageSkeleton from "../components/ComparePageSkeleton";
+import OffersPageSkeleton from "../components/OffersPageSkeleton";
+import AboutPageSkeleton from "../components/AboutPageSkeleton";
+import BlogsPageSkeleton from "../components/BlogsPageSkeleton";
+import BlogDetailsPageSkeleton from "../components/BlogDetailsPageSkeleton";
+import ContactPageSkeleton from "../components/ContactPageSkeleton";
+import FinanceCalculatorPageSkeleton from "../components/FinanceCalculatorPageSkeleton";
+import BrandsPageSkeleton from "../components/BrandsPageSkeleton";
+import SpecialOrderPageSkeleton from "../components/SpecialOrderPageSkeleton";
+import DrivePageSkeleton from "../components/DrivePageSkeleton";
+
+const AllCarsPage = lazy(() => import("../pages/AllCarsPage"));
+const CarDetailsPage = lazy(() => import("../pages/CarDetailsPage"));
+const ComparePage = lazy(() => import("../pages/ComparePage"));
+const OffersPage = lazy(() => import("../pages/OffersPage"));
+const AboutPage = lazy(() => import("../pages/AboutPage"));
+const BlogsPage = lazy(() => import("../pages/BlogsPage"));
+const BlogDetailsPage = lazy(() => import("../pages/BlogDetailsPage"));
+const ContactPage = lazy(() => import("../pages/ContactPage"));
+const FinanceCalculatorPage = lazy(() => import("../pages/FinanceCalculatorPage"));
+const BrandsPage = lazy(() => import("../pages/BrandsPage"));
+const SpecialOrderPage = lazy(() => import("../pages/SpecialOrderPage"));
+const DrivePage = lazy(() => import("../pages/DrivePage"));
+
+function withSuspense(element: ReactNode, fallback: ReactNode) {
+  return <Suspense fallback={fallback}>{element}</Suspense>;
+}
 
 export const router = createBrowserRouter(
   [
@@ -28,41 +46,56 @@ export const router = createBrowserRouter(
           index: true,
           Component: HomePage,
         },
-        { path: "/cars", element: <AllCarsPage /> },
-        { path: "/cars/:slug", element: <CarDetailsPage /> },
-        { path: "/compare", element: <ComparePage /> },
-        { path: "/offers", element: <OffersPage /> },
+        {
+          path: "/cars",
+          element: withSuspense(<AllCarsPage />, <AllCarsPageSkeleton />),
+        },
+        {
+          path: "/cars/:slug",
+          element: withSuspense(<CarDetailsPage />, <CarDetailsPageSkeleton />),
+        },
+        {
+          path: "/compare",
+          element: withSuspense(<ComparePage />, <ComparePageSkeleton />),
+        },
+        {
+          path: "/offers",
+          element: withSuspense(<OffersPage />, <OffersPageSkeleton />),
+        },
         {
           path: "/about",
-          element: <AboutPage />,
+          element: withSuspense(<AboutPage />, <AboutPageSkeleton />),
         },
         {
           path: "/blog",
-          element: <BlogsPage />,
+          element: withSuspense(<BlogsPage />, <BlogsPageSkeleton />),
         },
         {
           path: "/blog/:slug",
-          element: <BlogDetailsPage />,
+          element: withSuspense(<BlogDetailsPage />, <BlogDetailsPageSkeleton />),
         },
         {
           path: "/contact",
-          element: <ContactPage />,
+          element: withSuspense(<ContactPage />, <ContactPageSkeleton />),
         },
         {
           path: "/finance-calculator",
-          element: <FinanceCalculatorPage />,
+          element: withSuspense(
+            <FinanceCalculatorPage />,
+            <FinanceCalculatorPageSkeleton />,
+          ),
         },
         {
           path: "/brands",
-          element: <BrandsPage />,
+          element: withSuspense(<BrandsPage />, <BrandsPageSkeleton />),
         },
         {
           path: "/orders/special",
-          element: <SpecialOrderPage />,
+          element: withSuspense(<SpecialOrderPage />, <SpecialOrderPageSkeleton />),
         },
         {
           path: "drive",
-          element: <DrivePage />,
+          element: withSuspense(<DrivePage />, <DrivePageSkeleton />),
         },
         {
           path: "*",

@@ -1,8 +1,11 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import AllCarsHero from "../components/all-cars-page/AllCarsHero";
 import AllCarsSearchBar from "../components/all-cars-page/AllCarsSearchBar";
+import AllCarsFiltersModal from "../components/all-cars-page/AllCarsFiltersModal";
 import CarsResultsGrid from "../components/all-cars-page/CarsResultsGrid";
 import EmptyCarsState from "../components/all-cars-page/EmptyCarsState";
+import AllCarsPageSkeleton from "../components/AllCarsPageSkeleton";
 import { useAllCars } from "../hooks/useAllCars";
 import { useCarsFilter } from "../hooks/useCarsFilter";
 import { useCarsPagination } from "../hooks/useCarsPagination";
@@ -23,7 +26,14 @@ export default function AllCarsPage() {
         handleFilterChange,
     } = useCarsFilter();
 
-    const { heroCategories, allCars } = useAllCars({
+    const {
+        heroCategories,
+        allCars,
+        filterBrands,
+        filterTypes,
+        filterYears,
+        isPending,
+    } = useAllCars({
         filters,
         currentPage,
         offerId,
@@ -37,6 +47,12 @@ export default function AllCarsPage() {
         PAGE_SIZE,
     );
 
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
+
+    if (isPending) {
+        return <AllCarsPageSkeleton />;
+    }
+
     return (
         <main dir={i18n.dir()}>
             <AllCarsHero
@@ -47,7 +63,9 @@ export default function AllCarsPage() {
                 })}
                 categories={heroCategories}
                 activeCategory={
-                    filters.categoryId !== null ? String(filters.categoryId) : "all"
+                    filters.categoryId !== null
+                        ? String(filters.categoryId)
+                        : "all"
                 }
                 onCategoryChange={(value) =>
                     handleFilterChange({
@@ -59,13 +77,15 @@ export default function AllCarsPage() {
                 onSearchChange={(value) =>
                     handleFilterChange({ ...filters, search: value })
                 }
-                sortLabel={t("carsPage.sort.label")}
+                sortValue={filters.sort}
+                onSortChange={(value) =>
+                    handleFilterChange({ ...filters, sort: value })
+                }
                 filterLabel={t("carsPage.filters")}
+                onFilterClick={() => setIsFilterOpen(true)}
             />
-            <section className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
                 <div className="min-w-0 flex-1">
-                    <AllCarsSearchBar resultCount={filteredCars.length} />
-
                     {pagedCars.length > 0 ? (
                         <CarsResultsGrid
                             cars={pagedCars}
@@ -78,6 +98,16 @@ export default function AllCarsPage() {
                     )}
                 </div>
             </section>
+
+            <AllCarsFiltersModal
+                open={isFilterOpen}
+                onClose={() => setIsFilterOpen(false)}
+                filters={filters}
+                onApply={handleFilterChange}
+                brands={filterBrands}
+                types={filterTypes}
+                years={filterYears}
+            />
         </main>
     );
 }
