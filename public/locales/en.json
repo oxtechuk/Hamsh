@@ -1043,6 +1043,18 @@
                 "successToast": "Financing request submitted successfully.",
                 "errorToast": "An error occurred while sending. Please try again.",
                 "banksError": "Failed to load banks."
+            },
+            "acceptance": {
+                "enterSalary": "Please enter your salary and obligations to calculate the acceptance rate.",
+                "excellent": "Excellent — very high chance of approval",
+                "good": "Good — within the allowed banking financing range",
+                "warning": "Borderline — close to the maximum deduction limit",
+                "exceeded": "Exceeds the direct banking limit",
+                "employerSector": "Employer",
+                "title": "Approval Likelihood Indicator:",
+                "dtiLabel": "Deduction Rate:",
+                "exceededWarning": "Obligations exceed the direct banking limit.",
+                "debtOption": "I would like to benefit from the \"financing solutions and debt consolidation option\""
             }
         }
     },
@@ -1079,15 +1091,7 @@
             "salaryPlaceholder": "Enter Salary",
             "obligations": "Monthly Obligations",
             "obligationsPlaceholder": "Enter the Value of Your Monthly Obligations",
-            "nextButton": "Next — Select Car",
-            "cities": [
-                "Riyadh",
-                "Jeddah",
-                "Dammam",
-                "Makkah",
-                "Madinah",
-                "Al Khobar"
-            ]
+            "nextButton": "Next — Select Car"
         },
         "step2": {
             "stepperLabel": "Car Details",
@@ -1128,6 +1132,7 @@
             "years": "Years",
             "months": "Months",
             "month": "Month",
+            "installment": "Installment",
             "submitLead": "Submit Financing Request",
             "submitting": "Sending...",
             "successToast": "Financing request submitted successfully.",
@@ -1146,6 +1151,41 @@
             "whatsapp": "Follow Up on Your Request via WhatsApp",
             "whatsappMessage": "Hello, I submitted a financing request number {{requestNumber}} for car {{carLabel}} and would like to follow up on the request.",
             "backToCars": "Back to Browsing Cars"
+        },
+        "otp": {
+            "title": "Confirm Mobile Number",
+            "subtitle": "Please confirm your mobile number to complete the financing request",
+            "phoneLabel": "Mobile Number",
+            "sending": "Sending code...",
+            "sendButton": "Send Verification Code",
+            "codeLabel": "Enter Verification Code (OTP)",
+            "verifying": "Verifying...",
+            "verifyButton": "Confirm Code and Complete Request",
+            "resendIn": "You can request the code again in",
+            "seconds": "seconds",
+            "resendButton": "Resend Code",
+            "verifyButtonShort": "Confirm Number",
+            "verifiedBadge": "Number Confirmed",
+            "invalidPhone": "Invalid mobile number",
+            "sentSuccess": "Verification code sent to your mobile number",
+            "sendFailed": "Failed to send verification code",
+            "sendError": "An error occurred while sending the verification code",
+            "enterCode": "Please enter the verification code",
+            "verifiedSuccess": "Mobile number confirmed successfully",
+            "invalidCode": "Invalid or expired verification code",
+            "verifyError": "Failed to verify the code, please try again"
+        },
+        "acceptance": {
+            "enterSalary": "Please enter your salary and obligations to calculate the acceptance rate.",
+            "excellent": "Excellent — very high chance of approval",
+            "good": "Good — within the allowed banking financing range",
+            "warning": "Borderline — close to the maximum deduction limit",
+            "exceeded": "Exceeds the direct banking limit",
+            "employerSector": "Employer",
+            "title": "Approval Likelihood Indicator:",
+            "dtiLabel": "Deduction Rate:",
+            "exceededWarning": "Obligations exceed the direct banking limit.",
+            "debtOption": "I would like to benefit from the \"financing solutions and debt consolidation option\""
         },
         "validation": {
             "fillRequired": "Please fill in all required fields."
