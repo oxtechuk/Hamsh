@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="{{ App::getLocale() }}" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('تسجيل دخول المديرين | نوادر نجد') }}</title>
+    <title>{{ __('تسجيل دخول المديرين | هامش') }}</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,7 +24,12 @@
             --success: #10b981;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
 
         body {
             background-color: var(--bg-light);
@@ -39,7 +45,8 @@
             display: flex;
             width: 100vw;
             height: 100vh;
-            flex-direction: row; /* Always left: Image, right: Form */
+            flex-direction: row;
+            /* Always left: Image, right: Form */
         }
 
         /* Image Panel (Left) */
@@ -95,7 +102,7 @@
             padding: 60px 48px;
             overflow-y: auto;
             position: relative;
-            box-shadow: -10px 0 30px rgba(0,0,0,0.02);
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.02);
             border-left: 1px solid #f1f5f9;
         }
 
@@ -187,7 +194,7 @@
             box-shadow: 0 0 0 4px rgba(41, 155, 224, 0.15);
         }
 
-        .form-control:focus ~ i,
+        .form-control:focus~i,
         .input-wrapper:focus-within i {
             color: var(--primary);
         }
@@ -200,7 +207,8 @@
         }
 
         .remember-row input[type="checkbox"] {
-            width: 18px; height: 18px;
+            width: 18px;
+            height: 18px;
             accent-color: var(--primary);
             cursor: pointer;
             border-radius: 4px;
@@ -240,9 +248,17 @@
             transform: translateY(0);
         }
 
-        .btn-login.loading .spinner { display: inline-block; }
-        .btn-login.loading .btn-text { display: none; }
-        .btn-login.loading .btn-icon { display: none; }
+        .btn-login.loading .spinner {
+            display: inline-block;
+        }
+
+        .btn-login.loading .btn-text {
+            display: none;
+        }
+
+        .btn-login.loading .btn-icon {
+            display: none;
+        }
 
         .error-message {
             background: rgba(239, 68, 68, 0.08);
@@ -273,60 +289,88 @@
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         /* Direction-based styles */
-        [dir="rtl"] .input-wrapper i { right: 16px; left: auto; }
-        [dir="rtl"] .form-control { padding: 0 48px 0 16px; text-align: right; }
-        [dir="rtl"] .form-label { text-align: right; }
+        [dir="rtl"] .input-wrapper i {
+            right: 16px;
+            left: auto;
+        }
 
-        [dir="ltr"] .input-wrapper i { left: 16px; right: auto; }
-        [dir="ltr"] .form-control { padding: 0 16px 0 48px; text-align: left; }
-        [dir="ltr"] .form-label { text-align: left; }
+        [dir="rtl"] .form-control {
+            padding: 0 48px 0 16px;
+            text-align: right;
+        }
+
+        [dir="rtl"] .form-label {
+            text-align: right;
+        }
+
+        [dir="ltr"] .input-wrapper i {
+            left: 16px;
+            right: auto;
+        }
+
+        [dir="ltr"] .form-control {
+            padding: 0 16px 0 48px;
+            text-align: left;
+        }
+
+        [dir="ltr"] .form-label {
+            text-align: left;
+        }
 
         /* Responsive */
         @media (max-width: 900px) {
-            .image-panel { display: none; }
-            .form-panel { 
-                width: 100%; 
-                max-width: 500px; 
-                margin: auto; 
-                height: 100vh; 
-                box-shadow: none; 
-                border: none; 
+            .image-panel {
+                display: none;
+            }
+
+            .form-panel {
+                width: 100%;
+                max-width: 500px;
+                margin: auto;
+                height: 100vh;
+                box-shadow: none;
+                border: none;
                 padding: 40px 24px;
             }
         }
     </style>
 </head>
+
 <body>
 
     <div class="login-container">
-        
+
         <!-- Left Panel: Image (Hidden on Mobile) -->
         <div class="image-panel">
             <div class="image-panel-content" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
                 <h2>{{ __('منصة إدارة وتتبع السيارات الأكثر تميزاً') }}</h2>
-                <p>{{ __('تحكم في أسطول سياراتك، تتبع الحجوزات والمبيعات، وقم بإدارة لوحة العمل الخاصة بك بكل سهولة وذكاء.') }}</p>
+                <p>{{ __('تحكم في أسطول سياراتك، تتبع الحجوزات والمبيعات، وقم بإدارة لوحة العمل الخاصة بك بكل سهولة وذكاء.') }}
+                </p>
             </div>
         </div>
 
         @php
             $siteLogo = $globalSettings['site_logo'] ?? null;
-            $logoUrl = !empty($siteLogo) 
+            $logoUrl = !empty($siteLogo)
                 ? (str_starts_with($siteLogo, 'http') ? $siteLogo : \Illuminate\Support\Facades\Storage::disk('public')->url($siteLogo))
                 : asset('images/logo_without_bg.png');
-            $siteNameRaw = $globalSettings['site_name'] ?? 'نوادر نجد';
-            $siteName = is_array($siteNameRaw) ? ($siteNameRaw[app()->getLocale()] ?? 'نوادر نجد') : $siteNameRaw;
+            $siteNameRaw = $globalSettings['site_name'] ?? 'هامش';
+            $siteName = is_array($siteNameRaw) ? ($siteNameRaw[app()->getLocale()] ?? 'هامش') : $siteNameRaw;
         @endphp
 
         <!-- Right Panel: Form Card -->
         <div class="form-panel" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
-            
+
             <div class="form-content-wrapper">
                 <div class="logo-section">
-                    <img src="{{ $logoUrl }}" alt="{{ $siteName }}" style="max-height: 85px; width: auto; filter: drop-shadow(0 4px 12px rgba(41, 155, 224, 0.2));">
+                    <img src="{{ $logoUrl }}" alt="{{ $siteName }}"
+                        style="max-height: 85px; width: auto; filter: drop-shadow(0 4px 12px rgba(41, 155, 224, 0.2));">
                     <div class="logo-badge">
                         <i class="bi bi-shield-check"></i>
                         {{ $siteName }} - {{ __('لوحة التحكم') }}
@@ -352,7 +396,8 @@
                         <label class="form-label">{{ __('اسم المستخدم') }}</label>
                         <div class="input-wrapper">
                             <i class="bi bi-person"></i>
-                            <input type="text" name="username" class="form-control" placeholder="admin" required autofocus>
+                            <input type="text" name="username" class="form-control" placeholder="admin" required
+                                autofocus>
                         </div>
                     </div>
 
@@ -370,15 +415,19 @@
                     </div>
 
                     <button type="submit" class="btn-login" id="loginBtn">
-                        <span class="btn-icon"><i class="bi bi-arrow-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}-short" style="font-size: 24px;"></i></span>
+                        <span class="btn-icon"><i
+                                class="bi bi-arrow-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}-short"
+                                style="font-size: 24px;"></i></span>
                         <span class="btn-text">{{ __('تسجيل الدخول') }}</span>
-                        <span class="spinner" style="display: none; width: 20px; height: 20px; border: 2.5px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.6s linear infinite;"></span>
+                        <span class="spinner"
+                            style="display: none; width: 20px; height: 20px; border: 2.5px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.6s linear infinite;"></span>
                     </button>
                 </form>
             </div>
 
             <div class="footer-text">
-                &copy; {{ date('Y') }} <a href="{{ route('store.home') }}">{{ $siteName }}</a>. {{ __('جميع الحقوق محفوظة.') }}
+                &copy; {{ date('Y') }} <a href="{{ route('store.home') }}">{{ $siteName }}</a>.
+                {{ __('جميع الحقوق محفوظة.') }}
             </div>
 
         </div>
@@ -386,40 +435,41 @@
     </div>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('loginForm');
-        const btn = document.getElementById('loginBtn');
-        const spinner = btn ? btn.querySelector('.spinner') : null;
-        const btnIcon = btn ? btn.querySelector('.btn-icon') : null;
-        const btnText = btn ? btn.querySelector('.btn-text') : null;
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('loginForm');
+            const btn = document.getElementById('loginBtn');
+            const spinner = btn ? btn.querySelector('.spinner') : null;
+            const btnIcon = btn ? btn.querySelector('.btn-icon') : null;
+            const btnText = btn ? btn.querySelector('.btn-text') : null;
 
-        if (form && btn) {
-            form.addEventListener('submit', function () {
-                btn.classList.add('loading');
-                btn.disabled = true;
-                if (spinner) spinner.style.display = 'inline-block';
-                if (btnIcon) btnIcon.style.display = 'none';
-                if (btnText) btnText.style.display = 'none';
-            });
-        }
-
-        // Hide error on input focus
-        const errorMsg = document.getElementById('errorMsg');
-        if (errorMsg) {
-            const inputs = document.querySelectorAll('.form-control');
-            inputs.forEach(function (input) {
-                input.addEventListener('focus', function () {
-                    errorMsg.style.opacity = '0';
-                    errorMsg.style.transform = 'translateY(-10px)';
-                    errorMsg.style.transition = 'all 0.3s ease';
-                    setTimeout(function () {
-                        errorMsg.style.display = 'none';
-                    }, 300);
+            if (form && btn) {
+                form.addEventListener('submit', function () {
+                    btn.classList.add('loading');
+                    btn.disabled = true;
+                    if (spinner) spinner.style.display = 'inline-block';
+                    if (btnIcon) btnIcon.style.display = 'none';
+                    if (btnText) btnText.style.display = 'none';
                 });
-            });
-        }
-    });
+            }
+
+            // Hide error on input focus
+            const errorMsg = document.getElementById('errorMsg');
+            if (errorMsg) {
+                const inputs = document.querySelectorAll('.form-control');
+                inputs.forEach(function (input) {
+                    input.addEventListener('focus', function () {
+                        errorMsg.style.opacity = '0';
+                        errorMsg.style.transform = 'translateY(-10px)';
+                        errorMsg.style.transition = 'all 0.3s ease';
+                        setTimeout(function () {
+                            errorMsg.style.display = 'none';
+                        }, 300);
+                    });
+                });
+            }
+        });
     </script>
 
 </body>
+
 </html>

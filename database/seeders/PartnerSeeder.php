@@ -11,7 +11,7 @@ class PartnerSeeder extends Seeder
     {
         $partners = [
             [
-                'name' => 'نوادر للسيارات',
+                'name' => 'هامش للسيارات',
                 'logo' => 'partners/phgh7BHU6U96Ig0KVeQnLQ9bcvYyiiVWbgzD7U5P.webp',
                 'link' => 'https://www.alinma.com',
                 'sort_order' => 1,

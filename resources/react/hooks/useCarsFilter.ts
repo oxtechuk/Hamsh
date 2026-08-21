@@ -46,7 +46,7 @@ export function useCarsFilter() {
       params.brands = [filters.brandId];
     }
     if (filters.type !== "all") {
-      params.type = Number(filters.type);
+      params.type = filters.type;
     }
     if (filters.categoryId !== null) {
       params.category_id = filters.categoryId;

@@ -3,6 +3,7 @@ import type { IFilterValues } from "./IFilterValues";
 
 export interface IAllCarsFilterType {
   id: number;
+  slug: string;
   label: string;
 }
 

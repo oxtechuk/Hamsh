@@ -2,10 +2,10 @@
 <html lang="en">
 
 <meta charset="utf-8" />
-<title>@yield('title', ' | Nawader  CRM')</title>
+<title>@yield('title', ' | hamsh  CRM')</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<meta content="Nawader  CRM" name="description" />
-<meta content="Nawader " name="author" />
+<meta content="hamsh  CRM" name="description" />
+<meta content="hamsh " name="author" />
 
 <!-- layout setup -->
 <script type="module" src="{{ asset('assets/js/layout-setup.js') }}"></script>

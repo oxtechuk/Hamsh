@@ -12,10 +12,10 @@ class SettingsSeeder extends Seeder
         $settings = [
             // ── Basic ──
             'site_name' => [
-                'ar' => 'نوادر نجد',
-                'en' => 'Nawader Njed',
+                'ar' => 'هامش',
+                'en' => 'hamsh',
             ],
-            'footer_text' => '© 2026 نوادر نجد. جميع الحقوق محفوظة.',
+            'footer_text' => '© 2026 هامش. جميع الحقوق محفوظة.',
             'auto_assign_bookings' => '0',
 
             // ── Appearance ──
@@ -27,17 +27,17 @@ class SettingsSeeder extends Seeder
             'page_loader_image' => null,
 
             // ── Contact ──
-            'contact_email' => 'info@nawadernjed.sa',
+            'contact_email' => 'info@hamsh.sa',
             'contact_phone' => '+966 50 000 0000',
             'contact_whatsapp' => '+966 50 000 0000',
             'contact_address' => 'طريق الملك فهد، الرياض، المملكة العربية السعودية',
 
             // ── Social Media ──
             'social_media' => [
-                ['icon' => 'bi-twitter-x', 'color' => '#000000', 'link' => 'https://x.com/nawader_njed'],
-                ['icon' => 'bi-instagram', 'color' => '#E4405F', 'link' => 'https://instagram.com/nawader_njed'],
-                ['icon' => 'bi-tiktok', 'color' => '#000000', 'link' => 'https://tiktok.com/@nawader_njed'],
-                ['icon' => 'bi-snapchat', 'color' => '#FFFC00', 'link' => 'https://snapchat.com/add/nawader_njed'],
+                ['icon' => 'bi-twitter-x', 'color' => '#000000', 'link' => 'https://x.com/hamsh'],
+                ['icon' => 'bi-instagram', 'color' => '#E4405F', 'link' => 'https://instagram.com/hamsh'],
+                ['icon' => 'bi-tiktok', 'color' => '#000000', 'link' => 'https://tiktok.com/@hamsh'],
+                ['icon' => 'bi-snapchat', 'color' => '#FFFC00', 'link' => 'https://snapchat.com/add/hamsh'],
             ],
 
             // ── Promo Popup ──
@@ -45,7 +45,7 @@ class SettingsSeeder extends Seeder
                 'enabled' => false,
                 'image' => null,
                 'title' => 'عرض خاص لهذا الشهر!',
-                'text' => 'احصل على خصم يصل إلى 15% على جميع السيارات المميزة من نوادر نجد.',
+                'text' => 'احصل على خصم يصل إلى 15% على جميع السيارات المميزة من هامش.',
                 'link' => '/offers',
                 'button_text' => 'تصفح العروض',
             ],
@@ -54,7 +54,7 @@ class SettingsSeeder extends Seeder
             'store_home_hero' => [
                 'title' => [
                     'badge' => ['ar' => '🔥 أفضل العروض', 'en' => '🔥 Best Deals'],
-                    'text' => ['ar' => 'نوادر نجد للسيارات', 'en' => 'Nawader Njed Cars'],
+                    'text' => ['ar' => 'هامش للسيارات', 'en' => 'hamsh Cars'],
                 ],
                 'subtitle' => [
                     'badge' => ['ar' => '🚗 اكتشف الآن', 'en' => '🚗 Discover Now'],
@@ -64,8 +64,8 @@ class SettingsSeeder extends Seeder
                     ],
                 ],
                 'description' => [
-                    'ar' => 'نوادر نجد شريكك الموثوق في عالم السيارات. نوفر لك تشكيلة واسعة من أحدث الماركات العالمية مع ضمانات شاملة وخيارات تمويل مرنة تناسب الجميع.',
-                    'en' => 'Nawader Njed is your trusted partner in the automotive world. We offer a wide range of the latest global brands with comprehensive warranties and flexible financing options.',
+                    'ar' => 'هامش شريكك الموثوق في عالم السيارات. نوفر لك تشكيلة واسعة من أحدث الماركات العالمية مع ضمانات شاملة وخيارات تمويل مرنة تناسب الجميع.',
+                    'en' => 'hamsh is your trusted partner in the automotive world. We offer a wide range of the latest global brands with comprehensive warranties and flexible financing options.',
                 ],
                 'button_1_text' => ['ar' => 'تصفح السيارات', 'en' => 'Browse Cars'],
                 'button_1_link' => '/cars',
@@ -193,14 +193,14 @@ class SettingsSeeder extends Seeder
             'about_sections' => [
                 'hero' => [
                     'badge' => ['ar' => 'من نحن', 'en' => 'About Us'],
-                    'title' => ['ar' => 'نوادر — شريكك الموثوق', 'en' => 'Nawader — Your Trusted Partner'],
+                    'title' => ['ar' => 'هامش — شريكك الموثوق', 'en' => 'hamsh — Your Trusted Partner'],
                     'colored_title' => ['ar' => '', 'en' => ''],
                     'subtitle' => ['ar' => 'نحن أكثر من مجرد معرض سيارات. نحن شريكك الموثوق في رحلة امتلاك السيارة المثالية.', 'en' => 'We are more than just a car showroom. We are your trusted partner in the journey of owning the perfect car.'],
                 ],
                 'story' => [
                     'badge' => ['ar' => '', 'en' => ''],
                     'title' => ['ar' => 'قصتنا', 'en' => 'Our Story'],
-                    'content' => ['ar' => 'تأسست نوادر عام 2016 بهدف تقديم تجربة شراء سيارات مختلفة تجمع بين الجودة والشفافية والخدمة المتميزة. منذ تأسيسنا، نمونا لنصبح واحدة من أبرز أسماء صناعة السيارات في المملكة العربية السعودية، обслуживنا أكثر من 5000 عميل راضٍ.', 'en' => 'Founded in 2016, Nawader was established with the goal of providing a different car buying experience that combines quality, transparency, and exceptional service. Since our founding, we have grown to become one of the most prominent names in the automotive industry in Saudi Arabia, serving over 5,000 satisfied customers.'],
+                    'content' => ['ar' => 'تأسست هامش عام 2016 بهدف تقديم تجربة شراء سيارات مختلفة تجمع بين الجودة والشفافية والخدمة المتميزة. منذ تأسيسنا، نمونا لنصبح واحدة من أبرز أسماء صناعة السيارات في المملكة العربية السعودية، обслуживنا أكثر من 5000 عميل راضٍ.', 'en' => 'Founded in 2016, hamsh was established with the goal of providing a different car buying experience that combines quality, transparency, and exceptional service. Since our founding, we have grown to become one of the most prominent names in the automotive industry in Saudi Arabia, serving over 5,000 satisfied customers.'],
                     'mission_title' => ['ar' => 'مهمتنا', 'en' => 'Our Mission'],
                     'mission_text' => ['ar' => 'تمكين كل عميل من امتلاك سيارة أحلامه من خلال تجربة شراء سلسة وشفافة وعادلة.', 'en' => 'To empower every customer to own their dream car through a seamless, transparent, and fair buying experience.'],
                     'vision_title' => ['ar' => 'رؤيتنا', 'en' => 'Our Vision'],
@@ -215,7 +215,7 @@ class SettingsSeeder extends Seeder
                 ],
                 'dealer' => [
                     'title' => ['ar' => 'كن موزعاً لنا', 'en' => 'Become a Dealer'],
-                    'description' => ['ar' => 'انضم إلى شبكة الموزعين المعتمدين من نوادر واستفد من فرص التعاون المميزة.', 'en' => 'Join Nawader\'s authorized dealer network and benefit from exclusive cooperation opportunities.'],
+                    'description' => ['ar' => 'انضم إلى شبكة الموزعين المعتمدين من هامش واستفد من فرص التعاون المميزة.', 'en' => 'Join hamsh\'s authorized dealer network and benefit from exclusive cooperation opportunities.'],
                     'partner_button_text' => ['ar' => 'تواصل للشراكة', 'en' => 'Contact for Partnership'],
                     'partner_button_link' => 'https://wa.me/966500000000',
                     'contact_button_text' => ['ar' => 'تواصل معنا', 'en' => 'Contact Us'],
@@ -316,9 +316,9 @@ class SettingsSeeder extends Seeder
             ],
 
             // ── SEO ──
-            'meta_title' => 'نوادر — بيع وشراء السيارات في المملكة العربية السعودية',
-            'meta_description' => 'نوادر أكبر معرض سيارات في المملكة العربية السعودية. تشكيلة واسعة من السيارات الجديدة والمستعملة بأفضل الأسعار وخيارات تمويل مرنة.',
-            'meta_keywords' => 'سيارات, بيع سيارات, شراء سيارات, سيارات مستعملة, سيارات جديدة, تمويل سيارات, نوادر, السعودية',
+            'meta_title' => 'هامش — بيع وشراء السيارات في المملكة العربية السعودية',
+            'meta_description' => 'هامش أكبر معرض سيارات في المملكة العربية السعودية. تشكيلة واسعة من السيارات الجديدة والمستعملة بأفضل الأسعار وخيارات تمويل مرنة.',
+            'meta_keywords' => 'سيارات, بيع سيارات, شراء سيارات, سيارات مستعملة, سيارات جديدة, تمويل سيارات, هامش, السعودية',
             'google_analytics_id' => '',
             'meta_pixel_id' => '',
 

@@ -119,7 +119,7 @@ export default function AllCarsFiltersModal({
                     onChange={(value) => setField("type", value || "all")}
                     options={types.map((type) => ({
                       label: type.label,
-                      value: String(type.id),
+                      value: type.slug,
                     }))}
                     className={selectCls}
                   />

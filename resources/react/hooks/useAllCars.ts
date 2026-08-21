@@ -60,6 +60,7 @@ export function useAllCars({
     () =>
       (carsMeta?.filter_types ?? []).map((type) => ({
         id: type.id,
+        slug: type.slug,
         label: localize(type.name, language),
       })),
     [carsMeta, language],

@@ -1,11 +1,8 @@
 {
-  "mcpServers": {
-    "laravel-boost": {
-      "command": "C:\\Users\\Royal\\.config\\herd\\bin\\php84\\php.exe",
-      "args": [
-        "D:\\Projects\\XO\\Nawader\\artisan",
-        "boost:mcp"
-      ]
+    "mcpServers": {
+        "laravel-boost": {
+            "command": "C:\\Users\\Royal\\.config\\herd\\bin\\php84\\php.exe",
+            "args": ["D:\\Projects\\XO\\hamsh\\artisan", "boost:mcp"]
+        }
     }
-  }
 }

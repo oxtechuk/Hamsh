@@ -24,7 +24,7 @@ class FaqSeeder extends Seeder
             ],
             [
                 'question' => ['ar' => 'هل تقدمون ضماناً على السيارات؟', 'en' => 'Do you provide warranties on cars?'],
-                'answer' => ['ar' => 'نعم، جميع السيارات الجديدة مدعومة بالضمان الرسمي من الشركة المصنعة. كما نقدم ضماناً إضافياً من نوادر يغطي المكونات الرئيسية لمدة تصل إلى 3 سنوات.', 'en' => 'Yes, all new cars are backed by the official manufacturer warranty. We also provide an additional warranty from Nawader covering major components for up to 3 years.'],
+                'answer' => ['ar' => 'نعم، جميع السيارات الجديدة مدعومة بالضمان الرسمي من الشركة المصنعة. كما نقدم ضماناً إضافياً من هامش يغطي المكونات الرئيسية لمدة تصل إلى 3 سنوات.', 'en' => 'Yes, all new cars are backed by the official manufacturer warranty. We also provide an additional warranty from hamsh covering major components for up to 3 years.'],
                 'is_visible' => true,
                 'sort_order' => 3,
             ],

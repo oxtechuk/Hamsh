@@ -73,13 +73,6 @@ export default function RootLayout() {
         <Footer
         logoSrc={getImageUrl(settings?.logo ?? null) || APP_IMAGES.LOGO}
         logoAlt={t("rootLayout.logoAlt")}
-        quickLinks={[
-          { label: t("rootLayout.quickLinks.0.label"), to: t("rootLayout.quickLinks.0.to") },
-          { label: t("rootLayout.quickLinks.1.label"), to: t("rootLayout.quickLinks.1.to") },
-          { label: t("rootLayout.quickLinks.2.label"), to: t("rootLayout.quickLinks.2.to") },
-          { label: t("rootLayout.quickLinks.3.label"), to: t("rootLayout.quickLinks.3.to") },
-          { label: t("rootLayout.quickLinks.4.label"), to: t("rootLayout.quickLinks.4.to") },
-        ]}
         socialLinks={[
           {
             name: "TikTok",

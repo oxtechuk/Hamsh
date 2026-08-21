@@ -2,7 +2,7 @@ export interface ICarsQueryParams {
   page?: number;
   per_page?: number;
   brands?: number[];
-  type?: number;
+  type?: string;
   category_id?: number;
   year?: string;
   min_price?: number;

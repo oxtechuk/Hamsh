@@ -161,7 +161,7 @@
         "noCars": "No cars match the selected filters"
     },
     "rootLayout": {
-        "logoAlt": "Qimmah Najd Cars",
+        "logoAlt": "Hamsh Cars",
         "quickLinks": [
             {
                 "label": "Home",
@@ -185,7 +185,7 @@
             }
         ],
         "address": "Riyadh, Saudi Arabia",
-        "copyright": "All rights reserved, Qimmah Najd 2026 ©"
+        "copyright": "All rights reserved, Hamsh 2026 ©"
     },
     "footer": {
         "followUs": "Follow Us",
@@ -202,12 +202,26 @@
         "termsAndConditions": "Terms and Conditions",
         "servicesTitle": "Services",
         "companyTitle": "Company",
+        "carsTitle": "Cars",
+        "brandTitle": "Hamsh Trading",
         "companyDescription": "Your leading destination for luxury and family cars in Saudi Arabia. We offer the best brands at the best prices with the easiest financing solutions.",
         "services": {
             "carFinance": "Car Financing",
             "cashPurchase": "Cash Purchase",
             "carReservation": "Car Reservation",
             "customRequest": "Custom Request"
+        },
+        "company": {
+            "about": "About Hamsh",
+            "blog": "Blog",
+            "contact": "Contact Us"
+        },
+        "cars": {
+            "luxurySuv": "Luxury SUV",
+            "sedan": "Sedan",
+            "sport": "Sport",
+            "family": "Family",
+            "pickup": "Pickup"
         }
     },
     "brandsSection": {
@@ -416,7 +430,7 @@
         "readMore": "Read More",
         "hero": {
             "badge": "Featured Article",
-            "title": "<span class=\"highlight\">Qimmah Najd Cars</span> Blog",
+            "title": "<span class=\"highlight\">Hamsh Cars</span> Blog",
             "description": "Follow the latest automotive news, tips, and exclusive articles.",
             "allCategories": "All",
             "defaultAuthor": "Fahad Al-Qahtani",
@@ -507,8 +521,8 @@
             }
         },
         "intro": {
-            "titleStart": "About Qimmah",
-            "titleHighlight": "Najd",
+            "titleStart": "About",
+            "titleHighlight": "Hamsh",
             "description": "For years, we have been redefining the car-buying experience in Saudi Arabia. We are not an ordinary showroom, but a trusted destination that gives customers the best experience."
         },
         "coreValues": {
@@ -556,13 +570,13 @@
             }
         ],
         "whyChooseUs": {
-            "title": "Why Choose Qimmah",
-            "title1": "Najd?",
+            "title": "Why Choose",
+            "title1": "Hamsh?",
             "description": "We offer an exceptional car-buying experience built on trust, quality, and outstanding service."
         },
         "gallery": {
             "title": "Photos and Videos from Our Showroom",
-            "logoAlt": "Qimmah Najd Logo"
+            "logoAlt": "Hamsh Logo"
         },
         "partners": {
             "eyebrow": "Trusted by Leading Brands",
@@ -641,7 +655,7 @@
     "offersPage": {
         "hero": {
             "badge": "Limited-Time Offers",
-            "title": "Qimmah Najd's Exclusive Eid Offer",
+            "title": "Hamsh's Exclusive Eid Offer",
             "description": "We offer you a selected range of top cars with financing solutions and direct discounts on the latest models for Eid.",
             "primaryButton": "Discover the Offer",
             "secondaryButton": "Finance Calculator",
@@ -900,19 +914,19 @@
             "buttonText": "Ask Us Now",
             "items": [
                 {
-                    "question": "How Can I Apply for Car Financing Through Qimmah Najd Cars?",
+                    "question": "How Can I Apply for Car Financing Through Hamsh Cars?",
                     "answer": "Applying for financing is quick and easy. Start by completing the financing form on the website or contact us via WhatsApp. The application usually requires a national ID, salary statement, and bank statement for the last 3 months. Applications are reviewed within 24–48 business hours."
                 },
                 {
-                    "question": "How Can I Apply for Car Financing Through Qimmah Najd Cars?",
+                    "question": "How Can I Apply for Car Financing Through Hamsh Cars?",
                     "answer": "You can select the suitable car and submit a financing request directly, and our team will contact you to complete the required information."
                 },
                 {
-                    "question": "How Can I Apply for Car Financing Through Qimmah Najd Cars?",
+                    "question": "How Can I Apply for Car Financing Through Hamsh Cars?",
                     "answer": "Yes, we provide multiple financing solutions based on your credit status and suitable monthly budget."
                 },
                 {
-                    "question": "How Can I Apply for Car Financing Through Qimmah Najd Cars?",
+                    "question": "How Can I Apply for Car Financing Through Hamsh Cars?",
                     "answer": "After financing approval, reservation and delivery procedures are coordinated according to the available city."
                 }
             ]
@@ -990,7 +1004,7 @@
                 "nextButton": "Continue to the Next Step",
                 "consentPrefix": "I Agree to",
                 "consentLink": "Privacy Policy",
-                "consentSuffix": "Allow the Qimmah Najd team to contact me regarding the financing request.",
+                "consentSuffix": "Allow the Hamsh team to contact me regarding the financing request.",
                 "charCount": "Character"
             },
             "step2": {

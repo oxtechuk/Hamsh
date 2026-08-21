@@ -20,8 +20,8 @@ return [
     'allowed_methods' => ['*'],
 
     'allowed_origins' => [
-        'https://nawadernajd.com',
-        'https://www.nawadernajd.com',
+        'https://hamshnajd.com',
+        'https://www.hamshnajd.com',
         'http://localhost:3000',
         'http://localhost:5173',
         'http://localhost',
@@ -31,7 +31,7 @@ return [
     ],
 
     'allowed_origins_patterns' => [
-        '#^https?://.*\.nawadernajd\.com$#',
+        '#^https?://.*\.hamshnajd\.com$#',
         '#^https?://.*\.oxtech\.uk$#',
     ],
 

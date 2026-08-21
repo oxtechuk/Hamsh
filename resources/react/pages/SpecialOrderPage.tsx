@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 import SpecialOrderHeader from "../components/special-order/SpecialOrderHeader";
@@ -24,6 +25,10 @@ export default function SpecialOrderPage() {
         setCarField,
         handleSubmit,
     } = useSpecialOrderForm();
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [step, done]);
 
     return (
         <main
