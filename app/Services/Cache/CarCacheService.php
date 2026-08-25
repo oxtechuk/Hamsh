@@ -14,7 +14,9 @@ class CarCacheService extends BaseCacheService
 {
     public function rememberCarFilters(): array
     {
-        $result = $this->remember('cars.filters', function () {
+        $locale = app()->getLocale();
+
+        $result = $this->remember("cars.filters.{$locale}", function () {
             $brands = Brand::whereHas('cars', fn ($q) => $q->where('is_active', true))
                 ->withCount(['cars' => fn ($q) => $q->where('is_active', true)])
                 ->orderBy('name')
@@ -57,7 +59,7 @@ class CarCacheService extends BaseCacheService
                 ->values()
                 ->all();
 
-            $horsepowers = $activeCars->pluck('horsepower')->filter();
+            $horsepowers = $activeCars->map(fn ($car) => $car->horsepower)->filter();
             $hpBrackets = [
                 ['min' => 0, 'max' => 150],
                 ['min' => 151, 'max' => 250],
@@ -86,7 +88,6 @@ class CarCacheService extends BaseCacheService
             return compact('brands', 'years', 'types', 'categories', 'brandTypes', 'prices', 'fuels', 'horsepowerBrackets', 'highlightCounts');
         }, self::TTL_LONG);
 
-        $locale = app()->getLocale();
         $result['highlights'] = collect(Car::HIGHLIGHT_OPTIONS)->map(fn (array $labels, string $value): array => [
             'value' => $value,
             'label' => $labels[$locale] ?? $labels['en'],
@@ -98,14 +99,14 @@ class CarCacheService extends BaseCacheService
 
     public function rememberSpecialOrderOptions(): array
     {
-        return $this->remember('cars.special_order_options', function () {
+        $locale = app()->getLocale();
+
+        return $this->remember("cars.special_order_options.{$locale}", function () use ($locale) {
             $rows = DB::table('cars')
                 ->join('brands', 'brands.id', '=', 'cars.brand_id')
                 ->where('cars.is_active', true)
                 ->select('brands.id as brand_id', 'brands.name as brand_name', 'cars.model', 'cars.year', 'cars.color', 'cars.colors')
                 ->get();
-
-            $locale = app()->getLocale();
 
             $brands = [];
             $models = [];
@@ -153,9 +154,24 @@ class CarCacheService extends BaseCacheService
         }, self::TTL_LONG);
     }
 
+    public function rememberCarHpMap(): array
+    {
+        return $this->remember('cars.hp_map', function () {
+            return Car::where('is_active', true)
+                ->get(['id', 'specs'])
+                ->pluck('horsepower', 'id')
+                ->filter()
+                ->all();
+        }, self::TTL_LONG);
+    }
+
     public function forgetCars(): void
     {
-        Cache::forget('cars.filters');
-        Cache::forget('cars.special_order_options');
+        Cache::forget('cars.filters.ar');
+        Cache::forget('cars.filters.en');
+        Cache::forget('cars.special_order_options.ar');
+        Cache::forget('cars.special_order_options.en');
+        Cache::forget('cars.hp_map');
     }
+}
 }

@@ -17,7 +17,8 @@ class HomeCacheService extends BaseCacheService
 {
     public function rememberHomeData(): array
     {
-        $result = $this->remember('home.data', function () {
+        $locale = app()->getLocale();
+        $result = $this->remember("home.data.{$locale}", function () {
             $featuredCars = Car::with(['brand', 'images'])
                 ->where('is_featured', true)
                 ->where('is_active', true)
@@ -152,6 +153,7 @@ class HomeCacheService extends BaseCacheService
 
     public function forgetHome(): void
     {
-        Cache::forget('home.data');
+        Cache::forget('home.data.ar');
+        Cache::forget('home.data.en');
     }
 }

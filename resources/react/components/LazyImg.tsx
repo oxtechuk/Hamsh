@@ -15,22 +15,26 @@ export default function LazyImg(props: LazyImgProps) {
   const imgRef = useRef<HTMLImageElement>(null);
   const [loaded, setLoaded] = useState(false);
   const [failed, setFailed] = useState(false);
+  const [activeSrc, setActiveSrc] = useState<string>(eager ? (src as string) : PLACEHOLDER);
 
   useEffect(() => {
-    const el = imgRef.current;
-    if (!el) return;
+    setLoaded(false);
+    setFailed(false);
 
     if (eager) {
-      el.src = src as string;
+      setActiveSrc(src as string);
       return;
     }
+
+    setActiveSrc(PLACEHOLDER);
+    const el = imgRef.current;
+    if (!el) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          const img = el;
-          img.src = src as string;
-          observer.unobserve(img);
+          setActiveSrc(src as string);
+          observer.unobserve(el);
         }
       },
       { rootMargin: "200px" }
@@ -40,33 +44,42 @@ export default function LazyImg(props: LazyImgProps) {
     return () => observer.disconnect();
   }, [src, eager]);
 
+  const isPlaceholder = activeSrc === PLACEHOLDER;
+
   return (
-    <img
-      loading={eager ? "eager" : "lazy"}
-      fetchPriority={eager ? "high" : "auto"}
-      {...rest}
-      ref={imgRef}
-      src={PLACEHOLDER}
-      onLoad={(e) => {
-        setLoaded(true);
-        onLoad?.(e);
-      }}
-      onError={(e) => {
-        if (!failed) {
-          setFailed(true);
-          e.currentTarget.src = FALLBACK_IMAGE;
-        }
-        setLoaded(true);
-        onError?.(e);
-      }}
-      className={className}
-      style={{
-        ...style,
-        objectFit: failed ? "contain" : style?.objectFit,
-        clipPath: loaded ? "inset(0 0 0 0)" : "inset(0 0 100% 0)",
-        transition:
-          "clip-path 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.7s ease-in-out",
-      }}
-    />
+    <div className={`relative overflow-hidden ${className || ""}`}>
+      {/* Skeleton Pulse Overlay */}
+      {!loaded && !failed && (
+        <div className="absolute inset-0 bg-[#E8E7E3] animate-pulse z-0" />
+      )}
+
+      <img
+        loading={eager ? "eager" : "lazy"}
+        fetchPriority={eager ? "high" : "auto"}
+        {...rest}
+        ref={imgRef}
+        src={activeSrc}
+        onLoad={(e) => {
+          if (isPlaceholder) return;
+          setLoaded(true);
+          onLoad?.(e);
+        }}
+        onError={(e) => {
+          if (!failed) {
+            setFailed(true);
+            setActiveSrc(FALLBACK_IMAGE);
+          }
+          setLoaded(true);
+          onError?.(e);
+        }}
+        className={`w-full h-full object-cover relative z-10 transition-opacity duration-300 ${
+          loaded ? "opacity-100" : "opacity-0"
+        }`}
+        style={{
+          ...style,
+          objectFit: failed ? "contain" : style?.objectFit,
+        }}
+      />
+    </div>
   );
 }
