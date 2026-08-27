@@ -141,7 +141,7 @@ export default function CarsShowcaseSection({
                     className="h-full shrink-0"
                     style={{ width: cardWidth }}
                   >
-                    <CarCard {...car} />
+                    <CarCard {...car} eager={sIdx === 0 && cIdx < 4} />
                   </div>
                 ))}
               </div>

@@ -174,4 +174,3 @@ class CarCacheService extends BaseCacheService
         Cache::forget('cars.hp_map');
     }
 }
-}

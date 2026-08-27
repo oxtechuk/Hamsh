@@ -131,7 +131,7 @@ export default function FeaturedCarsSection({
                                     flexShrink: 0,
                                 }}
                             >
-                                <CarCard {...car} />
+                                <CarCard {...car} eager={i < 4} />
                             </div>
                         ))}
                     </div>

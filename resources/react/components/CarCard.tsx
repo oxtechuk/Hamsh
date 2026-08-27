@@ -28,6 +28,7 @@ export default function CarCard({
     reserveText,
     badgeText,
     badgeColor,
+    eager,
 }: ICarCardProps) {
     const { t, i18n } = useTranslation();
     const navigate = useNavigate();
@@ -79,6 +80,7 @@ export default function CarCard({
                     <LazyImg
                         src={image}
                         alt={`${brand} ${name}`}
+                        eager={eager}
                         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
 

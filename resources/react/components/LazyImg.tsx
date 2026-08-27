@@ -11,22 +11,23 @@ interface LazyImgProps extends ImgHTMLAttributes<HTMLImageElement> {
 }
 
 export default function LazyImg(props: LazyImgProps) {
-  const { src, className, style, onLoad, onError, eager = false, ...rest } = props;
+  const { src, className, style, onLoad, onError, eager = false, fetchPriority, ...rest } = props;
   const imgRef = useRef<HTMLImageElement>(null);
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(eager);
   const [failed, setFailed] = useState(false);
   const [activeSrc, setActiveSrc] = useState<string>(eager ? (src as string) : PLACEHOLDER);
 
   useEffect(() => {
-    setLoaded(false);
-    setFailed(false);
-
     if (eager) {
       setActiveSrc(src as string);
+      setLoaded(true);
       return;
     }
 
+    setLoaded(false);
+    setFailed(false);
     setActiveSrc(PLACEHOLDER);
+
     const el = imgRef.current;
     if (!el) return;
 
@@ -37,7 +38,7 @@ export default function LazyImg(props: LazyImgProps) {
           observer.unobserve(el);
         }
       },
-      { rootMargin: "200px" }
+      { rootMargin: "300px" }
     );
 
     observer.observe(el);
@@ -49,13 +50,14 @@ export default function LazyImg(props: LazyImgProps) {
   return (
     <div className={`relative overflow-hidden ${className || ""}`}>
       {/* Skeleton Pulse Overlay */}
-      {!loaded && !failed && (
+      {!eager && !loaded && !failed && (
         <div className="absolute inset-0 bg-[#E8E7E3] animate-pulse z-0" />
       )}
 
       <img
         loading={eager ? "eager" : "lazy"}
-        fetchPriority={eager ? "high" : "auto"}
+        fetchPriority={fetchPriority ?? (eager ? "high" : "auto")}
+        decoding="async"
         {...rest}
         ref={imgRef}
         src={activeSrc}
@@ -72,8 +74,10 @@ export default function LazyImg(props: LazyImgProps) {
           setLoaded(true);
           onError?.(e);
         }}
-        className={`w-full h-full object-cover relative z-10 transition-opacity duration-300 ${
-          loaded ? "opacity-100" : "opacity-0"
+        className={`w-full h-full object-cover relative z-10 ${
+          eager
+            ? "opacity-100"
+            : `transition-opacity duration-300 ${loaded ? "opacity-100" : "opacity-0"}`
         }`}
         style={{
           ...style,

@@ -124,7 +124,7 @@ export default function BudgetCarsSection({
                                         flexShrink: 0,
                                     }}
                                 >
-                                    <CarCard {...car} />
+                                    <CarCard {...car} eager={i < 4} />
                                 </div>
                             ))}
                         </div>

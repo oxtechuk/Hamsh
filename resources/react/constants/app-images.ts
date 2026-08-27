@@ -7,7 +7,18 @@ export function getImageUrl(path: string | null): string {
     if (path.startsWith("http://") || path.startsWith("https://")) {
         return path.replace(/([^:]\/)\//g, "$1");
     }
-    return `${STORAGE_PREFIX}${path}`;
+    const cleanPath = path.replace(/^\/+/, "");
+    if (
+        cleanPath.startsWith("images/") ||
+        cleanPath.startsWith("build/") ||
+        cleanPath.startsWith("assets/")
+    ) {
+        return `${API_ORIGIN}/${cleanPath}`;
+    }
+    if (cleanPath.startsWith("storage/")) {
+        return `${API_ORIGIN}/${cleanPath}`;
+    }
+    return `${STORAGE_PREFIX}${cleanPath}`;
 }
 
 const base = import.meta.env.BASE_URL;
