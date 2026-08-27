@@ -112,21 +112,40 @@ export function mapRelatedCar(
 }
 
 export function buildTabs(car: CarDetails, t: (key: string) => string): ITab[] {
-    return [
-        {
-            label: t("carDetails.specs.tab.features"),
+    const tabs: ITab[] = [];
+
+    if (car.specs && Array.isArray(car.specs) && car.specs.length > 0) {
+        tabs.push({
+            label: t("carDetails.specs.tab.specifications", { defaultValue: "المواصفات التقنية" }),
+            type: "specs",
+            items: car.specs.map((item: any) => ({
+                label: typeof item === "object" ? item.label || item.name || "" : String(item),
+                value: typeof item === "object" ? item.value || "" : "",
+            })),
+        });
+    } else if (car.specifications && car.specifications.length > 0) {
+        tabs.push({
+            label: t("carDetails.specs.tab.specifications", { defaultValue: "المواصفات التقنية" }),
             type: "other",
-            items: car.features_list ?? [],
-        },
-        {
-            label: t("carDetails.specs.tab.specifications"),
+            items: car.specifications as any,
+        });
+    }
+
+    if (car.features_list && car.features_list.length > 0) {
+        tabs.push({
+            label: t("carDetails.specs.tab.features", { defaultValue: "المميزات والتجهيزات" }),
             type: "other",
-            items: car.specifications ?? [],
-        },
-        {
-            label: t("carDetails.specs.tab.security"),
+            items: car.features_list as any,
+        });
+    }
+
+    if (car.safety_features && car.safety_features.length > 0) {
+        tabs.push({
+            label: t("carDetails.specs.tab.security", { defaultValue: "أنظمة الأمان والسلامة" }),
             type: "safety",
-            items: car.safety_features ?? [],
-        },
-    ];
+            items: car.safety_features as any,
+        });
+    }
+
+    return tabs;
 }
