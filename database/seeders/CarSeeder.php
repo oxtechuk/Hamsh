@@ -6,6 +6,9 @@ use App\Models\Brand;
 use App\Models\Car;
 use App\Models\CarCategory;
 use App\Models\CarImage;
+use App\Models\Feature;
+use App\Models\SafetyFeature;
+use App\Models\Specification;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -15,6 +18,12 @@ class CarSeeder extends Seeder
     {
         // Disable foreign key checks to safely refresh cars table
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        DB::table('car_specification')->truncate();
+        DB::table('car_feature')->truncate();
+        DB::table('car_safety_feature')->truncate();
+        Specification::truncate();
+        Feature::truncate();
+        SafetyFeature::truncate();
         CarImage::truncate();
         Car::truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
@@ -579,6 +588,163 @@ class CarSeeder extends Seeder
             ],
         ];
 
+        // Common Specifications definitions
+        $specsPool = [
+            'engine_capacity' => Specification::create([
+                'name' => ['ar' => 'سعة المحرك', 'en' => 'Engine Capacity'],
+                'value' => ['ar' => '2.5 لتر 4 أسطوانات DOHC', 'en' => '2.5L 4-Cylinder DOHC'],
+                'icon' => 'bi-speedometer2',
+            ]),
+            'horsepower' => Specification::create([
+                'name' => ['ar' => 'القوة الحصانية', 'en' => 'Horsepower'],
+                'value' => ['ar' => '188 حصان @ 6000 د/د', 'en' => '188 HP @ 6000 RPM'],
+                'icon' => 'bi-lightning-charge',
+            ]),
+            'torque' => Specification::create([
+                'name' => ['ar' => 'عزم الدوران', 'en' => 'Torque'],
+                'value' => ['ar' => '244 نيوتن.متر', 'en' => '244 Nm'],
+                'icon' => 'bi-gear-wide-connected',
+            ]),
+            'transmission' => Specification::create([
+                'name' => ['ar' => 'ناقل الحركة', 'en' => 'Transmission'],
+                'value' => ['ar' => 'أوتوماتيكي Xtronic CVT تتابعي', 'en' => 'Xtronic CVT Automatic'],
+                'icon' => 'bi-sliders',
+            ]),
+            'drive_system' => Specification::create([
+                'name' => ['ar' => 'نظام الدفع', 'en' => 'Drive Type'],
+                'value' => ['ar' => 'دفع أمامي FWD', 'en' => 'Front-Wheel Drive (FWD)'],
+                'icon' => 'bi-arrow-left-right',
+            ]),
+            'fuel_economy' => Specification::create([
+                'name' => ['ar' => 'اقتصاد الوقود', 'en' => 'Fuel Economy'],
+                'value' => ['ar' => '16.6 كم / لتر (ممتاز+)', 'en' => '16.6 km/L'],
+                'icon' => 'bi-fuel-pump',
+            ]),
+            'fuel_tank' => Specification::create([
+                'name' => ['ar' => 'سعة خزان الوقود', 'en' => 'Fuel Tank Capacity'],
+                'value' => ['ar' => '61 لتر', 'en' => '61 Liters'],
+                'icon' => 'bi-droplet',
+            ]),
+            'seats_count' => Specification::create([
+                'name' => ['ar' => 'عدد المقاعد', 'en' => 'Seating Capacity'],
+                'value' => ['ar' => '5 مقاعد رحبة', 'en' => '5 Seats'],
+                'icon' => 'bi-people',
+            ]),
+            'wheels' => Specification::create([
+                'name' => ['ar' => 'قياس العجلات', 'en' => 'Wheel Size'],
+                'value' => ['ar' => 'جنوط ألمنيوم قياس 17 بوصة', 'en' => '17-inch Alloy Wheels'],
+                'icon' => 'bi-circle',
+            ]),
+            'trunk_capacity' => Specification::create([
+                'name' => ['ar' => 'سعة الصندوق الخلفي', 'en' => 'Cargo Space'],
+                'value' => ['ar' => '436 لتر', 'en' => '436 Liters'],
+                'icon' => 'bi-box-seam',
+            ]),
+        ];
+
+        // Common Features definitions
+        $featuresPool = [
+            'zero_gravity' => Feature::create([
+                'name' => ['ar' => 'مقاعد انعدام الجاذبية', 'en' => 'Zero Gravity Seats'],
+                'value' => ['ar' => 'مقاعد أمامية مستوحاة من أبحاث ناسا لراحة فائقة وتخفيف الإجهاد', 'en' => 'NASA-inspired Zero Gravity Seats for fatigue reduction'],
+                'icon' => 'bi-person-check',
+            ]),
+            'touchscreen' => Feature::create([
+                'name' => ['ar' => 'شاشة لمس 12.3 بوصة', 'en' => '12.3-inch Touchscreen'],
+                'value' => ['ar' => 'نظام NissanConnect المتطور عالي الدقة مع ملاحة سحابية', 'en' => 'Advanced NissanConnect HD Display with Cloud Navigation'],
+                'icon' => 'bi-display',
+            ]),
+            'carplay' => Feature::create([
+                'name' => ['ar' => 'Apple CarPlay و Android Auto', 'en' => 'Apple CarPlay & Android Auto'],
+                'value' => ['ar' => 'اتصال لاسلكي كامل وتزامن للهواتف الذكية وتطبيقات الخرائط والموسيقى', 'en' => 'Wireless connectivity for navigation, calls, and audio apps'],
+                'icon' => 'bi-phone',
+            ]),
+            'remote_start' => Feature::create([
+                'name' => ['ar' => 'تشغيل المحرك عن بعد', 'en' => 'Remote Engine Start'],
+                'value' => ['ar' => 'تشغيل المحرك ونظام التكييف المسبق عن بعد بالمفتاح الذكي', 'en' => 'Remote start with climate control pre-conditioning'],
+                'icon' => 'bi-key',
+            ]),
+            'audio_system' => Feature::create([
+                'name' => ['ar' => 'نظام صوتي رقمي فاخر', 'en' => 'Premium Audio System'],
+                'value' => ['ar' => '6 مكبرات صوت نقية مع معالجة رقمية للصوت وموزع استريو', 'en' => '6 Crystal-clear speakers with digital audio processing'],
+                'icon' => 'bi-music-note-beamed',
+            ]),
+            'climate_control' => Feature::create([
+                'name' => ['ar' => 'تكييف أوتوماتيكي ثنائي', 'en' => 'Dual-Zone Climate Control'],
+                'value' => ['ar' => 'تحكم منفصل بدرجة الحرارة للسائق والراكب مع فتحات تهوية خلفية', 'en' => 'Independent driver & passenger temp control with rear vents'],
+                'icon' => 'bi-wind',
+            ]),
+            'wireless_charger' => Feature::create([
+                'name' => ['ar' => 'شاحن لاسلكي سريع', 'en' => 'Wireless Fast Charger'],
+                'value' => ['ar' => 'منصة شحن لاسلكي مدمجة للهواتف الذكية مع منفذ USB-C إضافي', 'en' => 'Built-in wireless phone charging pad with fast USB-C ports'],
+                'icon' => 'bi-battery-charging',
+            ]),
+            'led_lights' => Feature::create([
+                'name' => ['ar' => 'إضاءة LED متكاملة', 'en' => 'Full LED Lighting'],
+                'value' => ['ar' => 'مصابيح أمامية وخلفية LED مع إضاءة نهارية مميزة وحساس إضاءة تلقائي', 'en' => 'Signature LED headlights and taillights with auto sensor'],
+                'icon' => 'bi-lightbulb',
+            ]),
+            'sunroof' => Feature::create([
+                'name' => ['ar' => 'فتحة سقف كهربائية', 'en' => 'Power Sunroof'],
+                'value' => ['ar' => 'فتحة سقف زجاجية كهربائية بلمسة واحدة مع حاجب شمس مدمج', 'en' => 'One-touch tilt/slide power glass sunroof with sunshade'],
+                'icon' => 'bi-sun',
+            ]),
+        ];
+
+        // Common Safety Features definitions
+        $safetyPool = [
+            'propilot' => SafetyFeature::create([
+                'name' => ['ar' => 'مساعد القيادة ProPILOT Assist', 'en' => 'ProPILOT Assist'],
+                'value' => ['ar' => 'مساعد القيادة الذاتي للمحافظة على المسار والمسافة التفاعلية وتثبيت السرعة', 'en' => 'Intelligent lane-centering and adaptive cruise control system'],
+                'icon' => 'bi-shield-check',
+            ]),
+            'emergency_braking' => SafetyFeature::create([
+                'name' => ['ar' => 'فرامل الطوارئ الذكية AEB', 'en' => 'Intelligent Emergency Braking'],
+                'value' => ['ar' => 'رصد المشاة والمركبات مع الفرملة التلقائية لتفادي الاصطدامات الأمامية', 'en' => 'Forward collision warning with automatic emergency braking and pedestrian detection'],
+                'icon' => 'bi-exclamation-octagon',
+            ]),
+            'blind_spot' => SafetyFeature::create([
+                'name' => ['ar' => 'تنبيه النقطة العمياء BSW', 'en' => 'Blind Spot Warning'],
+                'value' => ['ar' => 'مراقبة حركة المركبات في الزوايا غير المرئية مع تنبيهات ضوئية وصوتية', 'en' => 'Radar sensor alert for vehicles in your blind spots'],
+                'icon' => 'bi-eye',
+            ]),
+            'lane_departure' => SafetyFeature::create([
+                'name' => ['ar' => 'تنبيه مغادرة المسار LDW', 'en' => 'Lane Departure Warning'],
+                'value' => ['ar' => 'تنبيه السائق عند الانحراف غير المقصود عن المسار واهتزاز عجلة القيادة', 'en' => 'Alerts driver if car drifts out of travel lane without turn signal'],
+                'icon' => 'bi-signpost-split',
+            ]),
+            'rear_cross_traffic' => SafetyFeature::create([
+                'name' => ['ar' => 'تنبيه حركة المرور الخلفية RCTA', 'en' => 'Rear Cross Traffic Alert'],
+                'value' => ['ar' => 'استشعار المركبات القادمة من الجانبين عند الرجوع للخلف في المواقف', 'en' => 'Warns of approaching cross traffic when backing out of spaces'],
+                'icon' => 'bi-arrow-left-right',
+            ]),
+            'airbags' => SafetyFeature::create([
+                'name' => ['ar' => 'منظومة 8 وسائد هوائية SRS', 'en' => '8 Advanced SRS Airbags'],
+                'value' => ['ar' => 'وسائد هوائية أمامية وجانبية وستائرية لحماية الرأس والركبة', 'en' => 'Dual-stage front, side-impact, curtain, and knee airbags'],
+                'icon' => 'bi-shield',
+            ]),
+            'rear_camera' => SafetyFeature::create([
+                'name' => ['ar' => 'كاميرا رؤية خلفية مع حساسات', 'en' => 'Rear Camera & Parking Sensors'],
+                'value' => ['ar' => 'كاميرا خلفية عالية الدقة مع خطوط توجيهية ديناميكية وحساسات ركن', 'en' => 'High-resolution rearview camera with dynamic guidelines and rear sensors'],
+                'icon' => 'bi-camera-video',
+            ]),
+            'tpms' => SafetyFeature::create([
+                'name' => ['ar' => 'مراقبة ضغط الإطارات TPMS', 'en' => 'Tire Pressure Monitor'],
+                'value' => ['ar' => 'مراقبة مباشرة لضغط كل إطار مع تنبيه عند انخفاض الضغط', 'en' => 'Individual tire pressure readout with Easy-Fill alert'],
+                'icon' => 'bi-speedometer',
+            ]),
+            'vdc_traction' => SafetyFeature::create([
+                'name' => ['ar' => 'التحكم بالثبات والجر VDC & TCS', 'en' => 'Vehicle Dynamic & Traction Control'],
+                'value' => ['ar' => 'نظام التحكم الديناميكي لمنع الانزلاق وتثبيت السيارة في المنعطفات الحادة', 'en' => 'Maintains directional stability and wheel traction on slippery roads'],
+                'icon' => 'bi-shield-shaded',
+            ]),
+            'hill_assist' => SafetyFeature::create([
+                'name' => ['ar' => 'مساعدة صعود المرتفعات HSA', 'en' => 'Hill Start Assist'],
+                'value' => ['ar' => 'منع رجوع السيارة للخلف عند بدء الحركة على الطرق المائلة والمرتفعات', 'en' => 'Holds brake pressure temporarily when starting on inclines'],
+                'icon' => 'bi-arrow-up-right-circle',
+            ]),
+        ];
+
         foreach ($cars as $carData) {
             $gallery = $carData['gallery'] ?? [];
             unset($carData['gallery']);
@@ -588,6 +754,15 @@ class CarSeeder extends Seeder
             foreach ($gallery as $img) {
                 $car->images()->create($img);
             }
+
+            // Attach rich specifications, features, and safety features
+            $car->specifications()->sync(array_values(array_map(fn ($s) => $s->id, $specsPool)));
+            $car->features_list()->sync(array_values(array_map(fn ($f) => $f->id, $featuresPool)));
+            $car->safety_features()->sync(array_values(array_map(fn ($sf) => $sf->id, $safetyPool)));
         }
+
+        // Clear car caches
+        app(\App\Services\Cache\CarCacheService::class)->forgetCars();
     }
 }
+
