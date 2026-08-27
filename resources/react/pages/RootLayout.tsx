@@ -51,7 +51,7 @@ export default function RootLayout() {
       />
 
       <TopBar
-        location={t("topbar.locationValue")}
+        location={settings?.contact?.address || t("topbar.locationValue")}
         onLanguageToggle={() => setLanguage(language === "en" ? "ar" : "en")}
       />
 

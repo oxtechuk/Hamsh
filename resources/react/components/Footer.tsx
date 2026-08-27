@@ -7,7 +7,7 @@ import type { IFooterProps } from "../interfaces/IFooterProps";
 import { useSettingsStore } from "../store/settings.store";
 import { useLanguageStore } from "../store/language.store";
 import { getSocialIcon } from "../utils/social-icons";
-import { APP_IMAGES } from "../constants/app-images";
+import { APP_IMAGES, getImageUrl } from "../constants/app-images";
 import LazyImg from "./LazyImg";
 
 interface FooterLink {
@@ -28,7 +28,7 @@ export default function Footer({
 
     const settings = useSettingsStore((state) => state.settings);
 
-    const resolvedLogo = APP_IMAGES.LOGO_WHITE;
+    const resolvedLogo = getImageUrl(settings?.logo ?? null) || logoSrc || APP_IMAGES.LOGO_WHITE || APP_IMAGES.LOGO;
 
     const phone = settings?.contact?.phone ?? settings?.contact?.sales_phone;
 
@@ -178,7 +178,7 @@ export default function Footer({
                                 <LazyImg
                                     src={resolvedLogo}
                                     alt={logoAlt}
-                                    className="h-[78px] w-auto max-w-[190px] object-contain sm:h-[86px]"
+                                    className="h-[78px] w-auto max-w-[190px] object-contain sm:h-[86px] brightness-0 invert"
                                 />
                             </NavLink>
 

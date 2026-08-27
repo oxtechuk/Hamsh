@@ -32,7 +32,6 @@ final class BlogApiService
                 ];
             }
 
-
             $featuredPosts = BlogPost::published()
                 ->with('categories', 'employee')
 

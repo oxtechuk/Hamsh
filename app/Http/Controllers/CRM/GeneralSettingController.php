@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Car;
 use App\Models\Offer;
 use App\Models\Setting;
+use App\Services\Cache\BaseCacheService;
+use App\Services\Cache\HomeCacheService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
@@ -444,14 +446,8 @@ class GeneralSettingController extends Controller
         Setting::updateOrCreate(['key' => 'store_booking_steps'], ['value' => $bookingSteps]);
 
         // Invalidate hero-related cache
-        Cache::forget('settings.all');
-        Cache::forget('settings.hero.store_booking_hero');
-        Cache::forget('settings.hero.store_home_hero');
-        Cache::forget('settings.hero.store_hero');
-        Cache::forget('settings.hero.store_offers_hero');
-        Cache::forget('settings.main_offer_id');
-        Cache::forget('settings.hero_slides');
-        Cache::forget('home.data');
+        app(BaseCacheService::class)->forgetSettings();
+        app(HomeCacheService::class)->forgetHome();
 
         return back()->with('success', __('تم تحديث الإعدادات بنجاح'));
     }

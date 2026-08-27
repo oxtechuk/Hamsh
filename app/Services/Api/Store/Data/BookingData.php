@@ -42,7 +42,7 @@ final class BookingData
                 : (float) config('store-api.booking.default_interest_rate', 4.0);
 
             $principal = max(0, $cashPrice - (float) $validated['down_payment']);
-            $totalMonths = (int) ($validated['duration_years']??1) * 12;
+            $totalMonths = (int) ($validated['duration_years'] ?? 1) * 12;
 
             $calculator = new InstallmentCalculator;
             $monthly = $calculator->calculate($principal, $totalMonths, $interestRate);

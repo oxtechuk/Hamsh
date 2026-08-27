@@ -9,6 +9,7 @@ use App\Models\CarImage;
 use App\Models\Feature;
 use App\Models\SafetyFeature;
 use App\Models\Specification;
+use App\Services\Cache\CarCacheService;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -762,7 +763,6 @@ class CarSeeder extends Seeder
         }
 
         // Clear car caches
-        app(\App\Services\Cache\CarCacheService::class)->forgetCars();
+        app(CarCacheService::class)->forgetCars();
     }
 }
-

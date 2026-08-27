@@ -42,6 +42,8 @@ class OfferController extends Controller
             $data['image'] = $request->file('image')->store('offers', 'public');
         }
 
+        $data['user_rated_count'] = isset($data['user_rated_count']) && $data['user_rated_count'] !== null ? (int) $data['user_rated_count'] : 0;
+
         $offer = Offer::create($data);
         $offer->cars()->sync($request->car_ids);
 
@@ -77,6 +79,10 @@ class OfferController extends Controller
                 \Storage::disk('public')->delete($offer->image);
             }
             $data['image'] = $request->file('image')->store('offers', 'public');
+        }
+
+        if (array_key_exists('user_rated_count', $data)) {
+            $data['user_rated_count'] = isset($data['user_rated_count']) && $data['user_rated_count'] !== null ? (int) $data['user_rated_count'] : 0;
         }
 
         $offer->update($data);

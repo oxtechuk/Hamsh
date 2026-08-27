@@ -155,5 +155,8 @@ class HomeCacheService extends BaseCacheService
     {
         Cache::forget('home.data.ar');
         Cache::forget('home.data.en');
+        Cache::forget('home.data');
+        Cache::forget('settings.hero_slides');
+        Cache::forget('settings.all');
     }
 }

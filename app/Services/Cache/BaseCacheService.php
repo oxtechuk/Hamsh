@@ -118,6 +118,12 @@ class BaseCacheService
     public function forgetSettings(): void
     {
         Cache::forget('settings.all');
+        Cache::forget('settings.hero.store_booking_hero');
+        Cache::forget('settings.hero.store_home_hero');
+        Cache::forget('settings.hero.store_hero');
+        Cache::forget('settings.hero.store_offers_hero');
+        Cache::forget('settings.main_offer_id');
+        Cache::forget('settings.hero_slides');
     }
 
     public function flushAll(): void

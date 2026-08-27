@@ -27,7 +27,7 @@ export default function TopBar({
             </button>
 
             <span className="hidden md:inline-flex items-center gap-1.5 sm:gap-3 whitespace-nowrap min-w-0">
-              <span className="truncate max-w-[80px] sm:max-w-none">{location}</span>
+              <span className="truncate max-w-[80px] sm:max-w-none">{location || settings?.contact?.address || t("topbar.locationValue")}</span>
               <MapPin size={14} strokeWidth={2.5} className="shrink-0 sm:size-[18px]" />
             </span>
           </div>

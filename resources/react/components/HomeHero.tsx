@@ -71,7 +71,7 @@ export default function HomeHero({
                                 alt={slide.alt || ""}
                                 eager
                                 className={[
-                                    "absolute inset-0 h-full w-full object-contians",
+                                    "absolute inset-0 h-full w-full object-cover",
                                     "transition-opacity duration-700 ease-in-out",
                                     slideIndex === index
                                         ? "opacity-100"
