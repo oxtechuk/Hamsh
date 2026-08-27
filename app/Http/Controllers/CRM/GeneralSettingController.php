@@ -9,7 +9,7 @@ use App\Models\Setting;
 use App\Services\Cache\BaseCacheService;
 use App\Services\Cache\HomeCacheService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 
 class GeneralSettingController extends Controller
 {
@@ -59,30 +59,26 @@ class GeneralSettingController extends Controller
             $financeStats = json_decode($financeStats, true) ?: [];
         }
 
-        $bookingHeroRaw = $settings['store_booking_hero'] ?? [];
-        $bookingHero = is_array($bookingHeroRaw) ? $bookingHeroRaw : (json_decode((string) $bookingHeroRaw, true) ?: []);
-
-        $bookingStepsRaw = $settings['store_booking_steps'] ?? [];
-        $bookingSteps = is_array($bookingStepsRaw) ? $bookingStepsRaw : (json_decode((string) $bookingStepsRaw, true) ?: []);
-
-        $bookingSectionsRaw = $settings['store_booking_sections'] ?? [];
-        $bookingSections = is_array($bookingSectionsRaw) ? $bookingSectionsRaw : (json_decode((string) $bookingSectionsRaw, true) ?: []);
-
-        $homeHeroRaw = $settings['store_home_hero'] ?? [];
-        $homeHero = is_array($homeHeroRaw) ? $homeHeroRaw : (json_decode((string) $homeHeroRaw, true) ?: []);
-
-        $homeFeaturesRaw = $settings['store_home_features'] ?? [];
-        $homeFeatures = is_array($homeFeaturesRaw) ? $homeFeaturesRaw : (json_decode((string) $homeFeaturesRaw, true) ?: []);
-
         $mainOfferId = $settings['main_offer_id'] ?? null;
-
-        $carsHeroRaw = $settings['store_hero'] ?? [];
-        $carsHero = is_array($carsHeroRaw) ? $carsHeroRaw : (json_decode((string) $carsHeroRaw, true) ?: []);
 
         $offersHeroRaw = $settings['store_offers_hero'] ?? [];
         $offersHero = is_array($offersHeroRaw) ? $offersHeroRaw : (json_decode((string) $offersHeroRaw, true) ?: []);
 
-        return view('crm.settings.general', compact('settings', 'cars', 'offers', 'bentoCars', 'socialMedia', 'homepageStats', 'homepageSections', 'aboutSections', 'aboutStats', 'aboutBranches', 'bookingHero', 'bookingSteps', 'bookingSections', 'homeHero', 'homeFeatures', 'carsHero', 'offersHero', 'financeStats', 'mainOfferId'));
+        return view('crm.settings.general', compact(
+            'settings',
+            'cars',
+            'offers',
+            'bentoCars',
+            'socialMedia',
+            'homepageStats',
+            'homepageSections',
+            'aboutSections',
+            'aboutStats',
+            'aboutBranches',
+            'offersHero',
+            'financeStats',
+            'mainOfferId'
+        ));
     }
 
     public function seo()
@@ -101,19 +97,16 @@ class GeneralSettingController extends Controller
 
     public function update(Request $request)
     {
-        // Whitelist of settings to update
+        // Whitelist of active settings to update
         $keys = [
             'site_name', 'footer_text', 'contact_email', 'contact_phone',
             'contact_whatsapp', 'contact_address', 'bento_cars',
-            'hero_ad_1_link', 'hero_ad_2_link', 'auto_assign_bookings',
-            'page_loader_enabled', 'car_popup_enabled',
+            'auto_assign_bookings', 'car_popup_enabled',
             'twilio_sid', 'twilio_auth_token', 'twilio_whatsapp_number', 'twilio_sms_number',
             'whatsapp_template_new_lead', 'whatsapp_template_status_update',
             'google_analytics_id', 'meta_pixel_id',
-            'homepage_featured',
             'homepage_sections',
             'about_sections',
-            'store_booking_sections',
             'main_offer_id',
             'enable_twilio_otp',
         ];
@@ -123,15 +116,11 @@ class GeneralSettingController extends Controller
             if ($request->has($key)) {
                 Setting::updateOrCreate(['key' => $key], ['value' => $request->get($key)]);
             } elseif (in_array($key, ['twilio_sid', 'twilio_auth_token', 'twilio_whatsapp_number', 'twilio_sms_number', 'whatsapp_template_new_lead', 'whatsapp_template_status_update'])) {
-                // Allow empty values for these keys
                 Setting::updateOrCreate(['key' => $key], ['value' => $request->get($key, '')]);
             }
         }
 
         // Checkbox unchecked cases
-        if (! $request->has('page_loader_enabled')) {
-            Setting::updateOrCreate(['key' => 'page_loader_enabled'], ['value' => '0']);
-        }
         if (! $request->has('enable_twilio_otp')) {
             Setting::updateOrCreate(['key' => 'enable_twilio_otp'], ['value' => '0']);
         }
@@ -152,9 +141,8 @@ class GeneralSettingController extends Controller
             $uploadedFiles = $request->file('about_hero_gallery');
             foreach ($uploadedFiles as $index => $file) {
                 if ($file) {
-                    // Delete old image if exists
-                    if (! empty($existingImages[$index]) && \Storage::disk('public')->exists($existingImages[$index])) {
-                        \Storage::disk('public')->delete($existingImages[$index]);
+                    if (! empty($existingImages[$index]) && Storage::disk('public')->exists($existingImages[$index])) {
+                        Storage::disk('public')->delete($existingImages[$index]);
                     }
                     $newImages[$index] = $file->store('settings/about', 'public');
                 }
@@ -244,8 +232,8 @@ class GeneralSettingController extends Controller
         }
         Setting::updateOrCreate(['key' => 'about_branches'], ['value' => $aboutBranches]);
 
-        // Handle File Uploads (Only if new files are uploaded)
-        $files = ['site_logo', 'site_favicon', 'breadcrumb_bg', 'hero_video', 'hero_ad_1_image', 'hero_ad_2_image', 'page_loader_image', 'default_car_image'];
+        // Handle File Uploads (site_logo, site_favicon, default_car_image)
+        $files = ['site_logo', 'site_favicon', 'default_car_image'];
         foreach ($files as $fileKey) {
             if ($request->hasFile($fileKey)) {
                 $path = $request->file($fileKey)->store('settings', 'public');
@@ -270,14 +258,12 @@ class GeneralSettingController extends Controller
                 // Check if a new file is uploaded for this slide
                 if ($request->hasFile("hero_slides.{$index}.image")) {
                     $path = $request->file("hero_slides.{$index}.image")->store('settings/hero', 'public');
-                    // Delete old image if exists
-                    if ($imagePath && \Storage::disk('public')->exists($imagePath)) {
-                        \Storage::disk('public')->delete($imagePath);
+                    if ($imagePath && Storage::disk('public')->exists($imagePath)) {
+                        Storage::disk('public')->delete($imagePath);
                     }
                     $imagePath = $path;
                 }
 
-                // If we have an image path (either new or existing), we add the slide
                 if ($imagePath) {
                     $newSlides[] = [
                         'image' => $imagePath,
@@ -287,44 +273,19 @@ class GeneralSettingController extends Controller
                 }
             }
 
-            // Clean up deleted slides (files that are on disk but not in the new slides)
+            // Clean up deleted slides
             $newPaths = array_column($newSlides, 'image');
             foreach ($existingSlides as $oldSlide) {
                 $oldPath = $oldSlide['image'] ?? null;
                 if ($oldPath && ! in_array($oldPath, $newPaths)) {
-                    if (\Storage::disk('public')->exists($oldPath)) {
-                        \Storage::disk('public')->delete($oldPath);
+                    if (Storage::disk('public')->exists($oldPath)) {
+                        Storage::disk('public')->delete($oldPath);
                     }
                 }
             }
 
             Setting::updateOrCreate(['key' => 'hero_slides'], ['value' => $newSlides]);
         }
-
-        // Handle Promo Popup
-        $existingPopup = Setting::where('key', 'promo_popup')->first();
-        $existingPopupValue = [];
-        if ($existingPopup && ! empty($existingPopup->value)) {
-            $existingPopupValue = is_array($existingPopup->value) ? $existingPopup->value : (json_decode($existingPopup->value, true) ?: []);
-        }
-
-        $popupImage = $existingPopupValue['image'] ?? null;
-        if ($request->hasFile('popup_image')) {
-            $popupImage = $request->file('popup_image')->store('settings/popup', 'public');
-            if (! empty($existingPopupValue['image']) && \Storage::disk('public')->exists($existingPopupValue['image'])) {
-                \Storage::disk('public')->delete($existingPopupValue['image']);
-            }
-        }
-
-        $popupData = [
-            'enabled' => $request->boolean('popup_enabled', false),
-            'image' => $popupImage,
-            'title' => $request->input('popup_title', ''),
-            'text' => $request->input('popup_text', ''),
-            'link' => $request->input('popup_link', ''),
-            'button_text' => $request->input('popup_button_text', __('تصفح العروض')),
-        ];
-        Setting::updateOrCreate(['key' => 'promo_popup'], ['value' => $popupData]);
 
         // Handle Main Gallery (Multiple Images)
         if ($request->hasFile('main_gallery')) {
@@ -352,73 +313,19 @@ class GeneralSettingController extends Controller
                 }));
                 Setting::updateOrCreate(['key' => 'main_gallery'], ['value' => $galleryPaths]);
 
-                // Optionally delete the physical file
-                if (\Storage::disk('public')->exists($imageToDelete)) {
-                    \Storage::disk('public')->delete($imageToDelete);
+                if (Storage::disk('public')->exists($imageToDelete)) {
+                    Storage::disk('public')->delete($imageToDelete);
                 }
             }
         }
-
-        // Handle Booking Hero
-        $bookingHeroData = $request->input('store_booking_hero', []);
-        if ($request->hasFile('booking_hero_image')) {
-            $existingHero = Setting::where('key', 'store_booking_hero')->first();
-            $oldImage = is_array($existingHero?->value) ? ($existingHero->value['image'] ?? null) : null;
-            if ($oldImage && \Storage::disk('public')->exists($oldImage)) {
-                \Storage::disk('public')->delete($oldImage);
-            }
-            $bookingHeroData['image'] = $request->file('booking_hero_image')->store('settings/booking', 'public');
-        } elseif (! isset($bookingHeroData['image'])) {
-            $existingHero = Setting::where('key', 'store_booking_hero')->first();
-            $bookingHeroData['image'] = is_array($existingHero?->value) ? ($existingHero->value['image'] ?? null) : null;
-        }
-        Setting::updateOrCreate(['key' => 'store_booking_hero'], ['value' => $bookingHeroData]);
-
-        // Handle Home Page Hero
-        $homeHeroData = $request->input('store_home_hero', []);
-        Setting::updateOrCreate(['key' => 'store_home_hero'], ['value' => $homeHeroData]);
-
-        // Handle Home Features
-        $featureIcons = $request->input('home_feature_icon', []);
-        $featureTitlesAr = $request->input('home_feature_title_ar', []);
-        $featureTitlesEn = $request->input('home_feature_title_en', []);
-        $featureDescsAr = $request->input('home_feature_desc_ar', []);
-        $featureDescsEn = $request->input('home_feature_desc_en', []);
-        $homeFeatures = [];
-        foreach ($featureIcons as $idx => $icon) {
-            if (! empty($icon) || ! empty($featureTitlesAr[$idx])) {
-                $homeFeatures[] = [
-                    'icon' => $icon,
-                    'title' => ['ar' => $featureTitlesAr[$idx] ?? '', 'en' => $featureTitlesEn[$idx] ?? ''],
-                    'description' => ['ar' => $featureDescsAr[$idx] ?? '', 'en' => $featureDescsEn[$idx] ?? ''],
-                ];
-            }
-        }
-        Setting::updateOrCreate(['key' => 'store_home_features'], ['value' => $homeFeatures]);
-        Cache::forget('settings.hero.store_home_hero');
-
-        // Handle All Cars Page Hero
-        $carsHeroData = $request->input('store_hero', []);
-        if ($request->hasFile('cars_hero_image')) {
-            $existingCarsHero = Setting::where('key', 'store_hero')->first();
-            $oldCarsHeroImage = is_array($existingCarsHero?->value) ? ($existingCarsHero->value['image'] ?? null) : null;
-            if ($oldCarsHeroImage && \Storage::disk('public')->exists($oldCarsHeroImage)) {
-                \Storage::disk('public')->delete($oldCarsHeroImage);
-            }
-            $carsHeroData['image'] = $request->file('cars_hero_image')->store('settings/cars', 'public');
-        } elseif (! isset($carsHeroData['image'])) {
-            $existingCarsHero = Setting::where('key', 'store_hero')->first();
-            $carsHeroData['image'] = is_array($existingCarsHero?->value) ? ($existingCarsHero->value['image'] ?? null) : null;
-        }
-        Setting::updateOrCreate(['key' => 'store_hero'], ['value' => $carsHeroData]);
 
         // Handle Offers Page Hero
         $offersHeroData = $request->input('store_offers_hero', []);
         if ($request->hasFile('offers_hero_image')) {
             $existingOffersHero = Setting::where('key', 'store_offers_hero')->first();
             $oldOffersHeroImage = is_array($existingOffersHero?->value) ? ($existingOffersHero->value['image'] ?? null) : null;
-            if ($oldOffersHeroImage && \Storage::disk('public')->exists($oldOffersHeroImage)) {
-                \Storage::disk('public')->delete($oldOffersHeroImage);
+            if ($oldOffersHeroImage && Storage::disk('public')->exists($oldOffersHeroImage)) {
+                Storage::disk('public')->delete($oldOffersHeroImage);
             }
             $offersHeroData['image'] = $request->file('offers_hero_image')->store('settings/offers', 'public');
         } elseif (! isset($offersHeroData['image'])) {
@@ -427,25 +334,7 @@ class GeneralSettingController extends Controller
         }
         Setting::updateOrCreate(['key' => 'store_offers_hero'], ['value' => $offersHeroData]);
 
-        // Handle Booking Steps
-        $stepIcons = $request->input('booking_step_icon', []);
-        $stepTitlesAr = $request->input('booking_step_title_ar', []);
-        $stepTitlesEn = $request->input('booking_step_title_en', []);
-        $stepDescsAr = $request->input('booking_step_desc_ar', []);
-        $stepDescsEn = $request->input('booking_step_desc_en', []);
-        $bookingSteps = [];
-        foreach ($stepIcons as $idx => $icon) {
-            if (! empty($icon) || ! empty($stepTitlesAr[$idx])) {
-                $bookingSteps[] = [
-                    'icon' => $icon,
-                    'title' => ['ar' => $stepTitlesAr[$idx] ?? '', 'en' => $stepTitlesEn[$idx] ?? ''],
-                    'description' => ['ar' => $stepDescsAr[$idx] ?? '', 'en' => $stepDescsEn[$idx] ?? ''],
-                ];
-            }
-        }
-        Setting::updateOrCreate(['key' => 'store_booking_steps'], ['value' => $bookingSteps]);
-
-        // Invalidate hero-related cache
+        // Invalidate cache
         app(BaseCacheService::class)->forgetSettings();
         app(HomeCacheService::class)->forgetHome();
 
