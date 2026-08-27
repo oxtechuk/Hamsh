@@ -25,62 +25,118 @@
 
         {{-- Stat Cards --}}
         <div class="row g-3 mb-4">
-            <div class="col-6 col-xl-4">
+            <div class="col-6 col-xl-3">
                 <div class="crm-stat-new">
-                    <span class="stat-badge orange">65%</span>
-                    <div class="stat-icon green"><i class="bi bi-person-check"></i></div>
-                    <div class="stat-lbl">{{ __('العملاء النشطون') }}</div>
-                    <div class="stat-val">76%</div>
+                    <span class="stat-badge {{ $stats['monthly_growth'] >= 0 ? 'green' : 'orange' }}">
+                        {{ ($stats['monthly_growth'] >= 0 ? '+' : '') . $stats['monthly_growth'] }}%
+                    </span>
+                    <div class="stat-icon purple"><i class="bi bi-people-fill"></i></div>
+                    <div class="stat-lbl">{{ __('إجمالي العملاء') }}</div>
+                    <div class="stat-val">{{ number_format($stats['total']) }}</div>
                 </div>
             </div>
-            <div class="col-6 col-xl-4">
+            <div class="col-6 col-xl-3">
                 <div class="crm-stat-new">
-                    <span class="stat-badge green">+3%</span>
-                    <div class="stat-icon blue"><i class="bi bi-people"></i></div>
+                    <span class="stat-badge blue">{{ $stats['new_this_month'] }} {{ __('هذا الشهر') }}</span>
+                    <div class="stat-icon blue"><i class="bi bi-person-plus-fill"></i></div>
                     <div class="stat-lbl">{{ __('العملاء الجدد') }}</div>
-                    <div class="stat-val">{{ number_format($leads->total()) }}</div>
+                    <div class="stat-val">{{ number_format($stats['new']) }}</div>
                 </div>
             </div>
-            <div class="col-6 col-xl-4">
+            <div class="col-6 col-xl-3">
                 <div class="crm-stat-new">
-                    <span class="stat-badge green">+12%</span>
-                    <div class="stat-icon purple"><i class="bi bi-person-lines-fill"></i></div>
-                    <div class="stat-lbl">{{ __('عدد العملاء') }}</div>
-                    <div class="stat-val">{{ number_format($leads->total()) }}</div>
+                    <span class="stat-badge green">{{ $stats['active_percentage'] }}%</span>
+                    <div class="stat-icon green"><i class="bi bi-person-check-fill"></i></div>
+                    <div class="stat-lbl">{{ __('قيد المتابعة والتفاوض') }}</div>
+                    <div class="stat-val">{{ number_format($stats['active']) }}</div>
+                </div>
+            </div>
+            <div class="col-6 col-xl-3">
+                <div class="crm-stat-new">
+                    <span class="stat-badge orange">{{ $stats['conversion_rate'] }}% {{ __('تحويل') }}</span>
+                    <div class="stat-icon orange"><i class="bi bi-trophy-fill"></i></div>
+                    <div class="stat-lbl">{{ __('تم التحويل بنجاح') }}</div>
+                    <div class="stat-val">{{ number_format($stats['converted']) }}</div>
                 </div>
             </div>
         </div>
 
-        {{-- Filter Tabs + Search --}}
-        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
-            <div class="crm-filter-tabs mb-0">
-                <a href="{{ route('crm.leads.index') }}"
-                    class="crm-filter-tab {{ !request('status') ? 'active' : '' }}">{{ __('الكل') }}</a>
-                @foreach($statuses as $key => $s)
-                    <a href="{{ route('crm.leads.index', ['status' => $key]) }}"
-                        class="crm-filter-tab {{ request('status') === $key ? 'active' : '' }}">{{ $s['label'] }}</a>
-                @endforeach
-            </div>
-            <form method="GET" class="d-flex gap-2 align-items-center">
-                <div style="position:relative;">
-                    <input type="text" name="search" value="{{ request('search') }}"
-                        placeholder="{{ __('بحث ببيانات العميل') }}"
-                        style="border:1px solid var(--crm-border);border-radius:8px;padding:8px 36px 8px 14px;font-size:13px;outline:none;font-family:'Cairo',sans-serif;width:220px;">
-                    <i class="bi bi-search"
-                        style="position:absolute;{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}:12px;top:50%;transform:translateY(-50%);color:var(--crm-text-muted);"></i>
+        {{-- Filters & Search Bar --}}
+        <div class="card border-0 shadow-sm rounded-4 mb-4 p-3" style="border:1px solid var(--crm-border)!important;">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
+                <div class="crm-filter-tabs mb-0">
+                    <a href="{{ route('crm.leads.index', request()->except('status', 'page')) }}"
+                        class="crm-filter-tab {{ !request('status') ? 'active' : '' }}">{{ __('الكل') }} ({{ $stats['total'] }})</a>
+                    @foreach($statuses as $key => $s)
+                        <a href="{{ route('crm.leads.index', array_merge(request()->except('page'), ['status' => $key])) }}"
+                            class="crm-filter-tab {{ request('status') === $key ? 'active' : '' }}">
+                            {{ $s['label'] }}
+                        </a>
+                    @endforeach
                 </div>
-                <button type="submit" class="btn-crm-primary" style="padding:8px 16px;">{{ __('بحث') }}</button>
+            </div>
+
+            <form method="GET" action="{{ route('crm.leads.index') }}" class="row g-2 align-items-center">
+                @if(request('status'))
+                    <input type="hidden" name="status" value="{{ request('status') }}">
+                @endif
+                <div class="col-12 col-md-3">
+                    <div style="position:relative;">
+                        <input type="text" name="search" value="{{ request('search') }}"
+                            placeholder="{{ __('بحث بالاسم، الهاتف، البريد...') }}"
+                            class="form-control form-control-sm"
+                            style="border:1px solid var(--crm-border);border-radius:8px;padding:8px 36px 8px 14px;font-size:13px;font-family:'Cairo',sans-serif;">
+                        <i class="bi bi-search"
+                            style="position:absolute;{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}:12px;top:50%;transform:translateY(-50%);color:var(--crm-text-muted);"></i>
+                    </div>
+                </div>
+                <div class="col-6 col-md-2">
+                    <select name="contact_source_id" class="form-select form-select-sm"
+                        style="border:1px solid var(--crm-border);border-radius:8px;padding:8px 12px;font-size:13px;font-family:'Cairo',sans-serif;">
+                        <option value="">{{ __('جميع المصادر') }}</option>
+                        @foreach($sources as $source)
+                            <option value="{{ $source->id }}" {{ request('contact_source_id') == $source->id ? 'selected' : '' }}>
+                                {{ $source->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-6 col-md-2">
+                    <select name="employee_id" class="form-select form-select-sm"
+                        style="border:1px solid var(--crm-border);border-radius:8px;padding:8px 12px;font-size:13px;font-family:'Cairo',sans-serif;">
+                        <option value="">{{ __('جميع الموظفين') }}</option>
+                        @foreach($employees as $emp)
+                            <option value="{{ $emp->id }}" {{ request('employee_id') == $emp->id ? 'selected' : '' }}>
+                                {{ $emp->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-6 col-md-2">
+                    <input type="date" name="date" value="{{ request('date') }}" class="form-control form-control-sm"
+                        style="border:1px solid var(--crm-border);border-radius:8px;padding:8px 12px;font-size:13px;font-family:'Cairo',sans-serif;"
+                        title="{{ __('تاريخ البدء') }}">
+                </div>
+                <div class="col-6 col-md-3 d-flex gap-2">
+                    <button type="submit" class="btn-crm-primary flex-grow-1" style="padding:8px 16px;border-radius:8px;font-size:13px;">
+                        <i class="bi bi-funnel"></i> {{ __('تصفية') }}
+                    </button>
+                    @if(request()->hasAny(['search', 'status', 'contact_source_id', 'employee_id', 'date']))
+                        <a href="{{ route('crm.leads.index') }}" class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center"
+                            style="border-radius:8px;padding:8px 12px;" title="{{ __('إعادة تعيين') }}">
+                            <i class="bi bi-arrow-counterclockwise"></i>
+                        </a>
+                    @endif
+                </div>
             </form>
         </div>
-
-
 
         {{-- Table --}}
         <div class="card border-0 shadow-sm rounded-4 overflow-hidden"
             style="border:1px solid var(--crm-border)!important;">
-            <div class="card-header bg-white border-0 px-4 py-3"
+            <div class="card-header bg-white border-0 px-4 py-3 d-flex align-items-center justify-content-between"
                 style="border-bottom:1px solid var(--crm-border)!important;">
-                <h6 class="fw-bold mb-0">{{ __('العملاء') }}</h6>
+                <h6 class="fw-bold mb-0">{{ __('قائمة العملاء') }} ({{ number_format($leads->total()) }})</h6>
             </div>
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
@@ -92,13 +148,13 @@
                             <th class="px-4 py-3 text-muted fw-bold" style="font-size:12px;">{{ __('رقم العميل') }}</th>
                             <th class="py-3 text-muted fw-bold" style="font-size:12px;">{{ __('اسم العميل') }}</th>
                             <th class="py-3 text-muted fw-bold" style="font-size:12px;">{{ __('الهاتف') }}</th>
-                            <th class="py-3 text-muted fw-bold text-center" style="font-size:12px;">{{ __('عدد الطلبات') }}
-                            </th>
-                            <th class="py-3 text-muted fw-bold" style="font-size:12px;">{{ __('نوع السيارات') }}</th>
-                            <th class="py-3 text-muted fw-bold" style="font-size:12px;">{{ __('فئة الديون') }}</th>
-                            <th class="py-3 text-muted fw-bold" style="font-size:12px;">{{ __('ميعاد طلب') }}</th>
+                            <th class="py-3 text-muted fw-bold" style="font-size:12px;">{{ __('المصدر') }}</th>
+                            <th class="py-3 text-muted fw-bold" style="font-size:12px;">{{ __('السيارة المطلوبة') }}</th>
+                            <th class="py-3 text-muted fw-bold" style="font-size:12px;">{{ __('المسؤول') }}</th>
+                            <th class="py-3 text-muted fw-bold text-center" style="font-size:12px;">{{ __('عدد الطلبات') }}</th>
+                            <th class="py-3 text-muted fw-bold" style="font-size:12px;">{{ __('ميعاد البدء') }}</th>
                             <th class="py-3 text-muted fw-bold" style="font-size:12px;">{{ __('الحالة') }}</th>
-                            <th class="py-3 text-muted fw-bold" style="font-size:12px;">{{ __('الإجراءات') }}</th>
+                            <th class="py-3 text-muted fw-bold text-center" style="font-size:12px;">{{ __('الإجراءات') }}</th>
                         </tr>
                     </thead>
                     <tbody class="border-top-0">
@@ -110,19 +166,45 @@
                                 </td>
                                 <td class="px-4 fw-bold" style="font-size:13px;">#{{ $lead->id }}</td>
                                 <td>
-                                    <div class="fw-bold" style="font-size:13px;color:var(--crm-text);">{{ $lead->client_name }}
+                                    <div class="fw-bold" style="font-size:13px;color:var(--crm-text);">
+                                        {{ $lead->client_name }}
                                     </div>
-                                </td>
-                                <td style="font-size:13px;" dir="ltr">{{ $lead->client_phone ?? '—' }}</td>
-                                <td class="text-center fw-bold" style="font-size:13px;">{{$lead->orders()->count()}}</td>
-                                <td style="font-size:12px;color:var(--crm-text-muted);">
-                                    {{ $lead->car?->name ?? '—' }}
-                                    @if($lead->car)
-                                        <br><small>{{ $lead->car->brand?->name }}</small>
+                                    @if($lead->client_email)
+                                        <small class="text-muted" style="font-size:11px;">{{ $lead->client_email }}</small>
                                     @endif
                                 </td>
+                                <td style="font-size:13px;" dir="ltr">
+                                    {{ $lead->client_phone ?? '—' }}
+                                </td>
                                 <td>
-                                    <span class="status-dot planned">{{ __('اقتصادية') }}</span>
+                                    <span class="badge bg-light text-dark border px-2 py-1" style="font-size:11px;font-weight:600;">
+                                        {{ $lead->contactSource?->name ?? '—' }}
+                                    </span>
+                                </td>
+                                <td style="font-size:12px;color:var(--crm-text-muted);">
+                                    @if($lead->car)
+                                        <span class="fw-bold text-dark">{{ $lead->car->name }}</span>
+                                        @if($lead->car->brand || $lead->car->category)
+                                            <br><small class="text-muted">{{ $lead->car->brand?->name }} {{ $lead->car->category ? '• ' . $lead->car->category->name : '' }}</small>
+                                        @endif
+                                    @else
+                                        <span>—</span>
+                                    @endif
+                                </td>
+                                <td style="font-size:12px;">
+                                    @if($lead->employee)
+                                        <span class="d-inline-flex align-items-center gap-1">
+                                            <i class="bi bi-person text-muted"></i>
+                                            {{ $lead->employee->name }}
+                                        </span>
+                                    @else
+                                        <span class="text-muted small">{{ __('غير محدد') }}</span>
+                                    @endif
+                                </td>
+                                <td class="text-center fw-bold" style="font-size:13px;">
+                                    <span class="badge rounded-pill bg-light text-primary border px-2 py-1">
+                                        {{ $lead->orders_count ?? 0 }}
+                                    </span>
                                 </td>
                                 <td style="font-size:12px;color:var(--crm-text-muted);">
                                     {{ $lead->started_at?->format('d/m/Y') ?? '—' }}
@@ -131,17 +213,18 @@
                                     @php
                                         $dotClass = match ($lead->status) {
                                             'new' => 'confirmed',
-                                            'in_progress' => 'planned',
-                                            'waiting' => 'waiting',
-                                            'sold' => 'done',
-                                            'rejected' => 'late',
-                                            default => 'cancelled',
+                                            'contacted' => 'planned',
+                                            'interested' => 'waiting',
+                                            'negotiation' => 'planned',
+                                            'converted' => 'done',
+                                            'lost' => 'late',
+                                            default => 'waiting',
                                         };
                                     @endphp
                                     <span class="status-dot {{ $dotClass }}">{{ $lead->status_label }}</span>
                                 </td>
                                 <td>
-                                    <div class="d-flex gap-2 align-items-center">
+                                    <div class="d-flex gap-2 align-items-center justify-content-center">
                                         <a href="{{ route('crm.leads.show', $lead) }}" class="btn btn-sm btn-light rounded-2"
                                             title="{{ __('عرض') }}">
                                             <i class="bi bi-eye" style="font-size:14px;"></i>
@@ -154,7 +237,7 @@
                                         @endcan
                                         @can('manage-leads')
                                             <form action="{{ route('crm.leads.destroy', $lead) }}" method="POST"
-                                                onsubmit="return confirm('{{ __('هل أنت متأكد؟') }}')">
+                                                onsubmit="return confirm('{{ __('هل أنت متأكد من حذف هذا العميل؟') }}')">
                                                 @csrf @method('DELETE')
                                                 <button class="btn btn-sm btn-light rounded-2" title="{{ __('حذف') }}"
                                                     style="color:var(--crm-red);">
@@ -167,9 +250,9 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="10" class="text-center text-muted py-5">
+                                <td colspan="11" class="text-center text-muted py-5">
                                     <i class="bi bi-person-x fs-1 d-block mb-2 opacity-25"></i>
-                                    {{ __('لا يوجد عملاء حالياً') }}
+                                    {{ __('لا يوجد عملاء يطابقون خيارات البحث والتصفية') }}
                                 </td>
                             </tr>
                         @endforelse

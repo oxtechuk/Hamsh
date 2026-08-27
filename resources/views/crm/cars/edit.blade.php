@@ -402,7 +402,7 @@
                                                         style="width:70px;height:52px;object-fit:cover;">
                                                     <a href="{{ route('crm.cars.delete-image', $img) }}"
                                                         class="position-absolute top-0 end-0"
-                                                        style="background:#b42225;color:#fff;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:10px;text-decoration:none;"
+                                                        style="background:#dcbb73;color:#fff;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:10px;text-decoration:none;"
                                                         onclick="return confirm('حذف؟')">×</a>
                                                 </div>
                                             @endforeach
@@ -421,7 +421,7 @@
                                                         style="width:70px;height:52px;object-fit:cover;">
                                                     <a href="{{ route('crm.cars.delete-image', $img) }}"
                                                         class="position-absolute top-0 end-0"
-                                                        style="background:#b42225;color:#fff;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:10px;text-decoration:none;"
+                                                        style="background:#dcbb73;color:#fff;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:10px;text-decoration:none;"
                                                         onclick="return confirm('حذف؟')">×</a>
                                                 </div>
                                             @endforeach
@@ -631,7 +631,7 @@
         // ===== Color Rows =====
         let colorCount = 0;
 
-        function addColorRow(name = '', hex = '#b42225', existingImg = null, existingImgPath = '') {
+        function addColorRow(name = '', hex = '#dcbb73', existingImg = null, existingImgPath = '') {
             const idx = colorCount++;
             document.getElementById('no-colors-msg').style.display = 'none';
             const container = document.getElementById('colors-container');
@@ -690,7 +690,7 @@
         existingColors.forEach(c => {
             const isNew = typeof c === 'string'; // old format = hex only
             const name = isNew ? '' : (c.name || '');
-            const hex = isNew ? c : (c.hex || '#b42225');
+            const hex = isNew ? c : (c.hex || '#dcbb73');
             const img = isNew ? null : (c.image ? '{{ asset("storage/") }}/' + c.image : null);
             const path = isNew ? '' : (c.image || '');
             addColorRow(name, hex, img, path);

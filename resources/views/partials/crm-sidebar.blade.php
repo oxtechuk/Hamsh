@@ -24,14 +24,19 @@
 
     {{-- Logo --}}
     <div class="crm-sidebar-logo">
-        @if($logo)
-            <img src="{{ asset('storage/' . $logo) }}" alt="{{ $siteNameText }}">
-        @else
-            <div style="display:flex;align-items:center;justify-content:center;gap:5px;">
-                <span style="font-size:20px;font-weight:900;color:var(--crm-red);">GR</span>
-                <span style="font-size:12px;font-weight:800;color:var(--crm-text);">Motors</span>
-            </div>
-        @endif
+        <a href="{{ route('crm.dashboard') }}" style="text-decoration:none;display:inline-block;">
+            @if($logo && \Illuminate\Support\Facades\Storage::disk('public')->exists($logo))
+                <img src="{{ asset('storage/' . $logo) }}" alt="{{ $siteNameText }}" style="max-height: 48px; object-fit: contain;">
+            @elseif(file_exists(public_path('images/logo_without_bg.svg')))
+                <img src="{{ asset('images/logo_without_bg.svg') }}" alt="{{ $siteNameText }}" style="max-height: 48px; object-fit: contain;">
+            @elseif(file_exists(public_path('images/logo_without_bg.png')))
+                <img src="{{ asset('images/logo_without_bg.png') }}" alt="{{ $siteNameText }}" style="max-height: 48px; object-fit: contain;">
+            @else
+                <div style="display:flex;align-items:center;justify-content:center;gap:6px;">
+                    <span style="font-size:20px;font-weight:900;color:var(--crm-gold);">{{ $siteNameText }}</span>
+                </div>
+            @endif
+        </a>
     </div>
 
     {{-- Navigation --}}
@@ -385,7 +390,7 @@
         <form action="{{ route('crm.logout') }}" method="POST">
             @csrf
             <button type="submit" class="crm-nav-link w-100"
-                style="background:none;border:none;cursor:pointer;color:#b42225;">
+                style="background:none;border:none;cursor:pointer;color:#dcbb73;">
                 <i class="bi bi-box-arrow-right"></i>
                 <span>{{ __('تسجيل الخروج') }}</span>
             </button>

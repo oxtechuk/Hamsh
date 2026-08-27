@@ -4,152 +4,273 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('تسجيل دخول المديرين | هامش') }}</title>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
+    @php
+        $siteLogoSetting = null;
+        $siteNameRaw = config('app.name', 'هامش');
+
+        try {
+            if (\Illuminate\Support\Facades\Schema::hasTable('settings')) {
+                $siteLogoSetting = \App\Models\Setting::where('key', 'site_logo')->first()?->value;
+                $siteNameRaw = \App\Models\Setting::where('key', 'site_name')->first()?->value ?? config('app.name', 'هامش');
+            }
+        } catch (\Throwable $e) {
+            // Fallback
+        }
+
+        if (! empty($siteLogoSetting) && \Illuminate\Support\Facades\Storage::disk('public')->exists($siteLogoSetting)) {
+            $logoUrl = asset('storage/'.$siteLogoSetting);
+        } elseif (file_exists(public_path('images/logo_without_bg.svg'))) {
+            $logoUrl = asset('images/logo_without_bg.svg');
+        } elseif (file_exists(public_path('images/logo_without_bg.png'))) {
+            $logoUrl = asset('images/logo_without_bg.png');
+        } else {
+            $logoUrl = asset('assets/images/logo.png');
+        }
+
+        $siteName = is_array($siteNameRaw) ? ($siteNameRaw[app()->getLocale()] ?? ($siteNameRaw['ar'] ?? 'هامش')) : $siteNameRaw;
+    @endphp
+
+    <title>{{ __('تسجيل دخول المديرين') }} | {{ $siteName }}</title>
+
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <style>
         :root {
-            --primary: #b42225;
-            --primary-dark: #b42225;
-            --primary-glow: rgba(41, 155, 224, 0.15);
-            --bg-light: #ffffff;
-            --bg-gray: #f8fafc;
-            --text-dark: #0f172a;
+            --primary: #c59b27;
+            --primary-light: #dfb847;
+            --primary-dark: #9a781b;
+            --primary-glow: rgba(197, 155, 39, 0.25);
+            --dark-surface: #0f141d;
+            --text-main: #0f172a;
             --text-muted: #64748b;
-            --border-color: #cbd5e1;
-            --success: #10b981;
+            --bg-page: #f8fafc;
+            --input-bg: #f8fafc;
+            --input-border: #e2e8f0;
+            --danger: #ef4444;
+            --radius-lg: 20px;
+            --radius-md: 14px;
+            --radius-sm: 10px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Cairo', sans-serif;
+            font-family: 'Cairo', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         body {
-            background-color: var(--bg-light);
-            color: var(--text-dark);
-            height: 100vh;
-            overflow: hidden;
+            min-height: 100vh;
+            background-color: var(--bg-page);
             display: flex;
             align-items: center;
             justify-content: center;
+            color: var(--text-main);
+            overflow-x: hidden;
         }
 
-        .login-container {
+        .login-wrapper {
+            width: 100%;
+            min-height: 100vh;
             display: flex;
-            width: 100vw;
-            height: 100vh;
-            flex-direction: row;
-            /* Always left: Image, right: Form */
         }
 
-        /* Image Panel (Left) */
-        .image-panel {
-            flex: 1.4;
+        /* Poster Showcase Side (Right in RTL, Left in LTR) */
+        .brand-showcase {
+            flex: 1.3;
             position: relative;
-            background-image: url('{{ asset("images/home_hero.png") }}');
+            background-image: url('{{ asset("images/bak.jpeg") }}');
             background-size: cover;
             background-position: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 60px;
-            color: #ffffff;
-        }
-
-        .image-panel::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(13, 16, 24, 0.85) 0%, rgba(41, 155, 224, 0.2) 100%);
-            z-index: 1;
-        }
-
-        .image-panel-content {
-            position: relative;
-            z-index: 2;
-            max-width: 550px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .image-panel-content h2 {
-            font-size: 34px;
-            font-weight: 800;
-            margin-bottom: 12px;
-            line-height: 1.3;
-        }
-
-        .image-panel-content p {
-            font-size: 16px;
-            opacity: 0.9;
-            font-weight: 500;
-            line-height: 1.6;
-        }
-
-        /* Form Panel (Right) */
-        .form-panel {
-            width: 480px;
-            background-color: var(--bg-light);
+            background-repeat: no-repeat;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 60px 48px;
-            overflow-y: auto;
+            padding: 45px 55px;
+            color: #ffffff;
+            overflow: hidden;
+        }
+
+        /* Luxury dark gradient overlay to ensure contrast and premium feel */
+        .brand-showcase::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to bottom,
+                rgba(10, 14, 23, 0.45) 0%,
+                rgba(10, 14, 23, 0.1) 40%,
+                rgba(10, 14, 23, 0.75) 100%
+            );
+            z-index: 1;
+        }
+
+        .showcase-top,
+        .showcase-bottom {
             position: relative;
-            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.02);
-            border-left: 1px solid #f1f5f9;
+            z-index: 2;
         }
 
-        .form-content-wrapper {
-            margin-top: auto;
-            margin-bottom: auto;
-            width: 100%;
-        }
-
-        .logo-section {
-            display: flex;
-            flex-direction: column;
+        .showcase-badge {
+            display: inline-flex;
             align-items: center;
-            margin-bottom: 40px;
+            gap: 8px;
+            padding: 8px 20px;
+            background: rgba(15, 23, 42, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #ffffff;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
-        .logo-badge {
+        .showcase-badge i {
+            color: var(--primary-light);
+            font-size: 16px;
+        }
+
+        .showcase-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.85);
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .showcase-bottom a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 700;
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            margin-top: 12px;
+            background: rgba(255, 255, 255, 0.15);
             padding: 6px 16px;
-            background: rgb(0 0 0 / 8%);
-            border: 1px solid rgba(41, 155, 224, 0.15);
             border-radius: 50px;
-            font-size: 12px;
-            color: var(--primary);
-            font-weight: 700;
+            backdrop-filter: blur(8px);
+            transition: var(--transition);
         }
 
-        .form-header {
-            text-align: center;
-            margin-bottom: 32px;
+        .showcase-bottom a:hover {
+            background: var(--primary);
+            color: #ffffff;
+            transform: translateY(-2px);
         }
 
-        .form-header h1 {
-            font-size: 24px;
-            font-weight: 800;
-            color: var(--text-dark);
-            margin-bottom: 8px;
+        /* Form Area Side */
+        .form-area {
+            width: 520px;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 45px 50px;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 2;
         }
 
-        .form-header p {
+        .form-top-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .back-home-link {
+            font-size: 13px;
+            font-weight: 600;
             color: var(--text-muted);
-            font-size: 14px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 8px;
+            background: #f1f5f9;
+            transition: var(--transition);
         }
 
+        .back-home-link:hover {
+            color: var(--primary-dark);
+            background: #e2e8f0;
+        }
+
+        .lang-switch-btn {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 6px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--input-border);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition);
+        }
+
+        .lang-switch-btn:hover {
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .form-body {
+            margin: auto 0;
+            width: 100%;
+        }
+
+        /* Logo Header */
+        .brand-logo-wrapper {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .brand-logo-img {
+            max-height: 90px;
+            max-width: 220px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.06));
+            transition: var(--transition);
+        }
+
+        .brand-logo-img:hover {
+            transform: scale(1.02);
+        }
+
+        .login-header-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 6px;
+            text-align: center;
+        }
+
+        .login-header-subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        /* Form Controls */
         .form-group {
             margin-bottom: 20px;
         }
@@ -158,185 +279,242 @@
             display: block;
             font-size: 13px;
             font-weight: 700;
-            color: var(--text-dark);
+            color: var(--text-main);
             margin-bottom: 8px;
         }
 
-        .input-wrapper {
+        .input-box {
             position: relative;
+            display: flex;
+            align-items: center;
         }
 
-        .input-wrapper i {
+        .input-icon-start {
             position: absolute;
-            color: var(--text-muted);
+            color: #94a3b8;
             font-size: 18px;
-            top: 50%;
-            transform: translateY(-50%);
-            transition: color 0.3s;
-            z-index: 1;
+            pointer-events: none;
+            transition: var(--transition);
+            z-index: 2;
         }
 
-        .form-control {
+        [dir="rtl"] .input-icon-start {
+            right: 18px;
+        }
+
+        [dir="ltr"] .input-icon-start {
+            left: 18px;
+        }
+
+        .toggle-password-btn {
+            position: absolute;
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 6px;
+            transition: var(--transition);
+            z-index: 2;
+        }
+
+        [dir="rtl"] .toggle-password-btn {
+            left: 14px;
+        }
+
+        [dir="ltr"] .toggle-password-btn {
+            right: 14px;
+        }
+
+        .toggle-password-btn:hover {
+            color: var(--text-main);
+        }
+
+        .custom-input {
             width: 100%;
-            background: var(--bg-gray);
-            border: 1.5px solid #e2e8f0;
-            border-radius: 12px;
-            color: var(--text-dark);
-            font-size: 15px;
-            transition: all 0.3s ease;
+            height: 52px;
+            background-color: var(--input-bg);
+            border: 1.5px solid var(--input-border);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-main);
             outline: none;
-            height: 50px;
+            transition: var(--transition);
         }
 
-        .form-control:focus {
+        [dir="rtl"] .custom-input {
+            padding: 0 48px 0 48px;
+            text-align: right;
+        }
+
+        [dir="ltr"] .custom-input {
+            padding: 0 48px 0 48px;
+            text-align: left;
+        }
+
+        .custom-input:focus {
+            background-color: #ffffff;
             border-color: var(--primary);
-            background: #ffffff;
-            box-shadow: 0 0 0 4px rgba(41, 155, 224, 0.15);
+            box-shadow: 0 0 0 4px var(--primary-glow);
         }
 
-        .form-control:focus~i,
-        .input-wrapper:focus-within i {
+        .input-box:focus-within .input-icon-start {
             color: var(--primary);
         }
 
-        .remember-row {
-            margin-bottom: 24px;
+        .form-options {
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: space-between;
+            margin-bottom: 24px;
         }
 
-        .remember-row input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            accent-color: var(--primary);
+        .remember-checkbox {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             cursor: pointer;
-            border-radius: 4px;
-        }
-
-        .remember-row label {
             font-size: 13px;
+            font-weight: 600;
             color: var(--text-muted);
-            cursor: pointer;
             user-select: none;
         }
 
-        .btn-login {
+        .remember-checkbox input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Login Button */
+        .btn-submit-login {
             width: 100%;
-            height: 52px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: #fff;
+            height: 54px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: #ffffff;
             border: none;
-            border-radius: 12px;
+            border-radius: var(--radius-md);
             font-size: 16px;
             font-weight: 800;
             cursor: pointer;
-            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            box-shadow: 0 10px 25px rgba(41, 155, 224, 0.25);
+            transition: var(--transition);
+            box-shadow: 0 8px 24px rgba(197, 155, 39, 0.3);
+            position: relative;
+            overflow: hidden;
         }
 
-        .btn-login:hover {
+        .btn-submit-login::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn-submit-login:hover {
             transform: translateY(-2px);
-            box-shadow: 0 15px 30px rgba(41, 155, 224, 0.35);
+            box-shadow: 0 12px 30px rgba(197, 155, 39, 0.4);
         }
 
-        .btn-login:active {
+        .btn-submit-login:hover::before {
+            left: 100%;
+        }
+
+        .btn-submit-login:active {
             transform: translateY(0);
         }
 
-        .btn-login.loading .spinner {
-            display: inline-block;
-        }
-
-        .btn-login.loading .btn-text {
-            display: none;
-        }
-
-        .btn-login.loading .btn-icon {
-            display: none;
-        }
-
-        .error-message {
-            background: rgba(239, 68, 68, 0.08);
-            color: #ef4444;
-            padding: 14px 16px;
-            border-radius: 12px;
+        /* Error Alert */
+        .alert-error-box {
+            background: #fef2f2;
+            border: 1px solid #fee2e2;
+            color: #b91c1c;
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
             font-size: 13px;
-            margin-bottom: 24px;
-            text-align: center;
-            border: 1px solid rgba(239, 68, 68, 0.15);
+            font-weight: 600;
+            margin-bottom: 22px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
+            gap: 10px;
+            animation: shake 0.4s ease-in-out;
         }
 
-        .footer-text {
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+
+        .form-footer {
             text-align: center;
             font-size: 12px;
             color: var(--text-muted);
-            margin-top: 30px;
+            padding-top: 20px;
         }
 
-        .footer-text a {
-            color: var(--primary);
+        .form-footer a {
+            color: var(--primary-dark);
             text-decoration: none;
             font-weight: 700;
         }
 
+        /* Spinner */
+        .spinner {
+            display: none;
+            width: 22px;
+            height: 22px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+
         @keyframes spin {
-            to {
-                transform: rotate(360deg);
+            to { transform: rotate(360deg); }
+        }
+
+        .btn-submit-login.loading .btn-text,
+        .btn-submit-login.loading .btn-icon {
+            display: none;
+        }
+
+        .btn-submit-login.loading .spinner {
+            display: inline-block;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 1024px) {
+            .brand-showcase {
+                padding: 35px;
+            }
+            .form-area {
+                width: 480px;
+                padding: 35px;
             }
         }
 
-        /* Direction-based styles */
-        [dir="rtl"] .input-wrapper i {
-            right: 16px;
-            left: auto;
-        }
-
-        [dir="rtl"] .form-control {
-            padding: 0 48px 0 16px;
-            text-align: right;
-        }
-
-        [dir="rtl"] .form-label {
-            text-align: right;
-        }
-
-        [dir="ltr"] .input-wrapper i {
-            left: 16px;
-            right: auto;
-        }
-
-        [dir="ltr"] .form-control {
-            padding: 0 16px 0 48px;
-            text-align: left;
-        }
-
-        [dir="ltr"] .form-label {
-            text-align: left;
-        }
-
-        /* Responsive */
-        @media (max-width: 900px) {
-            .image-panel {
+        @media (max-width: 850px) {
+            .brand-showcase {
                 display: none;
             }
-
-            .form-panel {
+            .form-area {
                 width: 100%;
-                max-width: 500px;
+                max-width: 480px;
                 margin: auto;
-                height: 100vh;
+                min-height: 100vh;
                 box-shadow: none;
-                border: none;
-                padding: 40px 24px;
+                padding: 30px 24px;
             }
         }
     </style>
@@ -344,127 +522,167 @@
 
 <body>
 
-    <div class="login-container">
+    <div class="login-wrapper">
 
-        <!-- Left Panel: Image (Hidden on Mobile) -->
-        <div class="image-panel">
-            <div class="image-panel-content" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
-                <h2>{{ __('منصة إدارة وتتبع السيارات الأكثر تميزاً') }}</h2>
-                <p>{{ __('تحكم في أسطول سياراتك، تتبع الحجوزات والمبيعات، وقم بإدارة لوحة العمل الخاصة بك بكل سهولة وذكاء.') }}
-                </p>
+        <!-- Poster Showcase Side (Right in RTL / Left in LTR) -->
+        <div class="brand-showcase" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
+            <div class="showcase-top">
+                <div class="showcase-badge">
+                    <i class="bi bi-shield-lock-fill"></i>
+                    <span>{{ __('لوحة الإدارة والتحكم') }} • {{ $siteName }}</span>
+                </div>
+            </div>
+
+            <div class="showcase-bottom">
+                <span>&copy; {{ date('Y') }} {{ $siteName }}. {{ __('جميع الحقوق محفوظة.') }}</span>
+                <a href="{{ route('store.home') }}">
+                    <span>{{ __('زيارة الموقع') }}</span>
+                    <i class="bi bi-arrow-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}"></i>
+                </a>
             </div>
         </div>
 
-        @php
-            $siteLogo = $globalSettings['site_logo'] ?? null;
-            $logoUrl = !empty($siteLogo)
-                ? (str_starts_with($siteLogo, 'http') ? $siteLogo : \Illuminate\Support\Facades\Storage::disk('public')->url($siteLogo))
-                : asset('images/logo_without_bg.png');
-            $siteNameRaw = $globalSettings['site_name'] ?? 'هامش';
-            $siteName = is_array($siteNameRaw) ? ($siteNameRaw[app()->getLocale()] ?? 'هامش') : $siteNameRaw;
-        @endphp
+        <!-- Form Card Panel -->
+        <div class="form-area" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
 
-        <!-- Right Panel: Form Card -->
-        <div class="form-panel" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
+            <!-- Top Header Actions -->
+            <div class="form-top-actions">
+                <a href="{{ route('store.home') }}" class="back-home-link">
+                    <i class="bi bi-arrow-{{ app()->getLocale() == 'ar' ? 'right' : 'left' }}"></i>
+                    <span>{{ __('العودة للموقع') }}</span>
+                </a>
 
-            <div class="form-content-wrapper">
-                <div class="logo-section">
-                    <img src="{{ $logoUrl }}" alt="{{ $siteName }}"
-                        style="max-height: 85px; width: auto; filter: drop-shadow(0 4px 12px rgba(41, 155, 224, 0.2));">
-                    <div class="logo-badge">
-                        <i class="bi bi-shield-check"></i>
-                        {{ $siteName }} - {{ __('لوحة التحكم') }}
-                    </div>
+                <a href="{{ route('lang.switch', app()->getLocale() == 'ar' ? 'en' : 'ar') }}" class="lang-switch-btn">
+                    <i class="bi bi-translate"></i>
+                    <span>{{ app()->getLocale() == 'ar' ? 'English' : 'العربية' }}</span>
+                </a>
+            </div>
+
+            <!-- Form Body Content -->
+            <div class="form-body">
+
+                <!-- Dynamic Site Logo -->
+                <div class="brand-logo-wrapper">
+                    <a href="{{ route('store.home') }}" title="{{ $siteName }}">
+                        <img src="{{ $logoUrl }}" alt="{{ $siteName }}" class="brand-logo-img">
+                    </a>
                 </div>
 
-                <div class="form-header">
-                    <h1>{{ __('مرحباً بعودتك') }}</h1>
-                    <p>{{ __('قم بتسجيل الدخول للمتابعة إلى لوحة التحكم') }}</p>
-                </div>
+                <h1 class="login-header-title">{{ __('تسجيل الدخول') }}</h1>
+                <p class="login-header-subtitle">{{ __('أهلاً بك، الرجاء إدخال بياناتك للمتابعة إلى لوحة الإدارة') }}</p>
 
                 @if($errors->any())
-                    <div class="error-message" id="errorMsg">
-                        <i class="bi bi-exclamation-circle"></i>
+                    <div class="alert-error-box" id="errorBox">
+                        <i class="bi bi-exclamation-triangle-fill fs-5"></i>
                         <span>{{ $errors->first() }}</span>
                     </div>
                 @endif
 
-                <form action="{{ route('crm.login.post') }}" method="POST" id="loginForm">
+                <form action="{{ route('crm.login.post') }}" method="POST" id="adminLoginForm">
                     @csrf
 
+                    <!-- Username / Email -->
                     <div class="form-group">
-                        <label class="form-label">{{ __('اسم المستخدم') }}</label>
-                        <div class="input-wrapper">
-                            <i class="bi bi-person"></i>
-                            <input type="text" name="username" class="form-control" placeholder="admin" required
-                                autofocus>
+                        <label class="form-label" for="username">{{ __('اسم المستخدم أو البريد الإلكتروني') }}</label>
+                        <div class="input-box">
+                            <i class="bi bi-person-fill input-icon-start"></i>
+                            <input type="text"
+                                   id="username"
+                                   name="username"
+                                   class="custom-input"
+                                   value="{{ old('username') }}"
+                                   placeholder="admin"
+                                   required
+                                   autofocus
+                                   autocomplete="username">
                         </div>
                     </div>
 
+                    <!-- Password -->
                     <div class="form-group">
-                        <label class="form-label">{{ __('كلمة المرور') }}</label>
-                        <div class="input-wrapper">
-                            <i class="bi bi-lock"></i>
-                            <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+                        <label class="form-label" for="password">{{ __('كلمة المرور') }}</label>
+                        <div class="input-box">
+                            <i class="bi bi-lock-fill input-icon-start"></i>
+                            <input type="password"
+                                   id="password"
+                                   name="password"
+                                   class="custom-input"
+                                   placeholder="••••••••"
+                                   required
+                                   autocomplete="current-password">
+                            <button type="button" class="toggle-password-btn" id="togglePasswordBtn" title="{{ __('إظهار / إخفاء كلمة المرور') }}">
+                                <i class="bi bi-eye-fill" id="eyeIcon"></i>
+                            </button>
                         </div>
                     </div>
 
-                    <div class="remember-row">
-                        <input type="checkbox" name="remember" id="remember">
-                        <label for="remember">{{ __('تذكرني') }}</label>
+                    <!-- Remember Me -->
+                    <div class="form-options">
+                        <label class="remember-checkbox" for="remember">
+                            <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+                            <span>{{ __('تذكر بيانات الدخول') }}</span>
+                        </label>
                     </div>
 
-                    <button type="submit" class="btn-login" id="loginBtn">
-                        <span class="btn-icon"><i
-                                class="bi bi-arrow-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}-short"
-                                style="font-size: 24px;"></i></span>
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn-submit-login" id="submitBtn">
                         <span class="btn-text">{{ __('تسجيل الدخول') }}</span>
-                        <span class="spinner"
-                            style="display: none; width: 20px; height: 20px; border: 2.5px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.6s linear infinite;"></span>
+                        <span class="btn-icon">
+                            <i class="bi bi-arrow-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}-short fs-4"></i>
+                        </span>
+                        <div class="spinner"></div>
                     </button>
                 </form>
+
             </div>
 
-            <div class="footer-text">
-                &copy; {{ date('Y') }} <a href="{{ route('store.home') }}">{{ $siteName }}</a>.
-                {{ __('جميع الحقوق محفوظة.') }}
+            <!-- Footer -->
+            <div class="form-footer">
+                &copy; {{ date('Y') }} <a href="{{ route('store.home') }}">{{ $siteName }}</a>. {{ __('نظام الإدارة المتكامل') }}
             </div>
 
         </div>
 
     </div>
 
+    <!-- Interactive Scripts -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const form = document.getElementById('loginForm');
-            const btn = document.getElementById('loginBtn');
-            const spinner = btn ? btn.querySelector('.spinner') : null;
-            const btnIcon = btn ? btn.querySelector('.btn-icon') : null;
-            const btnText = btn ? btn.querySelector('.btn-text') : null;
+            // Password toggle
+            const togglePasswordBtn = document.getElementById('togglePasswordBtn');
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
 
-            if (form && btn) {
-                form.addEventListener('submit', function () {
-                    btn.classList.add('loading');
-                    btn.disabled = true;
-                    if (spinner) spinner.style.display = 'inline-block';
-                    if (btnIcon) btnIcon.style.display = 'none';
-                    if (btnText) btnText.style.display = 'none';
+            if (togglePasswordBtn && passwordInput && eyeIcon) {
+                togglePasswordBtn.addEventListener('click', function () {
+                    const isPassword = passwordInput.type === 'password';
+                    passwordInput.type = isPassword ? 'text' : 'password';
+                    eyeIcon.className = isPassword ? 'bi bi-eye-slash-fill' : 'bi bi-eye-fill';
                 });
             }
 
-            // Hide error on input focus
-            const errorMsg = document.getElementById('errorMsg');
-            if (errorMsg) {
-                const inputs = document.querySelectorAll('.form-control');
+            // Form Submit Animation
+            const loginForm = document.getElementById('adminLoginForm');
+            const submitBtn = document.getElementById('submitBtn');
+
+            if (loginForm && submitBtn) {
+                loginForm.addEventListener('submit', function () {
+                    submitBtn.classList.add('loading');
+                    submitBtn.disabled = true;
+                });
+            }
+
+            // Smooth error dismissal
+            const errorBox = document.getElementById('errorBox');
+            if (errorBox) {
+                const inputs = document.querySelectorAll('.custom-input');
                 inputs.forEach(function (input) {
                     input.addEventListener('focus', function () {
-                        errorMsg.style.opacity = '0';
-                        errorMsg.style.transform = 'translateY(-10px)';
-                        errorMsg.style.transition = 'all 0.3s ease';
-                        setTimeout(function () {
-                            errorMsg.style.display = 'none';
-                        }, 300);
-                    });
+                        errorBox.style.opacity = '0';
+                        errorBox.style.transform = 'translateY(-8px)';
+                        errorBox.style.transition = 'all 0.3s ease';
+                        setTimeout(() => errorBox.style.display = 'none', 300);
+                    }, { once: true });
                 });
             }
         });

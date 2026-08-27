@@ -639,7 +639,7 @@
         // ===== Color Rows =====
         let colorCount = 0;
 
-        function addColorRow(name = '', hex = '#b42225', imgSrc = '') {
+        function addColorRow(name = '', hex = '#dcbb73', imgSrc = '') {
             const idx = colorCount++;
             const noMsg = document.getElementById('no-colors-msg');
             if (noMsg) noMsg.style.display = 'none';

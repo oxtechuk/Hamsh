@@ -154,7 +154,7 @@
 
     <style>
         :root {
-            --car-card-red: #b42225;
+            --car-card-red: #dcbb73;
             --car-card-dark: #1A1C21;
             --car-card-bg: #FFFFFF;
             --car-card-shadow: 0 10px 30px rgba(0,0,0,0.06);

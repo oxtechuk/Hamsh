@@ -15,7 +15,9 @@ class LeadController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Lead::with(['contactSource', 'car.brand', 'employee'])->latest();
+        $query = Lead::with(['contactSource', 'car.brand', 'car.category', 'employee'])
+            ->withCount('orders')
+            ->latest();
 
         if ($request->filled('search')) {
             $s = $request->search;
@@ -34,13 +36,46 @@ class LeadController extends Controller
         if ($request->filled('employee_id')) {
             $query->where('assigned_to', $request->employee_id);
         }
+        if ($request->filled('date')) {
+            $query->whereDate('started_at', $request->date);
+        }
 
         $leads = $query->paginate(20)->withQueryString();
         $statuses = Lead::STATUSES;
         $sources = ContactSource::activeOrdered()->get();
         $employees = Employee::where('is_active', true)->orderBy('name')->get();
 
-        return view('crm.leads.index', compact('leads', 'statuses', 'sources', 'employees'));
+        // Calculate dynamic real-time stats
+        $totalLeads = Lead::count();
+        $newLeads = Lead::where('status', 'new')->count();
+        $activeLeads = Lead::whereIn('status', ['new', 'contacted', 'interested', 'negotiation'])->count();
+        $convertedLeads = Lead::where('status', 'converted')->count();
+
+        // Monthly comparison
+        $thisMonthCount = Lead::whereMonth('created_at', now()->month)->whereYear('created_at', now()->year)->count();
+        $lastMonthCount = Lead::whereMonth('created_at', now()->subMonth()->month)->whereYear('created_at', now()->subMonth()->year)->count();
+
+        $monthlyGrowth = $lastMonthCount > 0
+            ? round((($thisMonthCount - $lastMonthCount) / $lastMonthCount) * 100, 1)
+            : ($thisMonthCount > 0 ? 100 : 0);
+
+        $activePercentage = $totalLeads > 0 ? round(($activeLeads / $totalLeads) * 100, 1) : 0;
+        $conversionRate = $totalLeads > 0 ? round(($convertedLeads / $totalLeads) * 100, 1) : 0;
+        $newThisMonth = Lead::where('status', 'new')->whereMonth('created_at', now()->month)->whereYear('created_at', now()->year)->count();
+
+        $stats = [
+            'total' => $totalLeads,
+            'new' => $newLeads,
+            'active' => $activeLeads,
+            'active_percentage' => $activePercentage,
+            'converted' => $convertedLeads,
+            'conversion_rate' => $conversionRate,
+            'this_month' => $thisMonthCount,
+            'new_this_month' => $newThisMonth,
+            'monthly_growth' => $monthlyGrowth,
+        ];
+
+        return view('crm.leads.index', compact('leads', 'statuses', 'sources', 'employees', 'stats'));
     }
 
     public function create()

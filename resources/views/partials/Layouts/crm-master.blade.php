@@ -30,44 +30,50 @@
 
     <style>
         :root {
-            --crm-red: #b42225;
-            --crm-red-dark: #b42225;
-            --crm-red-light: rgb(0 0 0 / 8%);
-            --crm-sidebar-width: 220px;
-            --crm-topbar-height: 64px;
-            --crm-bg: #F5F6FA;
-            --crm-card-bg: #fff;
-            --crm-text: #1C1C28;
-            --crm-text-muted: #8E92A4;
-            --crm-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-            --crm-radius: 14px;
-            --crm-border: #ECEEF2;
-            --crm-green: #12B76A;
-            --crm-orange: #F79009;
-            --crm-blue: #2E90FA;
-            --crm-purple: #7C3AED;
+            --crm-gold: #c59b27;
+            --crm-gold-light: #dfb847;
+            --crm-gold-dark: #9a781b;
+            --crm-gold-glow: rgba(197, 155, 39, 0.18);
+            --crm-primary: #c59b27;
+            --crm-primary-dark: #9a781b;
+            --crm-red: #c59b27;
+            --crm-red-dark: #9a781b;
+            --crm-red-light: rgba(197, 155, 39, 0.1);
+            --crm-sidebar-width: 260px;
+            --crm-topbar-height: 68px;
+            --crm-bg: #f8fafc;
+            --crm-card-bg: #ffffff;
+            --crm-text: #0f172a;
+            --crm-text-muted: #64748b;
+            --crm-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
+            --crm-radius: 16px;
+            --crm-border: #e2e8f0;
+            --crm-green: #10b981;
+            --crm-orange: #f59e0b;
+            --crm-blue: #3b82f6;
+            --crm-purple: #8b5cf6;
         }
 
         .gr-currency {
             display: inline-block !important;
-            width: 20px !important;
-            height: 20px !important;
+            width: 18px !important;
+            height: 18px !important;
             background-color: currentColor;
-            -webkit-mask-image: url('{{ asset('assets/images/Saudi_Riyal_Symbol.svg.png') }}') !important;
-            mask-image: url('{{ asset('assets/images/Saudi_Riyal_Symbol.svg.png') }}') !important;
+            -webkit-mask-image: url('{{ file_exists(public_path("images/riyal.svg")) ? asset("images/riyal.svg") : asset("assets/images/Saudi_Riyal_Symbol.svg.png") }}') !important;
+            mask-image: url('{{ file_exists(public_path("images/riyal.svg")) ? asset("images/riyal.svg") : asset("assets/images/Saudi_Riyal_Symbol.svg.png") }}') !important;
             -webkit-mask-repeat: no-repeat;
             mask-repeat: no-repeat;
             -webkit-mask-position: center;
             mask-position: center;
             -webkit-mask-size: contain;
             mask-size: contain;
-            vertical-align: middle;
+            vertical-align: -2px;
             margin: 0 2px;
         }
 
         .text-danger .gr-currency,
         .text-decoration-line-through .gr-currency {
-            color: #C0152A !important;
+            color: #ef4444 !important;
         }
 
         * {

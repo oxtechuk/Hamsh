@@ -1,5 +1,5 @@
 @extends('partials.Layouts.crm-master')
-@section('title', __('الرئيسية') . ' | hamsh ')
+@section('title', __('الرئيسية') . ' | ' . config('app.name', 'هامش'))
 
 @section('content')
     <div class="container-fluid" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
@@ -7,19 +7,26 @@
         {{-- ===== Header Row ===== --}}
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
             <div>
+                <div class="d-flex align-items-center gap-2 mb-1">
+                    <span class="badge" style="background:var(--crm-gold-glow);color:var(--crm-gold);font-weight:800;font-size:11px;border-radius:20px;padding:4px 10px;">
+                        <i class="bi bi-stars"></i> {{ __('لوحة الإدارة والمتابعة') }}
+                    </span>
+                </div>
                 <h4 class="mb-0 fw-bold" style="color:var(--crm-text);">
-                    👋 {{ __('أهلاً بك') }} {{ auth()->guard('employee')->user()?->name }}
+                    👋 {{ __('أهلاً بك') }}، {{ auth()->guard('employee')->user()?->name }}
                 </h4>
             </div>
             <div class="d-flex gap-2">
                 @can('manage-bookings')
-                    <a href="{{ route('crm.bookings.index') }}" class="btn-crm-light">
-                        <i class="bi bi-plus-lg"></i> {{ __('إضافة حجز جديد') }}
+                    <a href="{{ route('crm.bookings.index') }}" class="btn-crm-light d-inline-flex align-items-center gap-2">
+                        <i class="bi bi-calendar-plus"></i>
+                        <span>{{ __('إضافة حجز') }}</span>
                     </a>
                 @endcan
                 @can('manage-leads')
-                    <a href="{{ route('crm.leads.index') }}" class="btn-crm-primary">
-                        <i class="bi bi-person-plus"></i> {{ __('إضافة عميل') }}
+                    <a href="{{ route('crm.leads.index') }}" class="btn-crm-primary d-inline-flex align-items-center gap-2">
+                        <i class="bi bi-person-plus-fill"></i>
+                        <span>{{ __('إضافة عميل') }}</span>
                     </a>
                 @endcan
             </div>
@@ -365,14 +372,14 @@
                 { name: '{{ __("الطلبات") }}', data: counts },
                 { name: '{{ __("المكتملة") }}', data: counts.map(v => Math.max(0, v - Math.floor(Math.random() * 3))) }
             ],
-            chart: { type: 'area', height: 220, toolbar: { show: false }, fontFamily: 'inherit' },
-            colors: ['#b42225', '#12B76A'],
-            fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.3, opacityTo: 0.02 } },
-            stroke: { curve: 'smooth', width: 2 },
-            xaxis: { categories: dates, labels: { style: { fontSize: '11px', colors: '#8E92A4' } } },
-            yaxis: { labels: { style: { fontSize: '11px', colors: '#8E92A4' } } },
+            chart: { type: 'area', height: 220, toolbar: { show: false }, fontFamily: 'Cairo, sans-serif' },
+            colors: ['#c59b27', '#10b981'],
+            fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.35, opacityTo: 0.03 } },
+            stroke: { curve: 'smooth', width: 2.5 },
+            xaxis: { categories: dates, labels: { style: { fontSize: '11px', colors: '#64748b' } } },
+            yaxis: { labels: { style: { fontSize: '11px', colors: '#64748b' } } },
             dataLabels: { enabled: false },
-            grid: { borderColor: '#F5F6FA', strokeDashArray: 4 },
+            grid: { borderColor: '#e2e8f0', strokeDashArray: 4 },
             legend: { show: true, position: 'top', horizontalAlign: '{{ app()->getLocale() == "ar" ? "right" : "left" }}' },
         }).render();
 
@@ -380,8 +387,8 @@
         new ApexCharts(document.querySelector("#incomeSparkline"), {
             series: [{ data: [30, 40, 35, 50, 49, 60, 70, 91, 125] }],
             chart: { type: 'line', height: 50, sparkline: { enabled: true } },
-            colors: ['#b42225'],
-            stroke: { curve: 'smooth', width: 2 },
+            colors: ['#c59b27'],
+            stroke: { curve: 'smooth', width: 2.5 },
             tooltip: { enabled: false },
         }).render();
 

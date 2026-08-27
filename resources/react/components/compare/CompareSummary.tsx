@@ -50,7 +50,7 @@ export default function CompareSummary({
                 className={[
                     "flex min-h-[245px] flex-col items-center justify-center",
                     "rounded-[20px] border border-[#E8BFC1]",
-                    "bg-[#B42225]/13",
+                    "bg-[#dcbb73]/13",
                     "px-6 py-8 text-center",
                     "sm:min-h-[265px] sm:px-10",
                 ].join(" ")}
