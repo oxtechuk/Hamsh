@@ -32,4 +32,5 @@ export interface ISettingsData {
   contact: IContactInfo;
   working_hours?: IWorkingHours;
   social_media: ISocialMediaItem[];
+  car_popup_enabled?: boolean;
 }

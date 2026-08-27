@@ -8,6 +8,7 @@ import type { ICarCardProps } from "../interfaces/ICarCardProps";
 import { buildCarSpecPills } from "../utils/car-card-utils";
 import { resolveHighlight } from "../utils/badge-utils";
 import { SHOW_CAR_DETAILS_AS_MODAL } from "../constants/feature-flags";
+import { useSettingsStore } from "../store/settings.store";
 
 const MAX_VISIBLE_PILLS = 2;
 
@@ -34,6 +35,10 @@ export default function CarCard({
     const navigate = useNavigate();
     const direction = i18n.dir();
 
+    const carPopupEnabled = useSettingsStore(
+        (state) => state.settings?.car_popup_enabled ?? SHOW_CAR_DETAILS_AS_MODAL,
+    );
+
     const [showDetailsModal, setShowDetailsModal] = useState(false);
 
     const resolvedBadge = resolveHighlight(badgeText, i18n.language);
@@ -45,7 +50,7 @@ export default function CarCard({
         : { text: t("carCard.exclusive"), color: "#DFA655" };
 
     const handleOpenDetails = () => {
-        if (SHOW_CAR_DETAILS_AS_MODAL && slug) {
+        if (carPopupEnabled && slug) {
             setShowDetailsModal(true);
             return;
         }
