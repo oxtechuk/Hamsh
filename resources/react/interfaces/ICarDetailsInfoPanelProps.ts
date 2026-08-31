@@ -5,10 +5,11 @@ export type CarDetailsModalTab = "specs" | "features";
 
 export interface ICarDetailsInfoPanelProps {
   car: CarDetails;
-  activeTab: CarDetailsModalTab;
-  specRows: ISpecItem[];
+  activeTab?: CarDetailsModalTab;
+  specRows?: ISpecItem[];
   featureRows: ISpecItem[];
-  onChangeTab: (tab: CarDetailsModalTab) => void;
-  onCompare: () => void;
+  onChangeTab?: (tab: CarDetailsModalTab) => void;
+  onCompare?: () => void;
   onOrder: () => void;
+  onFinance?: () => void;
 }

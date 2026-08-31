@@ -62,8 +62,7 @@ export default function Home() {
 
             <CarsSearchSection
                 brands={data?.filter_brands ?? data?.brands}
-                types={data?.filter_types}
-                categories={data?.filter_categories}
+                models={data?.filter_models}
                 years={data?.filter_years}
                 onSearch={handleSearch}
             />

@@ -194,6 +194,10 @@ final class CarApiService
             $query->where('year', $filters['year']);
         }
 
+        if (! empty($filters['model'])) {
+            $query->where('model', $filters['model']);
+        }
+
         if (! empty($filters['min_price'])) {
             $query->where('cash_price', '>=', $filters['min_price']);
         }

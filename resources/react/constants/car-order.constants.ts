@@ -9,15 +9,20 @@ export const EMPTY_CAR_ORDER_FORM: ICarOrderFormData = {
     phone: "",
     email: "",
     salary: "",
-    workSector: "",
+    workSector: "private_approved",
     obligations: "",
+    consolidateDebts: false,
+    orderType: "finance",
 };
 
-export const CAR_ORDER_WORK_SECTORS: CarOrderWorkSector[] = [
-    "government",
-    "private",
-    "retired",
-    "freelance",
+export const CAR_ORDER_WORK_SECTORS_LIST: { value: string; labelAr: string; labelEn: string }[] = [
+    { value: "private_approved", labelAr: "قطاع خاص معتمد", labelEn: "Approved Private Sector" },
+    { value: "government", labelAr: "قطاع حكومي", labelEn: "Government Sector" },
+    { value: "semi_government", labelAr: "قطاع شبه حكومي", labelEn: "Semi-Government Sector" },
+    { value: "private_unapproved", labelAr: "قطاع خاص غير معتمد", labelEn: "Unapproved Private Sector" },
+    { value: "military", labelAr: "عسكري", labelEn: "Military Sector" },
+    { value: "retired", labelAr: "متقاعد", labelEn: "Retired" },
+    { value: "freelance", labelAr: "أعمال حرة / تجارة", labelEn: "Self-Employed / Business" },
 ];
 
 export const CAR_ORDER_STATIC_CITIES = [
@@ -46,15 +51,14 @@ export const CAR_ORDER_STATIC_CITIES = [
 ];
 
 export const carOrderFieldCls = [
-    "h-[48px] w-full",
-    "border-0 bg-white px-4",
-    "text-[13px] text-[#303A54] font-regular!",
+    "h-[46px] w-full",
+    "border border-[#E2E8F0] bg-white px-3.5",
+    "text-[14px] text-[#1E293B] font-medium rounded-lg",
     "outline-none",
-    "shadow-[0_6px_18px_rgba(48,58,84,0.06)]",
-    "placeholder:text-[#A8ABB2]",
-    "transition duration-300",
-    "focus:ring-1 focus:ring-[var(--brand-primary-color)]",
+    "placeholder:text-[#94A3B8]",
+    "transition duration-200",
+    "focus:border-[#C81E1E] focus:ring-2 focus:ring-[#C81E1E]/15",
 ].join(" ");
 
 export const carOrderLabelCls =
-    "mb-2 block text-start text-[12px] font-bold text-[#404E6A]";
+    "mb-1.5 block text-start text-[13px] font-bold text-[#1E293B]";

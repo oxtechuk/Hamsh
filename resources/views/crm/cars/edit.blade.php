@@ -40,7 +40,7 @@
                         </div>
                         <div class="car-section-body">
                             <div class="row g-3">
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <label class="form-label">{{ __('الماركة') }} <span class="text-danger">*</span></label>
                                     <select name="brand_id" class="form-select @error('brand_id') is-invalid @enderror"
                                         required>
@@ -53,17 +53,7 @@
                                     @error('brand_id')
                                     <div class="invalid-feedback">{{ $message }}</div> @enderror
                                 </div>
-                                <div class="col-md-4">
-                                    <label class="form-label">{{ __('التصنيف') }}</label>
-                                    <select name="category_id" class="form-select">
-                                        <option value="">{{ __('بدون تصنيف') }}</option>
-                                        @foreach($categories as $cat)
-                                            <option value="{{ $cat->id }}" @selected($car->category_id == $cat->id)>
-                                                {{ $cat->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <label class="form-label">{{ __('النوع') }} <span class="text-danger">*</span></label>
                                     <select name="type" class="form-select" required>
                                         @foreach($carTypes as $carType)
@@ -71,17 +61,62 @@
                                         @endforeach
                                     </select>
                                 </div>
+
+                                {{-- الموديل Searchable Combobox with Quick Add --}}
                                 <div class="col-md-6">
-                                    <label class="form-label">{{ __('الموديل') }} <span class="text-danger">*</span></label>
-                                    <input type="text" name="model" class="form-control" value="{{ $car->model }}" required>
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <label class="form-label mb-0">{{ __('الموديل') }} <span class="text-danger">*</span></label>
+                                        <button type="button" class="btn btn-link btn-sm text-primary p-0 text-decoration-none fw-semibold" onclick="promptNewModel()">
+                                            <i class="bi bi-plus-circle"></i> {{ __('إضافة موديل جديد') }}
+                                        </button>
+                                    </div>
+                                    <div class="dropdown model-combobox-wrapper">
+                                        <div class="input-group">
+                                            <input type="text" name="model" id="car_model_input" class="form-control @error('model') is-invalid @enderror"
+                                                value="{{ old('model', $car->model) }}" placeholder="{{ __('اختر أو اكتب الموديل (مثال: Camry LE)') }}"
+                                                required autocomplete="off" data-bs-toggle="dropdown" aria-expanded="false" oninput="filterModelsList(this.value)">
+                                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="bi bi-chevron-down"></i>
+                                            </button>
+                                            <ul class="dropdown-menu w-100 p-2 shadow-lg rounded-3 border-0" id="modelsDropdownList" style="max-height: 280px; overflow-y: auto; z-index: 1050;">
+                                                <li class="p-1">
+                                                    <div class="input-group input-group-sm mb-2">
+                                                        <span class="input-group-text bg-light border-0"><i class="bi bi-search"></i></span>
+                                                        <input type="text" id="model_inline_search" class="form-control bg-light border-0" placeholder="{{ __('بحث في الموديلات...') }}" oninput="filterModelsList(this.value)">
+                                                    </div>
+                                                </li>
+                                                <li><hr class="dropdown-divider my-1"></li>
+                                                <li class="dropdown-header text-muted small fw-bold px-2">{{ __('الموديلات السابقة المسجلة') }}</li>
+                                                <div id="models_items_container">
+                                                    @foreach($existingModels as $m)
+                                                        <li>
+                                                            <a class="dropdown-item rounded-2 py-1.5 px-2 model-option-item {{ $car->model === $m ? 'active' : '' }}" href="javascript:void(0)" onclick="selectModel('{{ $m }}')">
+                                                                <i class="bi bi-car-front text-muted me-1"></i> {{ $m }}
+                                                            </a>
+                                                        </li>
+                                                    @endforeach
+                                                </div>
+                                                <li id="no_model_found" class="text-center text-muted small py-2 d-none">{{ __('لا يوجد موديل مطابق') }}</li>
+                                                <li><hr class="dropdown-divider my-1"></li>
+                                                <li class="p-1">
+                                                    <button type="button" class="btn btn-sm btn-primary w-100 d-flex align-items-center justify-content-center gap-1 rounded-2" onclick="promptNewModel()">
+                                                        <i class="bi bi-plus-lg"></i> {{ __('إضافة موديل مخصص') }}
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        @error('model')
+                                        <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+                                    </div>
                                 </div>
-                                <div class="col-md-3">
+
+                                <div class="col-md-2">
                                     <label class="form-label">{{ __('سنة الصنع') }} <span
                                             class="text-danger">*</span></label>
                                     <input type="number" name="year" class="form-control" value="{{ $car->year }}"
                                         min="2000" max="2030" required>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <label class="form-label">{{ __('حالة الإتاحة') }}</label>
                                     <select name="availability_status" class="form-select">
                                         <option value="available" {{ $car->availability_status == 'available' ? 'selected' : '' }}>{{ __('متاحة للعرض') }}</option>
@@ -89,7 +124,7 @@
                                         <option value="on_request" {{ $car->availability_status == 'on_request' ? 'selected' : '' }}>{{ __('عند الطلب') }}</option>
                                     </select>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <label class="form-label">{{ __('التقييم') }}</label>
                                     <input type="number" name="rating" class="form-control" value="{{ $car->rating }}"
                                         min="0" max="5" step="0.1" placeholder="0.0">
@@ -181,12 +216,12 @@
                         </div>
                     </div>
 
-                    {{-- المواصفات --}}
+                    {{-- المواصفات والمميزات وميزات السلامة --}}
                     <div class="car-section mb-4">
-                        <div class="car-section-header"><i class="bi bi-speedometer2"></i> {{ __('المواصفات التقنية') }}
+                        <div class="car-section-header"><i class="bi bi-speedometer2"></i> {{ __('المواصفات التقنية والمميزات') }}
                         </div>
                         <div class="car-section-body">
-                            <div class="row g-3">
+                            <div class="row g-3 mb-4">
                                 <div class="col-md-3">
                                     <label class="form-label">{{ __('قوة المحرك') }}</label>
                                     <input type="text" name="specs[hp]" class="form-control" placeholder="300 HP"
@@ -207,95 +242,137 @@
                                     <input type="number" name="specs[seats]" class="form-control" placeholder="5"
                                         value="{{ $car->specs['seats'] ?? '' }}">
                                 </div>
-                                <div class="col-12">
-                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                            </div>
+
+                            {{-- المواصفات --}}
+                            <div class="border rounded-3 p-3 mb-4 bg-light-subtle">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="bi bi-card-checklist text-primary fs-5"></i>
                                         <label class="form-label mb-0 fw-bold">{{ __('المواصفات') }}</label>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="input-group input-group-sm" style="max-width: 200px;">
+                                            <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
+                                            <input type="text" class="form-control border-start-0" placeholder="{{ __('بحث...') }}" oninput="filterGrid(this, 'specs_grid')">
+                                        </div>
                                         <div class="btn-group btn-group-sm">
                                             <button type="button" class="btn btn-outline-secondary"
-                                                onclick="toggleCheckboxes('specifications[]', true)">{{ __('تحديد الكل') }}</button>
+                                                onclick="toggleCheckboxes('specifications[]', true)">{{ __('الكل') }}</button>
                                             <button type="button" class="btn btn-outline-secondary"
-                                                onclick="toggleCheckboxes('specifications[]', false)">{{ __('إلغاء الكل') }}</button>
+                                                onclick="toggleCheckboxes('specifications[]', false)">{{ __('إلغاء') }}</button>
                                         </div>
-                                    </div>
-                                    <div class="checkbox-grid-container">
-                                        <div class="row g-2">
-                                            @foreach($specifications as $spec)
-                                                <div class="col-md-4 col-lg-3">
-                                                    <div class="checkbox-item-wrapper">
-                                                        <input type="checkbox" name="specifications[]" value="{{ $spec->id }}"
-                                                            id="spec_{{ $spec->id }}" class="btn-check"
-                                                            @checked($car->specifications->contains($spec->id))>
-                                                        <label
-                                                            class="btn btn-outline-premium w-100 text-start d-flex align-items-center gap-2"
-                                                            for="spec_{{ $spec->id }}">
-                                                            <i class="bi bi-check-circle-fill check-icon"></i>
-                                                            <span>{{ $spec->name }}</span>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                        </div>
+                                        <button type="button" class="btn btn-sm btn-outline-primary d-flex align-items-center gap-1" onclick="openQuickAddModal('specification')">
+                                            <i class="bi bi-plus-lg"></i> {{ __('إضافة مواصفة') }}
+                                        </button>
                                     </div>
                                 </div>
-                                <div class="col-12 mt-4">
-                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div class="checkbox-grid-container" id="specs_grid">
+                                    <div class="row g-2" id="specs_items_row">
+                                        @foreach($specifications as $spec)
+                                            <div class="col-md-4 col-lg-3 grid-item-col" data-name="{{ strtolower($spec->name) }}">
+                                                <div class="checkbox-item-wrapper">
+                                                    <input type="checkbox" name="specifications[]" value="{{ $spec->id }}"
+                                                        id="spec_{{ $spec->id }}" class="btn-check"
+                                                        @checked($car->specifications->contains($spec->id))>
+                                                    <label
+                                                        class="btn btn-outline-premium w-100 text-start d-flex align-items-center gap-2"
+                                                        for="spec_{{ $spec->id }}">
+                                                        <i class="bi bi-check-circle-fill check-icon"></i>
+                                                        <span>{{ $spec->name }}</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- المميزات --}}
+                            <div class="border rounded-3 p-3 mb-4 bg-light-subtle">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="bi bi-stars text-warning fs-5"></i>
                                         <label class="form-label mb-0 fw-bold">{{ __('المميزات') }}</label>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="input-group input-group-sm" style="max-width: 200px;">
+                                            <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
+                                            <input type="text" class="form-control border-start-0" placeholder="{{ __('بحث...') }}" oninput="filterGrid(this, 'features_grid')">
+                                        </div>
                                         <div class="btn-group btn-group-sm">
                                             <button type="button" class="btn btn-outline-secondary"
-                                                onclick="toggleCheckboxes('features_list[]', true)">{{ __('تحديد الكل') }}</button>
+                                                onclick="toggleCheckboxes('features_list[]', true)">{{ __('الكل') }}</button>
                                             <button type="button" class="btn btn-outline-secondary"
-                                                onclick="toggleCheckboxes('features_list[]', false)">{{ __('إلغاء الكل') }}</button>
+                                                onclick="toggleCheckboxes('features_list[]', false)">{{ __('إلغاء') }}</button>
                                         </div>
-                                    </div>
-                                    <div class="checkbox-grid-container">
-                                        <div class="row g-2">
-                                            @foreach($features_list as $feat)
-                                                <div class="col-md-4 col-lg-3">
-                                                    <div class="checkbox-item-wrapper">
-                                                        <input type="checkbox" name="features_list[]" value="{{ $feat->id }}"
-                                                            id="feat_{{ $feat->id }}" class="btn-check"
-                                                            @checked($car->features_list->contains($feat->id))>
-                                                        <label
-                                                            class="btn btn-outline-premium w-100 text-start d-flex align-items-center gap-2"
-                                                            for="feat_{{ $feat->id }}">
-                                                            <i class="bi bi-check-circle-fill check-icon"></i>
-                                                            <span>{{ $feat->name }}</span>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                        </div>
+                                        <button type="button" class="btn btn-sm btn-outline-warning text-dark d-flex align-items-center gap-1" onclick="openQuickAddModal('feature')">
+                                            <i class="bi bi-plus-lg"></i> {{ __('إضافة ميزة') }}
+                                        </button>
                                     </div>
                                 </div>
-                                <div class="col-12 mt-4">
-                                    <div class="d-flex justify-content-between align-items-center mb-3">
-                                        <label class="form-label mb-0 fw-bold">{{ __('ميزات السلامة') }}</label>
+                                <div class="checkbox-grid-container" id="features_grid">
+                                    <div class="row g-2" id="features_items_row">
+                                        @foreach($features_list as $feat)
+                                            <div class="col-md-4 col-lg-3 grid-item-col" data-name="{{ strtolower($feat->name) }}">
+                                                <div class="checkbox-item-wrapper">
+                                                    <input type="checkbox" name="features_list[]" value="{{ $feat->id }}"
+                                                        id="feat_{{ $feat->id }}" class="btn-check"
+                                                        @checked($car->features_list->contains($feat->id))>
+                                                    <label
+                                                        class="btn btn-outline-premium w-100 text-start d-flex align-items-center gap-2"
+                                                        for="feat_{{ $feat->id }}">
+                                                        <i class="bi bi-check-circle-fill check-icon"></i>
+                                                        <span>{{ $feat->name }}</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- ميزات السلامة --}}
+                            <div class="border rounded-3 p-3 bg-light-subtle">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="bi bi-shield-check text-success fs-5"></i>
+                                        <label class="form-label mb-0 fw-bold">{{ __('ميزات السلامة والأمان') }}</label>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="input-group input-group-sm" style="max-width: 200px;">
+                                            <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
+                                            <input type="text" class="form-control border-start-0" placeholder="{{ __('بحث...') }}" oninput="filterGrid(this, 'safety_grid')">
+                                        </div>
                                         <div class="btn-group btn-group-sm">
                                             <button type="button" class="btn btn-outline-secondary"
-                                                onclick="toggleCheckboxes('safety_features[]', true)">{{ __('تحديد الكل') }}</button>
+                                                onclick="toggleCheckboxes('safety_features[]', true)">{{ __('الكل') }}</button>
                                             <button type="button" class="btn btn-outline-secondary"
-                                                onclick="toggleCheckboxes('safety_features[]', false)">{{ __('إلغاء الكل') }}</button>
+                                                onclick="toggleCheckboxes('safety_features[]', false)">{{ __('إلغاء') }}</button>
                                         </div>
+                                        <button type="button" class="btn btn-sm btn-outline-success d-flex align-items-center gap-1" onclick="openQuickAddModal('safety_feature')">
+                                            <i class="bi bi-plus-lg"></i> {{ __('إضافة ميزة سلامة') }}
+                                        </button>
                                     </div>
-                                    <div class="checkbox-grid-container">
-                                        <div class="row g-2">
-                                            @foreach($safety_features as $safetyFeat)
-                                                <div class="col-md-4 col-lg-3">
-                                                    <div class="checkbox-item-wrapper">
-                                                        <input type="checkbox" name="safety_features[]"
-                                                            value="{{ $safetyFeat->id }}" id="safety_feat_{{ $safetyFeat->id }}"
-                                                            class="btn-check"
-                                                            @checked($car->safety_features->contains($safetyFeat->id))>
-                                                        <label
-                                                            class="btn btn-outline-premium w-100 text-start d-flex align-items-center gap-2"
-                                                            for="safety_feat_{{ $safetyFeat->id }}">
-                                                            <i class="bi bi-check-circle-fill check-icon"></i>
-                                                            <span>{{ $safetyFeat->name }}</span>
-                                                        </label>
-                                                    </div>
+                                </div>
+                                <div class="checkbox-grid-container" id="safety_grid">
+                                    <div class="row g-2" id="safety_items_row">
+                                        @foreach($safety_features as $safetyFeat)
+                                            <div class="col-md-4 col-lg-3 grid-item-col" data-name="{{ strtolower($safetyFeat->name) }}">
+                                                <div class="checkbox-item-wrapper">
+                                                    <input type="checkbox" name="safety_features[]"
+                                                        value="{{ $safetyFeat->id }}" id="safety_feat_{{ $safetyFeat->id }}"
+                                                        class="btn-check"
+                                                        @checked($car->safety_features->contains($safetyFeat->id))>
+                                                    <label
+                                                        class="btn btn-outline-premium w-100 text-start d-flex align-items-center gap-2"
+                                                        for="safety_feat_{{ $safetyFeat->id }}">
+                                                        <i class="bi bi-check-circle-fill check-icon"></i>
+                                                        <span>{{ $safetyFeat->name }}</span>
+                                                    </label>
                                                 </div>
-                                            @endforeach
-                                        </div>
+                                            </div>
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
@@ -531,7 +608,7 @@
             background: var(--crm-red-light);
             border-color: var(--crm-red);
             color: var(--crm-red);
-            box-shadow: 0 4px 12px #EB5E281A
+            box-shadow: 0 4px 12px #c59b271A
         }
 
         .check-icon {
@@ -701,5 +778,202 @@
             const checkboxes = document.querySelectorAll(`input[name="${name}"]`);
             checkboxes.forEach(cb => cb.checked = state);
         }
+
+        // ===== Model Combobox Helpers =====
+        function selectModel(val) {
+            const input = document.getElementById('car_model_input');
+            input.value = val;
+            const dropdown = bootstrap.Dropdown.getInstance(input);
+            if (dropdown) dropdown.hide();
+        }
+
+        function filterModelsList(val) {
+            val = (val || '').toLowerCase().trim();
+            const items = document.querySelectorAll('.model-option-item');
+            let found = 0;
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (!val || text.includes(val)) {
+                    item.parentElement.style.display = '';
+                    found++;
+                } else {
+                    item.parentElement.style.display = 'none';
+                }
+            });
+            const noFound = document.getElementById('no_model_found');
+            if (noFound) {
+                if (found === 0 && val.length > 0) {
+                    noFound.classList.remove('d-none');
+                } else {
+                    noFound.classList.add('d-none');
+                }
+            }
+        }
+
+        function promptNewModel() {
+            const model = prompt('{{ __("أدخل اسم الموديل الجديد:") }}');
+            if (model && model.trim()) {
+                const input = document.getElementById('car_model_input');
+                input.value = model.trim();
+                
+                // Add to list dynamically if not exists
+                const container = document.getElementById('models_items_container');
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <a class="dropdown-item rounded-2 py-1.5 px-2 model-option-item active" href="javascript:void(0)" onclick="selectModel('${model.trim()}')">
+                        <i class="bi bi-car-front text-muted me-1"></i> ${model.trim()}
+                    </a>
+                `;
+                container.prepend(li);
+                
+                const dropdown = bootstrap.Dropdown.getInstance(input);
+                if (dropdown) dropdown.hide();
+            }
+        }
+
+        // ===== Filter Grid Checkboxes =====
+        function filterGrid(input, containerId) {
+            const query = (input.value || '').toLowerCase().trim();
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            const items = container.querySelectorAll('.grid-item-col');
+            items.forEach(item => {
+                const name = item.getAttribute('data-name') || '';
+                if (!query || name.includes(query)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // ===== Quick Add Modal for Specs / Features / Safety Features =====
+        let currentQuickAddType = 'specification';
+        const quickAddConfig = {
+            specification: {
+                title: '{{ __("إضافة مواصفة جديدة") }}',
+                url: '{{ route("crm.specifications.store") }}',
+                rowId: 'specs_items_row',
+                inputName: 'specifications[]',
+                prefix: 'spec'
+            },
+            feature: {
+                title: '{{ __("إضافة ميزة جديدة") }}',
+                url: '{{ route("crm.features.store") }}',
+                rowId: 'features_items_row',
+                inputName: 'features_list[]',
+                prefix: 'feat'
+            },
+            safety_feature: {
+                title: '{{ __("إضافة ميزة سلامة جديدة") }}',
+                url: '{{ route("crm.safety-features.store") }}',
+                rowId: 'safety_items_row',
+                inputName: 'safety_features[]',
+                prefix: 'safety_feat'
+            }
+        };
+
+        function openQuickAddModal(type) {
+            currentQuickAddType = type;
+            const conf = quickAddConfig[type];
+            document.getElementById('quickAddModalLabel').textContent = conf.title;
+            document.getElementById('quickAddNameAr').value = '';
+            document.getElementById('quickAddNameEn').value = '';
+            const modal = new bootstrap.Modal(document.getElementById('quickAddModal'));
+            modal.show();
+        }
+
+        function submitQuickAdd() {
+            const nameAr = document.getElementById('quickAddNameAr').value.trim();
+            const nameEn = document.getElementById('quickAddNameEn').value.trim() || nameAr;
+
+            if (!nameAr) {
+                alert('{{ __("يرجى كتابة الاسم بالعربية على الأقل") }}');
+                return;
+            }
+
+            const conf = quickAddConfig[currentQuickAddType];
+            const btn = document.getElementById('btnSubmitQuickAdd');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> {{ __("جاري الإضافة...") }}';
+
+            fetch(conf.url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: { ar: nameAr, en: nameEn }
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="bi bi-plus-circle me-1"></i> {{ __("إضافة") }}';
+
+                if (data.success && data.item) {
+                    const row = document.getElementById(conf.rowId);
+                    const id = data.item.id;
+                    const name = data.item.name;
+                    const col = document.createElement('div');
+                    col.className = 'col-md-4 col-lg-3 grid-item-col';
+                    col.setAttribute('data-name', name.toLowerCase());
+                    col.innerHTML = `
+                        <div class="checkbox-item-wrapper">
+                            <input type="checkbox" name="${conf.inputName}" value="${id}"
+                                id="${conf.prefix}_${id}" class="btn-check" checked>
+                            <label class="btn btn-outline-premium w-100 text-start d-flex align-items-center gap-2"
+                                for="${conf.prefix}_${id}">
+                                <i class="bi bi-check-circle-fill check-icon"></i>
+                                <span>${name}</span>
+                            </label>
+                        </div>
+                    `;
+                    row.appendChild(col);
+
+                    const modalEl = document.getElementById('quickAddModal');
+                    const modal = bootstrap.Modal.getInstance(modalEl);
+                    if (modal) modal.hide();
+                } else {
+                    alert(data.message || '{{ __("حدث خطأ أثناء الإضافة") }}');
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                btn.disabled = false;
+                btn.innerHTML = '<i class="bi bi-plus-circle me-1"></i> {{ __("إضافة") }}';
+                alert('{{ __("حدث خطأ في الاتصال بالخادم") }}');
+            });
+        }
     </script>
+
+    {{-- Modal for Quick Add --}}
+    <div class="modal fade" id="quickAddModal" tabindex="-1" aria-labelledby="quickAddModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h5 class="modal-title fw-bold" id="quickAddModalLabel">{{ __('إضافة عنصر جديد') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body py-4">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small text-muted">{{ __('الاسم بالعربية') }} <span class="text-danger">*</span></label>
+                        <input type="text" id="quickAddNameAr" class="form-control" placeholder="{{ __('مثال: نظام مراقبة النقطة العمياء') }}" dir="rtl">
+                    </div>
+                    <div class="mb-0">
+                        <label class="form-label fw-semibold small text-muted">{{ __('الاسم بالإنجليزية (اختياري)') }}</label>
+                        <input type="text" id="quickAddNameEn" class="form-control" placeholder="{{ __('e.g. Blind Spot Monitoring') }}" dir="ltr">
+                    </div>
+                </div>
+                <div class="modal-footer border-top-0 pt-0">
+                    <button type="button" class="btn btn-light rounded-3 px-4" data-bs-dismiss="modal">{{ __('إلغاء') }}</button>
+                    <button type="button" id="btnSubmitQuickAdd" class="btn btn-primary rounded-3 px-4" onclick="submitQuickAdd()">
+                        <i class="bi bi-plus-circle me-1"></i> {{ __('إضافة') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection

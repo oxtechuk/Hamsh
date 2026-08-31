@@ -165,20 +165,24 @@ export function useHomePageData() {
   const handleSearch = (values: ICarsSearchValues) => {
     const params = new URLSearchParams();
 
-    if (values.search.trim()) {
+    if (values.search?.trim()) {
+      params.set("search", values.search.trim());
       params.set("q", values.search.trim());
     }
     if (values.brandId) {
       params.set("brands[]", values.brandId);
+    }
+    if (values.model) {
+      params.set("model", values.model);
+    }
+    if (values.year) {
+      params.set("year", values.year);
     }
     if (values.typeId) {
       params.set("type", values.typeId);
     }
     if (values.categoryId) {
       params.set("category_id", values.categoryId);
-    }
-    if (values.year) {
-      params.set("year", values.year);
     }
 
     navigate(`/cars?${params.toString()}`);

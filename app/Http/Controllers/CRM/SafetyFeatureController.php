@@ -17,6 +17,11 @@ class SafetyFeatureController extends Controller
 
     public function store(Request $request)
     {
+        $name = $request->input('name');
+        if (is_string($name)) {
+            $request->merge(['name' => ['ar' => $name, 'en' => $name]]);
+        }
+
         $request->validate([
             'name' => 'required|array',
             'name.ar' => 'required|string',
@@ -27,7 +32,18 @@ class SafetyFeatureController extends Controller
             'icon' => 'nullable|string',
         ]);
 
-        SafetyFeature::create($request->all());
+        $item = SafetyFeature::create($request->all());
+
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'item' => [
+                    'id' => $item->id,
+                    'name' => $item->name,
+                ],
+                'message' => 'تمت إضافة ميزة السلامة بنجاح',
+            ]);
+        }
 
         return back()->with('success', 'تمت إضافة ميزة السلامة بنجاح');
     }

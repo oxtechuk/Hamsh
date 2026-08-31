@@ -18,6 +18,7 @@ export function useCarDetailsModal(slug: string, onClose: () => void) {
     const [activeImage, setActiveImage] = useState(0);
     const [activeTab, setActiveTab] = useState<CarDetailsModalTab>("features");
     const [showOrderModal, setShowOrderModal] = useState(false);
+    const [orderMode, setOrderMode] = useState<"finance" | "cash">("cash");
 
     const { data: car, isLoading } = useQuery({
         queryKey: ["car-details-modal", slug],
@@ -56,14 +57,23 @@ export function useCarDetailsModal(slug: string, onClose: () => void) {
         setActiveImage((prev) => (prev === images.length - 1 ? 0 : prev + 1));
     };
 
-    const handleOrder = () => {
+    const handleOrder = (mode: "cash" | "finance" = "cash") => {
+        setOrderMode(mode);
         if (SHOW_CAR_DETAILS_AS_MODAL) {
             setShowOrderModal(true);
             return;
         }
 
         onClose();
-        navigate("/finance-calculator");
+        if (mode === "finance") {
+            navigate("/finance-calculator");
+        } else {
+            navigate(`/cars/${slug}`);
+        }
+    };
+
+    const handleFinance = () => {
+        handleOrder("finance");
     };
 
     const handleCompare = () => {
@@ -81,6 +91,7 @@ export function useCarDetailsModal(slug: string, onClose: () => void) {
         activeTab,
         setActiveTab,
         showOrderModal,
+        orderMode,
         specRows,
         featureRows,
         images,
@@ -88,6 +99,7 @@ export function useCarDetailsModal(slug: string, onClose: () => void) {
         handlePrev,
         handleNext,
         handleOrder,
+        handleFinance,
         handleCompare,
     };
 }

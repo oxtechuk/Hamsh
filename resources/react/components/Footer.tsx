@@ -47,10 +47,10 @@ export default function Footer({
 
     const socialLinks = settings?.social_media?.length
         ? settings.social_media.map((social) => ({
-              name: social.platform ?? social.icon ?? "",
-              icon: social.platform ?? social.icon ?? "",
-              url: social.url ?? social.link ?? "",
-          }))
+            name: social.platform ?? social.icon ?? "",
+            icon: social.platform ?? social.icon ?? "",
+            url: social.url ?? social.link ?? "",
+        }))
         : propSocialLinks;
 
     const carLinks: FooterLink[] = [
@@ -360,7 +360,7 @@ export default function Footer({
                                     href="https://www.digitalplussa.com/ar"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="font-medium text-[var(--brand-primary-color,#EB5E28)] hover:underline transition-colors"
+                                    className="font-medium text-[var(--brand-primary-color,#c59b27)] hover:underline transition-colors"
                                 >
                                     {direction === "rtl" ? "شركة ديجيتال بلس" : "Digital Plus"}
                                 </a>

@@ -13,7 +13,7 @@ class TrackingController extends Controller
             'new' => ['label' => 'جديد',        'color' => '#1877F2', 'count' => 0],
             'contacted' => ['label' => 'تم التواصل',    'color' => '#0DCAF0', 'count' => 0],
             'interested' => ['label' => 'مهتم',         'color' => '#FF9800', 'count' => 0],
-            'rejected' => ['label' => 'مرفوض',        'color' => '#EB5E281A', 'count' => 0],
+            'rejected' => ['label' => 'مرفوض',        'color' => '#c59b271A', 'count' => 0],
             'sold' => ['label' => 'تم البيع ✓',   'color' => '#4CAF50', 'count' => 0],
         ];
 

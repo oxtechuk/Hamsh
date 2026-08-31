@@ -17,6 +17,11 @@ class FeatureController extends Controller
 
     public function store(Request $request)
     {
+        $name = $request->input('name');
+        if (is_string($name)) {
+            $request->merge(['name' => ['ar' => $name, 'en' => $name]]);
+        }
+
         $request->validate([
             'name' => 'required|array',
             'name.ar' => 'required|string',
@@ -27,7 +32,18 @@ class FeatureController extends Controller
             'icon' => 'nullable|string',
         ]);
 
-        Feature::create($request->all());
+        $item = Feature::create($request->all());
+
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'item' => [
+                    'id' => $item->id,
+                    'name' => $item->name,
+                ],
+                'message' => 'تمت إضافة الخاصية بنجاح',
+            ]);
+        }
 
         return back()->with('success', 'تمت إضافة الخاصية بنجاح');
     }

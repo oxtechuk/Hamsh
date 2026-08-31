@@ -17,6 +17,11 @@ class SpecificationController extends Controller
 
     public function store(Request $request)
     {
+        $name = $request->input('name');
+        if (is_string($name)) {
+            $request->merge(['name' => ['ar' => $name, 'en' => $name]]);
+        }
+
         $request->validate([
             'name' => 'required|array',
             'name.ar' => 'required|string',
@@ -27,7 +32,18 @@ class SpecificationController extends Controller
             'icon' => 'nullable|string',
         ]);
 
-        Specification::create($request->all());
+        $item = Specification::create($request->all());
+
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'item' => [
+                    'id' => $item->id,
+                    'name' => $item->name,
+                ],
+                'message' => 'تمت إضافة المواصفة بنجاح',
+            ]);
+        }
 
         return back()->with('success', 'تمت إضافة المواصفة بنجاح');
     }

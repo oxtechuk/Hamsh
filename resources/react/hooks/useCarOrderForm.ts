@@ -12,13 +12,17 @@ import {
 import type { CarDetails } from "../types/cars.types";
 import type { ICarOrderFormData } from "../interfaces/ICarOrderModalProps";
 
-export function useCarOrderForm(car: CarDetails) {
+export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash" = "finance") {
     const { t } = useTranslation();
 
-    const [step, setStep] = useState<1 | 2>(1);
+    const [mode, setMode] = useState<"finance" | "cash">(initialMode);
+    const [step, setStep] = useState<1 | 2>(initialMode === "finance" ? 2 : 1);
     const [done, setDone] = useState(false);
     const [submitting, setSubmitting] = useState(false);
-    const [form, setForm] = useState<ICarOrderFormData>(EMPTY_CAR_ORDER_FORM);
+    const [form, setForm] = useState<ICarOrderFormData>({
+        ...EMPTY_CAR_ORDER_FORM,
+        orderType: initialMode,
+    });
 
     const { data: citiesData = [] } = useQuery({
         queryKey: ["cities"],
@@ -38,43 +42,95 @@ export function useCarOrderForm(car: CarDetails) {
         setForm((previous) => ({ ...previous, [key]: value }));
     };
 
-    const canContinueStep1 = Boolean(
+    const canSubmitCash = Boolean(
         form.fullName.trim() && form.city.trim() && form.phone.trim(),
     );
 
-    const canSubmitStep2 = Boolean(form.salary.trim() && form.workSector);
+    const canSubmitFinance = Boolean(
+        form.fullName.trim() &&
+        form.phone.trim() &&
+        form.city.trim() &&
+        form.workSector &&
+        form.salary.trim(),
+    );
 
-    const eligibility = useMemo(() => {
+    // Calculate DBR and Acceptance Score
+    const dbrAnalysis = useMemo(() => {
         const salary = Number(form.salary) || 0;
         const obligations = Number(form.obligations) || 0;
-        if (salary <= 0) return 40;
-        const ratio = obligations / salary;
-        return Math.max(5, Math.min(95, Math.round(100 - ratio * 100)));
+
+        if (salary <= 0) {
+            return {
+                dbrRatio: 0,
+                isExceeded: false,
+                score: null as number | null,
+                scoreLabel: "—",
+                colorClass: "bg-gray-300",
+                textClass: "text-gray-600",
+                barColor: "#E2E8F0",
+                status: "empty",
+            };
+        }
+
+        const dbrRatio = Math.round((obligations / salary) * 100);
+        const isExceeded = dbrRatio > 45;
+
+        if (isExceeded) {
+            return {
+                dbrRatio,
+                isExceeded: true,
+                score: 32,
+                scoreLabel: "32%",
+                colorClass: "bg-[#C81E1E]",
+                textClass: "text-[#C81E1E]",
+                barColor: "#C81E1E",
+                status: "high_dbr",
+            };
+        }
+
+        if (dbrRatio > 33) {
+            const score = Math.max(45, Math.min(75, 100 - dbrRatio));
+            return {
+                dbrRatio,
+                isExceeded: false,
+                score,
+                scoreLabel: `${score}%`,
+                colorClass: "bg-[#D97706]",
+                textClass: "text-[#D97706]",
+                barColor: "#D97706",
+                status: "medium_dbr",
+            };
+        }
+
+        const score = Math.max(80, Math.min(95, 100 - dbrRatio));
+        return {
+            dbrRatio,
+            isExceeded: false,
+            score,
+            scoreLabel: `${score}%`,
+            colorClass: "bg-[#16A34A]",
+            textClass: "text-[#16A34A]",
+            barColor: "#16A34A",
+            status: "good_dbr",
+        };
     }, [form.salary, form.obligations]);
 
-    const handleStep1Submit = (event: FormEvent<HTMLFormElement>) => {
+    const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        if (!canContinueStep1) return;
-        setStep(2);
-    };
 
-    const handleStep2Submit = async (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        if (!canSubmitStep2) return;
+        if (mode === "cash" && !canSubmitCash) return;
+        if (mode === "finance" && !canSubmitFinance) return;
 
         setSubmitting(true);
 
         try {
             const notes = [
-                form.salary
-                    ? `${t("carDetails.modal.notes.salary")}: ${form.salary}`
-                    : "",
-                form.workSector
-                    ? `${t("carDetails.modal.notes.workSector")}: ${t(`carDetails.modal.workSector.${form.workSector}`)}`
-                    : "",
-                form.obligations
-                    ? `${t("carDetails.modal.notes.obligations")}: ${form.obligations}`
-                    : "",
+                mode === "finance" ? "طلب تمويل سيارة" : "طلب شراء كاش مباشر",
+                form.salary ? `الدخل الشهري: ${form.salary} ر.س` : "",
+                form.workSector ? `جهة العمل: ${form.workSector}` : "",
+                form.obligations ? `الالتزامات: ${form.obligations} ر.س` : "",
+                dbrAnalysis.score !== null ? `مؤشر القبول: ${dbrAnalysis.scoreLabel} (نسبة الاستقطاع: ${dbrAnalysis.dbrRatio}%)` : "",
+                form.consolidateDebts ? "يرغب في الاستفادة من خيار الحلول التمويلية وتوحيد الالتزامات" : "",
             ]
                 .filter(Boolean)
                 .join(" | ");
@@ -86,7 +142,7 @@ export function useCarOrderForm(car: CarDetails) {
                 city: form.city,
                 car_id: car.id,
                 down_payment: 0,
-                booking_type: "purchase",
+                booking_type: mode === "finance" ? "finance" : "purchase",
                 notes,
             });
 
@@ -99,6 +155,8 @@ export function useCarOrderForm(car: CarDetails) {
     };
 
     return {
+        mode,
+        setMode,
         step,
         setStep,
         done,
@@ -106,10 +164,9 @@ export function useCarOrderForm(car: CarDetails) {
         form,
         cityOptions,
         setField,
-        canContinueStep1,
-        canSubmitStep2,
-        eligibility,
-        handleStep1Submit,
-        handleStep2Submit,
+        canSubmitCash,
+        canSubmitFinance,
+        dbrAnalysis,
+        handleFormSubmit,
     };
 }

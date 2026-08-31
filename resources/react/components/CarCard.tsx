@@ -1,14 +1,18 @@
 import { useState, type MouseEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { CreditCard, ShoppingBag } from "lucide-react";
 
 import LazyImg from "./LazyImg";
 import CarDetailsModal from "./CarDetailsModal";
+import CarOrderModal from "./CarOrderModal";
 import type { ICarCardProps } from "../interfaces/ICarCardProps";
 import { buildCarSpecPills } from "../utils/car-card-utils";
 import { resolveHighlight } from "../utils/badge-utils";
 import { SHOW_CAR_DETAILS_AS_MODAL } from "../constants/feature-flags";
 import { useSettingsStore } from "../store/settings.store";
+import { getCarBySlug } from "../services/api";
 
 const MAX_VISIBLE_PILLS = 2;
 
@@ -34,12 +38,22 @@ export default function CarCard({
     const { t, i18n } = useTranslation();
     const navigate = useNavigate();
     const direction = i18n.dir();
+    const isRTL = direction === "rtl";
 
     const carPopupEnabled = useSettingsStore(
         (state) => state.settings?.car_popup_enabled ?? SHOW_CAR_DETAILS_AS_MODAL,
     );
 
     const [showDetailsModal, setShowDetailsModal] = useState(false);
+    const [showOrderModal, setShowOrderModal] = useState(false);
+    const [orderMode, setOrderMode] = useState<"finance" | "cash">("cash");
+
+    // Fetch car details when direct order/finance modal is triggered
+    const { data: carDetails } = useQuery({
+        queryKey: ["car-details-card", slug],
+        queryFn: () => getCarBySlug(slug!),
+        enabled: Boolean(showOrderModal && slug),
+    });
 
     const resolvedBadge = resolveHighlight(badgeText, i18n.language);
     const finalBadge = resolvedBadge
@@ -56,6 +70,20 @@ export default function CarCard({
         }
 
         navigate(detailsTo);
+    };
+
+    const handleOpenOrder = (mode: "cash" | "finance") => {
+        setOrderMode(mode);
+        if (carPopupEnabled && slug) {
+            setShowOrderModal(true);
+            return;
+        }
+
+        if (mode === "finance") {
+            navigate("/finance-calculator");
+        } else {
+            navigate(detailsTo);
+        }
     };
 
     const handleCompare = (event: MouseEvent<HTMLButtonElement>) => {
@@ -75,7 +103,7 @@ export default function CarCard({
                 dir={direction}
                 onClick={handleOpenDetails}
                 className={[
-                    "group relative flex w-full flex-col overflow-hidden ",
+                    "group relative flex w-full flex-col overflow-hidden rounded-xl",
                     "border border-[#E8E7E3] bg-white shadow-[0_2px_12px_rgba(0,0,0,0.03)]",
                     "transition-all duration-300 hover:-translate-y-1 hover:shadow-md cursor-pointer",
                 ].join(" ")}
@@ -93,7 +121,7 @@ export default function CarCard({
                     {finalBadge && (
                         <div className="absolute start-3 top-3 z-10">
                             <span
-                                className="inline-flex items-center justify-center px-3 py-1 text-[12px] font-bold text-white shadow-xs"
+                                className="inline-flex items-center justify-center px-3 py-1 text-[12px] font-bold text-white shadow-xs rounded-sm"
                                 style={{
                                     backgroundColor:
                                         finalBadge.color || "#DFA655",
@@ -108,17 +136,24 @@ export default function CarCard({
                 {/* Content Area */}
                 <div className="flex flex-1 flex-col justify-between border-b-2 border-[#E3E1DC] p-5 text-start">
                     <div>
-                        {/* Brand & Meta Row */}
+                        {/* Brand & Meta Row (With clickable details trigger) */}
                         <div className="flex items-center justify-between gap-2">
                             <p className="truncate text-[13px] font-bold text-[#DFA655]">
                                 {brand || t("carCard.defaultBrand")}
                             </p>
-                            <p className="shrink-0 text-[12px] font-medium text-[#888888]">
+                            <button
+                                type="button"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleOpenDetails();
+                                }}
+                                className="shrink-0 text-[12px] font-medium text-[#888888] hover:text-[#DFA655] transition-colors cursor-pointer"
+                            >
                                 {type
                                     ? `${type} · `
                                     : `${t("carCard.defaultType")} · `}
                                 {year || t("carCard.defaultYear")}
-                            </p>
+                            </button>
                         </div>
 
                         {/* Title */}
@@ -153,21 +188,21 @@ export default function CarCard({
                         <div className="mb-5 flex items-baseline justify-between gap-2 text-start">
                             {/* Cash price */}
                             <div className="text-start">
-                                <p className="text-[12px] font-medium ">
+                                <p className="text-[12px] font-medium text-gray-500">
                                     {t("carCard.cashPrice")}
                                 </p>
-                                <p className="mt-0.5 text-[22px] sm:text-[24px] font-black text-[#111111]">
+                                <p className="mt-0.5 text-[21px] sm:text-[23px] font-black text-[#111111]">
                                     {price}
                                 </p>
                             </div>
 
                             {/* Monthly price */}
                             {monthlyPrice ? (
-                                <div>
-                                    <p className="text-[12px] font-medium">
+                                <div className="text-end">
+                                    <p className="text-[12px] font-medium text-gray-500">
                                         {t("carCard.monthlyPayment")}
                                     </p>
-                                    <p className="mt-0.5 text-[18px] sm:text-[19px] font-extrabold text-[#DFA655]">
+                                    <p className="mt-0.5 text-[17px] sm:text-[18px] font-extrabold text-[#DFA655]">
                                         {monthlyPrice}
                                     </p>
                                 </div>
@@ -176,37 +211,49 @@ export default function CarCard({
                             )}
                         </div>
 
-                        {/* Action Buttons Row */}
+                        {/* Action Buttons Row: طلب سيارة | تمويل */}
                         <div
-                            className="grid grid-cols-2 gap-3"
+                            className="grid grid-cols-2 gap-2.5"
                             onClick={(event) => event.stopPropagation()}
                         >
-                            {/* Details Button */}
+                            {/* 1. زر طلب سيارة (شراء) */}
                             <button
                                 type="button"
-                                onClick={handleOpenDetails}
-                                className="flex h-[44px] w-full items-center justify-center rounded-[4px] bg-[#DFA655] text-[15px] font-bold text-white shadow-xs transition hover:bg-[#c89345] active:scale-95 cursor-pointer"
+                                onClick={() => handleOpenOrder("cash")}
+                                className="flex h-[44px] w-full items-center justify-center gap-1.5 rounded-[6px] bg-[#DFA655] text-[14px] font-bold text-white shadow-xs transition hover:bg-[#c89345] active:scale-95 cursor-pointer"
                             >
-                                {reserveText ?? t("carCard.details")}
+                                <ShoppingBag size={15} />
+                                <span>{isRTL ? "طلب سيارة" : "Order Car"}</span>
                             </button>
 
-                            {/* Compare Button */}
+                            {/* 2. زر تمويل */}
                             <button
                                 type="button"
-                                onClick={handleCompare}
-                                className="flex h-[44px] w-full items-center justify-center rounded-[4px] border border-[#D0D5DD] bg-white text-[14px] font-bold text-[#344054] transition hover:bg-gray-50 active:scale-95 cursor-pointer"
+                                onClick={() => handleOpenOrder("finance")}
+                                className="flex h-[44px] w-full items-center justify-center gap-1.5 rounded-[6px] border border-[#172139] bg-[#172139] text-[14px] font-bold text-white transition hover:bg-[#202d4d] active:scale-95 cursor-pointer shadow-xs"
                             >
-                                {compareText ?? t("carCard.compare")}
+                                <CreditCard size={15} className="text-[#DDBB72]" />
+                                <span>{isRTL ? "تمويل" : "Finance"}</span>
                             </button>
                         </div>
                     </div>
                 </div>
             </article>
 
+            {/* Details Modal */}
             {showDetailsModal && slug && (
                 <CarDetailsModal
                     slug={slug}
                     onClose={() => setShowDetailsModal(false)}
+                />
+            )}
+
+            {/* Direct Order / Finance Modal */}
+            {showOrderModal && carDetails && (
+                <CarOrderModal
+                    car={carDetails}
+                    initialMode={orderMode}
+                    onClose={() => setShowOrderModal(false)}
                 />
             )}
         </>

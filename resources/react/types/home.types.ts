@@ -273,6 +273,7 @@ export interface HomePageData {
   filter_categories?: FilterCategory[];
   filter_brand_types?: FilterCategory[];
   filter_years?: (string | { year: string })[];
+  filter_models?: string[];
   filter_prices?: FilterPrice[];
   active_offers?: ActiveOffer[];
 }

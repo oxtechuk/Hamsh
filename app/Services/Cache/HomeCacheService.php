@@ -62,6 +62,15 @@ class HomeCacheService extends BaseCacheService
                 ->map(fn ($car) => ['year' => $car->year])
                 ->values();
 
+            $filterModels = Car::where('is_active', true)
+                ->whereNotNull('model')
+                ->where('model', '!=', '')
+                ->select('model')
+                ->distinct()
+                ->orderBy('model')
+                ->pluck('model')
+                ->values();
+
             $filterBrandTypes = BrandType::where('is_active', true)->orderBy('sort_order')->orderBy('id')->get();
 
             $carPrices = Car::where('is_active', true)->pluck('cash_price');
@@ -112,16 +121,18 @@ class HomeCacheService extends BaseCacheService
                 ];
             })->values();
 
-            $bentoCars = Car::with(['brand', 'images'])
-                ->where('is_active', true)
+            $bentoCars = Car::where('is_active', true)
+                ->where('is_highlighted', '!=', 'none')
+                ->with(['brand', 'images'])
                 ->latest()
-                ->take(5)
+                ->limit(6)
                 ->get();
 
-            $highlightedCars = Car::with(['brand', 'images'])
+            $highlightedCars = Car::where('is_active', true)
                 ->where('is_highlighted', '!=', 'none')
-                ->where('is_active', true)
+                ->with(['brand', 'images'])
                 ->latest()
+                ->limit(8)
                 ->get();
 
             $highlightCounts = Car::where('is_active', true)
@@ -135,7 +146,7 @@ class HomeCacheService extends BaseCacheService
             return compact(
                 'featuredCars', 'activeOffers', 'brands', 'latestPosts', 'stats',
                 'testimonials', 'partners',
-                'filterBrands', 'filterCategories', 'filterTypes', 'filterYears',
+                'filterBrands', 'filterCategories', 'filterTypes', 'filterYears', 'filterModels',
                 'filterBrandTypes', 'filterPrices', 'filterFuels', 'filterHorsepowers', 'highlightCounts', 'bentoCars',
                 'highlightedCars', 'heroSlides',
             );

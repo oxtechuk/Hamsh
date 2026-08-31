@@ -3,13 +3,19 @@ import type { CarDetails } from "../types/cars.types";
 export interface ICarOrderModalProps {
   car: CarDetails;
   onClose: () => void;
+  initialMode?: "finance" | "cash";
 }
 
 export type CarOrderWorkSector =
+  | "private_approved"
   | "government"
-  | "private"
+  | "semi_government"
+  | "private_unapproved"
+  | "military"
   | "retired"
-  | "freelance";
+  | "private"
+  | "freelance"
+  | "other";
 
 export interface ICarOrderFormData {
   fullName: string;
@@ -17,6 +23,8 @@ export interface ICarOrderFormData {
   phone: string;
   email: string;
   salary: string;
-  workSector: CarOrderWorkSector | "";
+  workSector: string;
   obligations: string;
+  consolidateDebts?: boolean;
+  orderType?: "finance" | "cash";
 }

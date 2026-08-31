@@ -25,6 +25,7 @@ export default function CarDetailsModal({
         activeTab,
         setActiveTab,
         showOrderModal,
+        orderMode,
         specRows,
         featureRows,
         images,
@@ -32,11 +33,12 @@ export default function CarDetailsModal({
         handlePrev,
         handleNext,
         handleOrder,
+        handleFinance,
         handleCompare,
     } = useCarDetailsModal(slug, onClose);
 
     if (showOrderModal && car) {
-        return <CarOrderModal car={car} onClose={onClose} />;
+        return <CarOrderModal car={car} initialMode={orderMode} onClose={onClose} />;
     }
 
     return createPortal(
@@ -67,12 +69,9 @@ export default function CarDetailsModal({
                         <div className="grid grid-cols-1 lg:grid-cols-2">
                             <CarDetailsInfoPanel
                                 car={car}
-                                activeTab={activeTab}
-                                specRows={specRows}
                                 featureRows={featureRows}
-                                onChangeTab={setActiveTab}
-                                onCompare={handleCompare}
-                                onOrder={handleOrder}
+                                onOrder={() => handleOrder("cash")}
+                                onFinance={() => handleOrder("finance")}
                             />
 
                             <CarDetailsModalGallery

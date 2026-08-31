@@ -3,8 +3,8 @@ GR-MOTOR BY OX TECH.UK /oxtech.uk
 File: E-Commerce init js
 */
 
-var color = "#EB5E281A";
-var gradientColors = ["#EB5E281A", "#64b5f6"];
+var color = "#c59b271A";
+var gradientColors = ["#c59b271A", "#64b5f6"];
 
 var salesRevenueChart = {
   series: [{
@@ -129,7 +129,7 @@ var revenueChart = {
     type: "area",
     toolbar: { show: false }
   },
-  colors: ["#EB5E281A", "#28a745"],
+  colors: ["#c59b271A", "#28a745"],
   dataLabels: { enabled: false },
   stroke: { curve: "smooth", width: 2 },
   grid: { show: false },

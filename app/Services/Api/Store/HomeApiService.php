@@ -115,6 +115,7 @@ final class HomeApiService
             'filter_categories' => ($data['filterCategories'] ?? collect())->values(),
             'filter_types' => ($data['filterTypes'] ?? collect())->values(),
             'filter_years' => ($data['filterYears'] ?? collect())->values(),
+            'filter_models' => ($data['filterModels'] ?? collect())->values(),
             'filter_prices' => ($data['filterPrices'] ?? collect())->values(),
             'filter_fuels' => ($data['filterFuels'] ?? collect())->values(),
             'filter_horsepowers' => ($data['filterHorsepowers'] ?? collect())->values(),

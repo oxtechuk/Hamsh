@@ -1041,7 +1041,7 @@
                             <p class="small text-white opacity-50 mb-4">{{ __('تأكد من مراجعة جميع الأقسام قبل الحفظ.') }}</p>
                             @can('manage-settings')
                                 <button type="submit" class="btn w-100 py-3 fw-bold rounded-3"
-                                    style="background:#EB5E28;color:#fff;">
+                                    style="background:#c59b27;color:#fff;">
                                     <i class="bi bi-check2-circle me-2"></i> {{ __('تحديث الإعدادات') }}
                                 </button>
                             @endcan
