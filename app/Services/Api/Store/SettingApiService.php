@@ -24,6 +24,7 @@ final class SettingApiService
         'hero_ad_1_image', 'hero_ad_2_image', 'page_loader_image',
         'store_img_hero_mask', 'store_img_hero_card_1', 'store_img_hero_card_3',
         'store_img_business_1', 'store_img_offer_banner_left',
+        'maintenance_image',
     ];
 
     private const ARRAY_IMAGE_KEYS = [
@@ -62,6 +63,16 @@ final class SettingApiService
             $aboutBranches = json_decode($aboutBranches, true) ?: [];
         }
 
+        $maintenanceTitle = $settings->get('maintenance_title', '');
+        if (is_array($maintenanceTitle)) {
+            $maintenanceTitle = $maintenanceTitle[$locale] ?? ($maintenanceTitle['ar'] ?? '');
+        }
+
+        $maintenanceMessage = $settings->get('maintenance_message', '');
+        if (is_array($maintenanceMessage)) {
+            $maintenanceMessage = $maintenanceMessage[$locale] ?? ($maintenanceMessage['ar'] ?? '');
+        }
+
         return [
             'logo' => $this->resolveUrl($settings->get('site_logo')),
             'favicon' => $this->resolveUrl($settings->get('site_favicon')),
@@ -76,6 +87,13 @@ final class SettingApiService
             'social_media' => $socialMedia,
             'about_branches' => $aboutBranches,
             'car_popup_enabled' => $settings->get('car_popup_enabled', '0') === '1',
+            'maintenance' => [
+                'enabled' => $settings->get('maintenance_mode_enabled', '0') === '1',
+                'title' => $maintenanceTitle,
+                'message' => $maintenanceMessage,
+                'image' => $this->resolveUrl($settings->get('maintenance_image')),
+                'show_contact' => $settings->get('maintenance_show_contact', '1') === '1',
+            ],
         ];
     }
 

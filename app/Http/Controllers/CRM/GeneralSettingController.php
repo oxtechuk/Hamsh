@@ -109,6 +109,10 @@ class GeneralSettingController extends Controller
             'about_sections',
             'main_offer_id',
             'enable_twilio_otp',
+            'maintenance_mode_enabled',
+            'maintenance_title',
+            'maintenance_message',
+            'maintenance_show_contact',
         ];
 
         // Update text/array settings
@@ -126,6 +130,12 @@ class GeneralSettingController extends Controller
         }
         if (! $request->has('car_popup_enabled')) {
             Setting::updateOrCreate(['key' => 'car_popup_enabled'], ['value' => '0']);
+        }
+        if (! $request->has('maintenance_mode_enabled')) {
+            Setting::updateOrCreate(['key' => 'maintenance_mode_enabled'], ['value' => '0']);
+        }
+        if (! $request->has('maintenance_show_contact')) {
+            Setting::updateOrCreate(['key' => 'maintenance_show_contact'], ['value' => '0']);
         }
 
         // Handle About Hero Gallery Images
@@ -232,12 +242,27 @@ class GeneralSettingController extends Controller
         }
         Setting::updateOrCreate(['key' => 'about_branches'], ['value' => $aboutBranches]);
 
-        // Handle File Uploads (site_logo, site_favicon, default_car_image)
-        $files = ['site_logo', 'site_favicon', 'default_car_image'];
+        // Handle File Uploads (site_logo, site_favicon, default_car_image, maintenance_image)
+        $files = ['site_logo', 'site_favicon', 'default_car_image', 'maintenance_image'];
         foreach ($files as $fileKey) {
             if ($request->hasFile($fileKey)) {
+                $existing = Setting::where('key', $fileKey)->first();
+                if ($existing && ! empty($existing->value) && Storage::disk('public')->exists($existing->value)) {
+                    Storage::disk('public')->delete($existing->value);
+                }
                 $path = $request->file($fileKey)->store('settings', 'public');
                 Setting::updateOrCreate(['key' => $fileKey], ['value' => $path]);
+            }
+        }
+
+        // Handle Maintenance Image Deletion
+        if ($request->has('delete_maintenance_image')) {
+            $existing = Setting::where('key', 'maintenance_image')->first();
+            if ($existing && ! empty($existing->value)) {
+                if (Storage::disk('public')->exists($existing->value)) {
+                    Storage::disk('public')->delete($existing->value);
+                }
+                $existing->delete();
             }
         }
 

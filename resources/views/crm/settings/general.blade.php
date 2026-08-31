@@ -33,6 +33,9 @@
                                 <button type="button" class="settings-nav-btn" data-tab="contact">
                                     <i class="bi bi-telephone"></i> {{ __('التواصل والشبكات') }}
                                 </button>
+                                <button type="button" class="settings-nav-btn" data-tab="maintenance">
+                                    <i class="bi bi-tools"></i> {{ __('وضع الصيانة') }}
+                                </button>
                             </nav>
 
                             <p class="nav-group-label">{{ __('الصفحة الرئيسية') }}</p>
@@ -284,6 +287,126 @@
                                     <p class="text-muted small mt-2 mb-0"><i
                                             class="bi bi-info-circle me-1"></i>{{ __('أيقونات Bootstrap Icons:') }}
                                         <code>bi-facebook</code>, <code>bi-instagram</code>, <code>bi-tiktok</code>, <code>bi-twitter-x</code>, <code>bi-snapchat</code>…</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- =============================== --}}
+                        {{-- TAB: وضع الصيانة --}}
+                        {{-- =============================== --}}
+                        <div class="settings-pane d-none" id="tab-maintenance">
+                            <div class="card border-0 shadow-sm rounded-4">
+                                <div class="card-header bg-transparent border-0 p-4 pb-0">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="fw-bold mb-0">{{ __('وضع الصيانة (Maintenance Mode)') }}</h6>
+                                            <p class="text-muted small mb-0">{{ __('التحكم في إتاحة الواجهة الأمامية للموقع للمستخدمين والزوار') }}</p>
+                                        </div>
+                                        <span class="badge {{ ($settings['maintenance_mode_enabled'] ?? '0') == '1' ? 'bg-danger text-white' : 'bg-success-subtle text-success' }} px-3 py-2 rounded-pill">
+                                            <i class="bi {{ ($settings['maintenance_mode_enabled'] ?? '0') == '1' ? 'bi-exclamation-triangle-fill me-1' : 'bi-check-circle-fill me-1' }}"></i>
+                                            {{ ($settings['maintenance_mode_enabled'] ?? '0') == '1' ? __('وضع الصيانة مفعّل') : __('الموقع يعمل بصورة طبيعية') }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="card-body p-4">
+                                    @if(($settings['maintenance_mode_enabled'] ?? '0') == '1')
+                                        <div class="alert alert-danger d-flex align-items-center rounded-3 p-3 mb-4" role="alert">
+                                            <i class="bi bi-shield-exclamation fs-3 me-3"></i>
+                                            <div>
+                                                <div class="fw-bold">{{ __('تنبيه: الواجهة الأمامية معطلة حالياً') }}</div>
+                                                <div class="small">{{ __('الزوار يرون شاشة الصيانة فقط عند تصفح المتجر. يمكنك الاستمرار في استخدام لوحة التحكم كالمعتاد.') }}</div>
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    <div class="row g-4">
+                                        {{-- سويتش تفعيل وضع الصيانة --}}
+                                        <div class="col-12">
+                                            <div class="d-flex align-items-center justify-content-between p-3 bg-light rounded-3 border">
+                                                <div>
+                                                    <p class="fw-bold mb-0 text-dark">{{ __('تفعيل وضع الصيانة للواجهة الأمامية') }}</p>
+                                                    <p class="text-muted small mb-0">{{ __('عند التفعيل، سيتم توجيه جميع زوار الموقع إلى صفحة الصيانة والتطوير') }}</p>
+                                                </div>
+                                                <div class="form-check form-switch fs-4 mb-0">
+                                                    <input type="hidden" name="maintenance_mode_enabled" value="0">
+                                                    <input class="form-check-input" type="checkbox" name="maintenance_mode_enabled"
+                                                        value="1" {{ ($settings['maintenance_mode_enabled'] ?? '0') == '1' ? 'checked' : '' }}>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {{-- صورة شاشة الصيانة --}}
+                                        <div class="col-12">
+                                            <label class="form-label fw-semibold small text-muted d-block mb-2">{{ __('صورة وضع الصيانة (Maintenance Image)') }}</label>
+                                            <div class="d-flex flex-column flex-md-row align-items-start gap-3">
+                                                <div class="upload-preview rounded-3 p-2 bg-light border text-center position-relative" style="width:160px;height:120px;">
+                                                    @if(isset($settings['maintenance_image']) && !empty($settings['maintenance_image']))
+                                                        <img src="{{ asset('storage/' . $settings['maintenance_image']) }}" alt="Maintenance" class="w-100 h-100 object-fit-contain rounded-2">
+                                                        <button type="submit" name="delete_maintenance_image" value="1"
+                                                            class="btn btn-danger btn-sm rounded-circle position-absolute top-0 end-0 m-1 lh-1 p-1"
+                                                            title="{{ __('حذف الصورة') }}"
+                                                            onclick="return confirm('{{ __('هل تريد حذف صورة وضع الصيانة؟') }}')"
+                                                            style="width:24px;height:24px;font-size:11px;">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    @else
+                                                        <div class="d-flex flex-column align-items-center justify-content-center h-100 text-muted opacity-50">
+                                                            <i class="bi bi-tools fs-1 mb-1"></i>
+                                                            <span class="small">{{ __('لا توجد صورة') }}</span>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <input type="file" name="maintenance_image" class="form-control bg-light border-0 form-control-sm mb-2" accept="image/*">
+                                                    <p class="text-muted small mb-0">
+                                                        <i class="bi bi-info-circle me-1"></i>
+                                                        {{ __('ارفع صورة أو رسم توضيحي مناسب لشاشة الصيانة (PNG, JPG, SVG, WebP). إذا لم ترفع صورة، سيتم استخدام أيقونة وشعار المتجر الافتراضي.') }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {{-- عنوان الصيانة --}}
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold small text-muted">{{ __('عنوان الصيانة — عربي') }}</label>
+                                            <input type="text" name="maintenance_title[ar]" class="form-control bg-light border-0"
+                                                value="{{ is_array($settings['maintenance_title'] ?? null) ? ($settings['maintenance_title']['ar'] ?? '') : ($settings['maintenance_title'] ?? '') }}"
+                                                placeholder="{{ __('الموقع قيد الصيانة والتطوير حالياً') }}">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold small text-muted">{{ __('عنوان الصيانة — إنجليزي') }}</label>
+                                            <input type="text" name="maintenance_title[en]" class="form-control bg-light border-0"
+                                                value="{{ is_array($settings['maintenance_title'] ?? null) ? ($settings['maintenance_title']['en'] ?? '') : '' }}"
+                                                placeholder="Our website is currently under maintenance">
+                                        </div>
+
+                                        {{-- رسالة الصيانة --}}
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold small text-muted">{{ __('نص الرسالة التوضيحية — عربي') }}</label>
+                                            <textarea name="maintenance_message[ar]" class="form-control bg-light border-0" rows="3"
+                                                placeholder="{{ __('نعمل حالياً على تحديث وتطوير الموقع لتقديم تجربة أفضل، سنعود قريباً.') }}">{{ is_array($settings['maintenance_message'] ?? null) ? ($settings['maintenance_message']['ar'] ?? '') : ($settings['maintenance_message'] ?? '') }}</textarea>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold small text-muted">{{ __('نص الرسالة التوضيحية — إنجليزي') }}</label>
+                                            <textarea name="maintenance_message[en]" class="form-control bg-light border-0" rows="3"
+                                                placeholder="We are currently upgrading our system to serve you better. We will be back shortly.">{{ is_array($settings['maintenance_message'] ?? null) ? ($settings['maintenance_message']['en'] ?? '') : '' }}</textarea>
+                                        </div>
+
+                                        {{-- إظهار أزرار التواصل --}}
+                                        <div class="col-12">
+                                            <div class="d-flex align-items-center justify-content-between p-3 bg-light rounded-3">
+                                                <div>
+                                                    <p class="fw-semibold mb-0 small">{{ __('إظهار أزرار التواصل في شاشة الصيانة') }}</p>
+                                                    <p class="text-muted small mb-0">{{ __('عرض زر واتساب ورقم الاتصال بالمعرض حتى يتمكن العملاء من التواصل المباشر أثناء الصيانة') }}</p>
+                                                </div>
+                                                <div class="form-check form-switch fs-5 mb-0">
+                                                    <input type="hidden" name="maintenance_show_contact" value="0">
+                                                    <input class="form-check-input" type="checkbox" name="maintenance_show_contact"
+                                                        value="1" {{ ($settings['maintenance_show_contact'] ?? '1') == '1' ? 'checked' : '' }}>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

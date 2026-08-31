@@ -23,6 +23,14 @@ export interface IContactInfo {
   aftersales_phone?: string | null;
 }
 
+export interface IMaintenanceSettings {
+  enabled: boolean;
+  title: string;
+  message: string;
+  image: string | null;
+  show_contact: boolean;
+}
+
 export interface ISettingsData {
   logo: string | null;
   logo_color?: string | null;
@@ -33,4 +41,5 @@ export interface ISettingsData {
   working_hours?: IWorkingHours;
   social_media: ISocialMediaItem[];
   car_popup_enabled?: boolean;
+  maintenance?: IMaintenanceSettings;
 }

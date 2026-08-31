@@ -13,6 +13,7 @@ import Footer from "../components/Footer";
 import MobileBottomNav from "../components/MobileBottomNav";
 import ScrollToTop from "../components/ScrollToTop";
 import WhatsAppWidget from "../components/WhatsAppWidget";
+import MaintenancePage from "./MaintenancePage";
 
 export default function RootLayout() {
   const { t } = useTranslation();
@@ -30,6 +31,10 @@ export default function RootLayout() {
     const link = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
     if (link) link.href = getImageUrl(settings.favicon);
   }, [loaded, settings]);
+
+  if (loaded && settings?.maintenance?.enabled) {
+    return <MaintenancePage />;
+  }
 
   const navItems = [
     { label: t("nav.home"), path: "/" },

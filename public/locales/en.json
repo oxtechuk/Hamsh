@@ -1418,5 +1418,17 @@
         "nextSlide": "Next Slide",
         "close": "Close",
         "breadcrumb": "Breadcrumb"
+    },
+    "maintenance": {
+        "badge": "Maintenance & Upgrades",
+        "defaultTitle": "Our Website Is Currently Under Maintenance",
+        "defaultMessage": "We are currently performing scheduled maintenance and improvements to enhance your experience. We will be back online shortly.",
+        "contactUs": "Need urgent assistance? Contact us directly:",
+        "whatsapp": "WhatsApp",
+        "callUs": "Call Us",
+        "email": "Email",
+        "refresh": "Refresh Page",
+        "allRightsReserved": "All rights reserved",
+        "workingHard": "Our team is working hard to complete the updates"
     }
 }
