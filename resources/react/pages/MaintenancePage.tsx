@@ -8,6 +8,7 @@ import {
   MessageCircle,
   Globe,
   Sparkles,
+  ShieldAlert,
 } from "lucide-react";
 import { useSettingsStore } from "../store/settings.store";
 import { useLanguageStore } from "../store/language.store";
@@ -45,171 +46,176 @@ export default function MaintenancePage() {
   return (
     <div
       dir={direction}
-      className="min-h-screen relative flex flex-col justify-between bg-[#0b0f19] text-white selection:bg-[#EB5E28] selection:text-white font-sans overflow-hidden"
+      className="min-h-screen relative flex flex-col justify-between bg-[#F8FAFC] text-gray-900 selection:bg-[#DDBB72] selection:text-white font-sans overflow-hidden"
     >
-      {/* Dynamic Background Glows */}
-      <div className="absolute -top-40 -left-40 w-96 h-96 bg-[#EB5E28]/15 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-tr from-[#EB5E28]/10 via-transparent to-blue-600/10 rounded-full blur-[100px] pointer-events-none" />
+      {/* Background Decorative Gradient Orbs */}
+      <div className="absolute -top-32 -left-32 w-96 h-96 bg-[#DDBB72]/15 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/3 -right-32 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-32 left-1/3 w-[500px] h-[500px] bg-[#DDBB72]/10 rounded-full blur-3xl pointer-events-none" />
 
-      {/* Grid subtle pattern */}
+      {/* Grid subtle pattern for luxury texture */}
       <div
         className="absolute inset-0 opacity-[0.03] pointer-events-none"
         style={{
-          backgroundImage: `radial-gradient(rgba(255, 255, 255, 0.4) 1px, transparent 1px)`,
-          backgroundSize: "24px 24px",
+          backgroundImage: `radial-gradient(#000000 1px, transparent 1px)`,
+          backgroundSize: "28px 28px",
         }}
       />
 
       {/* Top Bar Header */}
-      <header className="relative z-10 w-full max-w-6xl mx-auto px-6 py-6 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          {logo ? (
-            <img
-              src={logo}
-              alt={settings?.site_name || "Logo"}
-              className="h-10 sm:h-12 w-auto object-contain drop-shadow-md"
-            />
-          ) : (
-            <div className="flex items-center gap-2 font-bold text-xl tracking-wide">
-              <span className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#EB5E28] to-amber-500 flex items-center justify-center text-white shadow-lg shadow-[#EB5E28]/20">
-                <Wrench className="w-5 h-5" />
-              </span>
-              <span>{settings?.site_name || "Auto Store"}</span>
-            </div>
-          )}
-        </div>
-
-        {/* Language Switcher */}
-        <button
-          onClick={toggleLanguage}
-          className="group flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 backdrop-blur-md transition-all duration-300 text-sm font-medium text-gray-200 hover:text-white"
-        >
-          <Globe className="w-4 h-4 text-[#EB5E28] transition-transform group-hover:rotate-45" />
-          <span>{language === "ar" ? "English" : "العربية"}</span>
-        </button>
-      </header>
-
-      {/* Main Content Hero */}
-      <main className="relative z-10 flex-1 flex items-center justify-center px-4 py-8 sm:py-12">
-        <div className="max-w-2xl w-full text-center">
-          {/* Status Badge */}
-          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-8 shadow-inner">
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#EB5E28] opacity-75" />
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#EB5E28]" />
-            </span>
-            <span className="text-xs sm:text-sm font-medium text-gray-300">
-              {t("maintenance.badge")}
-            </span>
-          </div>
-
-          {/* Maintenance Visual (Image or Custom Illustration) */}
-          <div className="relative mb-8 flex justify-center">
-            {customImage ? (
-              <div className="relative group max-w-sm sm:max-w-md w-full">
-                <div className="absolute -inset-1 bg-gradient-to-r from-[#EB5E28]/30 to-amber-500/30 rounded-3xl blur-xl opacity-75 group-hover:opacity-100 transition duration-500" />
-                <div className="relative rounded-2xl overflow-hidden border border-white/10 bg-black/40 backdrop-blur-xl p-3 shadow-2xl">
-                  <img
-                    src={customImage}
-                    alt="Maintenance Mode"
-                    className="w-full h-auto max-h-72 object-contain rounded-xl"
-                  />
-                </div>
-              </div>
+      <header className="relative z-10 w-full bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-xs">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            {logo ? (
+              <img
+                src={logo}
+                alt={settings?.site_name || "Logo"}
+                className="h-12 sm:h-14 w-auto object-contain"
+              />
             ) : (
-              <div className="relative">
-                <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl bg-gradient-to-tr from-[#EB5E28]/20 via-[#EB5E28]/10 to-transparent border border-[#EB5E28]/30 flex items-center justify-center shadow-2xl shadow-[#EB5E28]/20 backdrop-blur-xl mx-auto">
-                  <Wrench className="w-14 h-14 sm:w-16 sm:h-16 text-[#EB5E28] animate-pulse" />
-                </div>
-                <div className="absolute -top-2 -right-2 p-2 rounded-xl bg-amber-500/20 border border-amber-500/30 backdrop-blur-md">
-                  <Sparkles className="w-5 h-5 text-amber-400" />
-                </div>
+              <div className="flex items-center gap-2 font-bold text-xl text-gray-900 tracking-tight">
+                <span className="w-10 h-10 rounded-xl bg-[#DDBB72] flex items-center justify-center text-white shadow-md shadow-[#DDBB72]/30">
+                  <Wrench className="w-5 h-5" />
+                </span>
+                <span>{settings?.site_name || "هامش للتجارة"}</span>
               </div>
             )}
           </div>
 
-          {/* Title & Description */}
-          <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white mb-4 leading-tight">
-            {title}
-          </h1>
+          {/* Language Switcher */}
+          <button
+            onClick={toggleLanguage}
+            className="group flex items-center gap-2 px-4 py-2 rounded-full bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-all duration-200 text-sm font-semibold text-gray-700 hover:text-gray-900 cursor-pointer shadow-2xs"
+          >
+            <Globe className="w-4 h-4 text-[#DDBB72] transition-transform group-hover:rotate-45" />
+            <span>{language === "ar" ? "English" : "العربية"}</span>
+          </button>
+        </div>
+      </header>
 
-          <p className="text-gray-400 text-base sm:text-lg leading-relaxed max-w-xl mx-auto mb-8 whitespace-pre-line">
-            {message}
-          </p>
+      {/* Main Content Area */}
+      <main className="relative z-10 flex-1 flex items-center justify-center px-4 py-10 sm:py-16">
+        <div className="max-w-3xl w-full">
+          {/* Main Card */}
+          <div className="bg-white rounded-3xl border border-gray-100 shadow-xl shadow-gray-200/60 p-6 sm:p-12 text-center relative overflow-hidden">
+            {/* Top Accent Line */}
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#DDBB72] via-[#E8CD8C] to-[#DDBB72]" />
 
-          {/* Refresh Action Button */}
-          <div className="flex justify-center mb-10">
-            <button
-              onClick={handleRefresh}
-              disabled={isRefreshing}
-              className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#EB5E28] to-[#d64b18] hover:from-[#f06834] hover:to-[#e05420] text-white font-semibold text-sm sm:text-base shadow-lg shadow-[#EB5E28]/25 hover:shadow-[#EB5E28]/40 active:scale-[0.98] transition-all duration-200 cursor-pointer disabled:opacity-75"
-            >
-              <RotateCw
-                className={`w-4 h-4 ${isRefreshing ? "animate-spin" : ""}`}
-              />
-              <span>{t("maintenance.refresh")}</span>
-            </button>
-          </div>
-
-          {/* Optional Quick Contact Info */}
-          {maintenanceData?.show_contact !== false && contact && (
-            <div className="pt-8 border-t border-white/10">
-              <p className="text-xs sm:text-sm text-gray-400 mb-4 font-medium">
-                {t("maintenance.contactUs")}
-              </p>
-              <div className="flex flex-wrap items-center justify-center gap-3">
-                {contact.whatsapp && (
-                  <a
-                    href={`https://wa.me/${contact.whatsapp.replace(/[^0-9]/g, "")}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#25D366]/10 hover:bg-[#25D366]/20 border border-[#25D366]/30 text-[#25D366] text-xs sm:text-sm font-medium transition-all duration-200"
-                  >
-                    <MessageCircle className="w-4 h-4" />
-                    <span>{t("maintenance.whatsapp")}</span>
-                  </a>
-                )}
-
-                {contact.phone && (
-                  <a
-                    href={`tel:${contact.phone}`}
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-200 hover:text-white text-xs sm:text-sm font-medium transition-all duration-200"
-                  >
-                    <Phone className="w-4 h-4 text-[#EB5E28]" />
-                    <span dir="ltr">{contact.phone}</span>
-                  </a>
-                )}
-
-                {contact.email && (
-                  <a
-                    href={`mailto:${contact.email}`}
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-200 hover:text-white text-xs sm:text-sm font-medium transition-all duration-200"
-                  >
-                    <Mail className="w-4 h-4 text-blue-400" />
-                    <span>{contact.email}</span>
-                  </a>
-                )}
-              </div>
+            {/* Status Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#DDBB72]/10 border border-[#DDBB72]/30 text-[#A67C2E] mb-6 shadow-2xs">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#DDBB72] opacity-75" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#DDBB72]" />
+              </span>
+              <span className="text-xs sm:text-sm font-bold">
+                {t("maintenance.badge")}
+              </span>
             </div>
-          )}
+
+            {/* Visual Image / Icon */}
+            <div className="mb-8 flex justify-center">
+              {customImage ? (
+                <div className="relative max-w-sm sm:max-w-md w-full rounded-2xl overflow-hidden border border-gray-100 bg-[#F9FAFB] p-4 shadow-sm">
+                  <img
+                    src={customImage}
+                    alt="Maintenance"
+                    className="w-full h-auto max-h-64 object-contain rounded-xl mx-auto"
+                  />
+                </div>
+              ) : (
+                <div className="relative">
+                  <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-gradient-to-tr from-[#DDBB72]/20 via-[#DDBB72]/10 to-[#F9FAFB] border border-[#DDBB72]/30 flex items-center justify-center shadow-lg shadow-[#DDBB72]/15 mx-auto">
+                    <Wrench className="w-12 h-12 sm:w-14 sm:h-14 text-[#DDBB72] animate-pulse" />
+                  </div>
+                  <div className="absolute -top-2 -right-2 p-1.5 rounded-xl bg-amber-50 border border-amber-200 shadow-xs">
+                    <Sparkles className="w-4 h-4 text-amber-500" />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Title & Message */}
+            <h1 className="text-2xl sm:text-4xl font-extrabold text-gray-900 mb-4 tracking-tight leading-tight">
+              {title}
+            </h1>
+
+            <p className="text-gray-600 text-base sm:text-lg leading-relaxed max-w-xl mx-auto mb-8 whitespace-pre-line">
+              {message}
+            </p>
+
+            {/* Primary Action Button (Refresh) */}
+            <div className="flex justify-center mb-8">
+              <button
+                onClick={handleRefresh}
+                disabled={isRefreshing}
+                className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-xl bg-[#DDBB72] hover:bg-[#CBA458] text-white font-bold text-sm sm:text-base shadow-lg shadow-[#DDBB72]/30 hover:shadow-[#DDBB72]/45 active:scale-[0.98] transition-all duration-200 cursor-pointer disabled:opacity-75"
+              >
+                <RotateCw
+                  className={`w-4 h-4 ${isRefreshing ? "animate-spin" : ""}`}
+                />
+                <span>{t("maintenance.refresh")}</span>
+              </button>
+            </div>
+
+            {/* Quick Contact Options */}
+            {maintenanceData?.show_contact !== false && contact && (
+              <div className="pt-8 border-t border-gray-100">
+                <p className="text-xs sm:text-sm font-semibold text-gray-500 mb-4">
+                  {t("maintenance.contactUs")}
+                </p>
+                <div className="flex flex-wrap items-center justify-center gap-3">
+                  {contact.whatsapp && (
+                    <a
+                      href={`https://wa.me/${contact.whatsapp.replace(/[^0-9]/g, "")}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#25D366]/10 hover:bg-[#25D366]/20 border border-[#25D366]/30 text-[#128C7E] text-xs sm:text-sm font-bold transition-all duration-200"
+                    >
+                      <MessageCircle className="w-4 h-4" />
+                      <span>{t("maintenance.whatsapp")}</span>
+                    </a>
+                  )}
+
+                  {contact.phone && (
+                    <a
+                      href={`tel:${contact.phone}`}
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 text-gray-800 text-xs sm:text-sm font-semibold transition-all duration-200"
+                    >
+                      <Phone className="w-4 h-4 text-[#DDBB72]" />
+                      <span dir="ltr">{contact.phone}</span>
+                    </a>
+                  )}
+
+                  {contact.email && (
+                    <a
+                      href={`mailto:${contact.email}`}
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 text-gray-800 text-xs sm:text-sm font-semibold transition-all duration-200"
+                    >
+                      <Mail className="w-4 h-4 text-blue-500" />
+                      <span>{contact.email}</span>
+                    </a>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </main>
 
       {/* Footer */}
-      <footer className="relative z-10 w-full py-6 text-center text-xs text-gray-400 border-t border-white/5 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 px-4">
+      <footer className="relative z-10 w-full py-6 text-center text-xs text-gray-500 border-t border-gray-200 bg-white flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 px-4">
         <p>
-          &copy; {new Date().getFullYear()} {settings?.site_name || ""}.{" "}
+          &copy; {new Date().getFullYear()} {settings?.site_name || "هامش للتجارة"}.{" "}
           {t("maintenance.allRightsReserved")}.
         </p>
-        <span className="hidden sm:inline text-gray-600">•</span>
-        <div className="flex items-center gap-1.5 text-xs text-gray-400">
+        <span className="hidden sm:inline text-gray-300">•</span>
+        <div className="flex items-center gap-1.5 text-xs text-gray-500">
           <span>{language === "ar" ? "تم التطوير بواسطة" : "Developed by"}</span>
           <a
             href="https://www.digitalplussa.com/ar"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-medium text-[#EB5E28] hover:underline transition-colors"
+            className="font-semibold text-[#DDBB72] hover:underline transition-colors"
           >
             {language === "ar" ? "شركة ديجيتال بلس" : "Digital Plus"}
           </a>
