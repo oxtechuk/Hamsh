@@ -147,12 +147,10 @@ export default function CarCard({
                                     e.stopPropagation();
                                     handleOpenDetails();
                                 }}
-                                className="shrink-0 text-[12px] font-medium text-[#888888] hover:text-[#DFA655] transition-colors cursor-pointer"
+                                className="shrink-0 text-[12px] font-semibold text-[#888888] hover:text-[#DFA655] transition-colors cursor-pointer flex items-center gap-1 group/btn"
                             >
-                                {type
-                                    ? `${type} · `
-                                    : `${t("carCard.defaultType")} · `}
-                                {year || t("carCard.defaultYear")}
+                                <span>{isRTL ? "تفاصيل السيارة" : "Car Details"}</span>
+                                <span className="transition-transform group-hover/btn:translate-x-[-2px]">{isRTL ? "←" : "→"}</span>
                             </button>
                         </div>
 
