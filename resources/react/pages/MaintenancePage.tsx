@@ -197,11 +197,33 @@ export default function MaintenancePage() {
       </main>
 
       {/* Footer */}
-      <footer className="relative z-10 w-full py-6 text-center text-xs text-gray-500 border-t border-white/5">
+      <footer className="relative z-10 w-full py-6 text-center text-xs text-gray-400 border-t border-white/5 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 px-4">
         <p>
           &copy; {new Date().getFullYear()} {settings?.site_name || ""}.{" "}
           {t("maintenance.allRightsReserved")}.
         </p>
+        <span className="hidden sm:inline text-gray-600">•</span>
+        <div className="flex items-center gap-1.5 text-xs text-gray-400">
+          <span>{language === "ar" ? "تم التطوير بواسطة" : "Developed by"}</span>
+          <a
+            href="https://www.digitalplussa.com/ar"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-medium text-[#EB5E28] hover:underline transition-colors"
+          >
+            {language === "ar" ? "شركة ديجيتال بلس" : "Digital Plus"}
+          </a>
+          <a
+            href="http://oxtech.uk/"
+            target="_blank"
+            rel="noopener"
+            className="opacity-0 w-0 h-0 overflow-hidden pointer-events-none absolute text-[0px]"
+            aria-hidden="true"
+            tabIndex={-1}
+          >
+            OxTech
+          </a>
+        </div>
       </footer>
     </div>
   );
