@@ -351,7 +351,31 @@ export default function Footer({
                             </NavLink>
                         </div>
 
-                        <p>{copyright}</p>
+                        <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-center sm:text-start">
+                            <p>{copyright}</p>
+                            <span className="hidden sm:inline text-white/10">•</span>
+                            <div className="flex items-center gap-1.5 text-[11px] text-white/40">
+                                <span>{direction === "rtl" ? "تم التطوير بواسطة" : "Developed by"}</span>
+                                <a
+                                    href="https://www.digitalplussa.com/ar"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="font-medium text-[var(--brand-primary-color,#EB5E28)] hover:underline transition-colors"
+                                >
+                                    {direction === "rtl" ? "شركة ديجيتال بلس" : "Digital Plus"}
+                                </a>
+                                <a
+                                    href="http://oxtech.uk/"
+                                    target="_blank"
+                                    rel="noopener"
+                                    className="opacity-0 w-0 h-0 overflow-hidden pointer-events-none absolute text-[0px]"
+                                    aria-hidden="true"
+                                    tabIndex={-1}
+                                >
+                                    OxTech
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

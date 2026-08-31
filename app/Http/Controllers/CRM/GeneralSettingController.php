@@ -365,4 +365,26 @@ class GeneralSettingController extends Controller
 
         return back()->with('success', __('تم تحديث الإعدادات بنجاح'));
     }
+
+    public function toggleMaintenance(Request $request)
+    {
+        $enabled = $request->input('enabled');
+        if ($enabled === null) {
+            $current = Setting::where('key', 'maintenance_mode_enabled')->first();
+            $enabled = (! $current || in_array($current->value, ['0', 0, false, 'false'], true)) ? '1' : '0';
+        } else {
+            $enabled = in_array($enabled, [1, '1', true, 'true'], true) ? '1' : '0';
+        }
+
+        Setting::updateOrCreate(['key' => 'maintenance_mode_enabled'], ['value' => $enabled]);
+
+        app(BaseCacheService::class)->forgetSettings();
+        app(HomeCacheService::class)->forgetHome();
+
+        return response()->json([
+            'success' => true,
+            'enabled' => $enabled === '1',
+            'message' => $enabled === '1' ? __('تم تفعيل وضع الصيانة بنجاح') : __('تم تعطيل وضع الصيانة بنجاح'),
+        ]);
+    }
 }

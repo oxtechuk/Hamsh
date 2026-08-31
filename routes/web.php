@@ -246,6 +246,7 @@ Route::prefix('crm')->name('crm.')->middleware(['auth:employee', 'guard.employee
             Route::get('general', [GeneralSettingController::class, 'index'])->name('general');
             Route::get('seo', [GeneralSettingController::class, 'seo'])->name('seo');
             Route::post('update', [GeneralSettingController::class, 'update'])->name('update');
+            Route::post('maintenance/toggle', [GeneralSettingController::class, 'toggleMaintenance'])->name('maintenance.toggle');
         });
         Route::middleware('permission:manage-settings-integrations')->group(function () {
             Route::get('integrations', [GeneralSettingController::class, 'integrations'])->name('integrations');

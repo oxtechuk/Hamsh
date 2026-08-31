@@ -86,13 +86,13 @@ final class SettingApiService
             ],
             'social_media' => $socialMedia,
             'about_branches' => $aboutBranches,
-            'car_popup_enabled' => $settings->get('car_popup_enabled', '0') === '1',
+            'car_popup_enabled' => in_array($settings->get('car_popup_enabled', '0'), [1, '1', true, 'true'], true),
             'maintenance' => [
-                'enabled' => $settings->get('maintenance_mode_enabled', '0') === '1',
+                'enabled' => in_array($settings->get('maintenance_mode_enabled', '0'), [1, '1', true, 'true'], true),
                 'title' => $maintenanceTitle,
                 'message' => $maintenanceMessage,
                 'image' => $this->resolveUrl($settings->get('maintenance_image')),
-                'show_contact' => $settings->get('maintenance_show_contact', '1') === '1',
+                'show_contact' => ! in_array($settings->get('maintenance_show_contact', '1'), [0, '0', false, 'false'], true),
             ],
         ];
     }

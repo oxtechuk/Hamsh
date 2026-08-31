@@ -302,22 +302,20 @@
                                             <h6 class="fw-bold mb-0">{{ __('وضع الصيانة (Maintenance Mode)') }}</h6>
                                             <p class="text-muted small mb-0">{{ __('التحكم في إتاحة الواجهة الأمامية للموقع للمستخدمين والزوار') }}</p>
                                         </div>
-                                        <span class="badge {{ ($settings['maintenance_mode_enabled'] ?? '0') == '1' ? 'bg-danger text-white' : 'bg-success-subtle text-success' }} px-3 py-2 rounded-pill">
-                                            <i class="bi {{ ($settings['maintenance_mode_enabled'] ?? '0') == '1' ? 'bi-exclamation-triangle-fill me-1' : 'bi-check-circle-fill me-1' }}"></i>
-                                            {{ ($settings['maintenance_mode_enabled'] ?? '0') == '1' ? __('وضع الصيانة مفعّل') : __('الموقع يعمل بصورة طبيعية') }}
+                                        <span id="maintenance-status-badge" class="badge {{ (isset($settings['maintenance_mode_enabled']) && in_array($settings['maintenance_mode_enabled'], [1, '1', true, 'true'], true)) ? 'bg-danger text-white' : 'bg-success-subtle text-success' }} px-3 py-2 rounded-pill">
+                                            <i class="bi {{ (isset($settings['maintenance_mode_enabled']) && in_array($settings['maintenance_mode_enabled'], [1, '1', true, 'true'], true)) ? 'bi-exclamation-triangle-fill me-1' : 'bi-check-circle-fill me-1' }}"></i>
+                                            {{ (isset($settings['maintenance_mode_enabled']) && in_array($settings['maintenance_mode_enabled'], [1, '1', true, 'true'], true)) ? __('وضع الصيانة مفعّل') : __('الموقع يعمل بصورة طبيعية') }}
                                         </span>
                                     </div>
                                 </div>
                                 <div class="card-body p-4">
-                                    @if(($settings['maintenance_mode_enabled'] ?? '0') == '1')
-                                        <div class="alert alert-danger d-flex align-items-center rounded-3 p-3 mb-4" role="alert">
-                                            <i class="bi bi-shield-exclamation fs-3 me-3"></i>
-                                            <div>
-                                                <div class="fw-bold">{{ __('تنبيه: الواجهة الأمامية معطلة حالياً') }}</div>
-                                                <div class="small">{{ __('الزوار يرون شاشة الصيانة فقط عند تصفح المتجر. يمكنك الاستمرار في استخدام لوحة التحكم كالمعتاد.') }}</div>
-                                            </div>
+                                    <div id="maintenance-active-alert" class="alert alert-danger d-flex align-items-center rounded-3 p-3 mb-4 {{ (isset($settings['maintenance_mode_enabled']) && in_array($settings['maintenance_mode_enabled'], [1, '1', true, 'true'], true)) ? '' : 'd-none' }}" role="alert">
+                                        <i class="bi bi-shield-exclamation fs-3 me-3"></i>
+                                        <div>
+                                            <div class="fw-bold">{{ __('تنبيه: الواجهة الأمامية معطلة حالياً') }}</div>
+                                            <div class="small">{{ __('الزوار يرون شاشة الصيانة فقط عند تصفح المتجر. يمكنك الاستمرار في استخدام لوحة التحكم كالمعتاد.') }}</div>
                                         </div>
-                                    @endif
+                                    </div>
 
                                     <div class="row g-4">
                                         {{-- سويتش تفعيل وضع الصيانة --}}
@@ -325,12 +323,12 @@
                                             <div class="d-flex align-items-center justify-content-between p-3 bg-light rounded-3 border">
                                                 <div>
                                                     <p class="fw-bold mb-0 text-dark">{{ __('تفعيل وضع الصيانة للواجهة الأمامية') }}</p>
-                                                    <p class="text-muted small mb-0">{{ __('عند التفعيل، سيتم توجيه جميع زوار الموقع إلى صفحة الصيانة والتطوير') }}</p>
+                                                    <p class="text-muted small mb-0">{{ __('عند التفعيل، سيتم توجيه جميع زوار الموقع فوراً إلى صفحة الصيانة') }}</p>
                                                 </div>
                                                 <div class="form-check form-switch fs-4 mb-0">
                                                     <input type="hidden" name="maintenance_mode_enabled" value="0">
-                                                    <input class="form-check-input" type="checkbox" name="maintenance_mode_enabled"
-                                                        value="1" {{ ($settings['maintenance_mode_enabled'] ?? '0') == '1' ? 'checked' : '' }}>
+                                                    <input class="form-check-input" type="checkbox" id="maintenance_mode_toggle" name="maintenance_mode_enabled"
+                                                        value="1" onchange="toggleMaintenanceAjax(this)" {{ (isset($settings['maintenance_mode_enabled']) && in_array($settings['maintenance_mode_enabled'], [1, '1', true, 'true'], true)) ? 'checked' : '' }}>
                                                 </div>
                                             </div>
                                         </div>
@@ -1323,5 +1321,41 @@
                 btn.classList.add('open');
             }
         });
+
+        // ===== Instant Maintenance Mode Toggle =====
+        function toggleMaintenanceAjax(input) {
+            const isEnabled = input.checked;
+            const badge = document.getElementById('maintenance-status-badge');
+            const alertBox = document.getElementById('maintenance-active-alert');
+            
+            fetch('{{ route("crm.settings.maintenance.toggle") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ enabled: isEnabled ? 1 : 0 })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    if (data.enabled) {
+                        badge.className = 'badge bg-danger text-white px-3 py-2 rounded-pill';
+                        badge.innerHTML = '<i class="bi bi-exclamation-triangle-fill me-1"></i> {{ __("وضع الصيانة مفعّل") }}';
+                        alertBox.classList.remove('d-none');
+                    } else {
+                        badge.className = 'badge bg-success-subtle text-success px-3 py-2 rounded-pill';
+                        badge.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i> {{ __("الموقع يعمل بصورة طبيعية") }}';
+                        alertBox.classList.add('d-none');
+                    }
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                input.checked = !isEnabled;
+                alert('{{ __("حدث خطأ أثناء تغيير وضع الصيانة") }}');
+            });
+        }
     </script>
 @endsection
