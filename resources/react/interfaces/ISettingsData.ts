@@ -29,6 +29,7 @@ export interface IMaintenanceSettings {
   message: string;
   image: string | null;
   show_contact: boolean;
+  is_admin?: boolean;
 }
 
 export interface ISettingsData {

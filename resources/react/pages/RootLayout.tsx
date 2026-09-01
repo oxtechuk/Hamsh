@@ -32,7 +32,7 @@ export default function RootLayout() {
     if (link) link.href = getImageUrl(settings.favicon);
   }, [loaded, settings]);
 
-  if (loaded && settings?.maintenance?.enabled) {
+  if (settings?.maintenance?.enabled && !settings?.maintenance?.is_admin) {
     return <MaintenancePage />;
   }
 
@@ -48,6 +48,19 @@ export default function RootLayout() {
 
   return (
     <div dir={direction} className="min-h-screen pt-0 sm:pt-[30px]">
+      {/* Admin Maintenance Mode Indicator */}
+      {settings?.maintenance?.enabled && settings?.maintenance?.is_admin && (
+        <div className="bg-[#1A1F2E] text-amber-300 border-b border-amber-500/40 text-xs sm:text-sm font-bold py-2 px-4 text-center shadow-lg flex items-center justify-center gap-2 sticky top-0 z-50">
+          <span>⚠️ {language === "ar" ? "وضع الصيانة مفعل حالياً للزوار — أنت تتصفح الموقع كمسؤول" : "Maintenance mode is active for visitors — You are browsing as Admin"}</span>
+          <a
+            href="/crm/settings/general"
+            className="underline text-white hover:text-amber-200 ms-2 text-xs font-semibold"
+          >
+            {language === "ar" ? "إعدادات الصيانة" : "Settings"}
+          </a>
+        </div>
+      )}
+
       <ScrollToTop />
       <ToastContainer
         position="top-center"

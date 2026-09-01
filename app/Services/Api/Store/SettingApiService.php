@@ -93,6 +93,7 @@ final class SettingApiService
                 'message' => $maintenanceMessage,
                 'image' => $this->resolveUrl($settings->get('maintenance_image')),
                 'show_contact' => ! in_array($settings->get('maintenance_show_contact', '1'), [0, '0', false, 'false'], true),
+                'is_admin' => auth('employee')->check() || auth('sanctum')->check(),
             ],
         ];
     }
