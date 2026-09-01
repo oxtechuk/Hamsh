@@ -88,6 +88,16 @@ class CarController extends Controller
             'color_hexes' => 'nullable|array',
             'color_images' => 'nullable|array',
             'color_images.*' => 'nullable|image|max:5120',
+            'trim_names' => 'nullable|array',
+            'trim_cash_prices' => 'nullable|array',
+            'trim_installments' => 'nullable|array',
+            'trim_availabilities' => 'nullable|array',
+            'trim_engines' => 'nullable|array',
+            'trim_transmissions' => 'nullable|array',
+            'trim_safeties' => 'nullable|array',
+            'trim_lightings' => 'nullable|array',
+            'trim_images' => 'nullable|array',
+            'trim_images.*' => 'nullable|image|max:5120',
         ]);
 
         // Build structured colors array
@@ -106,6 +116,40 @@ class CarController extends Controller
             $colors[] = $entry;
         }
         $data['colors'] = $colors ?: null;
+
+        // Build structured trims array
+        $trims = [];
+        $trimNames = $request->input('trim_names', []);
+        $trimCashPrices = $request->input('trim_cash_prices', []);
+        $trimInstallments = $request->input('trim_installments', []);
+        $trimAvailabilities = $request->input('trim_availabilities', []);
+        $trimEngines = $request->input('trim_engines', []);
+        $trimTransmissions = $request->input('trim_transmissions', []);
+        $trimSafeties = $request->input('trim_safeties', []);
+        $trimLightings = $request->input('trim_lightings', []);
+        $trimFiles = $request->file('trim_images', []);
+
+        foreach ($trimNames as $i => $name) {
+            if (empty($name)) {
+                continue;
+            }
+            $entry = [
+                'name' => $name,
+                'cash_price' => ! empty($trimCashPrices[$i]) ? (int) $trimCashPrices[$i] : (int) ($data['cash_price'] ?? 0),
+                'monthly_installment' => ! empty($trimInstallments[$i]) ? (int) $trimInstallments[$i] : (int) ($data['min_installment'] ?? 0),
+                'availability_status' => $trimAvailabilities[$i] ?? '',
+                'engine' => $trimEngines[$i] ?? '',
+                'transmission' => $trimTransmissions[$i] ?? '',
+                'safety' => $trimSafeties[$i] ?? '',
+                'lighting' => $trimLightings[$i] ?? '',
+                'image' => null,
+            ];
+            if (! empty($trimFiles[$i])) {
+                $entry['image'] = $trimFiles[$i]->store('cars/trims', 'public');
+            }
+            $trims[] = $entry;
+        }
+        $data['trims'] = $trims ?: null;
 
         $data['slug'] = [
             'en' => Car::generateUniqueSlug($data['name']['en'], $data['year'], 'en'),
@@ -206,6 +250,17 @@ class CarController extends Controller
             'color_images' => 'nullable|array',
             'color_images.*' => 'nullable|image|max:5120',
             'color_keep_images' => 'nullable|array',
+            'trim_names' => 'nullable|array',
+            'trim_cash_prices' => 'nullable|array',
+            'trim_installments' => 'nullable|array',
+            'trim_availabilities' => 'nullable|array',
+            'trim_engines' => 'nullable|array',
+            'trim_transmissions' => 'nullable|array',
+            'trim_safeties' => 'nullable|array',
+            'trim_lightings' => 'nullable|array',
+            'trim_images' => 'nullable|array',
+            'trim_images.*' => 'nullable|image|max:5120',
+            'trim_keep_images' => 'nullable|array',
         ]);
 
         // Build structured colors array (keep existing images if no new upload)
@@ -230,6 +285,48 @@ class CarController extends Controller
             $colors[] = $entry;
         }
         $data['colors'] = $colors ?: null;
+
+        // Build structured trims array (keep existing images if no new upload)
+        $trims = [];
+        $trimNames = $request->input('trim_names', []);
+        $trimCashPrices = $request->input('trim_cash_prices', []);
+        $trimInstallments = $request->input('trim_installments', []);
+        $trimAvailabilities = $request->input('trim_availabilities', []);
+        $trimEngines = $request->input('trim_engines', []);
+        $trimTransmissions = $request->input('trim_transmissions', []);
+        $trimSafeties = $request->input('trim_safeties', []);
+        $trimLightings = $request->input('trim_lightings', []);
+        $trimFiles = $request->file('trim_images', []);
+        $keepTrimImages = $request->input('trim_keep_images', []);
+
+        foreach ($trimNames as $i => $name) {
+            if (empty($name)) {
+                continue;
+            }
+            $keptImage = $keepTrimImages[$i] ?? null;
+            if ($keptImage && str_contains($keptImage, 'storage/')) {
+                $keptImage = substr($keptImage, strpos($keptImage, 'storage/') + 8);
+            }
+            $entry = [
+                'name' => $name,
+                'cash_price' => ! empty($trimCashPrices[$i]) ? (int) $trimCashPrices[$i] : (int) ($data['cash_price'] ?? 0),
+                'monthly_installment' => ! empty($trimInstallments[$i]) ? (int) $trimInstallments[$i] : (int) ($data['min_installment'] ?? 0),
+                'availability_status' => $trimAvailabilities[$i] ?? '',
+                'engine' => $trimEngines[$i] ?? '',
+                'transmission' => $trimTransmissions[$i] ?? '',
+                'safety' => $trimSafeties[$i] ?? '',
+                'lighting' => $trimLightings[$i] ?? '',
+                'image' => $keptImage ?: null,
+            ];
+            if (! empty($trimFiles[$i])) {
+                if (! empty($keptImage)) {
+                    Storage::disk('public')->delete($keptImage);
+                }
+                $entry['image'] = $trimFiles[$i]->store('cars/trims', 'public');
+            }
+            $trims[] = $entry;
+        }
+        $data['trims'] = $trims ?: null;
 
         $data['is_featured'] = $request->boolean('is_featured');
         $data['is_active'] = $request->boolean('is_active');

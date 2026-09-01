@@ -19,6 +19,10 @@ export default function CarDetailsModal({
 
     const {
         car,
+        rawCar,
+        selectedTrim,
+        selectedTrimIndex,
+        handleSelectTrim,
         isLoading,
         activeImage,
         setActiveImage,
@@ -69,6 +73,8 @@ export default function CarDetailsModal({
                         <div className="grid grid-cols-1 lg:grid-cols-2">
                             <CarDetailsInfoPanel
                                 car={car}
+                                selectedTrimIndex={selectedTrimIndex}
+                                onSelectTrimIndex={handleSelectTrim}
                                 featureRows={featureRows}
                                 onOrder={() => handleOrder("cash")}
                                 onFinance={() => handleOrder("finance")}

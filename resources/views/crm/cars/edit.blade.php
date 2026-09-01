@@ -398,6 +398,25 @@
                         </div>
                     </div>
 
+                    {{-- فئات ومواصفات السيارة (Car Trims) --}}
+                    <div class="car-section mb-4">
+                        <div class="car-section-header d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-diagram-3"></i> {{ __('فئات السيارة (Trims & Specs)') }}</span>
+                            <button type="button" class="btn-crm-primary" style="padding:6px 14px;font-size:12px;"
+                                onclick="addTrimRow()">
+                                <i class="bi bi-plus-lg"></i> {{ __('إضافة فئة') }}
+                            </button>
+                        </div>
+                        <div class="car-section-body">
+                            <div id="trims-container" class="d-flex flex-column gap-3"></div>
+                            <p id="no-trims-msg" class="text-muted text-center py-3"
+                                style="font-size:13px;{{ $car->trims && count($car->trims) > 0 ? 'display:none;' : '' }}">
+                                <i class="bi bi-card-list d-block fs-2 mb-2 opacity-25"></i>
+                                {{ __('لم تضف فئات بعد — اضغط "إضافة فئة" لإضافة فئات وأسعار ومواصفات مخصصة تظهر في القائمة المنسدلة للسيارة') }}
+                            </p>
+                        </div>
+                    </div>
+
 
 
                 </div>
@@ -772,6 +791,127 @@
             const path = isNew ? '' : (c.image || '');
             addColorRow(name, hex, img, path);
         });
+
+        // ===== Trim (فئات السيارة) Rows =====
+        let trimCount = 0;
+
+        function escapeTrimHtml(str) {
+            if (!str) return '';
+            return String(str).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        }
+
+        function addTrimRow(name = '', existingImg = null, existingImgPath = '', cashPrice = '', installment = '', availability = '', engine = '', transmission = '', safety = '', lighting = '') {
+            const idx = trimCount++;
+            const noMsg = document.getElementById('no-trims-msg');
+            if (noMsg) noMsg.style.display = 'none';
+
+            const container = document.getElementById('trims-container');
+            const div = document.createElement('div');
+            div.className = 'trim-card p-3 rounded-3 border bg-light-subtle';
+            div.id = 'trim-row-' + idx;
+
+            const hasExisting = existingImg && existingImg !== '';
+            div.innerHTML = `
+                <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+                    <span class="fw-bold small text-dark"><i class="bi bi-tag-fill text-warning me-1"></i> {{ __('فئة') }} #${idx + 1}</span>
+                    <button type="button" class="btn btn-sm btn-outline-danger py-0 px-2 rounded-2" onclick="removeTrimRow(${idx})" title="{{ __('حذف') }}">
+                        <i class="bi bi-trash3"></i> {{ __('حذف الفئة') }}
+                    </button>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md-7">
+                        <label class="form-label small fw-semibold mb-1">{{ __('اسم الفئة') }} <span class="text-danger">*</span></label>
+                        <input type="text" name="trim_names[]" class="form-control form-control-sm" placeholder="{{ __('مثال: كامري GLE 2026 هايبرد (الأكثر طلباً)') }}" value="${escapeTrimHtml(name)}" required>
+                    </div>
+                    <div class="col-md-5">
+                        <label class="form-label small fw-semibold mb-1">{{ __('صورة الفئة') }}</label>
+                        ${existingImgPath ? `<input type="hidden" name="trim_keep_images[${idx}]" value="${escapeTrimHtml(existingImgPath)}">` : ''}
+                        <div class="d-flex align-items-center gap-2">
+                            <label class="color-img-label w-100 justify-content-center py-1.5" for="timg-${idx}" style="cursor:pointer;">
+                                <i class="bi bi-image"></i>
+                                <span id="timg-lbl-${idx}">${hasExisting ? '{{ __("تغيير الصورة") }}' : '{{ __("صورة الفئة") }}'}</span>
+                            </label>
+                            <input type="file" id="timg-${idx}" name="trim_images[${idx}]" accept="image/*" class="d-none" onchange="previewTrimImg(this, ${idx})">
+                            <img id="tprev-${idx}" src="${hasExisting ? existingImg : ''}" class="rounded border ${hasExisting ? '' : 'd-none'}" style="width:36px;height:36px;object-fit:cover;flex-shrink:0;">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label small fw-semibold mb-1">{{ __('سعر الكاش المقدر') }}</label>
+                        <div class="input-group input-group-sm">
+                            <input type="number" name="trim_cash_prices[]" class="form-control" placeholder="{{ __('115000') }}" value="${cashPrice}">
+                            <span class="input-group-text">{!! __('ريال') !!}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label small fw-semibold mb-1">{{ __('القسط الشهري التقديري') }}</label>
+                        <div class="input-group input-group-sm">
+                            <input type="number" name="trim_installments[]" class="form-control" placeholder="{{ __('1650') }}" value="${installment}">
+                            <span class="input-group-text">{!! __('ريال') !!}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label small fw-semibold mb-1">{{ __('حالة التوفر / التنبيه') }}</label>
+                        <input type="text" name="trim_availabilities[]" class="form-control form-control-sm" placeholder="{{ __('🔥 متبقي سيارتين فقط - ع وشك النفاذ!') }}" value="${escapeTrimHtml(availability)}">
+                    </div>
+                    <div class="col-12 mt-2">
+                        <div class="small fw-bold text-muted mb-1"><i class="bi bi-sliders me-1"></i> {{ __('المواصفات البسيطة للفئة:') }}</div>
+                        <div class="row g-2">
+                            <div class="col-md-3">
+                                <input type="text" name="trim_engines[]" class="form-control form-control-sm" placeholder="{{ __('نوع المحرك: 4 سلندر 2.5 لتر هجين') }}" value="${escapeTrimHtml(engine)}">
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" name="trim_transmissions[]" class="form-control form-control-sm" placeholder="{{ __('ناقل الحركة: أوتوماتيك تناسقي') }}" value="${escapeTrimHtml(transmission)}">
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" name="trim_safeties[]" class="form-control form-control-sm" placeholder="{{ __('أنظمة الأمان: تويوتا سيفتي سينس') }}" value="${escapeTrimHtml(safety)}">
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" name="trim_lightings[]" class="form-control form-control-sm" placeholder="{{ __('الإضاءة: مصابيح LED أمامية وخلفية') }}" value="${escapeTrimHtml(lighting)}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(div);
+        }
+
+        function removeTrimRow(idx) {
+            document.getElementById('trim-row-' + idx)?.remove();
+            if (document.querySelectorAll('.trim-card').length === 0) {
+                const noMsg = document.getElementById('no-trims-msg');
+                if (noMsg) noMsg.style.display = '';
+            }
+        }
+
+        function previewTrimImg(input, idx) {
+            if (!input.files[0]) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                const prev = document.getElementById('tprev-' + idx);
+                prev.src = e.target.result;
+                prev.classList.remove('d-none');
+                document.getElementById('timg-lbl-' + idx).textContent = '{{ __("تم الرفع") }} ✓';
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+
+        // Load existing trims on page load
+        const existingTrims = @json($car->trims ?? []);
+        if (Array.isArray(existingTrims)) {
+            existingTrims.forEach(t => {
+                const name = t.name || '';
+                const img = t.image || null;
+                const path = t.image || '';
+                const cashPrice = t.cash_price || '';
+                const installment = t.monthly_installment || '';
+                const availability = t.availability_status || '';
+                const engine = t.engine || '';
+                const transmission = t.transmission || '';
+                const safety = t.safety || '';
+                const lighting = t.lighting || '';
+                addTrimRow(name, img, path, cashPrice, installment, availability, engine, transmission, safety, lighting);
+            });
+        }
 
         // Toggle checkboxes helper
         function toggleCheckboxes(name, state) {

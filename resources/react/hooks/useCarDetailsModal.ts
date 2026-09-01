@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -19,11 +19,30 @@ export function useCarDetailsModal(slug: string, onClose: () => void) {
     const [activeTab, setActiveTab] = useState<CarDetailsModalTab>("features");
     const [showOrderModal, setShowOrderModal] = useState(false);
     const [orderMode, setOrderMode] = useState<"finance" | "cash">("cash");
+    const [selectedTrimIndex, setSelectedTrimIndex] = useState<number>(0);
 
     const { data: car, isLoading } = useQuery({
         queryKey: ["car-details-modal", slug],
         queryFn: () => getCarBySlug(slug),
     });
+
+    const selectedTrim = useMemo(() => {
+        if (!car?.trims || car.trims.length === 0) return null;
+        return car.trims[selectedTrimIndex] ?? car.trims[0];
+    }, [car?.trims, selectedTrimIndex]);
+
+    const effectiveCar = useMemo(() => {
+        if (!car) return car;
+        if (!selectedTrim) return car;
+        return {
+            ...car,
+            name: selectedTrim.name ? selectedTrim.name : car.name,
+            cash_price: selectedTrim.cash_price || car.cash_price,
+            current_price: selectedTrim.cash_price || car.current_price,
+            min_installment: selectedTrim.monthly_installment || car.min_installment,
+            availability_status: selectedTrim.availability_status || car.availability_status,
+        };
+    }, [car, selectedTrim]);
 
     const specRows: ISpecItem[] = (car?.specifications ?? []).map(
         (specification) => ({
@@ -38,14 +57,31 @@ export function useCarDetailsModal(slug: string, onClose: () => void) {
         }),
     );
 
-    const images = car?.images?.length
-        ? car.images
-        : car
-          ? [car.main_image]
-          : [];
+    const images = useMemo(() => {
+        if (!car) return [];
+        let list = car.images?.length ? [...car.images] : [car.main_image];
+        if (selectedTrim?.image && !list.includes(selectedTrim.image)) {
+            list = [selectedTrim.image, ...list];
+        }
+        return list;
+    }, [car, selectedTrim?.image]);
+
     const badge = car
         ? resolveHighlight(car.highlight, i18n.language)
         : undefined;
+
+    const handleSelectTrim = (index: number) => {
+        setSelectedTrimIndex(index);
+        const trim = car?.trims?.[index];
+        if (trim?.image) {
+            const imgIdx = images.findIndex((img) => img === trim.image);
+            if (imgIdx !== -1) {
+                setActiveImage(imgIdx);
+            } else {
+                setActiveImage(0);
+            }
+        }
+    };
 
     const handlePrev = () => {
         if (!images.length) return;
@@ -66,7 +102,7 @@ export function useCarDetailsModal(slug: string, onClose: () => void) {
 
         onClose();
         if (mode === "finance") {
-            navigate("/finance-calculator");
+            navigate("/finance-calculator", { state: { car: effectiveCar } });
         } else {
             navigate(`/cars/${slug}`);
         }
@@ -84,7 +120,11 @@ export function useCarDetailsModal(slug: string, onClose: () => void) {
     };
 
     return {
-        car,
+        car: effectiveCar || car,
+        rawCar: car,
+        selectedTrim,
+        selectedTrimIndex,
+        handleSelectTrim,
         isLoading,
         activeImage,
         setActiveImage,

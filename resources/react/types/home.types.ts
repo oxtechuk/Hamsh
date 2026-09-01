@@ -27,9 +27,17 @@ export interface CarColor {
   name: string;
 }
 
-export interface CarSpec {
-  label: string;
-  value: string;
+export interface CarTrim {
+  name: string;
+  image?: string | null;
+  cash_price?: number;
+  monthly_installment?: number;
+  availability_status?: string;
+  engine?: string;
+  transmission?: string;
+  safety?: string;
+  lighting?: string;
+  specs?: Record<string, string>;
 }
 
 export interface CarItem {
@@ -39,6 +47,7 @@ export interface CarItem {
   main_image: string | null;
   thumbnail: string | null;
   images: string[];
+  trims?: CarTrim[];
   cash_price: number;
   min_installment: number;
   current_price: number;

@@ -5,6 +5,8 @@ export type CarDetailsModalTab = "specs" | "features";
 
 export interface ICarDetailsInfoPanelProps {
   car: CarDetails;
+  selectedTrimIndex?: number;
+  onSelectTrimIndex?: (index: number) => void;
   activeTab?: CarDetailsModalTab;
   specRows?: ISpecItem[];
   featureRows: ISpecItem[];

@@ -58,6 +58,19 @@ export interface ActiveOffer {
   is_expired: boolean;
 }
 
+export interface CarTrim {
+  name: string;
+  image?: string | null;
+  cash_price?: number;
+  monthly_installment?: number;
+  availability_status?: string;
+  engine?: string;
+  transmission?: string;
+  safety?: string;
+  lighting?: string;
+  specs?: Record<string, string>;
+}
+
 export interface CarDetails {
   id: number;
   name: string;
@@ -76,6 +89,7 @@ export interface CarDetails {
   is_current_year: boolean;
   type: string;
   colors: CarColorWithImage[];
+  trims?: CarTrim[];
   specs: CarSpec[] | Record<string, string | null>;
   description: string;
   features: string;

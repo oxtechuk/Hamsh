@@ -24,6 +24,7 @@ class CarMiniResource extends JsonResource
             'year' => $this->year,
             'specs' => $this->specs,
             'colors' => $this->colors,
+            'trims' => $this->trims,
             'is_featured' => $this->is_featured,
             'rating' => $this->rating,
             'availability_status' => $this->availability_status,

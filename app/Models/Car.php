@@ -25,7 +25,7 @@ class Car extends Model
 
     protected $fillable = [
         'brand_id', 'category_id', 'name', 'slug', 'model', 'year', 'type',
-        'color', 'colors', 'cash_price', 'min_down_payment', 'min_installment',
+        'color', 'colors', 'trims', 'cash_price', 'min_down_payment', 'min_installment',
         'description', 'features', 'specs', 'thumbnail', 'is_featured', 'is_active', 'is_highlighted', 'views',
         'availability_status', 'rating',
     ];
@@ -34,6 +34,7 @@ class Car extends Model
 
     protected $casts = [
         'colors' => 'array',
+        'trims' => 'array',
         'specs' => 'array',
         'is_featured' => 'boolean',
         'is_active' => 'boolean',
@@ -51,12 +52,31 @@ class Car extends Model
         return array_map(function (mixed $color): array {
             $color = is_array($color) ? $color : [];
 
-            if (isset($color['image']) && $color['image'] !== null) {
+            if (isset($color['image']) && $color['image'] !== null && ! str_starts_with($color['image'], 'http')) {
                 $color['image'] = Storage::disk('public')->url($color['image']);
             }
 
             return $color;
         }, $colors);
+    }
+
+    public function getTrimsAttribute(mixed $value): ?array
+    {
+        $trims = is_string($value) ? json_decode($value, true) : $value;
+
+        if (! is_array($trims)) {
+            return null;
+        }
+
+        return array_map(function (mixed $trim): array {
+            $trim = is_array($trim) ? $trim : [];
+
+            if (isset($trim['image']) && $trim['image'] !== null && ! str_starts_with($trim['image'], 'http')) {
+                $trim['image'] = Storage::disk('public')->url($trim['image']);
+            }
+
+            return $trim;
+        }, $trims);
     }
 
     public function getSpecsAttribute(mixed $value): ?array
