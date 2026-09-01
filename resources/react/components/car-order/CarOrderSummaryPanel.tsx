@@ -15,6 +15,10 @@ export default function CarOrderSummaryPanel({
 }: ICarOrderSummaryPanelProps) {
     const { t, i18n } = useTranslation();
 
+    const isRTL = i18n.dir() === "rtl";
+    const cashPrice = Number(car.current_price || car.cash_price || 0);
+    const minInstallment = Number(car.min_installment || 0);
+
     return (
         <div className="order-1 flex flex-col gap-5 bg-[#1A1F2E] p-6 lg:p-8">
             <p className="text-[13px] font-bold text-[#DDBB72]">
@@ -38,17 +42,39 @@ export default function CarOrderSummaryPanel({
                 </p>
             </div>
 
-            <div className="flex items-baseline justify-between gap-3 border-t border-white/10 pt-4">
-                <p className="text-[12px] text-white/60">
-                    {t("carDetails.hero.installmentFrom")}
-                </p>
-                <p className="text-[22px] font-extrabold text-white">
-                    {formatPrice(
-                        car.min_installment,
-                        "var(--brand-primary-color)",
-                        i18n.language,
-                    )}
-                </p>
+            {/* Pricing Details (Cash price & Monthly installment) */}
+            <div className="flex flex-col gap-2.5 border-t border-white/10 pt-4">
+                {cashPrice > 0 && (
+                    <div className="flex items-baseline justify-between gap-3">
+                        <p className="text-[12px] text-white/70">
+                            {isRTL ? "السعر النقدي (كاش)" : "Cash Price"}
+                        </p>
+                        <p className="text-[18px] font-extrabold text-white">
+                            {formatPrice(
+                                cashPrice,
+                                "#FFFFFF",
+                                i18n.language,
+                            )}
+                        </p>
+                    </div>
+                )}
+
+                {minInstallment > 0 && (
+                    <div className="flex items-baseline justify-between gap-3 border-t border-white/5 pt-2.5">
+                        <p className="text-[12px] text-white/70">
+                            {t("carDetails.hero.installmentFrom", {
+                                defaultValue: isRTL ? "قسط شهري يبدأ من" : "Monthly Installment",
+                            })}
+                        </p>
+                        <p className="text-[18px] font-extrabold text-[var(--brand-primary-color,#DDBB72)]">
+                            {formatPrice(
+                                minInstallment,
+                                "var(--brand-primary-color,#DDBB72)",
+                                i18n.language,
+                            )}
+                        </p>
+                    </div>
+                )}
             </div>
 
             <ul className="mt-auto flex flex-col gap-4 pt-5">

@@ -2,7 +2,7 @@ import { useState, type MouseEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { CreditCard, ShoppingBag } from "lucide-react";
+import { CreditCard } from "lucide-react";
 
 import LazyImg from "./LazyImg";
 import CarDetailsModal from "./CarDetailsModal";
@@ -136,22 +136,17 @@ export default function CarCard({
                 {/* Content Area */}
                 <div className="flex flex-1 flex-col justify-between border-b-2 border-[#E3E1DC] p-5 text-start">
                     <div>
-                        {/* Brand & Meta Row (With clickable details trigger) */}
+                        {/* Brand & Meta Row */}
                         <div className="flex items-center justify-between gap-2">
                             <p className="truncate text-[13px] font-bold text-[#DFA655]">
                                 {brand || t("carCard.defaultBrand")}
                             </p>
-                            <button
-                                type="button"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleOpenDetails();
-                                }}
-                                className="shrink-0 text-[12px] font-semibold text-[#888888] hover:text-[#DFA655] transition-colors cursor-pointer flex items-center gap-1 group/btn"
-                            >
-                                <span>{isRTL ? "تفاصيل السيارة" : "Car Details"}</span>
-                                <span className="transition-transform group-hover/btn:translate-x-[-2px]">{isRTL ? "←" : "→"}</span>
-                            </button>
+                            <p className="shrink-0 text-[12px] font-medium text-[#888888]">
+                                {type
+                                    ? `${type} · `
+                                    : `${t("carCard.defaultType")} · `}
+                                {year || t("carCard.defaultYear")}
+                            </p>
                         </div>
 
                         {/* Title */}
@@ -209,19 +204,18 @@ export default function CarCard({
                             )}
                         </div>
 
-                        {/* Action Buttons Row: طلب سيارة | تمويل */}
+                        {/* Action Buttons Row: تفاصيل السيارة | تمويل */}
                         <div
                             className="grid grid-cols-2 gap-2.5"
                             onClick={(event) => event.stopPropagation()}
                         >
-                            {/* 1. زر طلب سيارة (شراء) */}
+                            {/* 1. زر تفاصيل السيارة (اللون الأساسي) */}
                             <button
                                 type="button"
-                                onClick={() => handleOpenOrder("cash")}
+                                onClick={handleOpenDetails}
                                 className="flex h-[44px] w-full items-center justify-center gap-1.5 rounded-[6px] bg-[#DFA655] text-[14px] font-bold text-white shadow-xs transition hover:bg-[#c89345] active:scale-95 cursor-pointer"
                             >
-                                <ShoppingBag size={15} />
-                                <span>{isRTL ? "طلب سيارة" : "Order Car"}</span>
+                                <span>{reserveText ?? (isRTL ? "تفاصيل السيارة" : "Car Details")}</span>
                             </button>
 
                             {/* 2. زر تمويل */}

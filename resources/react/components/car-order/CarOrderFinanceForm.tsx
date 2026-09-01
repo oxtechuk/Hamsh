@@ -191,7 +191,7 @@ export default function CarOrderFinanceForm({
                                     type="checkbox"
                                     checked={form.consolidateDebts || false}
                                     onChange={(e) => onFieldChange("consolidateDebts", e.target.checked)}
-                                    className="h-4 w-4 rounded border-gray-300 text-[#C81E1E] focus:ring-[#C81E1E]"
+                                    className="h-4 w-4 rounded border-gray-300 text-[#DDBB68] focus:ring-[#DDBB68]"
                                 />
                                 <span>{isRTL ? 'أرغب في الاستفادة من "خيار الحلول التمويلية وتوحيد الالتزامات"' : 'I want to benefit from "debt consolidation and finance solutions"'}</span>
                             </label>
@@ -207,8 +207,8 @@ export default function CarOrderFinanceForm({
                     disabled={!canSubmit || submitting}
                     className={[
                         "flex h-[48px] w-full items-center justify-center gap-2",
-                        "bg-[#C81E1E] text-white text-[15px] font-bold rounded-lg shadow-md",
-                        "transition duration-200 hover:bg-[#A81818] active:scale-[0.99] cursor-pointer",
+                        "bg-[var(--brand-primary-color,#DDBB68)] text-[#151A2A] text-[15px] font-bold rounded-lg shadow-sm",
+                        "transition duration-200 hover:bg-[#CBA458] active:scale-[0.99] cursor-pointer",
                         "disabled:cursor-not-allowed disabled:opacity-50",
                     ].join(" ")}
                 >

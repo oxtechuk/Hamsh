@@ -101,7 +101,7 @@ export default function CarOrderModal({
                                                 : "text-gray-500 hover:text-gray-900",
                                         ].join(" ")}
                                     >
-                                        <CreditCard size={16} className={mode === "finance" ? "text-[#C81E1E]" : ""} />
+
                                         <span>{isRTL ? "طلب تمويل سيارة" : "Finance Application"}</span>
                                     </button>
 
@@ -118,7 +118,7 @@ export default function CarOrderModal({
                                                 : "text-gray-500 hover:text-gray-900",
                                         ].join(" ")}
                                     >
-                                        <Banknote size={16} className={mode === "cash" ? "text-[#DDBB68]" : ""} />
+
                                         <span>{isRTL ? "شراء نقدي (كاش)" : "Cash Purchase"}</span>
                                     </button>
                                 </div>

@@ -57,7 +57,7 @@ export const carOrderFieldCls = [
     "outline-none",
     "placeholder:text-[#94A3B8]",
     "transition duration-200",
-    "focus:border-[#C81E1E] focus:ring-2 focus:ring-[#C81E1E]/15",
+    "focus:border-[#DDBB68] focus:ring-2 focus:ring-[#DDBB68]/20",
 ].join(" ");
 
 export const carOrderLabelCls =
