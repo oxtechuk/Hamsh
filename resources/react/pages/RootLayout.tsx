@@ -27,9 +27,17 @@ export default function RootLayout() {
   }, []);
 
   useEffect(() => {
-    if (!loaded || !settings?.favicon) return;
-    const link = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
-    if (link) link.href = getImageUrl(settings.favicon);
+    const favPath = settings?.favicon || settings?.logo || null;
+    const faviconUrl = favPath ? getImageUrl(favPath) : APP_IMAGES.LOGO;
+    if (faviconUrl) {
+      let link = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
+      if (!link) {
+        link = document.createElement("link");
+        link.rel = "icon";
+        document.head.appendChild(link);
+      }
+      link.href = faviconUrl;
+    }
   }, [loaded, settings]);
 
   if (settings?.maintenance?.enabled && !settings?.maintenance?.is_admin) {

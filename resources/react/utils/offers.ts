@@ -41,31 +41,51 @@ export function offerToCardProps(
   };
 }
 
+const SPEC_KEY_MAP: Record<string, string> = {
+  "Fuel Type": "fuel",
+  Transmission: "gearbox",
+  seats: "seats",
+  Seats: "seats",
+};
+
 function specValue(car: OfferBentoCar, label: string): string {
-  const spec = car.specs?.find((s) => s.label === label);
-  return spec?.value ?? "";
+  if (!car || !car.specs) return "";
+  if (Array.isArray(car.specs)) {
+    const spec = car.specs.find((s) => "label" in s && s.label === label);
+    return spec?.value ?? "";
+  }
+  if (typeof car.specs === "object") {
+    const key = SPEC_KEY_MAP[label] || label.toLowerCase();
+    const v = (car.specs as Record<string, unknown>)[key] ?? (car.specs as Record<string, unknown>)[label];
+    return typeof v === "string" ? v : (v != null ? String(v) : "");
+  }
+  return "";
 }
 
 export function mapBentoCarToCardProps(
   car: OfferBentoCar,
   locale = "ar",
 ): ICarCardProps | null {
-  const slug = localize(car.slug, locale);
-  if (!slug) return null;
+  try {
+    const slug = localize(car.slug, locale);
+    if (!slug) return null;
 
-  return {
-    id: car.id,
-    image: getImageUrl(car.main_image || car.thumbnail) || APP_IMAGES.CAR_PLACEHOLDER,
-    brand: localize(car.brand?.name, locale),
-    name: localize(car.name, locale),
-    year: String(car.year ?? ""),
-    type: car.type ?? "",
-    slug,
-    fuelType: specValue(car, "Fuel Type"),
-    transmission: specValue(car, "Transmission"),
-    seats: specValue(car, "Seats"),
-    price: formatPrice(car.cash_price ?? 0, "var(--brand-primary-color)", locale),
-    monthlyPrice: formatPrice(car.min_installment ?? 0, "var(--brand-secondary-color)", locale),
-    detailsTo: `/cars/${slug}`,
-  };
+    return {
+      id: car.id,
+      image: getImageUrl(car.main_image || car.thumbnail) || APP_IMAGES.CAR_PLACEHOLDER,
+      brand: localize(car.brand?.name, locale),
+      name: localize(car.name, locale),
+      year: String(car.year ?? ""),
+      type: car.type ?? "",
+      slug,
+      fuelType: specValue(car, "Fuel Type") || (car as any).fuel_type || "",
+      transmission: specValue(car, "Transmission") || (car as any).transmission || "",
+      seats: specValue(car, "Seats") || (car as any).seats || "",
+      price: formatPrice(car.cash_price ?? 0, "var(--brand-primary-color)", locale),
+      monthlyPrice: formatPrice(car.min_installment ?? 0, "var(--brand-secondary-color)", locale),
+      detailsTo: `/cars/${slug}`,
+    };
+  } catch {
+    return null;
+  }
 }

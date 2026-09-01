@@ -136,17 +136,22 @@ export default function CarCard({
                 {/* Content Area */}
                 <div className="flex flex-1 flex-col justify-between border-b-2 border-[#E3E1DC] p-5 text-start">
                     <div>
-                        {/* Brand & Meta Row */}
+                        {/* Brand & Details Row */}
                         <div className="flex items-center justify-between gap-2">
                             <p className="truncate text-[13px] font-bold text-[#DFA655]">
                                 {brand || t("carCard.defaultBrand")}
                             </p>
-                            <p className="shrink-0 text-[12px] font-medium text-[#888888]">
-                                {type
-                                    ? `${type} · `
-                                    : `${t("carCard.defaultType")} · `}
-                                {year || t("carCard.defaultYear")}
-                            </p>
+                            <button
+                                type="button"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleOpenDetails();
+                                }}
+                                className="shrink-0 text-[12px] font-bold text-[#555555] hover:text-[#DFA655] transition-all cursor-pointer flex items-center gap-1 group/btn px-2.5 py-1 rounded-[6px] bg-[#F5F2EC] hover:bg-[#eae5db] active:scale-95"
+                            >
+                                <span>{isRTL ? "تفاصيل السيارة" : "Car Details"}</span>
+                                <span className="transition-transform group-hover/btn:translate-x-[-2px]">{isRTL ? "←" : "→"}</span>
+                            </button>
                         </div>
 
                         {/* Title */}
@@ -204,18 +209,18 @@ export default function CarCard({
                             )}
                         </div>
 
-                        {/* Action Buttons Row: تفاصيل السيارة | تمويل */}
+                        {/* Action Buttons Row: طلب كاش | تمويل */}
                         <div
                             className="grid grid-cols-2 gap-2.5"
                             onClick={(event) => event.stopPropagation()}
                         >
-                            {/* 1. زر تفاصيل السيارة (اللون الأساسي) */}
+                            {/* 1. زر طلب كاش (اللون الأساسي) */}
                             <button
                                 type="button"
-                                onClick={handleOpenDetails}
+                                onClick={() => handleOpenOrder("cash")}
                                 className="flex h-[44px] w-full items-center justify-center gap-1.5 rounded-[6px] bg-[#DFA655] text-[14px] font-bold text-white shadow-xs transition hover:bg-[#c89345] active:scale-95 cursor-pointer"
                             >
-                                <span>{reserveText ?? (isRTL ? "تفاصيل السيارة" : "Car Details")}</span>
+                                <span>{isRTL ? "طلب كاش" : "Cash Order"}</span>
                             </button>
 
                             {/* 2. زر تمويل */}

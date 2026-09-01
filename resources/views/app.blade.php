@@ -1,15 +1,14 @@
 @php
     $initialSettings = app(\App\Services\Api\Store\SettingApiService::class)->footer();
     $isAdmin = auth('employee')->check();
-    if ($isAdmin) {
-        $initialSettings['maintenance']['is_admin'] = true;
-    }
+    $favUrl = !empty($initialSettings['favicon']) ? $initialSettings['favicon'] : (!empty($initialSettings['logo']) ? $initialSettings['logo'] : '/favicon.svg');
 @endphp
 <!doctype html>
 <html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="{{ !empty($initialSettings['favicon']) ? $initialSettings['favicon'] : '/favicon.svg' }}" />
+    <link rel="icon" type="image/svg+xml" href="{{ $favUrl }}" />
+    <link rel="shortcut icon" href="{{ $favUrl }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{ !empty($initialSettings['site_name']) ? $initialSettings['site_name'] : config('app.name', 'هامش') }}</title>
 

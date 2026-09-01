@@ -139,7 +139,7 @@
                         <div class="modal-body p-4">
                             <div class="row g-3">
                                 <div class="col-md-12">
-                                    <label class="form-label fw-bold">{{ __('السيارات المرتبطة') }}</label>
+                                    <label class="form-label fw-bold">{{ __('السيارات المرتبطة') }} <span class="text-danger">*</span></label>
                                     <select name="car_ids[]" class="form-select bg-light border-0 select2-multiple" multiple="multiple" required style="height: 150px;">
                                         @foreach($cars as $car)
                                         <option value="{{ $car->id }}" {{ in_array($car->id, $offer->cars->pluck('id')->toArray()) ? 'selected' : '' }}>{{ $car->brand->name ?? '' }} - {{ $car->name }}</option>
@@ -148,55 +148,55 @@
                                     <small class="text-muted">{{ __('يمكنك اختيار أكثر من سيارة بالضغط مع Control') }}</small>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label fw-bold">{{ __('عنوان العرض (عربي)') }}</label>
+                                    <label class="form-label fw-bold">{{ __('عنوان العرض (عربي)') }} <span class="text-danger">*</span></label>
                                     <input type="text" name="title[ar]" class="form-control bg-light border-0" value="{{ $offer->getTranslation('title', 'ar', false) }}" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label fw-bold">{{ __('عنوان العرض (EN)') }}</label>
-                                    <input type="text" name="title[en]" class="form-control bg-light border-0" value="{{ $offer->getTranslation('title', 'en', false) }}" required>
+                                    <label class="form-label fw-bold">{{ __('عنوان العرض (EN)') }} <small class="text-muted fw-normal">({{ __('اختياري') }})</small></label>
+                                    <input type="text" name="title[en]" class="form-control bg-light border-0" value="{{ $offer->getTranslation('title', 'en', false) }}">
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label fw-bold">{{ __('الوصف (عربي)') }}</label>
+                                    <label class="form-label fw-bold">{{ __('الوصف (عربي)') }} <small class="text-muted fw-normal">({{ __('اختياري') }})</small></label>
                                     <textarea name="description[ar]" class="form-control bg-light border-0" rows="2">{{ $offer->getTranslation('description', 'ar', false) }}</textarea>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label fw-bold">{{ __('الوصف (EN)') }}</label>
+                                    <label class="form-label fw-bold">{{ __('الوصف (EN)') }} <small class="text-muted fw-normal">({{ __('اختياري') }})</small></label>
                                     <textarea name="description[en]" class="form-control bg-light border-0" rows="2">{{ $offer->getTranslation('description', 'en', false) }}</textarea>
                                 </div>
                                 
                                 <div class="col-md-4">
-                                    <label class="form-label fw-bold">{{ __('خصم (%)') }}</label>
+                                    <label class="form-label fw-bold">{{ __('خصم (%)') }} <small class="text-muted fw-normal">({{ __('اختياري') }})</small></label>
                                     <input type="number" name="discount_percent" class="form-control bg-light border-0" value="{{ $offer->discount_percent }}">
                                 </div>
                                 <div class="col-md-4">
-                                    <label class="form-label fw-bold">{{ __('السعر الخاص') }}</label>
+                                    <label class="form-label fw-bold">{{ __('السعر الخاص') }} <small class="text-muted fw-normal">({{ __('اختياري') }})</small></label>
                                     <input type="number" name="special_price" class="form-control bg-light border-0" value="{{ $offer->special_price }}">
                                 </div>
                                 <div class="col-md-4">
-                                    <label class="form-label fw-bold">{{ __('قسط خاص') }}</label>
+                                    <label class="form-label fw-bold">{{ __('قسط خاص') }} <small class="text-muted fw-normal">({{ __('اختياري') }})</small></label>
                                     <input type="number" name="special_installment" class="form-control bg-light border-0" value="{{ $offer->special_installment }}">
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label class="form-label fw-bold">{{ __('فئة العرض') }}</label>
+                                    <label class="form-label fw-bold">{{ __('فئة العرض') }} <small class="text-muted fw-normal">({{ __('اختياري') }})</small></label>
                                     <input type="text" name="offer_category" class="form-control bg-light border-0" value="{{ $offer->offer_category }}" placeholder="مثال: تمويل، خصومات">
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label fw-bold">{{ __('عدد التقييمات') }}</label>
+                                    <label class="form-label fw-bold">{{ __('عدد التقييمات') }} <small class="text-muted fw-normal">({{ __('اختياري') }})</small></label>
                                     <input type="number" name="user_rated_count" class="form-control bg-light border-0" value="{{ $offer->user_rated_count }}" min="0">
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label class="form-label fw-bold">{{ __('تاريخ البدء') }}</label>
+                                    <label class="form-label fw-bold">{{ __('تاريخ البدء') }} <small class="text-muted fw-normal">({{ __('اختياري') }})</small></label>
                                     <input type="date" name="starts_at" class="form-control bg-light border-0" value="{{ $offer->starts_at ? $offer->starts_at->format('Y-m-d') : '' }}">
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label fw-bold">{{ __('تاريخ الانتهاء') }}</label>
+                                    <label class="form-label fw-bold">{{ __('تاريخ الانتهاء') }} <small class="text-muted fw-normal">({{ __('اختياري') }})</small></label>
                                     <input type="date" name="ends_at" class="form-control bg-light border-0" value="{{ $offer->ends_at ? $offer->ends_at->format('Y-m-d') : '' }}">
                                 </div>
 
                                 <div class="col-md-12">
-                                    <label class="form-label fw-bold">{{ __('صورة العرض') }}</label>
+                                    <label class="form-label fw-bold">{{ __('صورة العرض') }} <small class="text-muted fw-normal">({{ __('اختياري') }})</small></label>
                                     <div class="d-flex align-items-center gap-3 mb-2">
                                         @if($offer->image)
                                             <div class="rounded-3 border overflow-hidden" style="width: 100px; height: 60px;">
@@ -265,51 +265,51 @@
                             <input type="text" name="title[ar]" class="form-control bg-light border-0" placeholder="مثال: عرض الصيف الهائل" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">{{ __('عنوان العرض (EN)') }} <span class="text-danger">*</span></label>
-                            <input type="text" name="title[en]" class="form-control bg-light border-0" placeholder="e.g.: Mega Summer Sale" required>
+                            <label class="form-label fw-bold">{{ __('عنوان العرض (EN)') }} <small class="text-muted fw-normal">({{ __('اختياري') }})</small></label>
+                            <input type="text" name="title[en]" class="form-control bg-light border-0" placeholder="e.g.: Mega Summer Sale">
                         </div>
                         <div class="col-md-12">
-                            <label class="form-label fw-bold">{{ __('الوصف المختصر (عربي)') }}</label>
+                            <label class="form-label fw-bold">{{ __('الوصف المختصر (عربي)') }} <small class="text-muted fw-normal">({{ __('اختياري') }})</small></label>
                             <textarea name="description[ar]" class="form-control bg-light border-0" rows="2" placeholder="اكتب تفاصيل العرض..."></textarea>
                         </div>
                         <div class="col-md-12">
-                            <label class="form-label fw-bold">{{ __('الوصف المختصر (EN)') }}</label>
+                            <label class="form-label fw-bold">{{ __('الوصف المختصر (EN)') }} <small class="text-muted fw-normal">({{ __('اختياري') }})</small></label>
                             <textarea name="description[en]" class="form-control bg-light border-0" rows="2" placeholder="English description..."></textarea>
                         </div>
                         
                         <div class="col-md-4">
-                            <label class="form-label fw-bold">{{ __('نسبة الخصم (%)') }}</label>
+                            <label class="form-label fw-bold">{{ __('نسبة الخصم (%)') }} <small class="text-muted fw-normal">({{ __('اختياري') }})</small></label>
                             <input type="number" name="discount_percent" class="form-control bg-light border-0" placeholder="10">
                         </div>
                         <div class="col-md-4">
-                            <label class="form-label fw-bold">{{ __('سعر كاش خاص') }}</label>
+                            <label class="form-label fw-bold">{{ __('سعر كاش خاص') }} <small class="text-muted fw-normal">({{ __('اختياري') }})</small></label>
                             <input type="number" name="special_price" class="form-control bg-light border-0" placeholder="السعر بعد الخصم">
                         </div>
                         <div class="col-md-4">
-                            <label class="form-label fw-bold">{{ __('قسط شهري يبدأ من') }}</label>
+                            <label class="form-label fw-bold">{{ __('قسط شهري يبدأ من') }} <small class="text-muted fw-normal">({{ __('اختياري') }})</small></label>
                             <input type="number" name="special_installment" class="form-control bg-light border-0" placeholder="أقل قسط متاح">
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">{{ __('فئة العرض') }}</label>
+                            <label class="form-label fw-bold">{{ __('فئة العرض') }} <small class="text-muted fw-normal">({{ __('اختياري') }})</small></label>
                             <input type="text" name="offer_category" class="form-control bg-light border-0" placeholder="مثال: تمويل، خصومات">
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">{{ __('عدد التقييمات') }}</label>
+                            <label class="form-label fw-bold">{{ __('عدد التقييمات') }} <small class="text-muted fw-normal">({{ __('اختياري') }})</small></label>
                             <input type="number" name="user_rated_count" class="form-control bg-light border-0" placeholder="0" min="0">
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">{{ __('تاريخ البدء') }}</label>
+                            <label class="form-label fw-bold">{{ __('تاريخ البدء') }} <small class="text-muted fw-normal">({{ __('اختياري') }})</small></label>
                             <input type="date" name="starts_at" class="form-control bg-light border-0">
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">{{ __('تاريخ الانتهاء') }}</label>
+                            <label class="form-label fw-bold">{{ __('تاريخ الانتهاء') }} <small class="text-muted fw-normal">({{ __('اختياري') }})</small></label>
                             <input type="date" name="ends_at" class="form-control bg-light border-0">
                         </div>
 
                         <div class="col-md-12">
-                            <label class="form-label fw-bold">{{ __('صورة العرض') }}</label>
+                            <label class="form-label fw-bold">{{ __('صورة العرض') }} <small class="text-muted fw-normal">({{ __('اختياري') }})</small></label>
                             <input type="file" name="image" class="form-control bg-light border-0" accept="image/*">
                             <small class="text-muted">{{ __('سيتم استخدام صورة السيارة تلقائياً إذا لم ترفع صورة هنا') }}</small>
                         </div>

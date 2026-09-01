@@ -9,8 +9,16 @@
 <!-- layout setup -->
 <script type="module" src="{{ asset('assets/js/layout-setup.js') }}"></script>
 
+@php
+    $siteSettings = app(\App\Services\Cache\BaseCacheService::class)->rememberSettings();
+    $favPath = $siteSettings->get('site_favicon') ?: $siteSettings->get('site_logo');
+    $favUrl = $favPath && \Illuminate\Support\Facades\Storage::disk('public')->exists($favPath)
+        ? asset('storage/' . $favPath)
+        : asset('images/logo_without_bg.svg');
+@endphp
 <!-- App favicon -->
-<link rel="shortcut icon" href="{{ asset('assets/images/k_favicon_32x.png') }}">
+<link rel="icon" type="image/svg+xml" href="{{ $favUrl }}" />
+<link rel="shortcut icon" href="{{ $favUrl }}">
 
 @yield('css')
 @include('partials.head-css')

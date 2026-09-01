@@ -7,6 +7,16 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'لوحة التحكم | hamsh ')</title>
 
+    @php
+        $siteSettings = app(\App\Services\Cache\BaseCacheService::class)->rememberSettings();
+        $favPath = $siteSettings->get('site_favicon') ?: $siteSettings->get('site_logo');
+        $favUrl = $favPath && \Illuminate\Support\Facades\Storage::disk('public')->exists($favPath)
+            ? asset('storage/' . $favPath)
+            : asset('images/logo_without_bg.svg');
+    @endphp
+    <link rel="icon" type="image/svg+xml" href="{{ $favUrl }}" />
+    <link rel="shortcut icon" href="{{ $favUrl }}" />
+
     {{-- Preconnect & DNS-Prefetch for Speed --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
