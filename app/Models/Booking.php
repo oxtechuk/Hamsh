@@ -20,11 +20,12 @@ class Booking extends Model
         'last_contacted_at' => 'datetime',
     ];
 
-    const BOOKING_TYPES = ['test_drive', 'purchase', 'inquiry'];
+    const BOOKING_TYPES = ['test_drive', 'purchase', 'finance', 'inquiry'];
 
     const BOOKING_TYPES_LABELS = [
         'test_drive' => 'تجربة قيادة',
-        'purchase' => 'شراء',
+        'purchase' => 'شراء كاش',
+        'finance' => 'تمويل',
         'inquiry' => 'استفسار',
     ];
 

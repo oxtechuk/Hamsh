@@ -65,7 +65,7 @@ class BookingController extends Controller
             'monthly_installment' => 'nullable|numeric',
             'notes' => 'nullable|string',
             'type' => 'nullable|string',
-            'booking_type' => 'nullable|string|in:test_drive,purchase,inquiry',
+            'booking_type' => 'nullable|string|in:test_drive,purchase,finance,inquiry',
             'location' => 'nullable|string|max:500',
         ]);
 

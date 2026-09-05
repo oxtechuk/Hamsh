@@ -39,7 +39,7 @@ final class BookingRequest extends ApiBaseRequest
             $rules['interest_rate'] = ['nullable', 'numeric', 'min:0', 'max:50'];
         }
 
-        $rules['booking_type'] = ['nullable', 'string', 'in:test_drive,purchase,inquiry'];
+        $rules['booking_type'] = ['nullable', 'string', 'in:test_drive,purchase,finance,inquiry'];
 
         return $rules;
     }
