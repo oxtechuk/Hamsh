@@ -1,8 +1,7 @@
-import { useState, type MouseEvent } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { CreditCard } from "lucide-react";
 
 import LazyImg from "./LazyImg";
 import CarDetailsModal from "./CarDetailsModal";
@@ -59,9 +58,9 @@ export default function CarCard({
     const finalBadge = resolvedBadge
         ? {
               text: resolvedBadge.text,
-              color: badgeColor ?? resolvedBadge.color ?? "#DFA655",
+              color: badgeColor ?? resolvedBadge.color ?? "rgb(223, 166, 85)",
           }
-        : { text: t("carCard.exclusive"), color: "#DFA655" };
+        : { text: "new_arrival", color: "rgb(223, 166, 85)" };
 
     const handleOpenDetails = () => {
         if (carPopupEnabled && slug) {
@@ -86,13 +85,6 @@ export default function CarCard({
         }
     };
 
-    const handleCompare = (event: MouseEvent<HTMLButtonElement>) => {
-        event.stopPropagation();
-        navigate(
-            slug ? `/compare?slug=${encodeURIComponent(slug)}` : "/compare",
-        );
-    };
-
     const specPills = buildCarSpecPills(t, transmission, fuelType, seats);
     const visiblePills = specPills.slice(0, MAX_VISIBLE_PILLS);
     const hiddenPillsCount = specPills.length - visiblePills.length;
@@ -102,29 +94,24 @@ export default function CarCard({
             <article
                 dir={direction}
                 onClick={handleOpenDetails}
-                className={[
-                    "group relative flex w-full flex-col overflow-hidden rounded-xl",
-                    "border border-[#E8E7E3] bg-white shadow-[0_2px_12px_rgba(0,0,0,0.03)]",
-                    "transition-all duration-300 hover:-translate-y-1 hover:shadow-md cursor-pointer",
-                ].join(" ")}
+                className="group relative flex w-full flex-col overflow-hidden rounded-xl border border-[#E8E7E3] bg-white shadow-[0_2px_12px_rgba(0,0,0,0.03)] transition-all duration-300 hover:-translate-y-1 hover:shadow-md cursor-pointer"
             >
-                {/* Image Area */}
                 <div className="relative h-[210px] sm:h-[230px] w-full shrink-0 overflow-hidden bg-[#F4F4F4]">
-                    <LazyImg
-                        src={image}
-                        alt={`${brand} ${name}`}
-                        eager={eager}
-                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-
-                    {/* Gold Badge */}
+                    <div className="relative overflow-hidden h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        <LazyImg
+                            src={image}
+                            alt={`${brand} ${name}`}
+                            eager={eager}
+                            className="w-full h-full object-cover relative z-10 opacity-100"
+                        />
+                    </div>
                     {finalBadge && (
                         <div className="absolute start-3 top-3 z-10">
                             <span
                                 className="inline-flex items-center justify-center px-3 py-1 text-[12px] font-bold text-white shadow-xs rounded-sm"
                                 style={{
                                     backgroundColor:
-                                        finalBadge.color || "#DFA655",
+                                        finalBadge.color || "rgb(223, 166, 85)",
                                 }}
                             >
                                 {finalBadge.text}
@@ -133,10 +120,8 @@ export default function CarCard({
                     )}
                 </div>
 
-                {/* Content Area */}
                 <div className="flex flex-1 flex-col justify-between border-b-2 border-[#E3E1DC] p-5 text-start">
                     <div>
-                        {/* Brand & Details Row */}
                         <div className="flex items-center justify-between gap-2">
                             <p className="truncate text-[13px] font-bold text-[#DFA655]">
                                 {brand || t("carCard.defaultBrand")}
@@ -150,11 +135,12 @@ export default function CarCard({
                                 className="shrink-0 text-[12px] font-bold text-[#555555] hover:text-[#DFA655] transition-all cursor-pointer flex items-center gap-1 group/btn px-2.5 py-1 rounded-[6px] bg-[#F5F2EC] hover:bg-[#eae5db] active:scale-95"
                             >
                                 <span>{isRTL ? "تفاصيل السيارة" : "Car Details"}</span>
-                                <span className="transition-transform group-hover/btn:translate-x-[-2px]">{isRTL ? "←" : "→"}</span>
+                                <span className="transition-transform group-hover/btn:translate-x-[-2px]">
+                                    {isRTL ? "←" : "→"}
+                                </span>
                             </button>
                         </div>
 
-                        {/* Title */}
                         <h3
                             title={`${brand} ${name}`}
                             className="mt-1.5 line-clamp-1 text-[19px] sm:text-[20px] font-black leading-snug text-[#111111]"
@@ -162,7 +148,6 @@ export default function CarCard({
                             {name}
                         </h3>
 
-                        {/* Spec Pills */}
                         <div className="mt-3.5 mb-4 flex flex-nowrap items-center gap-1.5 overflow-hidden">
                             {visiblePills.map((pill, index) => (
                                 <span
@@ -182,9 +167,7 @@ export default function CarCard({
                     </div>
 
                     <div>
-                        {/* Prices Row */}
                         <div className="mb-5 flex items-baseline justify-between gap-2 text-start">
-                            {/* Cash price */}
                             <div className="text-start">
                                 <p className="text-[12px] font-medium text-gray-500">
                                     {t("carCard.cashPrice")}
@@ -194,7 +177,6 @@ export default function CarCard({
                                 </p>
                             </div>
 
-                            {/* Monthly price */}
                             {monthlyPrice ? (
                                 <div className="text-end">
                                     <p className="text-[12px] font-medium text-gray-500">
@@ -209,12 +191,10 @@ export default function CarCard({
                             )}
                         </div>
 
-                        {/* Action Buttons Row: طلب كاش | تمويل */}
                         <div
                             className="grid grid-cols-2 gap-2.5"
                             onClick={(event) => event.stopPropagation()}
                         >
-                            {/* 1. زر طلب كاش (اللون الأساسي) */}
                             <button
                                 type="button"
                                 onClick={() => handleOpenOrder("cash")}
@@ -223,13 +203,27 @@ export default function CarCard({
                                 <span>{isRTL ? "طلب كاش" : "Cash Order"}</span>
                             </button>
 
-                            {/* 2. زر تمويل */}
                             <button
                                 type="button"
                                 onClick={() => handleOpenOrder("finance")}
                                 className="flex h-[44px] w-full items-center justify-center gap-1.5 rounded-[6px] border border-[#172139] bg-[#172139] text-[14px] font-bold text-white transition hover:bg-[#202d4d] active:scale-95 cursor-pointer shadow-xs"
                             >
-                                <CreditCard size={15} className="text-[#DDBB72]" />
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="15"
+                                    height="15"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    className="lucide lucide-credit-card text-[#DDBB72]"
+                                    aria-hidden="true"
+                                >
+                                    <rect width="20" height="14" x="2" y="5" rx="2"></rect>
+                                    <line x1="2" x2="22" y1="10" y2="10"></line>
+                                </svg>
                                 <span>{isRTL ? "تمويل" : "Finance"}</span>
                             </button>
                         </div>
