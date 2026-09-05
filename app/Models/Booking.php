@@ -109,6 +109,15 @@ class Booking extends Model
         return self::STATUSES[$this->status]['color'] ?? 'secondary';
     }
 
+    public function getBookingTypeLabelAttribute(): string
+    {
+        if (empty($this->booking_type)) {
+            return 'طلب شراء كاش';
+        }
+
+        return self::BOOKING_TYPES_LABELS[$this->booking_type] ?? $this->booking_type;
+    }
+
     public function scopeNew($query)
     {
         return $query->where('status', 'new');

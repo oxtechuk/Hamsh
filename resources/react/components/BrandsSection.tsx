@@ -58,7 +58,7 @@ export default function BrandsSection({
                 onClick={() =>
                     brand.onClick
                         ? brand.onClick()
-                        : navigate(`/cars?search=${encodeURIComponent(brand.name)}`)
+                        : navigate(`/cars?brands[]=${brand.id}`)
                 }
                 className="flex h-auto w-[145px] shrink-0 flex-col items-center justify-center gap-2 px-6 py-5 sm:w-[170px]"
             >

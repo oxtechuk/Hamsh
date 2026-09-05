@@ -9,11 +9,17 @@ export function useCarsFilter() {
   const offerId = searchParams.get("offerId");
 
   const initialFilters = useMemo<IFilterValues>(() => {
-    const brands = searchParams.get("brands[]");
+    const brands =
+      searchParams.get("brands[]") ||
+      searchParams.get("brands") ||
+      searchParams.get("brand") ||
+      searchParams.get("brand_id") ||
+      searchParams.get("brandId");
     const type = searchParams.get("type");
-    const categoryId = searchParams.get("category_id");
+    const categoryId =
+      searchParams.get("category_id") || searchParams.get("categoryId");
     const year = searchParams.get("year");
-    const q = searchParams.get("q");
+    const q = searchParams.get("q") || searchParams.get("search");
     const sort = searchParams.get("sort");
 
     if (!brands && !type && !categoryId && !year && !q && !sort) {

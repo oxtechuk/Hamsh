@@ -16,7 +16,7 @@
         <div class="row g-3 mb-4">
             <div class="col-6 col-xl-4">
                 <div class="crm-stat-new">
-                    <span class="stat-badge orange">65%</span>
+                    <span class="stat-badge orange">{{ $stats['total'] > 0 ? round(($stats['new'] / $stats['total']) * 100) : 0 }}%</span>
                     <div class="stat-icon red"><i class="bi bi-clock"></i></div>
                     <div class="stat-lbl">{{ __('بانتظار المراجعة') }}</div>
                     <div class="stat-val">{{ number_format($stats['new'] ?? 0) }}</div>
@@ -24,18 +24,18 @@
             </div>
             <div class="col-6 col-xl-4">
                 <div class="crm-stat-new">
-                    <span class="stat-badge green">+3%</span>
-                    <div class="stat-icon blue"><i class="bi bi-people"></i></div>
+                    <span class="stat-badge green">{{ __('اليوم') }}</span>
+                    <div class="stat-icon blue"><i class="bi bi-calendar-check"></i></div>
                     <div class="stat-lbl">{{ __('عدد طلبات اليوم') }}</div>
-                    <div class="stat-val">{{ number_format($stats['in_progress'] ?? 0) }}</div>
+                    <div class="stat-val">{{ number_format($stats['today'] ?? 0) }}</div>
                 </div>
             </div>
             <div class="col-6 col-xl-4">
                 <div class="crm-stat-new">
-                    <span class="stat-badge green">+12%</span>
+                    <span class="stat-badge purple">{{ __('الكل') }}</span>
                     <div class="stat-icon purple"><i class="bi bi-person-lines-fill"></i></div>
                     <div class="stat-lbl">{{ __('إجمالي عدد الطلبات') }}</div>
-                    <div class="stat-val">{{ number_format($bookings->total()) }}</div>
+                    <div class="stat-val">{{ number_format($stats['total'] ?? $bookings->total()) }}</div>
                 </div>
             </div>
         </div>
@@ -47,20 +47,20 @@
                     <div class="d-flex flex-wrap gap-2 align-items-center">
                         {{-- Date --}}
                         <div style="position:relative;">
-                            <input type="date" name="date" value="{{ request('date', now()->format('Y-m-d')) }}"
-                                style="border:1px solid var(--crm-border);border-radius:8px;padding:8px 36px 8px 14px;font-size:13px;outline:none;font-family:'Cairo',sans-serif;">
+                            <input type="date" name="date" value="{{ request('date') }}"
+                                style="border:1px solid var(--crm-border);border-radius:8px;padding:8px 36px 8px 14px;font-size:13px;outline:none;font-family:'Cairo',sans-serif;"
+                                placeholder="{{ __('التاريخ') }}">
                             <i class="bi bi-calendar3"
                                 style="position:absolute;{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}:10px;top:50%;transform:translateY(-50%);color:var(--crm-text-muted);pointer-events:none;"></i>
                         </div>
-                        {{-- مصرف الخدمة --}}
-                        <select name="type"
+                        {{-- نوع الطلب --}}
+                        <select name="booking_type"
                             style="border:1px solid var(--crm-border);border-radius:8px;padding:8px 14px;font-size:13px;outline:none;font-family:'Cairo',sans-serif;min-width:150px;">
-                            <option value="">{{ __('مصرف الخدمة — الكل') }}</option>
-                            <option value="loan" {{ request('type') == 'loan' ? 'selected' : '' }}>{{ __('تمويل') }}</option>
-                            <option value="test" {{ request('type') == 'test' ? 'selected' : '' }}>{{ __('تجربة قيادة') }}
-                            </option>
-                            <option value="booking" {{ request('type') == 'booking' ? 'selected' : '' }}>{{ __('حجز سيارة') }}
-                            </option>
+                            <option value="">{{ __('نوع الطلب — الكل') }}</option>
+                            <option value="finance" {{ request('booking_type') === 'finance' ? 'selected' : '' }}>{{ __('طلب تمويل') }}</option>
+                            <option value="purchase" {{ request('booking_type') === 'purchase' ? 'selected' : '' }}>{{ __('شراء كاش') }}</option>
+                            <option value="test_drive" {{ request('booking_type') === 'test_drive' ? 'selected' : '' }}>{{ __('تجربة قيادة') }}</option>
+                            <option value="inquiry" {{ request('booking_type') === 'inquiry' ? 'selected' : '' }}>{{ __('استفسار') }}</option>
                         </select>
                         {{-- الحالة --}}
                         <select name="status"
@@ -74,7 +74,7 @@
                         {{-- Search --}}
                         <div style="position:relative;flex:1;min-width:180px;">
                             <input type="text" name="search" value="{{ request('search') }}"
-                                placeholder="{{ __('بحث...') }}"
+                                placeholder="{{ __('بحث باسم العميل أو رقم الجوال...') }}"
                                 style="width:100%;border:1px solid var(--crm-border);border-radius:8px;padding:8px 36px 8px 14px;font-size:13px;outline:none;font-family:'Cairo',sans-serif;">
                             <i class="bi bi-search"
                                 style="position:absolute;{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}:12px;top:50%;transform:translateY(-50%);color:var(--crm-text-muted);"></i>
@@ -86,8 +86,6 @@
                 </div>
             </div>
         </form>
-
-
 
         {{-- Table --}}
         <div class="card border-0 shadow-sm rounded-4 overflow-hidden"
@@ -104,43 +102,109 @@
                 <table class="table table-hover align-middle mb-0">
                     <thead style="background:#F8F9FC;">
                         <tr>
-                            <th class="px-4 py-3 text-muted fw-bold" style="font-size:12px;">{{ __('رقم الطلب') }}</th>
-                            <th class="py-3 text-muted fw-bold" style="font-size:12px;">{{ __('رقم العميل') }}</th>
-                            <th class="py-3 text-muted fw-bold" style="font-size:12px;">{{ __('الراتب') }}</th>
-                            <th class="py-3 text-muted fw-bold" style="font-size:12px;">{{ __('نوع الطلب') }}</th>
-                            <th class="py-3 text-muted fw-bold" style="font-size:12px;">{{ __('نوع السيارات') }}</th>
-                            <th class="py-3 text-muted fw-bold" style="font-size:12px;">{{ __('سعر السيارة') }}</th>
+                            <th class="px-3 py-3 text-muted fw-bold" style="font-size:12px;">{{ __('رقم الطلب') }}</th>
+                            <th class="py-3 text-muted fw-bold" style="font-size:12px;">{{ __('العميل') }}</th>
+                            <th class="py-3 text-muted fw-bold text-center" style="font-size:12px;">{{ __('نوع الطلب') }}</th>
+                            <th class="py-3 text-muted fw-bold" style="font-size:12px;">{{ __('السيارة المطلوبة') }}</th>
+                            <th class="py-3 text-muted fw-bold" style="font-size:12px;">{{ __('التفاصيل المالية') }}</th>
                             <th class="py-3 text-muted fw-bold" style="font-size:12px;">{{ __('المسؤول') }}</th>
                             <th class="py-3 text-muted fw-bold" style="font-size:12px;">{{ __('تاريخ الطلب') }}</th>
+                            <th class="py-3 text-muted fw-bold" style="font-size:12px;">{{ __('آخر تعديل') }}</th>
                             <th class="py-3 text-muted fw-bold" style="font-size:12px;">{{ __('الحالة') }}</th>
-                            <th class="py-3 text-muted fw-bold" style="font-size:12px;">{{ __('إجراءات') }}</th>
+                            <th class="py-3 text-muted fw-bold text-center" style="font-size:12px;">{{ __('إجراءات') }}</th>
                         </tr>
                     </thead>
                     <tbody class="border-top-0">
                         @forelse($bookings as $b)
+                            @php
+                                $bType = $b->booking_type;
+                                if (empty($bType)) {
+                                    if (str_contains($b->notes ?? '', 'تمويل') || ($b->monthly_installment > 0 && $b->duration_years > 0)) {
+                                        $bType = 'finance';
+                                    } else {
+                                        $bType = 'purchase';
+                                    }
+                                }
+                            @endphp
                             <tr>
-                                <td class="px-4 fw-bold" style="font-size:13px;">
+                                {{-- رقم الطلب --}}
+                                <td class="px-3 fw-bold" style="font-size:13px;">
                                     <a href="{{ route('crm.bookings.show', $b) }}" class="text-decoration-none"
-                                        style="color:var(--crm-text);">#{{ $b->id }}</a>
+                                        style="color:var(--crm-red);">#{{ $b->id }}</a>
                                 </td>
+
+                                {{-- العميل --}}
                                 <td>
-                                    <div class="fw-bold" style="font-size:13px;color:var(--crm-text);">{{ $b->client_name }}
+                                    <div class="fw-bold" style="font-size:13px;color:var(--crm-text);">{{ $b->client_name }}</div>
+                                    <div class="d-flex align-items-center gap-1">
+                                        <small class="text-muted" dir="ltr" style="font-size:11px;">{{ $b->client_phone }}</small>
+                                        @if($b->city)
+                                            <span class="text-muted" style="font-size:11px;">• {{ $b->city }}</span>
+                                        @endif
                                     </div>
-                                    <small class="text-muted" dir="ltr">{{ $b->client_phone }}</small>
                                 </td>
-                                <td style="font-size:13px;">
-                                    {{ number_format($b->monthly_installment) }}
-                                    <small class="text-muted">{!! __('ريال') !!}</small>
+
+                                {{-- نوع الطلب --}}
+                                <td class="text-center">
+                                    @if($bType === 'finance')
+                                        <span class="badge px-2.5 py-1.5 rounded-pill d-inline-flex align-items-center gap-1"
+                                            style="background:#EEF2FF;color:#4338CA;border:1px solid #C7D2FE;font-size:12px;font-weight:700;">
+                                            <i class="bi bi-wallet2"></i> {{ __('طلب تمويل') }}
+                                        </span>
+                                    @elseif($bType === 'purchase')
+                                        <span class="badge px-2.5 py-1.5 rounded-pill d-inline-flex align-items-center gap-1"
+                                            style="background:#ECFDF5;color:#047857;border:1px solid #A7F3D0;font-size:12px;font-weight:700;">
+                                            <i class="bi bi-cash-stack"></i> {{ __('شراء كاش') }}
+                                        </span>
+                                    @elseif($bType === 'test_drive')
+                                        <span class="badge px-2.5 py-1.5 rounded-pill d-inline-flex align-items-center gap-1"
+                                            style="background:#FFFBEB;color:#B45309;border:1px solid #FDE68A;font-size:12px;font-weight:700;">
+                                            <i class="bi bi-speedometer2"></i> {{ __('تجربة قيادة') }}
+                                        </span>
+                                    @else
+                                        <span class="badge px-2.5 py-1.5 rounded-pill d-inline-flex align-items-center gap-1"
+                                            style="background:#F1F5F9;color:#475569;border:1px solid #CBD5E1;font-size:12px;font-weight:700;">
+                                            <i class="bi bi-chat-left-text"></i> {{ __('استفسار') }}
+                                        </span>
+                                    @endif
                                 </td>
-                                <td style="font-size:12px;color:var(--crm-text-muted);">{{ __('طلب تجربة قيادة') }}</td>
+
+                                {{-- السيارة --}}
                                 <td>
-                                    <div style="font-size:12px;color:var(--crm-text);">{{ $b->car?->name ?? '—' }}</div>
-                                    <small class="text-muted">{{ $b->car?->brand?->name }}</small>
+                                    <div style="font-size:12px;font-weight:700;color:var(--crm-text);">
+                                        {{ $b->car?->brand?->name }} {{ $b->car?->name ?? '—' }}
+                                    </div>
+                                    @if($b->car?->year)
+                                        <small class="text-muted" style="font-size:11px;">موديل {{ $b->car->year }}</small>
+                                    @endif
                                 </td>
-                                <td style="font-size:13px;font-weight:700;">
-                                    {{ number_format($b->car?->cash_price ?? 0) }}
-                                    <small class="text-muted fw-normal">{!! __('ريال') !!}</small>
+
+                                {{-- التفاصيل المالية --}}
+                                <td>
+                                    @if($bType === 'finance' && $b->monthly_installment > 0)
+                                        <div style="font-size:13px;font-weight:700;color:#4338CA;">
+                                            <span style="font-size:11px;font-weight:600;color:#6B7280;">{{ __('القسط:') }} </span>{{ number_format($b->monthly_installment) }}
+                                            <small class="text-muted fw-normal">{!! __('ر.س/ش') !!}</small>
+                                        </div>
+                                        @if($b->total_price > 0 || ($b->car?->cash_price ?? 0) > 0)
+                                            <small class="text-muted d-block" style="font-size:11px;">
+                                                {{ __('الإجمالي:') }} {{ number_format($b->total_price ?: ($b->car?->cash_price ?? 0)) }} {!! __('ر.س') !!}
+                                            </small>
+                                        @endif
+                                    @else
+                                        <div style="font-size:13px;font-weight:700;color:var(--crm-text);">
+                                            {{ number_format($b->total_price ?: ($b->car?->cash_price ?? 0)) }}
+                                            <small class="text-muted fw-normal">{!! __('ر.س') !!}</small>
+                                        </div>
+                                        @if($b->down_payment > 0)
+                                            <small class="text-muted d-block" style="font-size:11px;">
+                                                {{ __('الدفعة:') }} {{ number_format($b->down_payment) }} {!! __('ر.س') !!}
+                                            </small>
+                                        @endif
+                                    @endif
                                 </td>
+
+                                {{-- المسؤول --}}
                                 <td style="font-size:12px;">
                                     <form action="{{ route('crm.bookings.assign', $b) }}" method="POST" class="m-0">
                                         @csrf @method('PATCH')
@@ -173,8 +237,21 @@
                                         </div>
                                     </form>
                                 </td>
-                                <td style="font-size:12px;color:var(--crm-text-muted);">{{ $b->created_at->format('d/m/Y') }}
+
+                                {{-- تاريخ الطلب --}}
+                                <td style="font-size:12px;color:var(--crm-text-muted);">
+                                    <div style="font-weight:600;color:var(--crm-text);">{{ $b->created_at->format('d/m/Y') }}</div>
+                                    <small class="text-muted" style="font-size:11px;">{{ $b->created_at->format('h:i A') }}</small>
                                 </td>
+
+                                {{-- آخر تعديل --}}
+                                <td>
+                                    <span class="badge bg-light text-secondary border px-2 py-1" style="font-size:11px;font-weight:600;" title="{{ $b->updated_at->format('d/m/Y H:i') }}">
+                                        <i class="bi bi-clock-history me-1"></i>{{ $b->updated_at->diffForHumans() }}
+                                    </span>
+                                </td>
+
+                                {{-- الحالة --}}
                                 <td>
                                     <form action="{{ route('crm.bookings.status', $b) }}" method="POST" class="m-0">
                                         @csrf @method('PATCH')
@@ -198,14 +275,16 @@
                                         </select>
                                     </form>
                                 </td>
+
+                                {{-- إجراءات --}}
                                 <td>
-                                    <div class="d-flex gap-1 align-items-center">
+                                    <div class="d-flex gap-1 align-items-center justify-content-center">
                                         <a href="{{ route('crm.bookings.show', $b) }}" class="btn btn-sm btn-light rounded-2"
-                                            title="{{ __('عرض') }}">
+                                            title="{{ __('عرض كامل التفاصيل') }}">
                                             <i class="bi bi-eye" style="font-size:14px;"></i>
                                         </a>
                                         <a href="https://wa.me/{{ $b->client_phone }}" target="_blank"
-                                            class="btn btn-sm btn-light rounded-2" title="{{ __('واتساب') }}"
+                                            class="btn btn-sm btn-light rounded-2" title="{{ __('مراسلة واتساب') }}"
                                             style="color:#25D366;">
                                             <i class="bi bi-whatsapp" style="font-size:14px;"></i>
                                         </a>
@@ -238,6 +317,14 @@
             <div class="d-md-none p-3">
                 @forelse($bookings as $b)
                     @php
+                        $bTypeM = $b->booking_type;
+                        if (empty($bTypeM)) {
+                            if (str_contains($b->notes ?? '', 'تمويل') || ($b->monthly_installment > 0 && $b->duration_years > 0)) {
+                                $bTypeM = 'finance';
+                            } else {
+                                $bTypeM = 'purchase';
+                            }
+                        }
                         $dotClassM = match ($b->status) {
                             'new', 'pending' => 'planned',
                             'in_progress' => 'waiting',
@@ -249,10 +336,28 @@
                     <div class="mb-3 p-3 rounded-3" style="border:1px solid var(--crm-border);background:#fff;">
                         <div class="d-flex justify-content-between align-items-start mb-2">
                             <div>
-                                <a href="{{ route('crm.bookings.show', $b) }}" class="fw-bold text-decoration-none"
-                                    style="color:var(--crm-red);font-size:14px;">#{{ $b->id }}</a>
-                                <div class="fw-bold mt-1" style="font-size:14px;color:var(--crm-text);">{{ $b->client_name }}
+                                <div class="d-flex align-items-center gap-2">
+                                    <a href="{{ route('crm.bookings.show', $b) }}" class="fw-bold text-decoration-none"
+                                        style="color:var(--crm-red);font-size:14px;">#{{ $b->id }}</a>
+                                    @if($bTypeM === 'finance')
+                                        <span class="badge px-2 py-1 rounded-pill" style="background:#EEF2FF;color:#4338CA;border:1px solid #C7D2FE;font-size:11px;">
+                                            <i class="bi bi-wallet2"></i> {{ __('تمويل') }}
+                                        </span>
+                                    @elseif($bTypeM === 'purchase')
+                                        <span class="badge px-2 py-1 rounded-pill" style="background:#ECFDF5;color:#047857;border:1px solid #A7F3D0;font-size:11px;">
+                                            <i class="bi bi-cash-stack"></i> {{ __('كاش') }}
+                                        </span>
+                                    @elseif($bTypeM === 'test_drive')
+                                        <span class="badge px-2 py-1 rounded-pill" style="background:#FFFBEB;color:#B45309;border:1px solid #FDE68A;font-size:11px;">
+                                            <i class="bi bi-speedometer2"></i> {{ __('تجربة قيادة') }}
+                                        </span>
+                                    @else
+                                        <span class="badge px-2 py-1 rounded-pill" style="background:#F1F5F9;color:#475569;border:1px solid #CBD5E1;font-size:11px;">
+                                            <i class="bi bi-chat-left-text"></i> {{ __('استفسار') }}
+                                        </span>
+                                    @endif
                                 </div>
+                                <div class="fw-bold mt-1" style="font-size:14px;color:var(--crm-text);">{{ $b->client_name }}</div>
                                 <div style="font-size:12px;color:var(--crm-text-muted);" dir="ltr">{{ $b->client_phone }}</div>
                             </div>
                             <form action="{{ route('crm.bookings.status', $b) }}" method="POST">
@@ -299,6 +404,10 @@
                                     </div>
                                 </form>
                             </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top" style="font-size:11px;color:var(--crm-text-muted);">
+                            <span><i class="bi bi-calendar3 me-1"></i> {{ $b->created_at->format('d/m/Y') }}</span>
+                            <span><i class="bi bi-clock-history me-1"></i> {{ $b->updated_at->diffForHumans() }}</span>
                         </div>
                         <div class="d-flex gap-2 mt-2">
                             <a href="{{ route('crm.bookings.show', $b) }}"
@@ -350,7 +459,7 @@
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content border-0 shadow-lg" style="border-radius: 20px; background: #FAF9F6;">
                     <div class="modal-header border-0 pb-0 px-4 pt-4">
-                        <h5 class="modal-title fw-bold" style="color: var(--crm-text);">{{ __('إضافة عميل / طلب') }}</h5>
+                        <h5 class="modal-title fw-bold" style="color: var(--crm-text);">{{ __('إضافة عميل / طلب جديد') }}</h5>
                         <button type="button" class="btn-close {{ app()->getLocale() == 'ar' ? 'ms-0 me-auto' : '' }}"
                             data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
@@ -387,11 +496,12 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-bold text-muted small">{{ __('نوع الطلب') }}</label>
-                                    <select name="type" class="form-select form-select-lg bg-white border-0 shadow-sm"
+                                    <select name="booking_type" class="form-select form-select-lg bg-white border-0 shadow-sm"
                                         style="border-radius: 12px; font-size: 14px;">
-                                        <option value="booking">{{ __('حجز سيارة') }}</option>
-                                        <option value="loan">{{ __('تمويل') }}</option>
-                                        <option value="test">{{ __('تجربة قيادة') }}</option>
+                                        <option value="finance">{{ __('طلب تمويل') }}</option>
+                                        <option value="purchase">{{ __('شراء كاش') }}</option>
+                                        <option value="test_drive">{{ __('تجربة قيادة') }}</option>
+                                        <option value="inquiry">{{ __('استفسار') }}</option>
                                     </select>
                                 </div>
                             </div>

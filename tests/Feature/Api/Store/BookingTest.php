@@ -111,6 +111,28 @@ class BookingTest extends TestCase
         ]);
     }
 
+    public function test_it_creates_a_finance_booking_successfully(): void
+    {
+        $car = $this->createCar();
+
+        $payload = [
+            'car_id' => $car->id,
+            'client_name' => 'Sara Khaled',
+            'client_phone' => '0555555555',
+            'client_email' => 'sara@example.com',
+            'city' => 'الرياض',
+            'down_payment' => 0,
+            'duration_years' => 5,
+            'booking_type' => 'finance',
+            'notes' => 'طلب تمويل سيارة',
+        ];
+
+        $response = $this->postJson(route('store.api.booking.store'), $payload);
+
+        $response->assertStatus(201);
+        $this->assertEquals('finance', $response->json('data.booking_type'));
+    }
+
     public function test_booking_requires_car_id_and_client_details(): void
     {
         $response = $this->postJson(route('store.api.booking.store'), []);

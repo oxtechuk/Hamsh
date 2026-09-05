@@ -25,16 +25,28 @@ class BookingController extends Controller
             $query->where('status', $request->status);
         }
 
+        // فلترة بنوع الطلب
+        if ($request->filled('booking_type')) {
+            $query->where('booking_type', $request->booking_type);
+        }
+
+        // فلترة بالتاريخ
+        if ($request->filled('date')) {
+            $query->whereDate('created_at', $request->date);
+        }
+
         // فلترة بالموظف
         if ($request->filled('employee_id')) {
             $query->where('assigned_to', $request->employee_id);
         }
+
         if (! auth()->user()->hasRole('admin')) {
             $query->where(function ($q) {
                 $q->where('assigned_to', \auth()->id())
                     ->orWhereNull('assigned_to');
             });
         }
+
         // بحث
         if ($request->filled('search')) {
             $s = $request->search;
@@ -47,9 +59,16 @@ class BookingController extends Controller
         $bookings = $query->paginate(20);
         $employees = Employee::where('is_active', true)->get();
         $statuses = Booking::STATUSES;
+        $bookingTypes = Booking::BOOKING_TYPES_LABELS;
         $cars = Car::with('brand')->where('is_active', true)->get();
 
-        return view('crm.bookings.index', compact('bookings', 'employees', 'statuses', 'cars'));
+        $stats = [
+            'new' => Booking::where('status', 'new')->count(),
+            'today' => Booking::whereDate('created_at', today())->count(),
+            'total' => Booking::count(),
+        ];
+
+        return view('crm.bookings.index', compact('bookings', 'employees', 'statuses', 'bookingTypes', 'cars', 'stats'));
     }
 
     public function store(Request $request)

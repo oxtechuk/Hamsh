@@ -32,7 +32,7 @@ export function useBrands(): IUseBrandsReturn {
       id: b.id,
       name: b.name,
       logo: getImageUrl(b.logo) || APP_IMAGES.BRAND_PLACEHOLDER,
-      onClick: () => navigate(`/cars?brands=${b.id}`),
+      onClick: () => navigate(`/cars?brands[]=${b.id}`),
     }));
   }, [brands, search, navigate]);
 

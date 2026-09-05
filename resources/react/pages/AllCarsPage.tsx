@@ -84,8 +84,27 @@ export default function AllCarsPage() {
                 filterLabel={t("carsPage.filters")}
                 onFilterClick={() => setIsFilterOpen(true)}
             />
-            <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+            <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
                 <div className="min-w-0 flex-1">
+                    {filters.brandId !== null && (
+                        <div className="mb-6 flex items-center gap-2">
+                            <span className="text-[13px] text-[#6B7280]">
+                                {t("carsSidebarFilter.brands")}:
+                            </span>
+                            <span className="inline-flex items-center gap-2 rounded-full border border-[#D1D5DB] bg-[#F3F4F6] px-3.5 py-1 text-[13px] font-bold text-[#111827]">
+                                {filterBrands.find((b) => b.id === filters.brandId)?.name || t("carsSidebarFilter.brands")}
+                                <button
+                                    type="button"
+                                    onClick={() => handleFilterChange({ ...filters, brandId: null })}
+                                    className="cursor-pointer text-[#6B7280] transition hover:text-red-600"
+                                    title={t("carsSidebarFilter.reset")}
+                                >
+                                    ✕
+                                </button>
+                            </span>
+                        </div>
+                    )}
+
                     {pagedCars.length > 0 ? (
                         <CarsResultsGrid
                             cars={pagedCars}
