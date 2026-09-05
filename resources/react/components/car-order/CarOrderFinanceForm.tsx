@@ -278,33 +278,78 @@ export default function CarOrderFinanceForm({
                 />
             </div>
 
-            {/* 6. نسبة الاستقطاع الفعلية من الراتب */}
-            <div className="flex items-center justify-between pt-1 pb-1 text-start">
-                <span className="text-[13px] font-bold text-[#1E293B]">
-                    {isRTL ? "نسبة الاستقطاع الفعلية من الراتب:" : "Actual Deduction Rate:"}
-                </span>
-                <span
-                    className={[
-                        "text-[16px] font-black",
-                        dbrAnalysis.isExceeded
-                            ? "text-[#C81E1E]"
-                            : dbrAnalysis.actualDeductionPct > 0
-                              ? "text-emerald-600"
-                              : "text-gray-700",
-                    ].join(" ")}
-                >
-                    {dbrAnalysis.actualDeductionPct}%
-                </span>
+            {/* 6. نسبة الاستقطاع الفعلية من الراتب والمؤشر الملون */}
+            <div className="flex flex-col gap-1.5 pt-1 pb-1 text-start">
+                <div className="flex items-center justify-between">
+                    <span className="text-[13px] font-bold text-[#1E293B]">
+                        {isRTL ? "نسبة الاستقطاع الفعلية من الراتب:" : "Actual Deduction Rate:"}
+                    </span>
+                    <div className="flex items-center gap-2">
+                        {/* Status Label Badge */}
+                        {dbrAnalysis.actualDeductionPct > 0 && (
+                            <span
+                                className={[
+                                    "px-2 py-0.5 rounded-md text-[11px] font-bold border",
+                                    dbrAnalysis.isExceeded
+                                        ? "bg-rose-50 text-rose-700 border-rose-200"
+                                        : dbrAnalysis.actualDeductionPct > 33
+                                          ? "bg-amber-50 text-amber-700 border-amber-200"
+                                          : "bg-emerald-50 text-emerald-700 border-emerald-200",
+                                ].join(" ")}
+                            >
+                                {dbrAnalysis.isExceeded
+                                    ? isRTL ? "مرتفع" : "High"
+                                    : dbrAnalysis.actualDeductionPct > 33
+                                      ? isRTL ? "متوسط" : "Moderate"
+                                      : isRTL ? "ممتاز" : "Excellent"}
+                            </span>
+                        )}
+                        <span
+                            className={[
+                                "text-[16px] font-black",
+                                dbrAnalysis.isExceeded
+                                    ? "text-[#C81E1E]"
+                                    : dbrAnalysis.actualDeductionPct > 33
+                                      ? "text-amber-600"
+                                      : dbrAnalysis.actualDeductionPct > 0
+                                        ? "text-emerald-600"
+                                        : "text-gray-700",
+                            ].join(" ")}
+                        >
+                            {dbrAnalysis.actualDeductionPct}%
+                        </span>
+                    </div>
+                </div>
+
+                {/* Colored Dynamic Progress Bar */}
+                <div className="h-2 w-full overflow-hidden rounded-full bg-gray-100 border border-gray-200/60">
+                    <div
+                        className={[
+                            "h-full rounded-full transition-all duration-500",
+                            dbrAnalysis.isExceeded
+                                ? "bg-rose-500"
+                                : dbrAnalysis.actualDeductionPct > 33
+                                  ? "bg-amber-500"
+                                  : dbrAnalysis.actualDeductionPct > 0
+                                    ? "bg-emerald-500"
+                                    : "bg-emerald-400/50",
+                        ].join(" ")}
+                        style={{
+                            width: `${Math.min(100, Math.max(0, dbrAnalysis.actualDeductionPct))}%`,
+                        }}
+                    />
+                </div>
             </div>
 
             {/* Exceeded Notice */}
             {dbrAnalysis.isExceeded && (
-                <div className="p-2.5 rounded-lg bg-red-50 border border-red-200 text-start text-[12px] text-[#C81E1E] font-semibold">
+                <div className="p-2.5 rounded-lg bg-red-50 border border-red-200 text-start text-[12px] text-[#C81E1E] font-semibold animate-in fade-in">
                     {isRTL
                         ? `النسبة تتجاوز الحد الأقصى المسموح به (${dbrAnalysis.maxLimit}%) لهذه الفئة.`
                         : `Deduction exceeds the maximum allowable limit (${dbrAnalysis.maxLimit}%).`}
                 </div>
             )}
+
 
             {/* 7. زر اعتماد والانتقال للتمويل */}
             <div className="pt-2">

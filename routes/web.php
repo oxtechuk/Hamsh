@@ -188,6 +188,7 @@ Route::prefix('crm')->name('crm.')->middleware(['auth:employee', 'guard.employee
         Route::get('bookings/completed', [BookingController::class, 'index'])->name('bookings.completed');
         Route::post('bookings', [BookingController::class, 'store'])->name('bookings.store');
         Route::get('bookings/{booking}', [BookingController::class, 'show'])->name('bookings.show');
+        Route::put('bookings/{booking}', [BookingController::class, 'update'])->name('bookings.update');
         Route::patch('bookings/{booking}/status', [BookingController::class, 'updateStatus'])->name('bookings.status');
         Route::patch('bookings/{booking}/assign', [BookingController::class, 'assign'])->name('bookings.assign');
         Route::post('bookings/{booking}/note', [BookingController::class, 'addNote'])->name('bookings.note');

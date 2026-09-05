@@ -94,8 +94,57 @@ class BookingController extends Controller
         $booking->load(['car.brand', 'employee', 'notes_list.employee', 'documents.employee']);
         $employees = Employee::where('is_active', true)->get();
         $statuses = Booking::STATUSES;
+        $cars = Car::with('brand')->where('is_active', true)->get();
 
-        return view('crm.bookings.show', compact('booking', 'employees', 'statuses'));
+        return view('crm.bookings.show', compact('booking', 'employees', 'statuses', 'cars'));
+    }
+
+    public function update(Request $request, Booking $booking)
+    {
+        $validated = $request->validate([
+            'client_name' => 'required|string|max:191',
+            'client_phone' => 'required|string|max:191',
+            'client_email' => 'nullable|email|max:191',
+            'city' => 'nullable|string|max:191',
+            'car_id' => 'nullable|exists:cars,id',
+            'status' => 'required|in:'.implode(',', array_keys(Booking::STATUSES)),
+            'assigned_to' => 'nullable|exists:employees,id',
+            'booking_type' => 'nullable|string|max:50',
+            'total_price' => 'nullable|numeric|min:0',
+            'down_payment' => 'nullable|numeric|min:0',
+            'monthly_installment' => 'nullable|numeric|min:0',
+            'duration_years' => 'nullable|integer|min:1|max:10',
+            'preferred_color' => 'nullable|string|max:191',
+            'location' => 'nullable|string|max:500',
+            'notes' => 'nullable|string',
+        ]);
+
+        $oldStatus = $booking->status;
+        $oldAssigned = $booking->assigned_to;
+
+        $booking->update($validated);
+
+        // سجل تحديث تفاصيل الطلب في الملاحظات
+        $logMessage = 'تم تعديل بيانات وتفاصيل الطلب بواسطة '.(auth('employee')->user()->name ?? 'المشرف');
+        if ($oldStatus !== $request->status) {
+            $logMessage .= ' (تغيير الحالة إلى: '.(Booking::STATUSES[$request->status]['label'] ?? $request->status).')';
+        }
+
+        BookingNote::create([
+            'booking_id' => $booking->id,
+            'employee_id' => auth('employee')->id(),
+            'note' => $logMessage,
+            'type' => 'note',
+        ]);
+
+        if ($request->assigned_to && $request->assigned_to != $oldAssigned) {
+            $employee = Employee::find($request->assigned_to);
+            if ($employee) {
+                $employee->notify(new NewBookingNotification($booking, __('طلب جديد'), __('تم تعيين طلب لك للعميل').' '.$booking->client_name));
+            }
+        }
+
+        return back()->with('success', 'تم تعديل وحفظ كافة تفاصيل الطلب بنجاح');
     }
 
     public function updateStatus(Request $request, Booking $booking)

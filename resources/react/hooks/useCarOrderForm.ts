@@ -115,7 +115,6 @@ export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash"
     const dbrAnalysis = useMemo(() => {
         const salary = Number(form.salary) || 0;
         const maxLimit = form.obligationType === "real_estate_personal" ? 65 : 45;
-        const carInstallment = Number(car.min_installment) || (car.cash_price ? Math.round(car.cash_price / 60) : 0);
         const obligations = form.obligationType === "none" ? 0 : (Number(form.obligations) || 0);
 
         if (salary <= 0) {
@@ -133,7 +132,7 @@ export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash"
             };
         }
 
-        const actualDeductionPct = Math.round(((carInstallment + obligations) / salary) * 100);
+        const actualDeductionPct = Math.round((obligations / salary) * 100);
         const isExceeded = actualDeductionPct > maxLimit;
 
         if (isExceeded) {
@@ -180,7 +179,8 @@ export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash"
             barColor: "#16A34A",
             status: "good_dbr",
         };
-    }, [form.salary, form.obligations, form.obligationType, car.min_installment, car.cash_price]);
+    }, [form.salary, form.obligations, form.obligationType]);
+
 
     const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
