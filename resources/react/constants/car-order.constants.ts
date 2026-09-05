@@ -11,9 +11,13 @@ export const EMPTY_CAR_ORDER_FORM: ICarOrderFormData = {
     salary: "",
     workSector: "private_approved",
     obligations: "",
+    obligationType: "none",
+    otpCode: "",
+    otpVerified: false,
     consolidateDebts: false,
     orderType: "finance",
 };
+
 
 export const CAR_ORDER_WORK_SECTORS_LIST: { value: string; labelAr: string; labelEn: string }[] = [
     { value: "private_approved", labelAr: "قطاع خاص معتمد", labelEn: "Approved Private Sector" },

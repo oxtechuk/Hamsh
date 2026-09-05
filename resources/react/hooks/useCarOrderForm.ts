@@ -5,6 +5,11 @@ import { toast } from "react-toastify";
 
 import { getCities, submitBooking } from "../services/api";
 import {
+    getCalculatorSettings,
+    sendCalculatorOtp,
+    verifyCalculatorOtp,
+} from "../services/api/calculator.service";
+import {
     CAR_ORDER_STATIC_CITIES,
     EMPTY_CAR_ORDER_FORM,
 } from "../constants/car-order.constants";
@@ -19,6 +24,11 @@ export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash"
     const [step, setStep] = useState<1 | 2>(initialMode === "finance" ? 2 : 1);
     const [done, setDone] = useState(false);
     const [submitting, setSubmitting] = useState(false);
+    const [sendingOtp, setSendingOtp] = useState(false);
+    const [verifyingOtp, setVerifyingOtp] = useState(false);
+    const [otpSent, setOtpSent] = useState(false);
+    const [otpVerified, setOtpVerified] = useState(false);
+
     const [form, setForm] = useState<ICarOrderFormData>({
         ...EMPTY_CAR_ORDER_FORM,
         orderType: initialMode,
@@ -29,6 +39,14 @@ export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash"
         queryFn: getCities,
         staleTime: 10 * 60 * 1000,
     });
+
+    const { data: calcSettings } = useQuery({
+        queryKey: ["calculator-settings"],
+        queryFn: getCalculatorSettings,
+        staleTime: 10 * 60 * 1000,
+    });
+
+    const otpEnabled = Boolean(calcSettings?.otp_enabled);
 
     const cityOptions =
         citiesData.length > 0
@@ -42,26 +60,69 @@ export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash"
         setForm((previous) => ({ ...previous, [key]: value }));
     };
 
+    const handleSendOtp = async () => {
+        if (!form.phone.trim() || form.phone.length < 9) {
+            toast.error(t("financeCalculator.validation.validPhone", { defaultValue: "يرجى إدخال رقم جوال صحيح أولاً" }));
+            return;
+        }
+
+        setSendingOtp(true);
+        try {
+            await sendCalculatorOtp(form.phone.trim());
+            setOtpSent(true);
+            toast.success(t("financeCalculator.otp.sentSuccess", { defaultValue: "تم إرسال رمز التحقق بنجاح" }));
+        } catch {
+            toast.error(t("financeCalculator.otp.sendFailed", { defaultValue: "فشل إرسال رمز التحقق، يرجى المحاولة لاحقاً" }));
+        } finally {
+            setSendingOtp(false);
+        }
+    };
+
+    const handleVerifyOtp = async () => {
+        if (!form.otpCode?.trim()) {
+            toast.error(t("financeCalculator.otp.enterCode", { defaultValue: "يرجى إدخال رمز التحقق" }));
+            return;
+        }
+
+        setVerifyingOtp(true);
+        try {
+            await verifyCalculatorOtp(form.phone.trim(), form.otpCode.trim(), form.fullName.trim());
+            setOtpVerified(true);
+            setField("otpVerified", true);
+            toast.success(t("financeCalculator.otp.verifiedSuccess", { defaultValue: "تم التحقق من رقم الجوال بنجاح" }));
+        } catch {
+            toast.error(t("financeCalculator.otp.invalidCode", { defaultValue: "رمز التحقق غير صحيح أو منتهي الصلاحية" }));
+        } finally {
+            setVerifyingOtp(false);
+        }
+    };
+
     const canSubmitCash = Boolean(
-        form.fullName.trim() && form.city.trim() && form.phone.trim(),
+        form.fullName.trim() &&
+        form.city.trim() &&
+        form.phone.trim() &&
+        (!otpEnabled || otpVerified),
     );
 
     const canSubmitFinance = Boolean(
         form.fullName.trim() &&
         form.phone.trim() &&
-        form.city.trim() &&
-        form.workSector &&
-        form.salary.trim(),
+        form.salary.trim() &&
+        (!otpEnabled || otpVerified),
     );
 
-    // Calculate DBR and Acceptance Score
+    // Calculate DBR and Acceptance Score based on obligations limit (45% for none/personal, 65% for real estate)
     const dbrAnalysis = useMemo(() => {
         const salary = Number(form.salary) || 0;
-        const obligations = Number(form.obligations) || 0;
+        const maxLimit = form.obligationType === "real_estate_personal" ? 65 : 45;
+        const carInstallment = Number(car.min_installment) || (car.cash_price ? Math.round(car.cash_price / 60) : 0);
+        const obligations = form.obligationType === "none" ? 0 : (Number(form.obligations) || 0);
 
         if (salary <= 0) {
             return {
                 dbrRatio: 0,
+                maxLimit,
+                actualDeductionPct: 0,
                 isExceeded: false,
                 score: null as number | null,
                 scoreLabel: "—",
@@ -72,12 +133,14 @@ export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash"
             };
         }
 
-        const dbrRatio = Math.round((obligations / salary) * 100);
-        const isExceeded = dbrRatio > 45;
+        const actualDeductionPct = Math.round(((carInstallment + obligations) / salary) * 100);
+        const isExceeded = actualDeductionPct > maxLimit;
 
         if (isExceeded) {
             return {
-                dbrRatio,
+                dbrRatio: actualDeductionPct,
+                maxLimit,
+                actualDeductionPct,
                 isExceeded: true,
                 score: 32,
                 scoreLabel: "32%",
@@ -88,10 +151,12 @@ export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash"
             };
         }
 
-        if (dbrRatio > 33) {
-            const score = Math.max(45, Math.min(75, 100 - dbrRatio));
+        if (actualDeductionPct > maxLimit * 0.75) {
+            const score = Math.max(45, Math.min(75, 100 - actualDeductionPct));
             return {
-                dbrRatio,
+                dbrRatio: actualDeductionPct,
+                maxLimit,
+                actualDeductionPct,
                 isExceeded: false,
                 score,
                 scoreLabel: `${score}%`,
@@ -102,9 +167,11 @@ export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash"
             };
         }
 
-        const score = Math.max(80, Math.min(95, 100 - dbrRatio));
+        const score = Math.max(80, Math.min(95, 100 - actualDeductionPct));
         return {
-            dbrRatio,
+            dbrRatio: actualDeductionPct,
+            maxLimit,
+            actualDeductionPct,
             isExceeded: false,
             score,
             scoreLabel: `${score}%`,
@@ -113,7 +180,7 @@ export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash"
             barColor: "#16A34A",
             status: "good_dbr",
         };
-    }, [form.salary, form.obligations]);
+    }, [form.salary, form.obligations, form.obligationType, car.min_installment, car.cash_price]);
 
     const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -124,12 +191,20 @@ export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash"
         setSubmitting(true);
 
         try {
+            const obligationTypeLabel =
+                form.obligationType === "none"
+                    ? "بدون التزام (استقطاع حتى 45%)"
+                    : form.obligationType === "personal"
+                      ? "التزام شخصي (استقطاع حتى 45%)"
+                      : "عقار + شخصي (استقطاع حتى 65%)";
+
             const notes = [
                 mode === "finance" ? "طلب تمويل سيارة" : "طلب شراء كاش مباشر",
                 form.salary ? `الدخل الشهري: ${form.salary} ر.س` : "",
                 form.workSector ? `جهة العمل: ${form.workSector}` : "",
-                form.obligations ? `الالتزامات: ${form.obligations} ر.س` : "",
-                dbrAnalysis.score !== null ? `مؤشر القبول: ${dbrAnalysis.scoreLabel} (نسبة الاستقطاع: ${dbrAnalysis.dbrRatio}%)` : "",
+                `طبيعة الالتزامات: ${obligationTypeLabel}`,
+                form.obligations ? `قيمة الالتزامات: ${form.obligations} ر.س` : "",
+                `نسبة الاستقطاع الفعلية: ${dbrAnalysis.actualDeductionPct}% (الحد الأقصى: ${dbrAnalysis.maxLimit}%)`,
                 form.consolidateDebts ? "يرغب في الاستفادة من خيار الحلول التمويلية وتوحيد الالتزامات" : "",
             ]
                 .filter(Boolean)
@@ -139,7 +214,7 @@ export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash"
                 client_name: form.fullName,
                 client_phone: form.phone,
                 client_email: form.email || undefined,
-                city: form.city,
+                city: form.city || "الرياض",
                 car_id: car.id,
                 down_payment: 0,
                 booking_type: mode === "finance" ? "finance" : "purchase",
@@ -148,7 +223,7 @@ export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash"
 
             setDone(true);
         } catch {
-            toast.error(t("specialOrder.error.submitFailed"));
+            toast.error(t("specialOrder.error.submitFailed", { defaultValue: "فشل إرسال الطلب، يرجى المحاولة مرة أخرى" }));
         } finally {
             setSubmitting(false);
         }
@@ -161,12 +236,20 @@ export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash"
         setStep,
         done,
         submitting,
+        otpEnabled,
+        sendingOtp,
+        verifyingOtp,
+        otpSent,
+        otpVerified,
         form,
         cityOptions,
         setField,
+        handleSendOtp,
+        handleVerifyOtp,
         canSubmitCash,
         canSubmitFinance,
         dbrAnalysis,
         handleFormSubmit,
     };
 }
+

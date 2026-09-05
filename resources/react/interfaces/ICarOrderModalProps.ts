@@ -17,6 +17,8 @@ export type CarOrderWorkSector =
   | "freelance"
   | "other";
 
+export type ObligationType = "none" | "personal" | "real_estate_personal";
+
 export interface ICarOrderFormData {
   fullName: string;
   city: string;
@@ -25,6 +27,10 @@ export interface ICarOrderFormData {
   salary: string;
   workSector: string;
   obligations: string;
+  obligationType: ObligationType;
+  otpCode?: string;
+  otpVerified?: boolean;
   consolidateDebts?: boolean;
   orderType?: "finance" | "cash";
 }
+
