@@ -116,18 +116,18 @@ export default function CarsSearchSection({
         models.length
           ? models
           : [
-              "Camry LE",
-              "Yaris Y",
-              "Accent Fleet",
-              "Elantra Smart",
-              "Sonata Smart",
-              "K3 LX",
-              "K4 EX",
-              "K5 LX",
-              "Accord LX Turbo",
-              "Altima S",
-              "Cruze LT",
-            ],
+            "Camry LE",
+            "Yaris Y",
+            "Accent Fleet",
+            "Elantra Smart",
+            "Sonata Smart",
+            "K3 LX",
+            "K4 EX",
+            "K5 LX",
+            "Accord LX Turbo",
+            "Altima S",
+            "Cruze LT",
+          ],
       ),
     ).filter(Boolean);
   }, [models]);
@@ -159,10 +159,6 @@ export default function CarsSearchSection({
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Title Header */}
         <div className="text-center mb-4 sm:mb-6">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 border border-amber-200/50 text-[11px] sm:text-xs font-bold text-amber-800 mb-2">
-            <Sparkles size={13} className="text-amber-600" />
-            <span>{isRTL ? "البحث المباشر والفلترة" : "Live Search & Filter"}</span>
-          </div>
           <h2 className="text-lg sm:text-2xl lg:text-3xl font-black tracking-tight text-gray-900">
             {title ?? (isRTL ? "ابحث عن سيارتك المثالية" : "Find Your Perfect Car")}
           </h2>

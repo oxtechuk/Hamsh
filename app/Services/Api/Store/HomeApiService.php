@@ -65,6 +65,7 @@ final class HomeApiService
         ];
 
         $showSearchFilter = ! in_array($this->cache->rememberSetting('show_home_search_filter', '1'), [0, '0', false, 'false'], true);
+        $showHomeBrands = ! in_array($this->cache->rememberSetting('show_home_brands_section', '1'), [0, '0', false, 'false'], true);
 
         $pageSections = [
             'filter' => [
@@ -95,6 +96,7 @@ final class HomeApiService
                 'button_text' => $rawSections['finance']['button_text'][$locale] ?? '',
             ],
             'brands' => [
+                'enabled' => $showHomeBrands,
                 'title' => $rawSections['brands']['title'][$locale] ?? '',
                 'subtitle' => $rawSections['brands']['subtitle'][$locale] ?? '',
             ],
@@ -110,6 +112,7 @@ final class HomeApiService
             'hero' => $hero,
             'hero_slides' => $heroSlides,
             'show_search_filter' => $showSearchFilter,
+            'show_home_brands' => $showHomeBrands,
             'featured_cars' => ($data['featuredCars'] ?? collect())->values(),
             'active_offers' => ($data['activeOffers'] ?? collect())->values(),
             'brands' => ($data['brands'] ?? collect())->values(),

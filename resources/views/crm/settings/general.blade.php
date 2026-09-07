@@ -854,23 +854,23 @@
                         <div class="settings-pane d-none" id="tab-homepage-sections">
                             @php $sec = $homepageSections; @endphp
                             <div class="d-flex flex-column gap-3">
-                                {{-- سوتش إظهار / إخفاء بار البحث وفلترة السيارات --}}
+                                {{-- سوتش إظهار / إخفاء قسم العلامات التجارية (الماركات) --}}
                                 <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-2">
                                     <div class="card-body p-4">
                                         <div class="d-flex align-items-center justify-content-between">
                                             <div class="d-flex align-items-center gap-3">
                                                 <div class="rounded-3 p-3 bg-warning bg-opacity-10 text-warning d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
-                                                    <i class="bi bi-search fs-5 text-warning"></i>
+                                                    <i class="bi bi-award fs-5 text-warning"></i>
                                                 </div>
                                                 <div>
-                                                    <h6 class="fw-bold mb-1">{{ __('قسم البحث وفلترة السيارات') }}</h6>
-                                                    <p class="text-muted small mb-0">{{ __('إظهار أو إخفاء قسم البحث وفلاتر الماركات والموديلات وسنة الصنع في الصفحة الرئيسية') }}</p>
+                                                    <h6 class="fw-bold mb-1">{{ __('قسم العلامات التجارية (الماركات)') }}</h6>
+                                                    <p class="text-muted small mb-0">{{ __('إظهار أو إخفاء قسم استعراض السيارات حسب العلامات التجارية (ابحث حسب علامتك التجارية) في الصفحة الرئيسية') }}</p>
                                                 </div>
                                             </div>
                                             <div class="form-check form-switch fs-4 mb-0">
-                                                <input type="hidden" name="show_home_search_filter" value="0">
-                                                <input class="form-check-input" type="checkbox" name="show_home_search_filter"
-                                                    value="1" id="show_home_search_filter" {{ ($settings['show_home_search_filter'] ?? '1') == '1' ? 'checked' : '' }}>
+                                                <input type="hidden" name="show_home_brands_section" value="0">
+                                                <input class="form-check-input" type="checkbox" name="show_home_brands_section"
+                                                    value="1" id="show_home_brands_section" {{ ($settings['show_home_brands_section'] ?? '1') == '1' ? 'checked' : '' }}>
                                             </div>
                                         </div>
                                     </div>

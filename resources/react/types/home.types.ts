@@ -260,6 +260,7 @@ export interface HomePageData {
   hero: HeroData;
   hero_slides: HeroSlideData[];
   show_search_filter?: boolean;
+  show_home_brands?: boolean;
   brands: BrandInfo[];
   latest_cars: {
     section: SectionMeta;

@@ -79,16 +79,18 @@ export default function Home() {
                 />
             )}
 
-            <BrandsSection
-                titleBlue={t("brandsSection.titleBlue")}
-                buttonText={t("brandsSection.buttonText")}
-                buttonTo="/brands"
-                brands={brands}
-                categories={brandCategories}
-                activeCategory={brandTypeId}
-                onCategoryChange={setBrandTypeId}
-                onSearchChange={setBrandSearch}
-            />
+            {data?.show_home_brands !== false && data?.page_sections?.brands?.enabled !== false && (
+                <BrandsSection
+                    titleBlue={t("brandsSection.titleBlue")}
+                    buttonText={t("brandsSection.buttonText")}
+                    buttonTo="/brands"
+                    brands={brands}
+                    categories={brandCategories}
+                    activeCategory={brandTypeId}
+                    onCategoryChange={setBrandTypeId}
+                    onSearchChange={setBrandSearch}
+                />
+            )}
 
             <FeaturedCarsSection
                 titleBlue={

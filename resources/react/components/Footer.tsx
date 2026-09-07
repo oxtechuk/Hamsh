@@ -328,35 +328,23 @@ export default function Footer({
             {/* ==================== GPS LOCATION CARD ==================== */}
             {showFooterMap && (
                 <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12 xl:px-[70px] pb-12">
-                    <div className="relative overflow-hidden rounded-[24px] border border-white/10 bg-gradient-to-br from-[#121724] to-[#1E2638] p-8 text-center shadow-xl sm:p-12">
-                        {/* Realistic SVG Vector Map Background Graphic */}
-                        <div className="absolute inset-0 opacity-25 pointer-events-none overflow-hidden">
-                            <svg className="w-full h-full object-cover" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice">
-                                <defs>
-                                    <pattern id="footer-map-grid" width="120" height="120" patternUnits="userSpaceOnUse">
-                                        <path d="M 120 0 L 0 0 0 120" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-                                        <path d="M 0 60 L 120 60 M 60 0 L 60 120" fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth="0.5" />
-                                    </pattern>
-                                </defs>
-                                <rect width="100%" height="100%" fill="url(#footer-map-grid)" />
-                                {/* Main Road Lines & Highways */}
-                                <path d="M-100 200 C 300 150, 600 400, 1300 350" fill="none" stroke="rgba(221,187,114,0.35)" strokeWidth="8" strokeLinecap="round" />
-                                <path d="M-50 450 C 400 500, 800 100, 1250 150" fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="5" strokeLinecap="round" />
-                                <path d="M200 -50 C 250 300, 500 400, 700 650" fill="none" stroke="rgba(255,255,255,0.18)" strokeWidth="4" />
-                                <path d="M850 -50 C 750 250, 950 450, 1050 650" fill="none" stroke="rgba(221,187,114,0.25)" strokeWidth="4" />
-                                <path d="M400 100 L 900 500" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="3" strokeDasharray="6,6" />
-                                {/* Location Radiating Rings */}
-                                <circle cx="600" cy="300" r="140" fill="rgba(221,187,114,0.06)" stroke="rgba(221,187,114,0.2)" strokeWidth="1.5" />
-                                <circle cx="600" cy="300" r="80" fill="rgba(221,187,114,0.1)" stroke="rgba(221,187,114,0.35)" strokeWidth="2" strokeDasharray="4,4" />
-                            </svg>
+                    <div className="group relative overflow-hidden rounded-[24px] border border-white/10 bg-[#121724] p-8 text-center shadow-xl sm:p-12">
+                        {/* Realistic Google Map Location Image Background */}
+                        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                            <img
+                                src="/images/footer-map-location.png"
+                                alt="Company Location Map"
+                                className="w-full h-full object-cover opacity-35 filter brightness-90 contrast-125 transition-transform duration-700 group-hover:scale-105"
+                            />
+                            {/* Gradient Vignette & Overlays */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#121724] via-[#121724]/70 to-[#121724]/50" />
+                            <div
+                                className="absolute inset-0"
+                                style={{
+                                    background: "radial-gradient(circle at 50% 50%, rgba(221, 187, 114, 0.12) 0%, rgba(18, 23, 36, 0.8) 70%, #121724 100%)",
+                                }}
+                            />
                         </div>
-                        {/* Radial Glow Vignette */}
-                        <div
-                            className="absolute inset-0 pointer-events-none"
-                            style={{
-                                background: "radial-gradient(circle at 50% 50%, rgba(221, 187, 114, 0.15) 0%, rgba(18, 23, 36, 0.85) 75%, #121724 100%)",
-                            }}
-                        />
 
                         <div className="relative z-10 flex flex-col items-center justify-center">
                             {/* Pin Icon with animated pulse */}
