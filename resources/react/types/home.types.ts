@@ -98,6 +98,8 @@ export interface HomeCarItem {
 
 export interface HeroSlideData {
   image: string | null;
+  image_desktop?: string | null;
+  image_mobile?: string | null;
   link: string | null;
   button_text: string;
 }

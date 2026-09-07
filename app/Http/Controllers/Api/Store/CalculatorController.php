@@ -35,8 +35,17 @@ final class CalculatorController extends ApiBaseController
         $otpSetting = Setting::where('key', 'enable_twilio_otp')->first();
         $otpEnabled = $otpSetting ? (bool) $otpSetting->value : false;
 
+        $dbrPersonal = Setting::where('key', 'finance_dbr_limit_personal')->first();
+        $dbrRealEstate = Setting::where('key', 'finance_dbr_limit_real_estate')->first();
+        $debtSolutionText = Setting::where('key', 'finance_debt_solution_text')->first();
+        $exceededWarningText = Setting::where('key', 'finance_exceeded_warning_text')->first();
+
         return $this->respondSuccess([
             'otp_enabled' => $otpEnabled,
+            'dbr_limit_personal' => $dbrPersonal && is_numeric($dbrPersonal->value) ? (int) $dbrPersonal->value : 45,
+            'dbr_limit_real_estate' => $dbrRealEstate && is_numeric($dbrRealEstate->value) ? (int) $dbrRealEstate->value : 65,
+            'debt_solution_text' => $debtSolutionText ? (string) $debtSolutionText->value : 'أرغب في الاستفادة من خيارات الحلول التمويلية وتوحيد الالتزامات',
+            'exceeded_warning_text' => $exceededWarningText ? (string) $exceededWarningText->value : 'نسبة الاستقطاع تتجاوز الحد المسموح به للتمويل.',
         ]);
     }
 

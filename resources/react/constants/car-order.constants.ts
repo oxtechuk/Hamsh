@@ -20,10 +20,9 @@ export const EMPTY_CAR_ORDER_FORM: ICarOrderFormData = {
 
 
 export const CAR_ORDER_WORK_SECTORS_LIST: { value: string; labelAr: string; labelEn: string }[] = [
-    { value: "private_approved", labelAr: "قطاع خاص معتمد", labelEn: "Approved Private Sector" },
     { value: "government", labelAr: "قطاع حكومي", labelEn: "Government Sector" },
     { value: "semi_government", labelAr: "قطاع شبه حكومي", labelEn: "Semi-Government Sector" },
-    { value: "private_unapproved", labelAr: "قطاع خاص غير معتمد", labelEn: "Unapproved Private Sector" },
+    { value: "private_unapproved", labelAr: "قطاع خاص", labelEn: "Private Sector" },
     { value: "military", labelAr: "عسكري", labelEn: "Military Sector" },
     { value: "retired", labelAr: "متقاعد", labelEn: "Retired" },
     { value: "freelance", labelAr: "أعمال حرة / تجارة", labelEn: "Self-Employed / Business" },

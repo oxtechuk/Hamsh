@@ -59,6 +59,10 @@
 :root {
   --brand-primary-color: #DDBB72;
   --brand-secondary-color: #303A54;
+  --brand-button-bg: #DDBB72;
+  --brand-button-text: #20283A;
+  --brand-text-primary: #07111F;
+  --brand-text-secondary: #595959;
   --brand-primary-light-color: #2E3035;
   --brand-gray-color: #595959;
   --brand-footer-color: #121317;

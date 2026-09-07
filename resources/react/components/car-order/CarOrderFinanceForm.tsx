@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Loader2, User, Home, CheckCircle2, ShieldCheck } from "lucide-react";
+import { Loader2, User, Home, ShieldCheck, AlertTriangle } from "lucide-react";
 
 import {
     CAR_ORDER_WORK_SECTORS_LIST,
@@ -16,6 +16,10 @@ interface CarOrderFinanceFormProps {
     dbrAnalysis: {
         dbrRatio: number;
         maxLimit: number;
+        personalLimit: number;
+        realEstateLimit: number;
+        debtSolutionText: string;
+        exceededWarningText: string;
         actualDeductionPct: number;
         isExceeded: boolean;
         score: number | null;
@@ -60,43 +64,46 @@ export default function CarOrderFinanceForm({
     const { t, i18n } = useTranslation();
     const isRTL = i18n.dir() === "rtl";
 
+    const personalLimitPct = dbrAnalysis.personalLimit || 45;
+    const realEstateLimitPct = dbrAnalysis.realEstateLimit || 65;
+
     const obligationOptions: {
         type: ObligationType;
         title: string;
         subtext: string;
         icon: React.ReactNode;
     }[] = [
-        {
-            type: "none",
-            title: isRTL ? "بدون التزام" : "No Obligations",
-            subtext: isRTL ? "استقطاع حتى 45%" : "Up to 45%",
-            icon: (
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
-                    <span className="h-3.5 w-3.5 rounded-full bg-emerald-500 shadow-sm" />
-                </div>
-            ),
-        },
-        {
-            type: "personal",
-            title: isRTL ? "التزام شخصي" : "Personal Obligation",
-            subtext: isRTL ? "استقطاع حتى 45%" : "Up to 45%",
-            icon: (
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-purple-100 text-purple-600">
-                    <User size={18} />
-                </div>
-            ),
-        },
-        {
-            type: "real_estate_personal",
-            title: isRTL ? "عقار + شخصي" : "Real Estate + Personal",
-            subtext: isRTL ? "استقطاع حتى 65%" : "Up to 65%",
-            icon: (
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-100 text-amber-600">
-                    <Home size={18} />
-                </div>
-            ),
-        },
-    ];
+            {
+                type: "none",
+                title: isRTL ? "بدون التزام" : "No Obligations",
+                subtext: isRTL ? `استقطاع حتى ${personalLimitPct}%` : `Up to ${personalLimitPct}%`,
+                icon: (
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+                        <span className="h-3.5 w-3.5 rounded-full bg-emerald-500 shadow-sm" />
+                    </div>
+                ),
+            },
+            {
+                type: "personal",
+                title: isRTL ? "التزام شخصي" : "Personal Obligation",
+                subtext: isRTL ? `استقطاع حتى ${personalLimitPct}%` : `Up to ${personalLimitPct}%`,
+                icon: (
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-purple-100 text-purple-600">
+                        <User size={18} />
+                    </div>
+                ),
+            },
+            {
+                type: "real_estate_personal",
+                title: isRTL ? "عقار + شخصي" : "Real Estate + Personal",
+                subtext: isRTL ? `استقطاع حتى ${realEstateLimitPct}%` : `Up to ${realEstateLimitPct}%`,
+                icon: (
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-100 text-amber-600">
+                        <Home size={18} />
+                    </div>
+                ),
+            },
+        ];
 
     return (
         <form onSubmit={onSubmit} className="flex flex-col gap-3.5 text-start">
@@ -212,7 +219,23 @@ export default function CarOrderFinanceForm({
                 </select>
             </div>
 
-            {/* 4. حدد طبيعة التزاماتك المالية الحالية */}
+            {/* 4. الراتب الشهري */}
+            <div>
+                <label className={carOrderLabelCls}>
+                    {isRTL ? "الراتب الشهري (ر.س)" : "Monthly Salary (SAR)"}
+                </label>
+                <input
+                    type="number"
+                    min={0}
+                    value={form.salary}
+                    onChange={(e) => onFieldChange("salary", e.target.value)}
+                    placeholder={isRTL ? "مثال 8000" : "e.g. 8000"}
+                    className={carOrderFieldCls}
+                    required
+                />
+            </div>
+
+            {/* 5. حدد طبيعة التزاماتك المالية الحالية */}
             <div>
                 <label className={carOrderLabelCls}>
                     {isRTL ? "حدد طبيعة التزاماتك المالية الحالية:" : "Select your current financial obligations:"}
@@ -262,22 +285,6 @@ export default function CarOrderFinanceForm({
                 </div>
             )}
 
-            {/* 5. الراتب الشهري */}
-            <div>
-                <label className={carOrderLabelCls}>
-                    {isRTL ? "الراتب الشهري (ر.س)" : "Monthly Salary (SAR)"}
-                </label>
-                <input
-                    type="number"
-                    min={0}
-                    value={form.salary}
-                    onChange={(e) => onFieldChange("salary", e.target.value)}
-                    placeholder={isRTL ? "مثال 8000" : "e.g. 8000"}
-                    className={carOrderFieldCls}
-                    required
-                />
-            </div>
-
             {/* 6. نسبة الاستقطاع الفعلية من الراتب والمؤشر الملون */}
             <div className="flex flex-col gap-1.5 pt-1 pb-1 text-start">
                 <div className="flex items-center justify-between">
@@ -293,15 +300,15 @@ export default function CarOrderFinanceForm({
                                     dbrAnalysis.isExceeded
                                         ? "bg-rose-50 text-rose-700 border-rose-200"
                                         : dbrAnalysis.actualDeductionPct > 33
-                                          ? "bg-amber-50 text-amber-700 border-amber-200"
-                                          : "bg-emerald-50 text-emerald-700 border-emerald-200",
+                                            ? "bg-amber-50 text-amber-700 border-amber-200"
+                                            : "bg-emerald-50 text-emerald-700 border-emerald-200",
                                 ].join(" ")}
                             >
                                 {dbrAnalysis.isExceeded
                                     ? isRTL ? "مرتفع" : "High"
                                     : dbrAnalysis.actualDeductionPct > 33
-                                      ? isRTL ? "متوسط" : "Moderate"
-                                      : isRTL ? "ممتاز" : "Excellent"}
+                                        ? isRTL ? "متوسط" : "Moderate"
+                                        : isRTL ? "ممتاز" : "Excellent"}
                             </span>
                         )}
                         <span
@@ -310,10 +317,10 @@ export default function CarOrderFinanceForm({
                                 dbrAnalysis.isExceeded
                                     ? "text-[#C81E1E]"
                                     : dbrAnalysis.actualDeductionPct > 33
-                                      ? "text-amber-600"
-                                      : dbrAnalysis.actualDeductionPct > 0
-                                        ? "text-emerald-600"
-                                        : "text-gray-700",
+                                        ? "text-amber-600"
+                                        : dbrAnalysis.actualDeductionPct > 0
+                                            ? "text-emerald-600"
+                                            : "text-gray-700",
                             ].join(" ")}
                         >
                             {dbrAnalysis.actualDeductionPct}%
@@ -329,10 +336,10 @@ export default function CarOrderFinanceForm({
                             dbrAnalysis.isExceeded
                                 ? "bg-rose-500"
                                 : dbrAnalysis.actualDeductionPct > 33
-                                  ? "bg-amber-500"
-                                  : dbrAnalysis.actualDeductionPct > 0
-                                    ? "bg-emerald-500"
-                                    : "bg-emerald-400/50",
+                                    ? "bg-amber-500"
+                                    : dbrAnalysis.actualDeductionPct > 0
+                                        ? "bg-emerald-500"
+                                        : "bg-emerald-400/50",
                         ].join(" ")}
                         style={{
                             width: `${Math.min(100, Math.max(0, dbrAnalysis.actualDeductionPct))}%`,
@@ -341,15 +348,27 @@ export default function CarOrderFinanceForm({
                 </div>
             </div>
 
-            {/* Exceeded Notice */}
+            {/* Exceeded Warning Card & Debt Consolidation Checkbox (Matches exact mockup) */}
             {dbrAnalysis.isExceeded && (
-                <div className="p-2.5 rounded-lg bg-red-50 border border-red-200 text-start text-[12px] text-[#C81E1E] font-semibold animate-in fade-in">
-                    {isRTL
-                        ? `النسبة تتجاوز الحد الأقصى المسموح به (${dbrAnalysis.maxLimit}%) لهذه الفئة.`
-                        : `Deduction exceeds the maximum allowable limit (${dbrAnalysis.maxLimit}%).`}
+                <div className="p-3.5 rounded-xl bg-rose-50/80 border border-rose-200 border-dashed text-start animate-in fade-in flex flex-col gap-2.5">
+                    <div className="flex items-center gap-2 text-rose-700 font-bold text-[12px] sm:text-[13px] leading-snug">
+                        <AlertTriangle size={17} className="shrink-0 text-amber-600" />
+                        <span>{dbrAnalysis.exceededWarningText}</span>
+                    </div>
+
+                    <label className="flex items-center gap-2.5 cursor-pointer select-none pt-2 border-t border-rose-200/60">
+                        <input
+                            type="checkbox"
+                            checked={Boolean(form.consolidateDebts)}
+                            onChange={(e) => onFieldChange("consolidateDebts", e.target.checked)}
+                            className="h-4 w-4 rounded border-rose-300 text-[#FF4D5A] focus:ring-[#FF4D5A] accent-[#FF4D5A] cursor-pointer"
+                        />
+                        <span className="text-[12px] sm:text-[13px] font-semibold text-gray-800 leading-tight">
+                            {dbrAnalysis.debtSolutionText}
+                        </span>
+                    </label>
                 </div>
             )}
-
 
             {/* 7. زر اعتماد والانتقال للتمويل */}
             <div className="pt-2">

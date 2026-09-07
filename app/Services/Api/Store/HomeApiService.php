@@ -22,7 +22,9 @@ final class HomeApiService
         $data = $this->cache->rememberHomeData();
 
         $heroSlides = array_map(function (array $slide): array {
-            $slide['image'] = $this->resolveImage($slide['image'] ?? null);
+            $slide['image'] = $this->resolveImage($slide['image'] ?? $slide['image_desktop'] ?? null);
+            $slide['image_desktop'] = $this->resolveImage($slide['image_desktop'] ?? $slide['image'] ?? null);
+            $slide['image_mobile'] = $this->resolveImage($slide['image_mobile'] ?? null);
 
             return $slide;
         }, $data['heroSlides'] ?? []);

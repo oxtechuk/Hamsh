@@ -64,21 +64,38 @@ export default function HomeHero({
                     className="relative overflow-hidden rounded-[16px]"
                 >
                     <div className="relative h-[54vh] min-h-[240px] sm:h-[62vh] lg:h-[68vh]">
-                        {slides.map((slide, slideIndex) => (
-                            <LazyImg
-                                key={slide.id}
-                                src={slide.image}
-                                alt={slide.alt || ""}
-                                eager
-                                className={[
-                                    "absolute inset-0 h-full w-full object-cover",
-                                    "transition-opacity duration-700 ease-in-out",
-                                    slideIndex === index
-                                        ? "opacity-100"
-                                        : "pointer-events-none opacity-0",
-                                ].join(" ")}
-                            />
-                        ))}
+                        {slides.map((slide, slideIndex) => {
+                            const isCurrent = slideIndex === index;
+                            const desktopSrc = slide.imageDesktop || slide.image;
+
+                            return (
+                                <div
+                                    key={slide.id}
+                                    className={[
+                                        "absolute inset-0 h-full w-full",
+                                        "transition-opacity duration-700 ease-in-out",
+                                        isCurrent
+                                            ? "opacity-100 z-10"
+                                            : "pointer-events-none opacity-0 z-0",
+                                    ].join(" ")}
+                                >
+                                    <picture className="block h-full w-full">
+                                        {slide.imageMobile && (
+                                            <source
+                                                media="(max-width: 768px)"
+                                                srcSet={slide.imageMobile}
+                                            />
+                                        )}
+                                        <LazyImg
+                                            src={desktopSrc}
+                                            alt={slide.alt || ""}
+                                            eager={isCurrent}
+                                            className="h-full w-full object-cover"
+                                        />
+                                    </picture>
+                                </div>
+                            );
+                        })}
 
                         {current.buttonText && (
                             <button
@@ -87,11 +104,15 @@ export default function HomeHero({
                                     current.detailsTo &&
                                     navigate(current.detailsTo)
                                 }
+                                style={{
+                                    backgroundColor: "var(--brand-button-bg, var(--brand-primary-color))",
+                                    color: "var(--brand-button-text, #20283A)",
+                                }}
                                 className={[
                                     "absolute bottom-6 start-6 z-20",
                                     "flex h-[46px] items-center justify-center",
-                                    "bg-[var(--brand-primary-color)] px-6",
-                                    "text-[14px] font-bold text-[#20283A]",
+                                    "px-6 rounded-[8px]",
+                                    "text-[14px] font-bold shadow-md",
                                     "transition duration-300 hover:brightness-95",
                                 ].join(" ")}
                             >

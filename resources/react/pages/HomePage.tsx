@@ -43,14 +43,23 @@ export default function Home() {
             <HomeHero
                 slides={
                     data?.hero_slides?.length
-                        ? data.hero_slides.map((slide, index) => ({
-                              id: index,
-                              image:
-                                  getImageUrl(slide.image) ||
-                                  APP_IMAGES.CAR_PLACEHOLDER,
-                              detailsTo: slide.link || undefined,
-                              buttonText: slide.button_text || undefined,
-                          }))
+                        ? data.hero_slides.map((slide, index) => {
+                              const desktopImg =
+                                  getImageUrl(slide.image_desktop || slide.image) ||
+                                  APP_IMAGES.CAR_PLACEHOLDER;
+                              const mobileImg = slide.image_mobile
+                                  ? getImageUrl(slide.image_mobile)
+                                  : undefined;
+
+                              return {
+                                  id: index,
+                                  image: desktopImg,
+                                  imageDesktop: desktopImg,
+                                  imageMobile: mobileImg,
+                                  detailsTo: slide.link || undefined,
+                                  buttonText: slide.button_text || undefined,
+                              };
+                          })
                         : [
                               {
                                   id: 0,

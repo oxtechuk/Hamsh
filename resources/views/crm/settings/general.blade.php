@@ -30,6 +30,9 @@
                                 <button type="button" class="settings-nav-btn" data-tab="appearance">
                                     <i class="bi bi-palette"></i> {{ __('الشعار والمظهر') }}
                                 </button>
+                                <button type="button" class="settings-nav-btn" data-tab="brand-colors">
+                                    <i class="bi bi-palette2"></i> {{ __('الهوية البصرية والألوان') }}
+                                </button>
                                 <button type="button" class="settings-nav-btn" data-tab="contact">
                                     <i class="bi bi-telephone"></i> {{ __('التواصل والشبكات') }}
                                 </button>
@@ -51,6 +54,9 @@
                                 </button>
                                 <button type="button" class="settings-nav-btn" data-tab="finance-stats">
                                     <i class="bi bi-currency-dollar"></i> {{ __('إحصائيات التمويل') }}
+                                </button>
+                                <button type="button" class="settings-nav-btn" data-tab="finance-limits">
+                                    <i class="bi bi-calculator"></i> {{ __('نسب الاستقطاع والتمويل (DBR)') }}
                                 </button>
                             </nav>
 
@@ -204,6 +210,241 @@
                         </div>
 
                         {{-- =============================== --}}
+                        {{-- TAB: الهوية البصرية والألوان --}}
+                        {{-- =============================== --}}
+                        <div class="settings-pane d-none" id="tab-brand-colors">
+                            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                                <div class="card-header bg-transparent border-0 p-4 pb-0 d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="fw-bold mb-0">{{ __('الهوية البصرية وتخصيص الألوان') }}</h6>
+                                        <p class="text-muted small mb-0">{{ __('التحكم في ألوان المتجر الرئيسية والثانوية، أزرار التفاعل، النصوص والخلفيات بشكل ديناميكي') }}</p>
+                                    </div>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="resetBrandColors()">
+                                        <i class="bi bi-arrow-counterclockwise me-1"></i> {{ __('استعادة الافتراضي') }}
+                                    </button>
+                                </div>
+                                <div class="card-body p-4">
+                                    <div class="row g-4">
+                                        {{-- اللون الأساسي --}}
+                                        <div class="col-md-6">
+                                            <div class="p-3 bg-light rounded-3 border">
+                                                <label class="form-label fw-bold small text-dark d-flex justify-content-between align-items-center mb-2">
+                                                    <span><i class="bi bi-circle-fill text-warning me-1"></i> {{ __('اللون الأساسي (Primary Color)') }}</span>
+                                                    <span class="badge bg-white text-muted border text-xs">{{ __('الذهبي الافتراضي: #DDBB72') }}</span>
+                                                </label>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <input type="color" id="theme_primary_picker" class="form-control form-control-color border-0 p-1 bg-white shadow-sm"
+                                                        value="{{ $settings['theme_primary_color'] ?? '#DDBB72' }}" style="width:48px;height:42px;cursor:pointer;"
+                                                        oninput="syncColorInput('theme_primary_picker', 'theme_primary_color')">
+                                                    <input type="text" name="theme_primary_color" id="theme_primary_color"
+                                                        class="form-control bg-white border-0 fw-mono text-uppercase"
+                                                        value="{{ $settings['theme_primary_color'] ?? '#DDBB72' }}" placeholder="#DDBB72"
+                                                        oninput="syncColorInput('theme_primary_color', 'theme_primary_picker')">
+                                                </div>
+                                                <p class="text-muted small mb-0 mt-1">{{ __('يُستخدم في الأشرطة المميزة، الأسعار، العناوين، والشارات.') }}</p>
+                                            </div>
+                                        </div>
+
+                                        {{-- اللون الثانوي --}}
+                                        <div class="col-md-6">
+                                            <div class="p-3 bg-light rounded-3 border">
+                                                <label class="form-label fw-bold small text-dark d-flex justify-content-between align-items-center mb-2">
+                                                    <span><i class="bi bi-circle-fill text-primary me-1"></i> {{ __('اللون الثانوي (Secondary Color)') }}</span>
+                                                    <span class="badge bg-white text-muted border text-xs">{{ __('الكحلي الافتراضي: #303A54') }}</span>
+                                                </label>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <input type="color" id="theme_secondary_picker" class="form-control form-control-color border-0 p-1 bg-white shadow-sm"
+                                                        value="{{ $settings['theme_secondary_color'] ?? '#303A54' }}" style="width:48px;height:42px;cursor:pointer;"
+                                                        oninput="syncColorInput('theme_secondary_picker', 'theme_secondary_color')">
+                                                    <input type="text" name="theme_secondary_color" id="theme_secondary_color"
+                                                        class="form-control bg-white border-0 fw-mono text-uppercase"
+                                                        value="{{ $settings['theme_secondary_color'] ?? '#303A54' }}" placeholder="#303A54"
+                                                        oninput="syncColorInput('theme_secondary_color', 'theme_secondary_picker')">
+                                                </div>
+                                                <p class="text-muted small mb-0 mt-1">{{ __('يُستخدم في البطاقات، العناصر الثانوية، والأقسام الفرعية.') }}</p>
+                                            </div>
+                                        </div>
+
+                                        {{-- لون خلفية الأزرار --}}
+                                        <div class="col-md-6">
+                                            <div class="p-3 bg-light rounded-3 border">
+                                                <label class="form-label fw-bold small text-dark d-flex justify-content-between align-items-center mb-2">
+                                                    <span><i class="bi bi-square-fill text-warning me-1"></i> {{ __('لون خلفية الأزرار (Button Background)') }}</span>
+                                                    <span class="badge bg-white text-muted border text-xs">{{ __('الافتراضي: #DDBB72') }}</span>
+                                                </label>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <input type="color" id="theme_btn_bg_picker" class="form-control form-control-color border-0 p-1 bg-white shadow-sm"
+                                                        value="{{ $settings['theme_button_bg_color'] ?? '#DDBB72' }}" style="width:48px;height:42px;cursor:pointer;"
+                                                        oninput="syncColorInput('theme_btn_bg_picker', 'theme_button_bg_color')">
+                                                    <input type="text" name="theme_button_bg_color" id="theme_button_bg_color"
+                                                        class="form-control bg-white border-0 fw-mono text-uppercase"
+                                                        value="{{ $settings['theme_button_bg_color'] ?? '#DDBB72' }}" placeholder="#DDBB72"
+                                                        oninput="syncColorInput('theme_button_bg_color', 'theme_btn_bg_picker')">
+                                                </div>
+                                                <p class="text-muted small mb-0 mt-1">{{ __('لون خلفية أزرار الدعوة للإجراء (CTA) والتفاعل في كافة الصفحات.') }}</p>
+                                            </div>
+                                        </div>
+
+                                        {{-- لون نص الأزرار --}}
+                                        <div class="col-md-6">
+                                            <div class="p-3 bg-light rounded-3 border">
+                                                <label class="form-label fw-bold small text-dark d-flex justify-content-between align-items-center mb-2">
+                                                    <span><i class="bi bi-fonts me-1"></i> {{ __('لون نص الأزرار (Button Text Color)') }}</span>
+                                                    <span class="badge bg-white text-muted border text-xs">{{ __('الافتراضي: #20283A') }}</span>
+                                                </label>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <input type="color" id="theme_btn_text_picker" class="form-control form-control-color border-0 p-1 bg-white shadow-sm"
+                                                        value="{{ $settings['theme_button_text_color'] ?? '#20283A' }}" style="width:48px;height:42px;cursor:pointer;"
+                                                        oninput="syncColorInput('theme_btn_text_picker', 'theme_button_text_color')">
+                                                    <input type="text" name="theme_button_text_color" id="theme_button_text_color"
+                                                        class="form-control bg-white border-0 fw-mono text-uppercase"
+                                                        value="{{ $settings['theme_button_text_color'] ?? '#20283A' }}" placeholder="#20283A"
+                                                        oninput="syncColorInput('theme_button_text_color', 'theme_btn_text_picker')">
+                                                </div>
+                                                <p class="text-muted small mb-0 mt-1">{{ __('لون الكتابة والنصوص داخل الأزرار الرئيسية لضمان الوضوح والتباين.') }}</p>
+                                            </div>
+                                        </div>
+
+                                        {{-- لون النصوص الرئيسي --}}
+                                        <div class="col-md-6">
+                                            <div class="p-3 bg-light rounded-3 border">
+                                                <label class="form-label fw-bold small text-dark d-flex justify-content-between align-items-center mb-2">
+                                                    <span><i class="bi bi-type-bold me-1"></i> {{ __('لون النصوص الرئيسي (Heading & Text Color)') }}</span>
+                                                    <span class="badge bg-white text-muted border text-xs">{{ __('الافتراضي: #07111F') }}</span>
+                                                </label>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <input type="color" id="theme_text_primary_picker" class="form-control form-control-color border-0 p-1 bg-white shadow-sm"
+                                                        value="{{ $settings['theme_text_primary_color'] ?? '#07111F' }}" style="width:48px;height:42px;cursor:pointer;"
+                                                        oninput="syncColorInput('theme_text_primary_picker', 'theme_text_primary_color')">
+                                                    <input type="text" name="theme_text_primary_color" id="theme_text_primary_color"
+                                                        class="form-control bg-white border-0 fw-mono text-uppercase"
+                                                        value="{{ $settings['theme_text_primary_color'] ?? '#07111F' }}" placeholder="#07111F"
+                                                        oninput="syncColorInput('theme_text_primary_color', 'theme_text_primary_picker')">
+                                                </div>
+                                                <p class="text-muted small mb-0 mt-1">{{ __('لون العناوين الرئيسية وأسماء السيارات والنصوص الأساسية.') }}</p>
+                                            </div>
+                                        </div>
+
+                                        {{-- لون النصوص الفرعية والمساعدة --}}
+                                        <div class="col-md-6">
+                                            <div class="p-3 bg-light rounded-3 border">
+                                                <label class="form-label fw-bold small text-dark d-flex justify-content-between align-items-center mb-2">
+                                                    <span><i class="bi bi-type me-1"></i> {{ __('لون النصوص الفرعية (Secondary/Muted Text)') }}</span>
+                                                    <span class="badge bg-white text-muted border text-xs">{{ __('الافتراضي: #595959') }}</span>
+                                                </label>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <input type="color" id="theme_text_sec_picker" class="form-control form-control-color border-0 p-1 bg-white shadow-sm"
+                                                        value="{{ $settings['theme_text_secondary_color'] ?? '#595959' }}" style="width:48px;height:42px;cursor:pointer;"
+                                                        oninput="syncColorInput('theme_text_sec_picker', 'theme_text_secondary_color')">
+                                                    <input type="text" name="theme_text_secondary_color" id="theme_text_secondary_color"
+                                                        class="form-control bg-white border-0 fw-mono text-uppercase"
+                                                        value="{{ $settings['theme_text_secondary_color'] ?? '#595959' }}" placeholder="#595959"
+                                                        oninput="syncColorInput('theme_text_secondary_color', 'theme_text_sec_picker')">
+                                                </div>
+                                                <p class="text-muted small mb-0 mt-1">{{ __('لون النصوص التوضيحية والوصف والبيانات الإحصائية.') }}</p>
+                                            </div>
+                                        </div>
+
+                                        {{-- لون خلفية المتجر --}}
+                                        <div class="col-md-6">
+                                            <div class="p-3 bg-light rounded-3 border">
+                                                <label class="form-label fw-bold small text-dark d-flex justify-content-between align-items-center mb-2">
+                                                    <span><i class="bi bi-paint-bucket me-1"></i> {{ __('لون خلفية الموقع (Site Background)') }}</span>
+                                                    <span class="badge bg-white text-muted border text-xs">{{ __('الافتراضي: #F5F2EC') }}</span>
+                                                </label>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <input type="color" id="theme_bg_picker" class="form-control form-control-color border-0 p-1 bg-white shadow-sm"
+                                                        value="{{ $settings['theme_background_color'] ?? '#F5F2EC' }}" style="width:48px;height:42px;cursor:pointer;"
+                                                        oninput="syncColorInput('theme_bg_picker', 'theme_background_color')">
+                                                    <input type="text" name="theme_background_color" id="theme_background_color"
+                                                        class="form-control bg-white border-0 fw-mono text-uppercase"
+                                                        value="{{ $settings['theme_background_color'] ?? '#F5F2EC' }}" placeholder="#F5F2EC"
+                                                        oninput="syncColorInput('theme_background_color', 'theme_bg_picker')">
+                                                </div>
+                                                <p class="text-muted small mb-0 mt-1">{{ __('لون أرضية وصفحات المتجر الأساسية.') }}</p>
+                                            </div>
+                                        </div>
+
+                                        {{-- لون الفوتر --}}
+                                        <div class="col-md-6">
+                                            <div class="p-3 bg-light rounded-3 border">
+                                                <label class="form-label fw-bold small text-dark d-flex justify-content-between align-items-center mb-2">
+                                                    <span><i class="bi bi-layout-sidebar-inset-reverse me-1"></i> {{ __('لون تذييل الموقع (Footer Background)') }}</span>
+                                                    <span class="badge bg-white text-muted border text-xs">{{ __('الافتراضي: #121317') }}</span>
+                                                </label>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <input type="color" id="theme_footer_bg_picker" class="form-control form-control-color border-0 p-1 bg-white shadow-sm"
+                                                        value="{{ $settings['theme_footer_bg_color'] ?? '#121317' }}" style="width:48px;height:42px;cursor:pointer;"
+                                                        oninput="syncColorInput('theme_footer_bg_picker', 'theme_footer_bg_color')">
+                                                    <input type="text" name="theme_footer_bg_color" id="theme_footer_bg_color"
+                                                        class="form-control bg-white border-0 fw-mono text-uppercase"
+                                                        value="{{ $settings['theme_footer_bg_color'] ?? '#121317' }}" placeholder="#121317"
+                                                        oninput="syncColorInput('theme_footer_bg_color', 'theme_footer_bg_picker')">
+                                                </div>
+                                                <p class="text-muted small mb-0 mt-1">{{ __('لون خلفية الفوتر السفلي للموقع.') }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {{-- Live Interactive Preview --}}
+                                    <div class="mt-4 pt-4 border-top">
+                                        <h6 class="fw-bold mb-3 d-flex align-items-center">
+                                            <i class="bi bi-eye me-2 text-primary"></i> {{ __('معاينة حية فورية للهوية البصرية (Live Theme Preview)') }}
+                                        </h6>
+                                        <div id="live-theme-preview-box" class="p-4 rounded-4 border shadow-sm transition-all"
+                                            style="background-color: {{ $settings['theme_background_color'] ?? '#F5F2EC' }}; min-height: 220px;">
+                                            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 pb-3 border-bottom mb-3" style="border-color: rgba(0,0,0,0.08) !important;">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <div class="rounded-circle d-flex align-items-center justify-content-center"
+                                                        id="preview-logo-badge" style="width:36px;height:36px; background-color: {{ $settings['theme_primary_color'] ?? '#DDBB72' }}; color: {{ $settings['theme_button_text_color'] ?? '#20283A' }}; font-weight:bold;">
+                                                        H
+                                                    </div>
+                                                    <span class="fw-bold fs-6" id="preview-brand-title" style="color: {{ $settings['theme_text_primary_color'] ?? '#07111F' }};">
+                                                        {{ $settings['site_name']['ar'] ?? 'هامش كار' }}
+                                                    </span>
+                                                </div>
+                                                <span class="badge px-3 py-2 rounded-pill" id="preview-sec-badge"
+                                                    style="background-color: {{ $settings['theme_secondary_color'] ?? '#303A54' }}; color:#ffffff;">
+                                                    <i class="bi bi-shield-check me-1"></i> {{ __('ضمان معتمد') }}
+                                                </span>
+                                            </div>
+
+                                            <div class="row align-items-center g-3">
+                                                <div class="col-md-7">
+                                                    <h5 class="fw-bold mb-2" id="preview-heading" style="color: {{ $settings['theme_text_primary_color'] ?? '#07111F' }};">
+                                                        {{ __('أحدث السيارات الفاخرة بأفضل أنظمة التمويل') }}
+                                                    </h5>
+                                                    <p class="small mb-3" id="preview-desc" style="color: {{ $settings['theme_text_secondary_color'] ?? '#595959' }};">
+                                                        {{ __('اختر سيارتك المفضلة واستمتع بتجربة شراء استثنائية مع حلول دفع ميسرة تناسب جميع الاحتياجات.') }}
+                                                    </p>
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <button type="button" class="btn px-4 py-2 fw-bold rounded-3 shadow-sm border-0 transition"
+                                                            id="preview-primary-btn"
+                                                            style="background-color: {{ $settings['theme_button_bg_color'] ?? '#DDBB72' }}; color: {{ $settings['theme_button_text_color'] ?? '#20283A' }};">
+                                                            <i class="bi bi-cart-check me-1"></i> {{ __('احجز سيارتك الآن') }}
+                                                        </button>
+                                                        <span class="fw-bold fs-5 ms-2" id="preview-price" style="color: {{ $settings['theme_primary_color'] ?? '#DDBB72' }};">
+                                                            245,000 <small class="fs-6">{{ __('ر.س') }}</small>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <div class="p-3 bg-white rounded-3 shadow-sm border text-center">
+                                                        <i class="bi bi-car-front fs-1 mb-1 d-block" id="preview-car-icon" style="color: {{ $settings['theme_secondary_color'] ?? '#303A54' }};"></i>
+                                                        <span class="fw-bold d-block small" id="preview-car-name" style="color: {{ $settings['theme_text_primary_color'] ?? '#07111F' }};">مرسيدس بنز G-Class 2025</span>
+                                                        <span class="badge mt-2" id="preview-car-tag" style="background-color: {{ $settings['theme_primary_color'] ?? '#DDBB72' }}; color: {{ $settings['theme_button_text_color'] ?? '#20283A' }};">
+                                                            {{ __('قسط يبدأ من 3,500 ر.س') }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- =============================== --}}
                         {{-- TAB: التواصل والشبكات --}}
                         {{-- =============================== --}}
                         <div class="settings-pane d-none" id="tab-contact">
@@ -248,6 +489,83 @@
                                                 <input type="text" name="contact_address"
                                                     class="form-control bg-light border-0"
                                                     value="{{ $settings['contact_address'] ?? '' }}" placeholder="الرياض، طريق الملك فهد">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {{-- البيانات الرسمية والتوثيق (السجل التجاري، الضريبة، معروف) --}}
+                                    <div class="border-top pt-4 mb-4">
+                                        <h6 class="fw-bold mb-3 small text-dark d-flex align-items-center">
+                                            <i class="bi bi-patch-check-fill text-success me-2"></i> {{ __('البيانات الرسمية والسجلات (تظهر أسفل الفوتر)') }}
+                                        </h6>
+                                        <div class="row g-3">
+                                            <div class="col-md-4">
+                                                <label class="form-label fw-semibold small text-muted">{{ __('رقم السجل التجاري') }}</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light border-0"><i class="bi bi-building"></i></span>
+                                                    <input type="text" name="commercial_registration_no"
+                                                        class="form-control bg-light border-0" dir="ltr"
+                                                        value="{{ $settings['commercial_registration_no'] ?? '' }}" placeholder="7054436493">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label fw-semibold small text-muted">{{ __('الرقم الضريبي (VAT)') }}</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light border-0"><i class="bi bi-receipt"></i></span>
+                                                    <input type="text" name="tax_number"
+                                                        class="form-control bg-light border-0" dir="ltr"
+                                                        value="{{ $settings['tax_number'] ?? '' }}" placeholder="3148150319">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label fw-semibold small text-muted">{{ __('رقم توثيق معروف / المركز السعودي للأعمال') }}</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light border-0"><i class="bi bi-shield-check"></i></span>
+                                                    <input type="text" name="maroof_number"
+                                                        class="form-control bg-light border-0" dir="ltr"
+                                                        value="{{ $settings['maroof_number'] ?? '' }}" placeholder="373677">
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="form-label fw-semibold small text-muted">{{ __('رابط صفحة توثيق معروف (اختياري)') }}</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light border-0"><i class="bi bi-link-45deg"></i></span>
+                                                    <input type="url" name="maroof_url"
+                                                        class="form-control bg-light border-0 text-start" dir="ltr"
+                                                        value="{{ $settings['maroof_url'] ?? '' }}" placeholder="https://maroof.sa/...">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {{-- خريطة الموقع GPS --}}
+                                    <div class="border-top pt-4 mb-4">
+                                        <h6 class="fw-bold mb-3 small text-dark d-flex align-items-center">
+                                            <i class="bi bi-geo-alt-fill text-danger me-2"></i> {{ __('موقع المعرض على الخريطة (GPS / Google Maps)') }}
+                                        </h6>
+                                        <div class="row g-3">
+                                            <div class="col-12">
+                                                <label class="form-label fw-semibold small text-muted">{{ __('رابط خرائط جوجل (Google Maps URL / GPS)') }}</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light border-0"><i class="bi bi-map"></i></span>
+                                                    <input type="url" name="gps_map_link"
+                                                        class="form-control bg-light border-0 text-start" dir="ltr"
+                                                        value="{{ $settings['gps_map_link'] ?? '' }}" placeholder="https://maps.google.com/?q=24.7136,46.6753">
+                                                </div>
+                                                <p class="text-muted small mb-0 mt-1">{{ __('يُستخدم لتوجيه العملاء عند الضغط على زر "اعرض الموقع" في بطاقة موقعنا بالفوتر.') }}</p>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="d-flex align-items-center justify-content-between p-3 bg-light rounded-3">
+                                                    <div>
+                                                        <p class="fw-semibold mb-0 small">{{ __('إظهار بطاقة "موقعنا (GPS)" أعلى الفوتر') }}</p>
+                                                        <p class="text-muted small mb-0">{{ __('عرض كرت خريطة تفاعلي يحتوي على أيقونة GPS وزر مباشر لفتح موقع المعرض على الخريطة') }}</p>
+                                                    </div>
+                                                    <div class="form-check form-switch fs-5 mb-0">
+                                                        <input type="hidden" name="show_footer_map" value="0">
+                                                        <input class="form-check-input" type="checkbox" name="show_footer_map"
+                                                            value="1" {{ ($settings['show_footer_map'] ?? '1') == '1' ? 'checked' : '' }}>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -417,7 +735,7 @@
                                 <div class="card-header bg-transparent border-0 p-4 pb-0 d-flex justify-content-between align-items-start">
                                     <div>
                                         <h6 class="fw-bold mb-0">{{ __('شرائح الهيرو (سلايدر الرئيسية)') }}</h6>
-                                        <p class="text-muted small mb-0">{{ __('الصور الإعلانية والروابط ونصوص الأزرار في أعلى الصفحة الرئيسية') }}</p>
+                                        <p class="text-muted small mb-0">{{ __('الصور الإعلانية والروابط ونصوص الأزرار للديسكتوب والموبايل بشكل متجاوب') }}</p>
                                     </div>
                                     <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3"
                                         onclick="addHeroSlide()">
@@ -430,42 +748,84 @@
                                             ? (is_array($settings['hero_slides']) ? $settings['hero_slides'] : (json_decode($settings['hero_slides'], true) ?: []))
                                             : [];
                                     @endphp
-                                    <div id="hero-slides-container" class="d-flex flex-column gap-3">
+                                    <div id="hero-slides-container" class="d-flex flex-column gap-4">
                                         @foreach($heroSlides as $idx => $slide)
-                                            <div class="hero-slide-item card border border-light-subtle rounded-3 shadow-sm"
+                                            @php
+                                                $desktopImg = $slide['image_desktop'] ?? $slide['image'] ?? null;
+                                                $mobileImg = $slide['image_mobile'] ?? null;
+                                            @endphp
+                                            <div class="hero-slide-item card border border-light-subtle rounded-3 shadow-sm overflow-hidden"
                                                 id="hero-slide-{{ $idx }}">
+                                                <div class="card-header bg-light py-2 px-3 border-0 d-flex justify-content-between align-items-center">
+                                                    <span class="badge bg-white text-dark border px-3 py-1 fw-semibold">
+                                                        <i class="bi bi-layers me-1 text-primary"></i> {{ __('شريحة') }} #{{ $idx + 1 }}
+                                                    </span>
+                                                    <button type="button"
+                                                        class="btn btn-sm btn-light text-danger rounded-circle lh-1 p-1"
+                                                        onclick="removeHeroSlide({{ $idx }})"><i
+                                                            class="bi bi-x-lg"></i></button>
+                                                </div>
                                                 <div class="card-body p-3">
-                                                    <div class="d-flex justify-content-between align-items-center mb-3">
-                                                        <span class="small fw-semibold text-muted">{{ __('شريحة') }}
-                                                            {{ $idx + 1 }}</span>
-                                                        <button type="button"
-                                                            class="btn btn-sm btn-light text-danger rounded-circle lh-1 p-1"
-                                                            onclick="removeHeroSlide({{ $idx }})"><i
-                                                                class="bi bi-x-lg"></i></button>
-                                                    </div>
                                                     <div class="row g-3">
-                                                        <div class="col-md-4">
-                                                            <input type="hidden" name="hero_slides[{{ $idx }}][image_path]"
-                                                                value="{{ $slide['image'] ?? '' }}">
-                                                            @if(isset($slide['image']))
-                                                                <div class="rounded-3 overflow-hidden mb-2" style="height:90px;">
-                                                                    <img src="{{ asset('storage/' . $slide['image']) }}"
-                                                                        class="w-100 h-100 object-fit-cover"></div>
-                                                            @endif
-                                                            <input type="file" name="hero_slides[{{ $idx }}][image]"
-                                                                class="form-control bg-light border-0 form-control-sm"
-                                                                accept="image/*">
+                                                        {{-- Desktop Image --}}
+                                                        <div class="col-md-6">
+                                                            <div class="p-3 bg-light rounded-3 border h-100">
+                                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                                    <label class="form-label fw-bold small mb-0 text-dark">
+                                                                        <i class="bi bi-laptop me-1 text-primary"></i> {{ __('بانر الديسكتوب (Desktop Banner)') }}
+                                                                    </label>
+                                                                    <span class="badge bg-white text-muted border text-xs">1920×600px</span>
+                                                                </div>
+                                                                <input type="hidden" name="hero_slides[{{ $idx }}][image_desktop_path]"
+                                                                    value="{{ $desktopImg }}">
+                                                                @if($desktopImg)
+                                                                    <div class="rounded-3 overflow-hidden mb-2 bg-dark text-center" style="height:100px;">
+                                                                        <img src="{{ asset('storage/' . $desktopImg) }}"
+                                                                            class="w-100 h-100 object-fit-cover">
+                                                                    </div>
+                                                                @endif
+                                                                <input type="file" name="hero_slides[{{ $idx }}][image_desktop]"
+                                                                    class="form-control bg-white border-0 form-control-sm"
+                                                                    accept="image/*">
+                                                            </div>
                                                         </div>
-                                                        <div class="col-md-8">
+                                                        {{-- Mobile Image --}}
+                                                        <div class="col-md-6">
+                                                            <div class="p-3 bg-light rounded-3 border h-100">
+                                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                                    <label class="form-label fw-bold small mb-0 text-dark">
+                                                                        <i class="bi bi-phone me-1 text-success"></i> {{ __('بانر الموبايل (Mobile Banner)') }}
+                                                                    </label>
+                                                                    <span class="badge bg-white text-muted border text-xs">750×600px / 1:1</span>
+                                                                </div>
+                                                                <input type="hidden" name="hero_slides[{{ $idx }}][image_mobile_path]"
+                                                                    value="{{ $mobileImg }}">
+                                                                @if($mobileImg)
+                                                                    <div class="rounded-3 overflow-hidden mb-2 bg-dark text-center" style="height:100px;">
+                                                                        <img src="{{ asset('storage/' . $mobileImg) }}"
+                                                                            class="h-100 object-fit-contain">
+                                                                    </div>
+                                                                @else
+                                                                    <div class="rounded-2 p-2 mb-2 bg-white text-center text-muted small border" style="font-size:11px;">
+                                                                        <i class="bi bi-info-circle me-1"></i> {{ __('اختياري (يتم استخدام صورة الديسكتوب كبديل إذا تُرِكت فارغة)') }}
+                                                                    </div>
+                                                                @endif
+                                                                <input type="file" name="hero_slides[{{ $idx }}][image_mobile]"
+                                                                    class="form-control bg-white border-0 form-control-sm"
+                                                                    accept="image/*">
+                                                            </div>
+                                                        </div>
+                                                        {{-- Slide Link & Button Text --}}
+                                                        <div class="col-12">
                                                             <div class="row g-2">
-                                                                <div class="col-12">
+                                                                <div class="col-md-6">
                                                                     <label class="form-label fw-semibold small text-muted mb-1">{{ __('رابط الشريحة') }}</label>
                                                                     <input type="text" name="hero_slides[{{ $idx }}][link]"
                                                                         class="form-control bg-light border-0 text-start form-control-sm"
                                                                         dir="ltr" value="{{ $slide['link'] ?? '' }}"
                                                                         placeholder="/cars أو https://...">
                                                                 </div>
-                                                                <div class="col-12">
+                                                                <div class="col-md-6">
                                                                     <label class="form-label fw-semibold small text-muted mb-1">{{ __('نص الزر') }}</label>
                                                                     <input type="text"
                                                                         name="hero_slides[{{ $idx }}][button_text]"
@@ -641,6 +1001,97 @@
                                     <div id="no-finance-stats-msg"
                                         class="text-center py-4 bg-light rounded-3 {{ count($financeStats) > 0 ? 'd-none' : '' }}">
                                         <span class="text-muted small">{{ __('لا توجد إحصائيات بعد') }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- =============================== --}}
+                        {{-- TAB: إعدادات نسب الاستقطاع والتمويل (DBR) --}}
+                        {{-- =============================== --}}
+                        <div class="settings-pane d-none" id="tab-finance-limits">
+                            <div class="card border-0 shadow-sm rounded-4">
+                                <div class="card-header bg-transparent border-0 p-4 pb-0">
+                                    <h6 class="fw-bold mb-0">{{ __('إعدادات نسب الاستقطاع وحلول التمويل (DBR)') }}</h6>
+                                    <p class="text-muted small mb-0">{{ __('التحكم في الحدود القصوى لنسب الاستقطاع ونصوص التنبيه والموافقة على توحيد الالتزامات في نموذج طلب التمويل') }}</p>
+                                </div>
+                                <div class="card-body p-4">
+                                    <div class="row g-4">
+                                        {{-- DBR limits --}}
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold small text-muted">{{ __('الحد الأقصى للاستقطاع — شخصي / بدون التزام (%)') }}</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light border-0"><i class="bi bi-percent"></i></span>
+                                                <input type="number" min="1" max="100" name="finance_dbr_limit_personal"
+                                                    class="form-control bg-light border-0"
+                                                    value="{{ $settings['finance_dbr_limit_personal'] ?? '45' }}"
+                                                    placeholder="45">
+                                            </div>
+                                            <p class="text-muted small mb-0 mt-1">{{ __('الحد الأقصى المسموح به للاستقطاع من الراتب للالتزامات الشخصية (الافتراضي: 45%).') }}</p>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold small text-muted">{{ __('الحد الأقصى للاستقطاع — عقاري + شخصي (%)') }}</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light border-0"><i class="bi bi-percent"></i></span>
+                                                <input type="number" min="1" max="100" name="finance_dbr_limit_real_estate"
+                                                    class="form-control bg-light border-0"
+                                                    value="{{ $settings['finance_dbr_limit_real_estate'] ?? '65' }}"
+                                                    placeholder="65">
+                                            </div>
+                                            <p class="text-muted small mb-0 mt-1">{{ __('الحد الأقصى المسموح به للتمويل العقاري مع الشخصي (الافتراضي: 65%).') }}</p>
+                                        </div>
+
+                                        {{-- Texts --}}
+                                        <div class="col-12">
+                                            <label class="form-label fw-semibold small text-muted">{{ __('نص رسالة التنبيه عند تجاوز الحد المسموح') }}</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light border-0"><i class="bi bi-exclamation-triangle-fill text-warning"></i></span>
+                                                <input type="text" name="finance_exceeded_warning_text"
+                                                    class="form-control bg-light border-0"
+                                                    value="{{ $settings['finance_exceeded_warning_text'] ?? 'نسبة الاستقطاع تتجاوز الحد المسموح به للتمويل.' }}"
+                                                    placeholder="نسبة الاستقطاع تتجاوز الحد المسموح به للتمويل.">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <label class="form-label fw-semibold small text-muted">{{ __('نص خيار الموافقة على الحلول التمويلية وتوحيد الالتزامات') }}</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light border-0"><i class="bi bi-check2-square text-primary"></i></span>
+                                                <input type="text" name="finance_debt_solution_text"
+                                                    class="form-control bg-light border-0"
+                                                    value="{{ $settings['finance_debt_solution_text'] ?? 'أرغب في الاستفادة من خيارات الحلول التمويلية وتوحيد الالتزامات' }}"
+                                                    placeholder="أرغب في الاستفادة من خيارات الحلول التمويلية وتوحيد الالتزامات">
+                                            </div>
+                                            <p class="text-muted small mb-0 mt-1">{{ __('يظهر هذا الخيار للعميل عندما تتجاوز التزاماته النسبة المحددة، ليتمكن من تقديم طلبه تحت بند حلول تمويلية.') }}</p>
+                                        </div>
+
+                                        {{-- Visual Preview Card --}}
+                                        <div class="col-12">
+                                            <div class="p-3 rounded-4 border bg-light">
+                                                <p class="fw-bold small mb-2 text-dark"><i class="bi bi-eye me-1"></i> {{ __('معاينة البطاقة في المتجر عند تجاوز الالتزامات') }}</p>
+                                                <div class="p-3 rounded-3 bg-white border border-danger-subtle shadow-xs">
+                                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                                        <span class="small fw-bold text-dark">{{ __('نسبة الاستقطاع الفعلية من الراتب:') }}</span>
+                                                        <span class="badge bg-danger text-white fw-bold">50%</span>
+                                                    </div>
+                                                    <div class="progress mb-3" style="height: 8px;">
+                                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 50%"></div>
+                                                    </div>
+                                                    <div class="p-3 rounded-3 bg-danger-subtle border border-danger border-opacity-25">
+                                                        <div class="text-danger small fw-bold mb-2">
+                                                            <i class="bi bi-exclamation-triangle-fill me-1"></i> {{ $settings['finance_exceeded_warning_text'] ?? 'نسبة الاستقطاع تتجاوز الحد المسموح به للتمويل.' }}
+                                                        </div>
+                                                        <div class="form-check text-start">
+                                                            <input class="form-check-input" type="checkbox" checked disabled id="previewCheck">
+                                                            <label class="form-check-label small fw-semibold text-dark" for="previewCheck">
+                                                                {{ $settings['finance_debt_solution_text'] ?? 'أرغب في الاستفادة من خيارات الحلول التمويلية وتوحيد الالتزامات' }}
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1175,25 +1626,46 @@
             const idx = items.length > 0 ? parseInt(items[items.length - 1].id.split('-').pop()) + 1 : 0;
             document.getElementById('no-slides-msg').classList.add('d-none');
             const div = document.createElement('div');
-            div.className = 'hero-slide-item card border border-light-subtle rounded-3 shadow-sm';
+            div.className = 'hero-slide-item card border border-light-subtle rounded-3 shadow-sm overflow-hidden';
             div.id = 'hero-slide-' + idx;
             div.innerHTML = `
+            <div class="card-header bg-light py-2 px-3 border-0 d-flex justify-content-between align-items-center">
+                <span class="badge bg-white text-dark border px-3 py-1 fw-semibold">
+                    <i class="bi bi-layers me-1 text-primary"></i> {{ __('شريحة جديدة') }} #${idx + 1}
+                </span>
+                <button type="button" class="btn btn-sm btn-light text-danger rounded-circle lh-1 p-1" onclick="removeHeroSlide(${idx})"><i class="bi bi-x-lg"></i></button>
+            </div>
             <div class="card-body p-3">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <span class="small fw-semibold text-muted">{{ __('شريحة جديدة') }}</span>
-                    <button type="button" class="btn btn-sm btn-light text-danger rounded-circle lh-1 p-1" onclick="removeHeroSlide(${idx})"><i class="bi bi-x-lg"></i></button>
-                </div>
                 <div class="row g-3">
-                    <div class="col-md-4">
-                        <input type="file" name="hero_slides[${idx}][image]" class="form-control bg-light border-0 form-control-sm" accept="image/*" required>
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded-3 border h-100">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <label class="form-label fw-bold small mb-0 text-dark">
+                                    <i class="bi bi-laptop me-1 text-primary"></i> {{ __('بانر الديسكتوب (Desktop Banner)') }}
+                                </label>
+                                <span class="badge bg-white text-muted border text-xs">1920×600px</span>
+                            </div>
+                            <input type="file" name="hero_slides[${idx}][image_desktop]" class="form-control bg-white border-0 form-control-sm" accept="image/*" required>
+                        </div>
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded-3 border h-100">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <label class="form-label fw-bold small mb-0 text-dark">
+                                    <i class="bi bi-phone me-1 text-success"></i> {{ __('بانر الموبايل (Mobile Banner)') }}
+                                </label>
+                                <span class="badge bg-white text-muted border text-xs">750×600px / 1:1</span>
+                            </div>
+                            <input type="file" name="hero_slides[${idx}][image_mobile]" class="form-control bg-white border-0 form-control-sm" accept="image/*">
+                        </div>
+                    </div>
+                    <div class="col-12">
                         <div class="row g-2">
-                            <div class="col-12">
+                            <div class="col-md-6">
                                 <label class="form-label fw-semibold small text-muted mb-1">{{ __('الرابط') }}</label>
                                 <input type="text" name="hero_slides[${idx}][link]" class="form-control bg-light border-0 text-start form-control-sm" dir="ltr" placeholder="/cars أو https://...">
                             </div>
-                            <div class="col-12">
+                            <div class="col-md-6">
                                 <label class="form-label fw-semibold small text-muted mb-1">{{ __('نص الزر') }}</label>
                                 <input type="text" name="hero_slides[${idx}][button_text]" class="form-control bg-light border-0 form-control-sm" value="{{ __('اكتشف السيارات') }}">
                             </div>
@@ -1206,6 +1678,97 @@
         function removeHeroSlide(idx) {
             document.getElementById('hero-slide-' + idx)?.remove();
             if (!document.querySelector('.hero-slide-item')) document.getElementById('no-slides-msg').classList.remove('d-none');
+        }
+
+        // ===== Brand Colors Sync & Live Preview =====
+        function syncColorInput(sourceId, targetId) {
+            const source = document.getElementById(sourceId);
+            const target = document.getElementById(targetId);
+            if (!source || !target) return;
+            
+            let val = source.value.trim();
+            if (sourceId.includes('picker')) {
+                target.value = val.toUpperCase();
+            } else {
+                if (!val.startsWith('#') && val.length > 0) {
+                    val = '#' + val;
+                }
+                if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
+                    target.value = val;
+                }
+            }
+            updateLiveThemePreview();
+        }
+
+        function updateLiveThemePreview() {
+            const primary = document.getElementById('theme_primary_color')?.value || '#DDBB72';
+            const secondary = document.getElementById('theme_secondary_color')?.value || '#303A54';
+            const btnBg = document.getElementById('theme_button_bg_color')?.value || '#DDBB72';
+            const btnText = document.getElementById('theme_button_text_color')?.value || '#20283A';
+            const textPrimary = document.getElementById('theme_text_primary_color')?.value || '#07111F';
+            const textSec = document.getElementById('theme_text_secondary_color')?.value || '#595959';
+            const bg = document.getElementById('theme_background_color')?.value || '#F5F2EC';
+
+            const box = document.getElementById('live-theme-preview-box');
+            if (box) box.style.backgroundColor = bg;
+
+            const logo = document.getElementById('preview-logo-badge');
+            if (logo) { logo.style.backgroundColor = primary; logo.style.color = btnText; }
+
+            const brandTitle = document.getElementById('preview-brand-title');
+            if (brandTitle) brandTitle.style.color = textPrimary;
+
+            const secBadge = document.getElementById('preview-sec-badge');
+            if (secBadge) secBadge.style.backgroundColor = secondary;
+
+            const heading = document.getElementById('preview-heading');
+            if (heading) heading.style.color = textPrimary;
+
+            const desc = document.getElementById('preview-desc');
+            if (desc) desc.style.color = textSec;
+
+            const btn = document.getElementById('preview-primary-btn');
+            if (btn) { btn.style.backgroundColor = btnBg; btn.style.color = btnText; }
+
+            const price = document.getElementById('preview-price');
+            if (price) price.style.color = primary;
+
+            const carIcon = document.getElementById('preview-car-icon');
+            if (carIcon) carIcon.style.color = secondary;
+
+            const carName = document.getElementById('preview-car-name');
+            if (carName) carName.style.color = textPrimary;
+
+            const carTag = document.getElementById('preview-car-tag');
+            if (carTag) { carTag.style.backgroundColor = primary; carTag.style.color = btnText; }
+        }
+
+        function resetBrandColors() {
+            const defaults = {
+                'theme_primary_color': '#DDBB72',
+                'theme_secondary_color': '#303A54',
+                'theme_button_bg_color': '#DDBB72',
+                'theme_button_text_color': '#20283A',
+                'theme_text_primary_color': '#07111F',
+                'theme_text_secondary_color': '#595959',
+                'theme_background_color': '#F5F2EC',
+                'theme_footer_bg_color': '#121317'
+            };
+
+            for (const [key, val] of Object.entries(defaults)) {
+                const input = document.getElementById(key);
+                if (input) input.value = val;
+            }
+            document.getElementById('theme_primary_picker').value = defaults['theme_primary_color'];
+            document.getElementById('theme_secondary_picker').value = defaults['theme_secondary_color'];
+            document.getElementById('theme_btn_bg_picker').value = defaults['theme_button_bg_color'];
+            document.getElementById('theme_btn_text_picker').value = defaults['theme_button_text_color'];
+            document.getElementById('theme_text_primary_picker').value = defaults['theme_text_primary_color'];
+            document.getElementById('theme_text_sec_picker').value = defaults['theme_text_secondary_color'];
+            document.getElementById('theme_bg_picker').value = defaults['theme_background_color'];
+            document.getElementById('theme_footer_bg_picker').value = defaults['theme_footer_bg_color'];
+
+            updateLiveThemePreview();
         }
 
         // ===== Social Media =====

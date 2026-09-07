@@ -17,8 +17,16 @@ export async function calculateFinance(data: ICalculateRequest): Promise<ICalcul
   return response.data.data;
 }
 
-export async function getCalculatorSettings(): Promise<{ otp_enabled: boolean }> {
-  const response = await api.get<IApiResponse<{ otp_enabled: boolean }>>("store/calculator/settings");
+export interface ICalculatorSettingsResponse {
+  otp_enabled: boolean;
+  dbr_limit_personal?: number;
+  dbr_limit_real_estate?: number;
+  debt_solution_text?: string;
+  exceeded_warning_text?: string;
+}
+
+export async function getCalculatorSettings(): Promise<ICalculatorSettingsResponse> {
+  const response = await api.get<IApiResponse<ICalculatorSettingsResponse>>("store/calculator/settings");
   return response.data.data;
 }
 

@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
-import { getCities, submitBooking } from "../services/api";
+import { getCities, submitBooking, getSettings } from "../services/api";
 import {
     getCalculatorSettings,
     sendCalculatorOtp,
@@ -16,6 +16,19 @@ import {
 
 import type { CarDetails } from "../types/cars.types";
 import type { ICarOrderFormData } from "../interfaces/ICarOrderModalProps";
+
+// Helper to reliably sanitize and parse numbers from keyboard/paste (Arabic/Eastern numerals, commas, spaces)
+export function parseNumericValue(val: unknown): number {
+    if (typeof val === "number") return isNaN(val) ? 0 : val;
+    if (!val) return 0;
+    const str = String(val)
+        .replace(/[٠-٩]/g, (d) => String("٠١٢٣٤٥٦٧٨٩".indexOf(d)))
+        .replace(/[۰-۹]/g, (d) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d)))
+        .replace(/,/g, "")
+        .replace(/[^\d.]/g, "");
+    const parsed = parseFloat(str);
+    return isNaN(parsed) ? 0 : parsed;
+}
 
 export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash" = "finance") {
     const { t } = useTranslation();
@@ -46,6 +59,12 @@ export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash"
         staleTime: 10 * 60 * 1000,
     });
 
+    const { data: generalSettings } = useQuery({
+        queryKey: ["settings"],
+        queryFn: () => getSettings(),
+        staleTime: 10 * 60 * 1000,
+    });
+
     const otpEnabled = Boolean(calcSettings?.otp_enabled);
 
     const cityOptions =
@@ -57,7 +76,13 @@ export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash"
         key: K,
         value: ICarOrderFormData[K],
     ) => {
-        setForm((previous) => ({ ...previous, [key]: value }));
+        setForm((previous) => {
+            const next = { ...previous, [key]: value };
+            if (key === "obligationType" && value === "none") {
+                next.obligations = "";
+            }
+            return next;
+        });
     };
 
     const handleSendOtp = async () => {
@@ -97,30 +122,28 @@ export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash"
         }
     };
 
-    const canSubmitCash = Boolean(
-        form.fullName.trim() &&
-        form.city.trim() &&
-        form.phone.trim() &&
-        (!otpEnabled || otpVerified),
-    );
-
-    const canSubmitFinance = Boolean(
-        form.fullName.trim() &&
-        form.phone.trim() &&
-        form.salary.trim() &&
-        (!otpEnabled || otpVerified),
-    );
-
-    // Calculate DBR and Acceptance Score based on obligations limit (45% for none/personal, 65% for real estate)
+    // Calculate DBR and Acceptance Score based on dynamic limits from settings
     const dbrAnalysis = useMemo(() => {
-        const salary = Number(form.salary) || 0;
-        const maxLimit = form.obligationType === "real_estate_personal" ? 65 : 45;
-        const obligations = form.obligationType === "none" ? 0 : (Number(form.obligations) || 0);
+        const salary = parseNumericValue(form.salary);
+
+        // Fallback hierarchy: calcSettings -> generalSettings -> default constants
+        const initialFinance = (typeof window !== "undefined" && (window as any).__INITIAL_SETTINGS__?.finance_calculator) || {};
+        const personalLimit = Number(calcSettings?.dbr_limit_personal ?? generalSettings?.finance_calculator?.dbr_limit_personal ?? initialFinance.dbr_limit_personal ?? 45);
+        const realEstateLimit = Number(calcSettings?.dbr_limit_real_estate ?? generalSettings?.finance_calculator?.dbr_limit_real_estate ?? initialFinance.dbr_limit_real_estate ?? 65);
+        const debtSolutionText = calcSettings?.debt_solution_text || generalSettings?.finance_calculator?.debt_solution_text || initialFinance.debt_solution_text || "أرغب في الاستفادة من خيارات الحلول التمويلية وتوحيد الالتزامات";
+        const exceededWarningText = calcSettings?.exceeded_warning_text || generalSettings?.finance_calculator?.exceeded_warning_text || initialFinance.exceeded_warning_text || "نسبة الاستقطاع تتجاوز الحد المسموح به للتمويل.";
+
+        const maxLimit = form.obligationType === "real_estate_personal" ? realEstateLimit : personalLimit;
+        const obligations = form.obligationType === "none" ? 0 : parseNumericValue(form.obligations);
 
         if (salary <= 0) {
             return {
                 dbrRatio: 0,
                 maxLimit,
+                personalLimit,
+                realEstateLimit,
+                debtSolutionText,
+                exceededWarningText,
                 actualDeductionPct: 0,
                 isExceeded: false,
                 score: null as number | null,
@@ -139,6 +162,10 @@ export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash"
             return {
                 dbrRatio: actualDeductionPct,
                 maxLimit,
+                personalLimit,
+                realEstateLimit,
+                debtSolutionText,
+                exceededWarningText,
                 actualDeductionPct,
                 isExceeded: true,
                 score: 32,
@@ -155,6 +182,10 @@ export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash"
             return {
                 dbrRatio: actualDeductionPct,
                 maxLimit,
+                personalLimit,
+                realEstateLimit,
+                debtSolutionText,
+                exceededWarningText,
                 actualDeductionPct,
                 isExceeded: false,
                 score,
@@ -170,6 +201,10 @@ export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash"
         return {
             dbrRatio: actualDeductionPct,
             maxLimit,
+            personalLimit,
+            realEstateLimit,
+            debtSolutionText,
+            exceededWarningText,
             actualDeductionPct,
             isExceeded: false,
             score,
@@ -179,8 +214,22 @@ export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash"
             barColor: "#16A34A",
             status: "good_dbr",
         };
-    }, [form.salary, form.obligations, form.obligationType]);
+    }, [form.salary, form.obligations, form.obligationType, calcSettings, generalSettings]);
 
+    const canSubmitCash = Boolean(
+        form.fullName.trim() &&
+        form.city.trim() &&
+        form.phone.trim() &&
+        (!otpEnabled || otpVerified),
+    );
+
+    const canSubmitFinance = Boolean(
+        form.fullName.trim() &&
+        form.phone.trim() &&
+        parseNumericValue(form.salary) > 0 &&
+        (!otpEnabled || otpVerified) &&
+        (!dbrAnalysis.isExceeded || form.consolidateDebts),
+    );
 
     const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -193,10 +242,10 @@ export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash"
         try {
             const obligationTypeLabel =
                 form.obligationType === "none"
-                    ? "بدون التزام (استقطاع حتى 45%)"
+                    ? `بدون التزام (استقطاع حتى ${dbrAnalysis.personalLimit}%)`
                     : form.obligationType === "personal"
-                      ? "التزام شخصي (استقطاع حتى 45%)"
-                      : "عقار + شخصي (استقطاع حتى 65%)";
+                      ? `التزام شخصي (استقطاع حتى ${dbrAnalysis.personalLimit}%)`
+                      : `عقار + شخصي (استقطاع حتى ${dbrAnalysis.realEstateLimit}%)`;
 
             const notes = [
                 mode === "finance" ? "طلب تمويل سيارة" : "طلب شراء كاش مباشر",
@@ -205,7 +254,7 @@ export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash"
                 `طبيعة الالتزامات: ${obligationTypeLabel}`,
                 form.obligations ? `قيمة الالتزامات: ${form.obligations} ر.س` : "",
                 `نسبة الاستقطاع الفعلية: ${dbrAnalysis.actualDeductionPct}% (الحد الأقصى: ${dbrAnalysis.maxLimit}%)`,
-                form.consolidateDebts ? "يرغب في الاستفادة من خيار الحلول التمويلية وتوحيد الالتزامات" : "",
+                form.consolidateDebts ? `يرغب في الاستفادة من خيار: ${dbrAnalysis.debtSolutionText}` : "",
             ]
                 .filter(Boolean)
                 .join(" | ");

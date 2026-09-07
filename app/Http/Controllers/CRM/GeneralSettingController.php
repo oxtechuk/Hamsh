@@ -113,6 +113,25 @@ class GeneralSettingController extends Controller
             'maintenance_title',
             'maintenance_message',
             'maintenance_show_contact',
+            'theme_primary_color',
+            'theme_secondary_color',
+            'theme_button_bg_color',
+            'theme_button_text_color',
+            'theme_text_primary_color',
+            'theme_text_secondary_color',
+            'theme_background_color',
+            'theme_footer_bg_color',
+            'theme_header_bg_color',
+            'commercial_registration_no',
+            'tax_number',
+            'maroof_number',
+            'maroof_url',
+            'gps_map_link',
+            'show_footer_map',
+            'finance_dbr_limit_personal',
+            'finance_dbr_limit_real_estate',
+            'finance_debt_solution_text',
+            'finance_exceeded_warning_text',
         ];
 
         // Update text/array settings
@@ -130,6 +149,9 @@ class GeneralSettingController extends Controller
         }
         if (! $request->has('car_popup_enabled')) {
             Setting::updateOrCreate(['key' => 'car_popup_enabled'], ['value' => '0']);
+        }
+        if (! $request->has('show_footer_map')) {
+            Setting::updateOrCreate(['key' => 'show_footer_map'], ['value' => '0']);
         }
         if (! $request->has('maintenance_mode_enabled')) {
             Setting::updateOrCreate(['key' => 'maintenance_mode_enabled'], ['value' => '0']);
@@ -266,7 +288,7 @@ class GeneralSettingController extends Controller
             }
         }
 
-        // Handle Hero Slides (Carousel Slider Banners)
+        // Handle Hero Slides (Carousel Slider Banners - Desktop & Mobile)
         if ($request->has('hero_slides_submitted')) {
             $existingSlidesSetting = Setting::where('key', 'hero_slides')->first();
             $existingSlides = [];
@@ -278,33 +300,61 @@ class GeneralSettingController extends Controller
             $slidesData = $request->input('hero_slides', []);
 
             foreach ($slidesData as $index => $slide) {
-                $imagePath = $slide['image_path'] ?? null;
+                $imageDesktopPath = $slide['image_desktop_path'] ?? $slide['image_path'] ?? null;
+                $imageMobilePath = $slide['image_mobile_path'] ?? null;
 
-                // Check if a new file is uploaded for this slide
-                if ($request->hasFile("hero_slides.{$index}.image")) {
-                    $path = $request->file("hero_slides.{$index}.image")->store('settings/hero', 'public');
-                    if ($imagePath && Storage::disk('public')->exists($imagePath)) {
-                        Storage::disk('public')->delete($imagePath);
+                // Handle Desktop Image upload
+                if ($request->hasFile("hero_slides.{$index}.image_desktop")) {
+                    $path = $request->file("hero_slides.{$index}.image_desktop")->store('settings/hero', 'public');
+                    if ($imageDesktopPath && Storage::disk('public')->exists($imageDesktopPath)) {
+                        Storage::disk('public')->delete($imageDesktopPath);
                     }
-                    $imagePath = $path;
+                    $imageDesktopPath = $path;
+                } elseif ($request->hasFile("hero_slides.{$index}.image")) {
+                    $path = $request->file("hero_slides.{$index}.image")->store('settings/hero', 'public');
+                    if ($imageDesktopPath && Storage::disk('public')->exists($imageDesktopPath)) {
+                        Storage::disk('public')->delete($imageDesktopPath);
+                    }
+                    $imageDesktopPath = $path;
                 }
 
-                if ($imagePath) {
+                // Handle Mobile Image upload
+                if ($request->hasFile("hero_slides.{$index}.image_mobile")) {
+                    $path = $request->file("hero_slides.{$index}.image_mobile")->store('settings/hero', 'public');
+                    if ($imageMobilePath && Storage::disk('public')->exists($imageMobilePath)) {
+                        Storage::disk('public')->delete($imageMobilePath);
+                    }
+                    $imageMobilePath = $path;
+                }
+
+                if ($imageDesktopPath || $imageMobilePath) {
                     $newSlides[] = [
-                        'image' => $imagePath,
+                        'image' => $imageDesktopPath ?: $imageMobilePath,
+                        'image_desktop' => $imageDesktopPath ?: $imageMobilePath,
+                        'image_mobile' => $imageMobilePath ?: null,
                         'link' => $slide['link'] ?? '',
                         'button_text' => $slide['button_text'] ?? __('اكتشف السيارات'),
                     ];
                 }
             }
 
-            // Clean up deleted slides
-            $newPaths = array_column($newSlides, 'image');
+            // Clean up deleted slides images
+            $newDesktopPaths = array_filter(array_column($newSlides, 'image_desktop'));
+            $newMobilePaths = array_filter(array_column($newSlides, 'image_mobile'));
+            $allNewPaths = array_unique(array_merge($newDesktopPaths, $newMobilePaths));
+
             foreach ($existingSlides as $oldSlide) {
-                $oldPath = $oldSlide['image'] ?? null;
-                if ($oldPath && ! in_array($oldPath, $newPaths)) {
-                    if (Storage::disk('public')->exists($oldPath)) {
-                        Storage::disk('public')->delete($oldPath);
+                $oldDesktop = $oldSlide['image_desktop'] ?? $oldSlide['image'] ?? null;
+                $oldMobile = $oldSlide['image_mobile'] ?? null;
+
+                if ($oldDesktop && ! in_array($oldDesktop, $allNewPaths, true)) {
+                    if (Storage::disk('public')->exists($oldDesktop)) {
+                        Storage::disk('public')->delete($oldDesktop);
+                    }
+                }
+                if ($oldMobile && ! in_array($oldMobile, $allNewPaths, true)) {
+                    if (Storage::disk('public')->exists($oldMobile)) {
+                        Storage::disk('public')->delete($oldMobile);
                     }
                 }
             }

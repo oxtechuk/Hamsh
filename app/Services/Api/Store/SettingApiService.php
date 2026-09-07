@@ -87,6 +87,31 @@ final class SettingApiService
             'social_media' => $socialMedia,
             'about_branches' => $aboutBranches,
             'car_popup_enabled' => in_array($settings->get('car_popup_enabled', '0'), [1, '1', true, 'true'], true),
+            'theme' => [
+                'primary_color' => $settings->get('theme_primary_color', '#DDBB72'),
+                'secondary_color' => $settings->get('theme_secondary_color', '#303A54'),
+                'button_bg_color' => $settings->get('theme_button_bg_color', '#DDBB72'),
+                'button_text_color' => $settings->get('theme_button_text_color', '#20283A'),
+                'text_primary_color' => $settings->get('theme_text_primary_color', '#07111F'),
+                'text_secondary_color' => $settings->get('theme_text_secondary_color', '#595959'),
+                'background_color' => $settings->get('theme_background_color', '#F5F2EC'),
+                'footer_bg_color' => $settings->get('theme_footer_bg_color', '#121317'),
+                'header_bg_color' => $settings->get('theme_header_bg_color', '#ffffff'),
+            ],
+            'business_info' => [
+                'cr_number' => $settings->get('commercial_registration_no', ''),
+                'tax_number' => $settings->get('tax_number', ''),
+                'maroof_number' => $settings->get('maroof_number', ''),
+                'maroof_url' => $settings->get('maroof_url', ''),
+                'map_link' => $settings->get('gps_map_link', ''),
+                'show_footer_map' => ! in_array($settings->get('show_footer_map', '1'), [0, '0', false, 'false'], true),
+            ],
+            'finance_calculator' => [
+                'dbr_limit_personal' => (int) ($settings->get('finance_dbr_limit_personal') ?: 45),
+                'dbr_limit_real_estate' => (int) ($settings->get('finance_dbr_limit_real_estate') ?: 65),
+                'debt_solution_text' => (string) ($settings->get('finance_debt_solution_text') ?: 'أرغب في الاستفادة من خيارات الحلول التمويلية وتوحيد الالتزامات'),
+                'exceeded_warning_text' => (string) ($settings->get('finance_exceeded_warning_text') ?: 'نسبة الاستقطاع تتجاوز الحد المسموح به للتمويل.'),
+            ],
             'maintenance' => [
                 'enabled' => in_array($settings->get('maintenance_mode_enabled', '0'), [1, '1', true, 'true'], true),
                 'title' => $maintenanceTitle,
@@ -116,17 +141,11 @@ final class SettingApiService
         }
 
         return [
-            'finance' => [
-                'badge' => $finance['badge'][$locale] ?? '',
-                'title' => $finance['title'][$locale] ?? '',
-                'subtitle' => $finance['subtitle'][$locale] ?? '',
-                'features' => array_values(array_filter(array_map('trim', explode("\n", $finance['features'][$locale] ?? '')))),
-                'button_text' => $finance['button_text'][$locale] ?? '',
-            ],
-            'stats' => array_map(fn (array $stat): array => [
-                'label' => $stat['label'] ?? '',
-                'value' => $stat['value'] ?? '',
-            ], $financeStats),
+            'title' => $finance['title'][$locale] ?? '',
+            'subtitle' => $finance['subtitle'][$locale] ?? '',
+            'features' => array_values(array_filter(array_map('trim', explode("\n", $finance['features'][$locale] ?? '')))),
+            'button_text' => $finance['button_text'][$locale] ?? '',
+            'stats' => $financeStats,
         ];
     }
 
@@ -196,6 +215,12 @@ final class SettingApiService
     {
         if (isset($item['image']) && is_string($item['image'])) {
             $item['image'] = $this->resolveUrl($item['image']);
+        }
+        if (isset($item['image_desktop']) && is_string($item['image_desktop'])) {
+            $item['image_desktop'] = $this->resolveUrl($item['image_desktop']);
+        }
+        if (isset($item['image_mobile']) && is_string($item['image_mobile'])) {
+            $item['image_mobile'] = $this->resolveUrl($item['image_mobile']);
         }
 
         return $item;
