@@ -64,8 +64,11 @@ final class HomeApiService
             'offer' => $offerId ? HomeOfferResource::make(Offer::query()->find($offerId))->resolve() : null,
         ];
 
+        $showSearchFilter = ! in_array($this->cache->rememberSetting('show_home_search_filter', '1'), [0, '0', false, 'false'], true);
+
         $pageSections = [
             'filter' => [
+                'enabled' => $showSearchFilter,
                 'title' => $rawSections['filter']['title'][$locale] ?? '',
             ],
             'featured_cars' => [
@@ -106,6 +109,7 @@ final class HomeApiService
         return [
             'hero' => $hero,
             'hero_slides' => $heroSlides,
+            'show_search_filter' => $showSearchFilter,
             'featured_cars' => ($data['featuredCars'] ?? collect())->values(),
             'active_offers' => ($data['activeOffers'] ?? collect())->values(),
             'brands' => ($data['brands'] ?? collect())->values(),

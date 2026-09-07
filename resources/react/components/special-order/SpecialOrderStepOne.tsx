@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { getCities } from "../../services/api";
 import { useLanguageStore } from "../../store/language.store";
+import { sanitizeSaudiPhone } from "../../hooks/useCarOrderForm";
 
 import type { ISpecialOrderStepOneProps } from "../../interfaces/ISpecialOrderStepOneProps";
 import type { IFieldGroupProps } from "../../interfaces/IFieldGroupProps";
@@ -118,10 +119,12 @@ export default function SpecialOrderStepOne({
                         type="tel"
                         value={data.phone}
                         onChange={(event) =>
-                            onChange("phone", event.target.value)
+                            onChange("phone", sanitizeSaudiPhone(event.target.value))
                         }
-                        placeholder={t("specialOrder.step1.phonePlaceholder")}
-                        inputMode="tel"
+                        placeholder={t("specialOrder.step1.phonePlaceholder", "05xxxxxxxx")}
+                        maxLength={10}
+                        pattern="^05[0-9]{8}$"
+                        inputMode="numeric"
                         autoComplete="tel"
                         dir="ltr"
                         className={`${fieldCls} text-end`}

@@ -30,6 +30,29 @@ export function parseNumericValue(val: unknown): number {
     return isNaN(parsed) ? 0 : parsed;
 }
 
+// Helper to sanitize Saudi phone numbers: digits only, convert Arabic numerals, enforce 05 prefix and max 10 digits
+export function sanitizeSaudiPhone(raw: unknown): string {
+    if (!raw) return "";
+    let cleaned = String(raw)
+        .replace(/[٠-٩]/g, (d) => String("٠١٢٣٤٥٦٧٨٩".indexOf(d)))
+        .replace(/[۰-۹]/g, (d) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d)))
+        .replace(/\D/g, "");
+
+    if (cleaned.startsWith("966")) {
+        cleaned = cleaned.slice(3);
+    }
+    if (cleaned.startsWith("5")) {
+        cleaned = "0" + cleaned;
+    }
+
+    return cleaned.slice(0, 10);
+}
+
+// Strict check for valid 10-digit Saudi mobile number starting with 05
+export function isValidSaudiPhone(phone: string): boolean {
+    return /^05\d{8}$/.test(phone.trim());
+}
+
 export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash" = "finance") {
     const { t } = useTranslation();
 
@@ -77,7 +100,14 @@ export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash"
         value: ICarOrderFormData[K],
     ) => {
         setForm((previous) => {
-            const next = { ...previous, [key]: value };
+            let nextValue = value;
+            if (key === "phone") {
+                nextValue = sanitizeSaudiPhone(value) as ICarOrderFormData[K];
+            }
+            const next = { ...previous, [key]: nextValue };
+            if (key === "phone" && previous.otpVerified) {
+                next.otpVerified = false;
+            }
             if (key === "obligationType" && value === "none") {
                 next.obligations = "";
             }
@@ -86,8 +116,8 @@ export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash"
     };
 
     const handleSendOtp = async () => {
-        if (!form.phone.trim() || form.phone.length < 9) {
-            toast.error(t("financeCalculator.validation.validPhone", { defaultValue: "يرجى إدخال رقم جوال صحيح أولاً" }));
+        if (!isValidSaudiPhone(form.phone)) {
+            toast.error(t("financeCalculator.validation.validPhone", { defaultValue: "يرجى إدخال رقم جوال سعودي صحيح يبدأ بـ 05 (10 أرقام)" }));
             return;
         }
 
@@ -219,13 +249,13 @@ export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash"
     const canSubmitCash = Boolean(
         form.fullName.trim() &&
         form.city.trim() &&
-        form.phone.trim() &&
+        isValidSaudiPhone(form.phone) &&
         (!otpEnabled || otpVerified),
     );
 
     const canSubmitFinance = Boolean(
         form.fullName.trim() &&
-        form.phone.trim() &&
+        isValidSaudiPhone(form.phone) &&
         parseNumericValue(form.salary) > 0 &&
         (!otpEnabled || otpVerified) &&
         (!dbrAnalysis.isExceeded || form.consolidateDebts),
@@ -233,6 +263,11 @@ export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash"
 
     const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
+        if (!isValidSaudiPhone(form.phone)) {
+            toast.error(t("financeCalculator.validation.validPhone", { defaultValue: "يرجى إدخال رقم جوال سعودي صحيح يبدأ بـ 05 (10 أرقام)" }));
+            return;
+        }
 
         if (mode === "cash" && !canSubmitCash) return;
         if (mode === "finance" && !canSubmitFinance) return;

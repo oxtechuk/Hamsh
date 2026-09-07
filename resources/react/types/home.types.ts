@@ -259,6 +259,7 @@ export interface FinanceSettingsData {
 export interface HomePageData {
   hero: HeroData;
   hero_slides: HeroSlideData[];
+  show_search_filter?: boolean;
   brands: BrandInfo[];
   latest_cars: {
     section: SectionMeta;

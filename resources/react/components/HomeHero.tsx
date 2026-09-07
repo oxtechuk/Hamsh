@@ -63,7 +63,7 @@ export default function HomeHero({
                     dir="ltr"
                     className="relative overflow-hidden rounded-[16px]"
                 >
-                    <div className="relative h-[54vh] min-h-[240px] sm:h-[62vh] lg:h-[68vh]">
+                    <div className="relative aspect-[4/3] sm:aspect-[16/7] md:aspect-[21/8] lg:h-[68vh] w-full">
                         {slides.map((slide, slideIndex) => {
                             const isCurrent = slideIndex === index;
                             const desktopSrc = slide.imageDesktop || slide.image;
@@ -86,10 +86,11 @@ export default function HomeHero({
                                                 srcSet={slide.imageMobile}
                                             />
                                         )}
-                                        <LazyImg
+                                        <img
                                             src={desktopSrc}
                                             alt={slide.alt || ""}
-                                            eager={isCurrent}
+                                            loading={isCurrent ? "eager" : "lazy"}
+                                            decoding="async"
                                             className="h-full w-full object-cover"
                                         />
                                     </picture>

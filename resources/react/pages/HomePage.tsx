@@ -69,12 +69,15 @@ export default function Home() {
                 }
             />
 
-            <CarsSearchSection
-                brands={data?.filter_brands ?? data?.brands}
-                models={data?.filter_models}
-                years={data?.filter_years}
-                onSearch={handleSearch}
-            />
+            {data?.show_search_filter !== false && data?.page_sections?.filter?.enabled !== false && (
+                <CarsSearchSection
+                    title={data?.page_sections?.filter?.title?.trim() || undefined}
+                    brands={data?.filter_brands ?? data?.brands}
+                    models={data?.filter_models}
+                    years={data?.filter_years}
+                    onSearch={handleSearch}
+                />
+            )}
 
             <BrandsSection
                 titleBlue={t("brandsSection.titleBlue")}

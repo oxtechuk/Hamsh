@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { getCities } from "../../services/api";
 import { useLanguageStore } from "../../store/language.store";
+import { sanitizeSaudiPhone, isValidSaudiPhone } from "../../hooks/useCarOrderForm";
 
 import type { IDriveStepOneProps } from "../../interfaces/IDriveStepOneProps";
 import type { IFieldGroupProps } from "../../interfaces/IFieldGroupProps";
@@ -48,7 +49,7 @@ export default function DriveStepOne({
 
     const canContinue =
         data.fullName.trim() &&
-        data.phone.trim() &&
+        isValidSaudiPhone(data.phone) &&
         data.city.trim() &&
         data.salary.trim() &&
         data.obligations.trim();
@@ -84,9 +85,13 @@ export default function DriveStepOne({
                         type="tel"
                         value={data.phone}
                         onChange={(event) =>
-                            onChange("phone", event.target.value)
+                            onChange("phone", sanitizeSaudiPhone(event.target.value))
                         }
-                        placeholder={t("drivePage.step1.phonePlaceholder")}
+                        placeholder={t("drivePage.step1.phonePlaceholder", "05xxxxxxxx")}
+                        maxLength={10}
+                        pattern="^05[0-9]{8}$"
+                        inputMode="numeric"
+                        autoComplete="tel"
                         dir="ltr"
                         className={`${fieldCls} text-end`}
                     />

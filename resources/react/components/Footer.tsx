@@ -329,12 +329,32 @@ export default function Footer({
             {showFooterMap && (
                 <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12 xl:px-[70px] pb-12">
                     <div className="relative overflow-hidden rounded-[24px] border border-white/10 bg-gradient-to-br from-[#121724] to-[#1E2638] p-8 text-center shadow-xl sm:p-12">
-                        {/* Map pattern overlay */}
+                        {/* Realistic SVG Vector Map Background Graphic */}
+                        <div className="absolute inset-0 opacity-25 pointer-events-none overflow-hidden">
+                            <svg className="w-full h-full object-cover" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice">
+                                <defs>
+                                    <pattern id="footer-map-grid" width="120" height="120" patternUnits="userSpaceOnUse">
+                                        <path d="M 120 0 L 0 0 0 120" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
+                                        <path d="M 0 60 L 120 60 M 60 0 L 60 120" fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth="0.5" />
+                                    </pattern>
+                                </defs>
+                                <rect width="100%" height="100%" fill="url(#footer-map-grid)" />
+                                {/* Main Road Lines & Highways */}
+                                <path d="M-100 200 C 300 150, 600 400, 1300 350" fill="none" stroke="rgba(221,187,114,0.35)" strokeWidth="8" strokeLinecap="round" />
+                                <path d="M-50 450 C 400 500, 800 100, 1250 150" fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="5" strokeLinecap="round" />
+                                <path d="M200 -50 C 250 300, 500 400, 700 650" fill="none" stroke="rgba(255,255,255,0.18)" strokeWidth="4" />
+                                <path d="M850 -50 C 750 250, 950 450, 1050 650" fill="none" stroke="rgba(221,187,114,0.25)" strokeWidth="4" />
+                                <path d="M400 100 L 900 500" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="3" strokeDasharray="6,6" />
+                                {/* Location Radiating Rings */}
+                                <circle cx="600" cy="300" r="140" fill="rgba(221,187,114,0.06)" stroke="rgba(221,187,114,0.2)" strokeWidth="1.5" />
+                                <circle cx="600" cy="300" r="80" fill="rgba(221,187,114,0.1)" stroke="rgba(221,187,114,0.35)" strokeWidth="2" strokeDasharray="4,4" />
+                            </svg>
+                        </div>
+                        {/* Radial Glow Vignette */}
                         <div
-                            className="absolute inset-0 opacity-15 pointer-events-none"
+                            className="absolute inset-0 pointer-events-none"
                             style={{
-                                backgroundImage: `radial-gradient(circle at 50% 50%, rgba(221, 187, 114, 0.2) 0%, transparent 60%), linear-gradient(0deg, rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)`,
-                                backgroundSize: '100% 100%, 32px 32px, 32px 32px'
+                                background: "radial-gradient(circle at 50% 50%, rgba(221, 187, 114, 0.15) 0%, rgba(18, 23, 36, 0.85) 75%, #121724 100%)",
                             }}
                         />
 
@@ -365,79 +385,10 @@ export default function Footer({
                                         backgroundColor: "var(--brand-button-bg, var(--brand-primary-color, #DDBB72))",
                                         color: "var(--brand-button-text, #20283A)",
                                     }}
-                                    className="inline-flex items-center gap-2.5 rounded-xl px-8 py-3.5 text-base font-bold shadow-lg transition duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
+                                    className="inline-flex items-center gap-2.5 rounded-xl px-8 py-3.5 text-base font-bold shadow-lg transition duration-300 hover:scale-105 hover:brightness-110 active:scale-95 cursor-pointer"
                                 >
                                     <span>{t("footer.viewLocation", { defaultValue: "اعرض الموقع" })}</span>
                                     <span className="text-xl leading-none">↗</span>
-                                </a>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* ==================== OFFICIAL TRUST / BUSINESS BADGES ==================== */}
-            {(crNumber || taxNumber || maroofNumber) && (
-                <div className="border-t border-white/[0.08] py-7 bg-black/20">
-                    <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12 xl:px-[70px]">
-                        <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
-                            {/* السجل التجاري */}
-                            {crNumber && (
-                                <div className="flex items-center gap-3.5 rounded-2xl border border-white/10 bg-white/[0.05] px-5 py-3.5 backdrop-blur-md shadow-sm transition hover:border-white/25">
-                                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-950/80 border border-emerald-500/40 text-emerald-400 shadow-sm">
-                                        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                                        </svg>
-                                    </div>
-                                    <div className="text-start">
-                                        <span className="block text-[11px] font-semibold text-white/50">
-                                            {t("footer.crNumber", { defaultValue: "السجل التجاري" })}
-                                        </span>
-                                        <span className="block text-sm font-extrabold tracking-wider text-white" dir="ltr">
-                                            {crNumber}
-                                        </span>
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* الرقم الضريبي */}
-                            {taxNumber && (
-                                <div className="flex items-center gap-3.5 rounded-2xl border border-white/10 bg-white/[0.05] px-5 py-3.5 backdrop-blur-md shadow-sm transition hover:border-white/25">
-                                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-amber-950/80 border border-amber-500/40 text-amber-400 shadow-sm">
-                                        <span className="text-xs font-black tracking-tight">VAT</span>
-                                    </div>
-                                    <div className="text-start">
-                                        <span className="block text-[11px] font-semibold text-white/50">
-                                            {t("footer.taxNumber", { defaultValue: "الرقم الضريبي" })}
-                                        </span>
-                                        <span className="block text-sm font-extrabold tracking-wider text-white" dir="ltr">
-                                            {taxNumber}
-                                        </span>
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* معروف */}
-                            {maroofNumber && (
-                                <a
-                                    href={maroofUrl || undefined}
-                                    target={maroofUrl ? "_blank" : undefined}
-                                    rel={maroofUrl ? "noopener noreferrer" : undefined}
-                                    className={`flex items-center gap-3.5 rounded-2xl border border-white/10 bg-white/[0.05] px-5 py-3.5 backdrop-blur-md shadow-sm transition ${maroofUrl ? "hover:border-cyan-400/60 hover:bg-white/[0.08] cursor-pointer" : ""}`}
-                                >
-                                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-cyan-950/80 border border-cyan-500/40 text-cyan-400 shadow-sm">
-                                        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                                        </svg>
-                                    </div>
-                                    <div className="text-start">
-                                        <span className="block text-[11px] font-semibold text-white/50">
-                                            {t("footer.maroof", { defaultValue: "معروف" })}
-                                        </span>
-                                        <span className="block text-sm font-extrabold tracking-wider text-white" dir="ltr">
-                                            {maroofNumber}
-                                        </span>
-                                    </div>
                                 </a>
                             )}
                         </div>

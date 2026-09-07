@@ -62,11 +62,14 @@ export default function CarOrderCashForm({
                 </label>
                 <input
                     type="tel"
+                    inputMode="numeric"
+                    maxLength={10}
+                    pattern="^05[0-9]{8}$"
                     value={form.phone}
                     onChange={(e) => onFieldChange("phone", e.target.value)}
                     placeholder="05xxxxxxxx"
                     dir="ltr"
-                    className={`${carOrderFieldCls} text-start`}
+                    className={`${carOrderFieldCls} text-start ${form.phone && form.phone.length === 10 && form.phone.startsWith("05") ? "border-emerald-500 focus:border-emerald-500 focus:ring-emerald-500/20" : form.phone && form.phone.length > 0 ? "border-amber-400 focus:border-amber-500" : ""}`}
                     required
                 />
             </div>

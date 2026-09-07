@@ -854,8 +854,31 @@
                         <div class="settings-pane d-none" id="tab-homepage-sections">
                             @php $sec = $homepageSections; @endphp
                             <div class="d-flex flex-column gap-3">
+                                {{-- سوتش إظهار / إخفاء بار البحث وفلترة السيارات --}}
+                                <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-2">
+                                    <div class="card-body p-4">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="rounded-3 p-3 bg-warning bg-opacity-10 text-warning d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                                                    <i class="bi bi-search fs-5 text-warning"></i>
+                                                </div>
+                                                <div>
+                                                    <h6 class="fw-bold mb-1">{{ __('قسم البحث وفلترة السيارات') }}</h6>
+                                                    <p class="text-muted small mb-0">{{ __('إظهار أو إخفاء قسم البحث وفلاتر الماركات والموديلات وسنة الصنع في الصفحة الرئيسية') }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="form-check form-switch fs-4 mb-0">
+                                                <input type="hidden" name="show_home_search_filter" value="0">
+                                                <input class="form-check-input" type="checkbox" name="show_home_search_filter"
+                                                    value="1" id="show_home_search_filter" {{ ($settings['show_home_search_filter'] ?? '1') == '1' ? 'checked' : '' }}>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 @php
                                     $hSections = [
+                                        ['id' => 'filter', 'icon' => 'bi-search', 'label' => __('عنوان قسم البحث والفلترة'), 'fields' => ['title']],
                                         ['id' => 'budget', 'icon' => 'bi-wallet2', 'label' => __('قسم الميزانية'), 'fields' => ['badge', 'title', 'description', 'button_text']],
                                         ['id' => 'finance', 'icon' => 'bi-currency-dollar', 'label' => __('قسم حلول التمويل'), 'fields' => ['badge', 'title', 'subtitle', 'button_text']],
                                         ['id' => 'featured_cars', 'icon' => 'bi-star', 'label' => __('السيارات المميزة'), 'fields' => ['badge', 'title', 'subtitle', 'button_text']],
@@ -1013,19 +1036,94 @@
                             <div class="card border-0 shadow-sm rounded-4">
                                 <div class="card-header bg-transparent border-0 p-4 pb-0">
                                     <h6 class="fw-bold mb-0">{{ __('إعدادات نسب الاستقطاع وحلول التمويل (DBR)') }}</h6>
-                                    <p class="text-muted small mb-0">{{ __('التحكم في الحدود القصوى لنسب الاستقطاع ونصوص التنبيه والموافقة على توحيد الالتزامات في نموذج طلب التمويل') }}</p>
+                                    <p class="text-muted small mb-0">{{ __('معادلة الحساب والتحكم في الحدود القصوى لنسب الاستقطاع ونصوص التنبيه والموافقة على توحيد الالتزامات') }}</p>
                                 </div>
                                 <div class="card-body p-4">
                                     <div class="row g-4">
-                                        {{-- DBR limits --}}
+
+                                        {{-- 1. بطاقة شرح المعادلة الحسابية --}}
+                                        <div class="col-12">
+                                            <div class="p-3.5 rounded-4 border bg-light">
+                                                <div class="d-flex align-items-center gap-2 mb-2">
+                                                    <span class="badge bg-primary text-white p-2 rounded-3"><i class="bi bi-calculator fs-6"></i></span>
+                                                    <div>
+                                                        <h6 class="fw-bold mb-0 text-dark small">{{ __('معادلة احتساب نسبة الاستقطاع (DBR Formula)') }}</h6>
+                                                        <p class="text-muted small mb-0">{{ __('تُحسب نسبة الاستقطاع الفعلية تلقائياً من الراتب والالتزامات كما يلي:') }}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="p-3 rounded-3 bg-white border text-center font-monospace shadow-xs mt-2" dir="ltr">
+                                                    <span class="text-primary fw-bold">Actual DBR (%)</span> = 
+                                                    <span class="text-danger fw-bold">( Monthly Obligations ÷ Monthly Salary )</span> × <span class="fw-bold">100</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {{-- 2. حاسبة تجريبية تفاعلية حية داخل الداشبورد --}}
+                                        <div class="col-12">
+                                            <div class="p-3.5 rounded-4 border bg-white shadow-xs">
+                                                <div class="d-flex align-items-center justify-content-between mb-3">
+                                                    <h6 class="fw-bold mb-0 text-dark small d-flex align-items-center gap-2">
+                                                        <i class="bi bi-play-circle-fill text-success"></i>
+                                                        {{ __('حاسبة تجريبية لاختبار المعادلة مباشرة (Live Simulator)') }}
+                                                    </h6>
+                                                    <span class="badge bg-success-subtle text-success small fw-bold">{{ __('تحديث فوري') }}</span>
+                                                </div>
+
+                                                <div class="row g-3">
+                                                    <div class="col-md-4">
+                                                        <label class="form-label small fw-semibold text-muted">{{ __('تجربة الراتب الشهري (ر.س)') }}</label>
+                                                        <input type="number" id="sim_salary" class="form-control bg-light border-0" value="8000" min="1000" oninput="runDbrSimulator()">
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label class="form-label small fw-semibold text-muted">{{ __('تجربة الالتزامات الشهرية (ر.س)') }}</label>
+                                                        <input type="number" id="sim_obligations" class="form-control bg-light border-0" value="4000" min="0" oninput="runDbrSimulator()">
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label class="form-label small fw-semibold text-muted">{{ __('نوع الالتزام التجريبي') }}</label>
+                                                        <select id="sim_type" class="form-select bg-light border-0" onchange="runDbrSimulator()">
+                                                            <option value="personal">{{ __('التزام شخصي / بدون التزام') }}</option>
+                                                            <option value="real_estate">{{ __('عقاري + شخصي') }}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                {{-- Simulator Result Card --}}
+                                                <div class="mt-3 p-3 rounded-3 bg-light border">
+                                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                                        <span class="small fw-bold text-dark">{{ __('نسبة الاستقطاع المحسوبة:') }}</span>
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <span id="sim_status_badge" class="badge bg-danger text-white fw-bold">مرتفع (تتجاوز الحد)</span>
+                                                            <span id="sim_result_pct" class="fs-5 fw-black text-danger">50%</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="progress mb-2" style="height: 10px;">
+                                                        <div id="sim_progress_bar" class="progress-bar bg-danger" role="progressbar" style="width: 50%; transition: width 0.3s ease;"></div>
+                                                    </div>
+                                                    <div id="sim_warning_box" class="p-2.5 rounded-2 bg-danger-subtle border border-danger border-opacity-25 mt-2">
+                                                        <div class="text-danger small fw-bold mb-1 d-flex align-items-center gap-1">
+                                                            <i class="bi bi-exclamation-triangle-fill"></i>
+                                                            <span id="sim_warning_text">{{ $settings['finance_exceeded_warning_text'] ?? 'نسبة الاستقطاع تتجاوز الحد المسموح به للتمويل.' }}</span>
+                                                        </div>
+                                                        <div class="form-check text-start mb-0">
+                                                            <input class="form-check-input" type="checkbox" checked disabled id="sim_check">
+                                                            <label class="form-check-label small fw-semibold text-dark" id="sim_solution_label">
+                                                                {{ $settings['finance_debt_solution_text'] ?? 'أرغب في الاستفادة من خيارات الحلول التمويلية وتوحيد الالتزامات' }}
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {{-- DBR Limits Settings --}}
                                         <div class="col-md-6">
                                             <label class="form-label fw-semibold small text-muted">{{ __('الحد الأقصى للاستقطاع — شخصي / بدون التزام (%)') }}</label>
                                             <div class="input-group">
                                                 <span class="input-group-text bg-light border-0"><i class="bi bi-percent"></i></span>
-                                                <input type="number" min="1" max="100" name="finance_dbr_limit_personal"
+                                                <input type="number" min="1" max="100" name="finance_dbr_limit_personal" id="finance_dbr_limit_personal"
                                                     class="form-control bg-light border-0"
                                                     value="{{ $settings['finance_dbr_limit_personal'] ?? '45' }}"
-                                                    placeholder="45">
+                                                    placeholder="45" oninput="runDbrSimulator()">
                                             </div>
                                             <p class="text-muted small mb-0 mt-1">{{ __('الحد الأقصى المسموح به للاستقطاع من الراتب للالتزامات الشخصية (الافتراضي: 45%).') }}</p>
                                         </div>
@@ -1034,10 +1132,10 @@
                                             <label class="form-label fw-semibold small text-muted">{{ __('الحد الأقصى للاستقطاع — عقاري + شخصي (%)') }}</label>
                                             <div class="input-group">
                                                 <span class="input-group-text bg-light border-0"><i class="bi bi-percent"></i></span>
-                                                <input type="number" min="1" max="100" name="finance_dbr_limit_real_estate"
+                                                <input type="number" min="1" max="100" name="finance_dbr_limit_real_estate" id="finance_dbr_limit_real_estate"
                                                     class="form-control bg-light border-0"
                                                     value="{{ $settings['finance_dbr_limit_real_estate'] ?? '65' }}"
-                                                    placeholder="65">
+                                                    placeholder="65" oninput="runDbrSimulator()">
                                             </div>
                                             <p class="text-muted small mb-0 mt-1">{{ __('الحد الأقصى المسموح به للتمويل العقاري مع الشخصي (الافتراضي: 65%).') }}</p>
                                         </div>
@@ -1047,10 +1145,10 @@
                                             <label class="form-label fw-semibold small text-muted">{{ __('نص رسالة التنبيه عند تجاوز الحد المسموح') }}</label>
                                             <div class="input-group">
                                                 <span class="input-group-text bg-light border-0"><i class="bi bi-exclamation-triangle-fill text-warning"></i></span>
-                                                <input type="text" name="finance_exceeded_warning_text"
+                                                <input type="text" name="finance_exceeded_warning_text" id="finance_exceeded_warning_text"
                                                     class="form-control bg-light border-0"
                                                     value="{{ $settings['finance_exceeded_warning_text'] ?? 'نسبة الاستقطاع تتجاوز الحد المسموح به للتمويل.' }}"
-                                                    placeholder="نسبة الاستقطاع تتجاوز الحد المسموح به للتمويل.">
+                                                    placeholder="نسبة الاستقطاع تتجاوز الحد المسموح به للتمويل." oninput="runDbrSimulator()">
                                             </div>
                                         </div>
 
@@ -1058,39 +1156,12 @@
                                             <label class="form-label fw-semibold small text-muted">{{ __('نص خيار الموافقة على الحلول التمويلية وتوحيد الالتزامات') }}</label>
                                             <div class="input-group">
                                                 <span class="input-group-text bg-light border-0"><i class="bi bi-check2-square text-primary"></i></span>
-                                                <input type="text" name="finance_debt_solution_text"
+                                                <input type="text" name="finance_debt_solution_text" id="finance_debt_solution_text"
                                                     class="form-control bg-light border-0"
                                                     value="{{ $settings['finance_debt_solution_text'] ?? 'أرغب في الاستفادة من خيارات الحلول التمويلية وتوحيد الالتزامات' }}"
-                                                    placeholder="أرغب في الاستفادة من خيارات الحلول التمويلية وتوحيد الالتزامات">
+                                                    placeholder="أرغب في الاستفادة من خيارات الحلول التمويلية وتوحيد الالتزامات" oninput="runDbrSimulator()">
                                             </div>
                                             <p class="text-muted small mb-0 mt-1">{{ __('يظهر هذا الخيار للعميل عندما تتجاوز التزاماته النسبة المحددة، ليتمكن من تقديم طلبه تحت بند حلول تمويلية.') }}</p>
-                                        </div>
-
-                                        {{-- Visual Preview Card --}}
-                                        <div class="col-12">
-                                            <div class="p-3 rounded-4 border bg-light">
-                                                <p class="fw-bold small mb-2 text-dark"><i class="bi bi-eye me-1"></i> {{ __('معاينة البطاقة في المتجر عند تجاوز الالتزامات') }}</p>
-                                                <div class="p-3 rounded-3 bg-white border border-danger-subtle shadow-xs">
-                                                    <div class="d-flex align-items-center justify-content-between mb-2">
-                                                        <span class="small fw-bold text-dark">{{ __('نسبة الاستقطاع الفعلية من الراتب:') }}</span>
-                                                        <span class="badge bg-danger text-white fw-bold">50%</span>
-                                                    </div>
-                                                    <div class="progress mb-3" style="height: 8px;">
-                                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 50%"></div>
-                                                    </div>
-                                                    <div class="p-3 rounded-3 bg-danger-subtle border border-danger border-opacity-25">
-                                                        <div class="text-danger small fw-bold mb-2">
-                                                            <i class="bi bi-exclamation-triangle-fill me-1"></i> {{ $settings['finance_exceeded_warning_text'] ?? 'نسبة الاستقطاع تتجاوز الحد المسموح به للتمويل.' }}
-                                                        </div>
-                                                        <div class="form-check text-start">
-                                                            <input class="form-check-input" type="checkbox" checked disabled id="previewCheck">
-                                                            <label class="form-check-label small fw-semibold text-dark" for="previewCheck">
-                                                                {{ $settings['finance_debt_solution_text'] ?? 'أرغب في الاستفادة من خيارات الحلول التمويلية وتوحيد الالتزامات' }}
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -1920,5 +1991,63 @@
                 alert('{{ __("حدث خطأ أثناء تغيير وضع الصيانة") }}');
             });
         }
+
+        // ===== DBR Live Simulator =====
+        function runDbrSimulator() {
+            const salary = parseFloat(document.getElementById('sim_salary')?.value) || 0;
+            const obligations = parseFloat(document.getElementById('sim_obligations')?.value) || 0;
+            const type = document.getElementById('sim_type')?.value || 'personal';
+            const personalLimit = parseFloat(document.getElementById('finance_dbr_limit_personal')?.value) || 45;
+            const realEstateLimit = parseFloat(document.getElementById('finance_dbr_limit_real_estate')?.value) || 65;
+            const maxLimit = type === 'real_estate' ? realEstateLimit : personalLimit;
+
+            const warningText = document.getElementById('finance_exceeded_warning_text')?.value || 'نسبة الاستقطاع تتجاوز الحد المسموح به للتمويل.';
+            const solutionText = document.getElementById('finance_debt_solution_text')?.value || 'أرغب في الاستفادة من خيارات الحلول التمويلية وتوحيد الالتزامات';
+
+            const pct = salary > 0 ? Math.round((obligations / salary) * 100) : 0;
+            const isExceeded = pct > maxLimit;
+
+            const resultPctEl = document.getElementById('sim_result_pct');
+            const statusBadgeEl = document.getElementById('sim_status_badge');
+            const progressBarEl = document.getElementById('sim_progress_bar');
+            const warningBoxEl = document.getElementById('sim_warning_box');
+            const warningTextEl = document.getElementById('sim_warning_text');
+            const solutionLabelEl = document.getElementById('sim_solution_label');
+
+            if (resultPctEl) resultPctEl.textContent = pct + '%';
+            if (progressBarEl) {
+                progressBarEl.style.width = Math.min(100, Math.max(0, pct)) + '%';
+            }
+            if (warningTextEl) warningTextEl.textContent = warningText;
+            if (solutionLabelEl) solutionLabelEl.textContent = solutionText;
+
+            if (isExceeded) {
+                if (resultPctEl) resultPctEl.className = 'fs-5 fw-black text-danger';
+                if (statusBadgeEl) {
+                    statusBadgeEl.className = 'badge bg-danger text-white fw-bold';
+                    statusBadgeEl.textContent = 'مرتفع (تتجاوز الحد ' + maxLimit + '%)';
+                }
+                if (progressBarEl) progressBarEl.className = 'progress-bar bg-danger';
+                if (warningBoxEl) warningBoxEl.classList.remove('d-none');
+            } else if (pct > maxLimit * 0.75) {
+                if (resultPctEl) resultPctEl.className = 'fs-5 fw-black text-warning';
+                if (statusBadgeEl) {
+                    statusBadgeEl.className = 'badge bg-warning text-dark fw-bold';
+                    statusBadgeEl.textContent = 'متوسط (ضمن الحد ' + maxLimit + '%)';
+                }
+                if (progressBarEl) progressBarEl.className = 'progress-bar bg-warning';
+                if (warningBoxEl) warningBoxEl.classList.add('d-none');
+            } else {
+                if (resultPctEl) resultPctEl.className = 'fs-5 fw-black text-success';
+                if (statusBadgeEl) {
+                    statusBadgeEl.className = 'badge bg-success text-white fw-bold';
+                    statusBadgeEl.textContent = 'ممتاز (ضمن الحد ' + maxLimit + '%)';
+                }
+                if (progressBarEl) progressBarEl.className = 'progress-bar bg-success';
+                if (warningBoxEl) warningBoxEl.classList.add('d-none');
+            }
+        }
+        // Initialize simulator
+        document.addEventListener('DOMContentLoaded', runDbrSimulator);
     </script>
 @endsection

@@ -128,6 +128,7 @@ class GeneralSettingController extends Controller
             'maroof_url',
             'gps_map_link',
             'show_footer_map',
+            'show_home_search_filter',
             'finance_dbr_limit_personal',
             'finance_dbr_limit_real_estate',
             'finance_debt_solution_text',
@@ -152,6 +153,9 @@ class GeneralSettingController extends Controller
         }
         if (! $request->has('show_footer_map')) {
             Setting::updateOrCreate(['key' => 'show_footer_map'], ['value' => '0']);
+        }
+        if (! $request->has('show_home_search_filter')) {
+            Setting::updateOrCreate(['key' => 'show_home_search_filter'], ['value' => '0']);
         }
         if (! $request->has('maintenance_mode_enabled')) {
             Setting::updateOrCreate(['key' => 'maintenance_mode_enabled'], ['value' => '0']);

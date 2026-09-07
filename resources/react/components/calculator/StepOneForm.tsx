@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { useLanguageStore } from "../../store/language.store";
 import { getCities } from "../../services/api";
+import { sanitizeSaudiPhone, isValidSaudiPhone } from "../../hooks/useCarOrderForm";
 
 import type { IPersonalInfo } from "../../interfaces/IPersonalInfo";
 import type { IStepOneFormProps } from "../../interfaces/IStepOneFormProps";
@@ -81,6 +82,11 @@ export default function StepOneForm({
             return;
         }
 
+        if (!isValidSaudiPhone(phone)) {
+            toast.error(t("financeCalculator.validation.validPhone", { defaultValue: "يرجى إدخال رقم جوال سعودي صحيح يبدأ بـ 05 (10 أرقام)" }));
+            return;
+        }
+
         onNext({
             fullName: fullName.trim(),
             phone: phone.trim(),
@@ -93,7 +99,7 @@ export default function StepOneForm({
         } satisfies IPersonalInfo);
     };
 
-    const isDisabled = !fullName.trim() || !phone.trim() || !city.trim();
+    const isDisabled = !fullName.trim() || !isValidSaudiPhone(phone) || !city.trim();
 
     return (
         <section dir={direction} className="w-full">
@@ -120,11 +126,14 @@ export default function StepOneForm({
                     <input
                         type="tel"
                         value={phone}
-                        onChange={(event) => setPhone(event.target.value)}
+                        onChange={(event) => setPhone(sanitizeSaudiPhone(event.target.value))}
                         placeholder={t(
                             "financeCalculator.step1.phonePlaceholder",
+                            "05xxxxxxxx"
                         )}
-                        inputMode="tel"
+                        maxLength={10}
+                        pattern="^05[0-9]{8}$"
+                        inputMode="numeric"
                         autoComplete="tel"
                         dir="ltr"
                         className={`${fieldClassName} text-end`}
