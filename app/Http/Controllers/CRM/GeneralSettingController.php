@@ -155,9 +155,6 @@ class GeneralSettingController extends Controller
         if (! $request->has('show_footer_map')) {
             Setting::updateOrCreate(['key' => 'show_footer_map'], ['value' => '0']);
         }
-        if (! $request->has('show_home_search_filter')) {
-            Setting::updateOrCreate(['key' => 'show_home_search_filter'], ['value' => '0']);
-        }
         if (! $request->has('show_home_brands_section')) {
             Setting::updateOrCreate(['key' => 'show_home_brands_section'], ['value' => '0']);
         }

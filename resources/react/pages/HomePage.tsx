@@ -69,15 +69,13 @@ export default function Home() {
                 }
             />
 
-            {data?.show_search_filter !== false && data?.page_sections?.filter?.enabled !== false && (
-                <CarsSearchSection
-                    title={data?.page_sections?.filter?.title?.trim() || undefined}
-                    brands={data?.filter_brands ?? data?.brands}
-                    models={data?.filter_models}
-                    years={data?.filter_years}
-                    onSearch={handleSearch}
-                />
-            )}
+            <CarsSearchSection
+                title={data?.page_sections?.filter?.title?.trim() || undefined}
+                brands={data?.filter_brands ?? data?.brands}
+                models={data?.filter_models}
+                years={data?.filter_years}
+                onSearch={handleSearch}
+            />
 
             {data?.show_home_brands !== false && data?.page_sections?.brands?.enabled !== false && (
                 <BrandsSection
