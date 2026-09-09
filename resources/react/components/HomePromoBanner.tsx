@@ -1,5 +1,5 @@
-import React, { useMemo } from "react";
-import { ArrowUpRight, ArrowLeft, ArrowRight, Play } from "lucide-react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { ArrowLeft, ArrowRight, Volume2, VolumeX, Play, Pause } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import type { HomePromoBannerData } from "../types/home.types";
@@ -23,7 +23,7 @@ function getYoutubeEmbedUrl(url?: string | null): string | null {
         }
 
         if (videoId) {
-            return `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=0&rel=0&modestbranding=1`;
+            return `https://www.youtube-nocookie.com/embed/${videoId}?enablejsapi=1&mute=1&playsinline=1&rel=0&modestbranding=1`;
         }
     } catch {
         return null;
@@ -39,10 +39,78 @@ export default function HomePromoBanner({
     const { i18n } = useTranslation();
     const isRTL = i18n.dir() === "rtl";
 
+    const videoRef = useRef<HTMLVideoElement | null>(null);
+    const iframeRef = useRef<HTMLIFrameElement | null>(null);
+    const containerRef = useRef<HTMLDivElement | null>(null);
+
+    const [isMuted, setIsMuted] = useState(true);
+    const [isPlaying, setIsPlaying] = useState(false);
+
     const youtubeEmbedUrl = useMemo(
         () => getYoutubeEmbedUrl(banner?.youtube_url),
         [banner?.youtube_url],
     );
+
+    // Scroll-into-view Intersection Observer for auto-playing upon scrolling
+    useEffect(() => {
+        if (!banner || !banner.enabled) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    const isVisible = entry.isIntersecting;
+
+                    // 1. Handle Uploaded Video playback
+                    if (videoRef.current) {
+                        if (isVisible) {
+                            videoRef.current.muted = true;
+                            videoRef.current
+                                .play()
+                                .then(() => {
+                                    setIsPlaying(true);
+                                })
+                                .catch(() => {
+                                    // Browser prevented playback
+                                });
+                        } else {
+                            videoRef.current.pause();
+                            setIsPlaying(false);
+                        }
+                    }
+
+                    // 2. Handle YouTube iframe playback via postMessage
+                    if (iframeRef.current && iframeRef.current.contentWindow) {
+                        try {
+                            const command = isVisible
+                                ? '{"event":"command","func":"playVideo","args":""}'
+                                : '{"event":"command","func":"pauseVideo","args":""}';
+                            iframeRef.current.contentWindow.postMessage(
+                                command,
+                                "*",
+                            );
+                        } catch {
+                            // Cross-origin fallback
+                        }
+                    }
+                });
+            },
+            {
+                threshold: 0.35, // Plays when at least 35% visible
+            },
+        );
+
+        const target = containerRef.current;
+        if (target) {
+            observer.observe(target);
+        }
+
+        return () => {
+            if (target) {
+                observer.unobserve(target);
+            }
+            observer.disconnect();
+        };
+    }, [banner]);
 
     if (!banner || !banner.enabled) {
         return null;
@@ -64,7 +132,6 @@ export default function HomePromoBanner({
     const hasVideo = Boolean(video_url);
     const hasYoutube = Boolean(youtubeEmbedUrl);
 
-    // If active but has no media at all, don't render an empty broken section
     if (type === "image" && !hasImage && !title && !button_text) return null;
     if (type === "video" && !hasVideo) return null;
     if (type === "youtube" && !hasYoutube) return null;
@@ -73,8 +140,27 @@ export default function HomePromoBanner({
     const linkRel = open_in_new_tab ? "noopener noreferrer" : undefined;
     const ArrowIcon = isRTL ? ArrowLeft : ArrowRight;
 
+    const toggleVideoPlay = () => {
+        if (!videoRef.current) return;
+        if (videoRef.current.paused) {
+            videoRef.current.play().then(() => setIsPlaying(true));
+        } else {
+            videoRef.current.pause();
+            setIsPlaying(false);
+        }
+    };
+
+    const toggleVideoMute = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (!videoRef.current) return;
+        const nextState = !videoRef.current.muted;
+        videoRef.current.muted = nextState;
+        setIsMuted(nextState);
+    };
+
     return (
         <section
+            ref={containerRef}
             dir={i18n.dir()}
             className={`w-full py-4 sm:py-6 lg:py-8 ${className}`}
         >
@@ -82,7 +168,6 @@ export default function HomePromoBanner({
                 {/* 1. TYPE: IMAGE BANNER */}
                 {type === "image" && (
                     <div className="group relative overflow-hidden rounded-2xl shadow-xl transition-all duration-300 hover:shadow-2xl sm:rounded-3xl border border-gray-100 bg-gray-900">
-                        {/* Background Image / Picture */}
                         {hasImage && (
                             <picture className="block w-full">
                                 {image_mobile && (
@@ -100,7 +185,6 @@ export default function HomePromoBanner({
                             </picture>
                         )}
 
-                        {/* Dark Gradient Overlay (always ensures text readability) */}
                         {(title || subtitle || button_text) && (
                             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent sm:bg-gradient-to-r sm:from-black/85 sm:via-black/50 sm:to-transparent flex flex-col justify-end sm:justify-center p-6 sm:p-10 lg:p-14 text-white">
                                 <div className="max-w-xl space-y-3 sm:space-y-4">
@@ -145,7 +229,6 @@ export default function HomePromoBanner({
                             </div>
                         )}
 
-                        {/* If no button or title, make whole banner clickable if button_url is set */}
                         {!button_text && button_url && (
                             button_url.startsWith("http") ? (
                                 <a
@@ -168,18 +251,50 @@ export default function HomePromoBanner({
                     </div>
                 )}
 
-                {/* 2. TYPE: UPLOADED VIDEO */}
+                {/* 2. TYPE: UPLOADED VIDEO (Auto-plays on scroll) */}
                 {type === "video" && hasVideo && (
-                    <div className="relative overflow-hidden rounded-2xl shadow-xl sm:rounded-3xl border border-gray-100 bg-black">
-                        <div className="relative w-full aspect-video max-h-[520px]">
+                    <div className="group relative overflow-hidden rounded-2xl shadow-xl sm:rounded-3xl border border-gray-100 bg-black">
+                        <div
+                            className="relative w-full aspect-video max-h-[520px] cursor-pointer"
+                            onClick={toggleVideoPlay}
+                        >
                             <video
+                                ref={videoRef}
                                 src={video_url || undefined}
-                                controls
                                 playsInline
                                 loop
-                                muted
+                                muted={isMuted}
+                                preload="metadata"
                                 className="h-full w-full object-cover"
                             />
+
+                            {/* Controls & Sound overlay */}
+                            <div className="absolute top-4 end-4 z-20 flex items-center gap-2">
+                                <button
+                                    type="button"
+                                    onClick={toggleVideoMute}
+                                    className="flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-md transition-all duration-200 hover:bg-black/90 hover:scale-110 active:scale-95"
+                                    title={isMuted ? "تشغيل الصوت" : "كتم الصوت"}
+                                    aria-label="Sound Toggle"
+                                >
+                                    {isMuted ? (
+                                        <VolumeX className="h-5 w-5" />
+                                    ) : (
+                                        <Volume2 className="h-5 w-5" />
+                                    )}
+                                </button>
+                            </div>
+
+                            {/* Pause/Play Center Indicator on Hover */}
+                            <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100 bg-black/20 pointer-events-none">
+                                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-md">
+                                    {isPlaying ? (
+                                        <Pause className="h-6 w-6" />
+                                    ) : (
+                                        <Play className="h-6 w-6 ms-0.5" />
+                                    )}
+                                </div>
+                            </div>
                         </div>
 
                         {/* Video Footer info if title or button exists */}
@@ -228,11 +343,12 @@ export default function HomePromoBanner({
                     </div>
                 )}
 
-                {/* 3. TYPE: YOUTUBE EMBED VIDEO */}
+                {/* 3. TYPE: YOUTUBE EMBED VIDEO (Auto-plays on scroll) */}
                 {type === "youtube" && hasYoutube && (
                     <div className="relative overflow-hidden rounded-2xl shadow-xl sm:rounded-3xl border border-gray-100 bg-gray-950">
                         <div className="relative w-full aspect-video max-h-[550px]">
                             <iframe
+                                ref={iframeRef}
                                 src={youtubeEmbedUrl || ""}
                                 title={title || "YouTube Promo Video"}
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
