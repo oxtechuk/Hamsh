@@ -14,6 +14,7 @@
         <form action="{{ route('crm.settings.update') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="hero_slides_submitted" value="1">
+            <input type="hidden" name="home_promo_banner_submitted" value="1">
 
             <div class="row g-4 align-items-start">
 
@@ -45,6 +46,9 @@
                             <nav class="nav flex-column gap-1 mb-1">
                                 <button type="button" class="settings-nav-btn" data-tab="hero-slides">
                                     <i class="bi bi-images"></i> {{ __('شرائح الهيرو (السلايدر)') }}
+                                </button>
+                                <button type="button" class="settings-nav-btn" data-tab="promo-banner">
+                                    <i class="bi bi-badge-ad"></i> {{ __('البانر الإعلاني (منتصف الصفحة)') }}
                                 </button>
                                 <button type="button" class="settings-nav-btn" data-tab="homepage-sections">
                                     <i class="bi bi-layout-text-window"></i> {{ __('نصوص الأقسام') }}
@@ -843,6 +847,294 @@
                                         class="text-center py-5 bg-light rounded-3 {{ count($heroSlides) > 0 ? 'd-none' : '' }}">
                                         <i class="bi bi-images fs-1 text-muted opacity-25 d-block mb-1"></i>
                                         <span class="text-muted small">{{ __('لا توجد شرائح بعد. اضغط "إضافة شريحة" للبدء.') }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- =============================== --}}
+                        {{-- TAB: البانر الإعلاني (منتصف الصفحة) --}}
+                        {{-- =============================== --}}
+                        @php
+                            $pb = $promoBanner ?? [];
+                            $pbEnabled = !in_array($pb['enabled'] ?? '0', ['0', 0, false, 'false'], true);
+                            $pbType = $pb['type'] ?? 'image';
+                            $pbDesktopImg = !empty($pb['image_desktop']) ? Storage::disk('public')->url($pb['image_desktop']) : null;
+                            $pbMobileImg = !empty($pb['image_mobile']) ? Storage::disk('public')->url($pb['image_mobile']) : null;
+                            $pbVideoFile = !empty($pb['video_file']) ? Storage::disk('public')->url($pb['video_file']) : null;
+                        @endphp
+                        <div class="settings-pane d-none" id="tab-promo-banner">
+                            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                                <div class="card-header bg-transparent border-0 p-4 pb-2">
+                                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                                        <div>
+                                            <h6 class="fw-bold mb-1">
+                                                <i class="bi bi-badge-ad text-primary me-1"></i> {{ __('البانر الإعلاني والترويجي (منتصف الصفحة الرئيسية)') }}
+                                            </h6>
+                                            <p class="text-muted small mb-0">{{ __('تحكم كامل في إظهار أو إخفاء البانر الإعلاني في منتصف الصفحة واختيار نوعه وتعديل الوسائط والروابط') }}</p>
+                                        </div>
+                                        <div class="form-check form-switch fs-5 m-0 d-flex align-items-center gap-2">
+                                            <input class="form-check-input ms-0" type="checkbox" role="switch"
+                                                name="home_promo_banner[enabled]" value="1" id="promoBannerEnabledSwitch"
+                                                {{ $pbEnabled ? 'checked' : '' }}>
+                                            <label class="form-check-label fs-6 fw-bold text-dark" for="promoBannerEnabledSwitch">
+                                                {{ __('تفعيل البانر') }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card-body p-4 pt-2">
+                                    {{-- Info & Recommended Dimensions Box --}}
+                                    <div class="alert alert-info border-0 rounded-4 p-3 mb-4 bg-primary-subtle text-primary-emphasis">
+                                        <div class="d-flex align-items-start gap-2 mb-2">
+                                            <i class="bi bi-info-circle-fill fs-5 mt-1 text-primary"></i>
+                                            <div>
+                                                <strong class="d-block mb-1">{{ __('المقاسات الموصى بها لأفضل دقة وسرعة تحميل:') }}</strong>
+                                                <div class="row g-2 small">
+                                                    <div class="col-md-6">
+                                                        <div class="bg-white bg-opacity-75 p-2 rounded-3 border border-primary-subtle">
+                                                            <span class="fw-bold text-dark"><i class="bi bi-laptop me-1"></i> {{ __('صورة الديسكتوب:') }}</span>
+                                                            <code>1920 × 550 px</code> أو <code>1400 × 450 px</code> (نسبة 16:6 أو 21:9)
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="bg-white bg-opacity-75 p-2 rounded-3 border border-primary-subtle">
+                                                            <span class="fw-bold text-dark"><i class="bi bi-phone me-1"></i> {{ __('صورة الموبايل:') }}</span>
+                                                            <code>800 × 600 px</code> أو <code>750 × 500 px</code> (نسبة 4:3)
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="bg-white bg-opacity-75 p-2 rounded-3 border border-primary-subtle">
+                                                            <span class="fw-bold text-dark"><i class="bi bi-file-earmark-play me-1"></i> {{ __('فيديو مرفوع:') }}</span>
+                                                            <code>1920 × 1080 px</code> (MP4 أقل من 20MB)
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="bg-white bg-opacity-75 p-2 rounded-3 border border-primary-subtle">
+                                                            <span class="fw-bold text-dark"><i class="bi bi-youtube me-1 text-danger"></i> {{ __('فيديو يوتيوب:') }}</span>
+                                                            رابط فيديو مباشر متجاوب 16:9
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {{-- Banner Type Selection --}}
+                                    <div class="mb-4">
+                                        <label class="form-label fw-bold text-dark mb-2">{{ __('نوع البانر (اختر الوسيط الإعلاني):') }}</label>
+                                        <div class="row g-3">
+                                            <div class="col-md-4">
+                                                <label class="card h-100 p-3 border rounded-4 cursor-pointer text-center promo-type-card {{ $pbType === 'image' ? 'border-primary bg-primary-subtle' : 'bg-light' }}" for="promoTypeImage" style="cursor: pointer;">
+                                                    <div class="form-check p-0 m-0 text-center">
+                                                        <input class="form-check-input d-none promo-type-radio" type="radio" name="home_promo_banner[type]" id="promoTypeImage" value="image" {{ $pbType === 'image' ? 'checked' : '' }} onchange="switchPromoBannerType('image')">
+                                                        <div class="fs-2 mb-2 text-primary"><i class="bi bi-image"></i></div>
+                                                        <h6 class="fw-bold mb-1">{{ __('بانر صورة مع زر ورابط') }}</h6>
+                                                        <p class="text-muted small mb-0">{{ __('عرض صورة إعلانية مخصصة للشاشات الكبيرة والموبايل مع زر توجيه') }}</p>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="card h-100 p-3 border rounded-4 cursor-pointer text-center promo-type-card {{ $pbType === 'video' ? 'border-primary bg-primary-subtle' : 'bg-light' }}" for="promoTypeVideo" style="cursor: pointer;">
+                                                    <div class="form-check p-0 m-0 text-center">
+                                                        <input class="form-check-input d-none promo-type-radio" type="radio" name="home_promo_banner[type]" id="promoTypeVideo" value="video" {{ $pbType === 'video' ? 'checked' : '' }} onchange="switchPromoBannerType('video')">
+                                                        <div class="fs-2 mb-2 text-primary"><i class="bi bi-camera-video"></i></div>
+                                                        <h6 class="fw-bold mb-1">{{ __('فيديو مرفوع من الجهاز') }}</h6>
+                                                        <p class="text-muted small mb-0">{{ __('رفع ملف فيديو بصيغة MP4 يعمل بمشغل متطور في الموقع') }}</p>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="card h-100 p-3 border rounded-4 cursor-pointer text-center promo-type-card {{ $pbType === 'youtube' ? 'border-primary bg-primary-subtle' : 'bg-light' }}" for="promoTypeYoutube" style="cursor: pointer;">
+                                                    <div class="form-check p-0 m-0 text-center">
+                                                        <input class="form-check-input d-none promo-type-radio" type="radio" name="home_promo_banner[type]" id="promoTypeYoutube" value="youtube" {{ $pbType === 'youtube' ? 'checked' : '' }} onchange="switchPromoBannerType('youtube')">
+                                                        <div class="fs-2 mb-2 text-danger"><i class="bi bi-youtube"></i></div>
+                                                        <h6 class="fw-bold mb-1">{{ __('رابط فيديو يوتيوب') }}</h6>
+                                                        <p class="text-muted small mb-0">{{ __('تضمين فيديو من يوتيوب بمشغل سريع ومتجاوب مع جميع الأجهزة') }}</p>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <hr class="my-4 text-muted opacity-25">
+
+                                    {{-- 1. Section: Image Uploads --}}
+                                    <div id="promo-section-image" class="promo-type-section {{ $pbType === 'image' ? '' : 'd-none' }}">
+                                        <h6 class="fw-bold mb-3 text-dark">
+                                            <i class="bi bi-images me-1 text-primary"></i> {{ __('صور البانر (الديسكتوب والموبايل)') }}
+                                        </h6>
+                                        <div class="row g-4 mb-4">
+                                            {{-- Desktop Image --}}
+                                            <div class="col-md-6">
+                                                <div class="p-3 bg-light rounded-4 border h-100">
+                                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                                        <label class="form-label fw-bold small mb-0 text-dark">
+                                                            <i class="bi bi-laptop me-1 text-primary"></i> {{ __('صورة الديسكتوب (Desktop Banner)') }}
+                                                        </label>
+                                                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle small px-2">1920 × 550 px</span>
+                                                    </div>
+                                                    <div class="image-upload-wrapper text-center p-3 border border-2 border-dashed rounded-3 bg-white mb-2 position-relative">
+                                                        <div id="promo-desktop-preview-container" class="{{ $pbDesktopImg ? '' : 'd-none' }} mb-2 position-relative">
+                                                            <img id="promo-desktop-preview" src="{{ $pbDesktopImg ?? '' }}" class="img-fluid rounded-2 shadow-sm" style="max-height: 140px; width: 100%; object-fit: cover;">
+                                                            <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1 rounded-circle p-1 lh-1" onclick="deletePromoDesktopImage()" title="{{ __('حذف الصورة') }}">
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
+                                                        </div>
+                                                        <div id="promo-desktop-placeholder" class="{{ $pbDesktopImg ? 'd-none' : '' }} py-3">
+                                                            <i class="bi bi-cloud-arrow-up fs-2 text-muted opacity-50 d-block mb-1"></i>
+                                                            <span class="text-muted small">{{ __('اسحب الصورة هنا أو اضغط للاختيار') }}</span>
+                                                        </div>
+                                                        <input type="file" name="home_promo_banner_image_desktop" id="promo_banner_image_desktop" class="form-control form-control-sm mt-2" accept="image/*" onchange="previewPromoImage(this, 'promo-desktop-preview', 'promo-desktop-preview-container', 'promo-desktop-placeholder')">
+                                                        <input type="hidden" name="delete_promo_banner_desktop" id="delete_promo_banner_desktop" value="0">
+                                                    </div>
+                                                    <p class="text-muted small mb-0"><i class="bi bi-info-circle me-1"></i> {{ __('يتم عرض هذه الصورة على شاشات الكمبيوتر واللابتوب.') }}</p>
+                                                </div>
+                                            </div>
+
+                                            {{-- Mobile Image --}}
+                                            <div class="col-md-6">
+                                                <div class="p-3 bg-light rounded-4 border h-100">
+                                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                                        <label class="form-label fw-bold small mb-0 text-dark">
+                                                            <i class="bi bi-phone me-1 text-primary"></i> {{ __('صورة الموبايل (Mobile Banner)') }}
+                                                        </label>
+                                                        <span class="badge bg-secondary-subtle text-secondary border small px-2">800 × 600 px</span>
+                                                    </div>
+                                                    <div class="image-upload-wrapper text-center p-3 border border-2 border-dashed rounded-3 bg-white mb-2 position-relative">
+                                                        <div id="promo-mobile-preview-container" class="{{ $pbMobileImg ? '' : 'd-none' }} mb-2 position-relative">
+                                                            <img id="promo-mobile-preview" src="{{ $pbMobileImg ?? '' }}" class="img-fluid rounded-2 shadow-sm" style="max-height: 140px; width: 100%; object-fit: cover;">
+                                                            <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1 rounded-circle p-1 lh-1" onclick="deletePromoMobileImage()" title="{{ __('حذف الصورة') }}">
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
+                                                        </div>
+                                                        <div id="promo-mobile-placeholder" class="{{ $pbMobileImg ? 'd-none' : '' }} py-3">
+                                                            <i class="bi bi-phone fs-2 text-muted opacity-50 d-block mb-1"></i>
+                                                            <span class="text-muted small">{{ __('اسحب صورة الموبايل هنا أو اضغط للاختيار') }}</span>
+                                                        </div>
+                                                        <input type="file" name="home_promo_banner_image_mobile" id="promo_banner_image_mobile" class="form-control form-control-sm mt-2" accept="image/*" onchange="previewPromoImage(this, 'promo-mobile-preview', 'promo-mobile-preview-container', 'promo-mobile-placeholder')">
+                                                        <input type="hidden" name="delete_promo_banner_mobile" id="delete_promo_banner_mobile" value="0">
+                                                    </div>
+                                                    <p class="text-muted small mb-0"><i class="bi bi-info-circle me-1"></i> {{ __('اختياري - إذا تُركت فارغة سيتم استخدام صورة الديسكتوب تلقائياً.') }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {{-- 2. Section: Video Upload --}}
+                                    <div id="promo-section-video" class="promo-type-section {{ $pbType === 'video' ? '' : 'd-none' }}">
+                                        <h6 class="fw-bold mb-3 text-dark">
+                                            <i class="bi bi-film me-1 text-primary"></i> {{ __('ملف الفيديو المرفوع (MP4 / WebM)') }}
+                                        </h6>
+                                        <div class="p-3 bg-light rounded-4 border mb-4">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <label class="form-label fw-bold small mb-0 text-dark">
+                                                    <i class="bi bi-file-earmark-play me-1 text-primary"></i> {{ __('رفع فيديو البانر (Max: 25MB)') }}
+                                                </label>
+                                                <span class="badge bg-success-subtle text-success border border-success-subtle small px-2">1080p MP4</span>
+                                            </div>
+                                            <div class="text-center p-3 border border-2 border-dashed rounded-3 bg-white mb-2 position-relative">
+                                                <div id="promo-video-preview-container" class="{{ $pbVideoFile ? '' : 'd-none' }} mb-2 position-relative">
+                                                    <video id="promo-video-preview" src="{{ $pbVideoFile ?? '' }}" controls class="rounded-3 shadow-sm w-100" style="max-height: 220px; background: #000;"></video>
+                                                    <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-2 rounded-circle p-1 lh-1" onclick="deletePromoVideoFile()" title="{{ __('حذف الفيديو') }}">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </div>
+                                                <div id="promo-video-placeholder" class="{{ $pbVideoFile ? 'd-none' : '' }} py-3">
+                                                    <i class="bi bi-camera-reels fs-2 text-muted opacity-50 d-block mb-1"></i>
+                                                    <span class="text-muted small">{{ __('اختر ملف فيديو MP4 أو WebM من جهازك') }}</span>
+                                                </div>
+                                                <input type="file" name="home_promo_banner_video" id="promo_banner_video" class="form-control form-control-sm mt-2" accept="video/mp4,video/webm,video/ogg,video/quicktime" onchange="previewPromoVideo(this)">
+                                                <input type="hidden" name="delete_promo_banner_video" id="delete_promo_banner_video" value="0">
+                                            </div>
+                                            <p class="text-muted small mb-0"><i class="bi bi-check2-circle text-success me-1"></i> {{ __('سيعمل الفيديو بمشغل حديث متجاوب مع تشغيل تلقائي صامت وإمكانية التحكم بالصوت والتكبير.') }}</p>
+                                        </div>
+                                    </div>
+
+                                    {{-- 3. Section: YouTube URL --}}
+                                    <div id="promo-section-youtube" class="promo-type-section {{ $pbType === 'youtube' ? '' : 'd-none' }}">
+                                        <h6 class="fw-bold mb-3 text-dark">
+                                            <i class="bi bi-youtube me-1 text-danger"></i> {{ __('رابط فيديو يوتيوب (YouTube Video URL)') }}
+                                        </h6>
+                                        <div class="p-3 bg-light rounded-4 border mb-4">
+                                            <label class="form-label fw-bold small text-dark">{{ __('رابط الفيديو من يوتيوب') }}</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-white border-0"><i class="bi bi-youtube text-danger fs-5"></i></span>
+                                                <input type="url" name="home_promo_banner[youtube_url]" id="promo_youtube_url" class="form-control bg-white border-0"
+                                                    value="{{ $pb['youtube_url'] ?? '' }}"
+                                                    placeholder="مثال: https://www.youtube.com/watch?v=xxxxxx أو https://youtu.be/xxxxxx"
+                                                    oninput="updateYoutubePreview(this.value)">
+                                            </div>
+                                            <div id="youtube-preview-container" class="mt-3 {{ !empty($pb['youtube_url']) ? '' : 'd-none' }}">
+                                                <p class="small text-muted mb-1">{{ __('معاينة مشغل اليوتيوب:') }}</p>
+                                                <div class="ratio ratio-16x9 rounded-3 overflow-hidden shadow-sm" style="max-height: 250px;">
+                                                    <iframe id="youtube-preview-iframe" src="{{ !empty($pb['youtube_url']) ? 'https://www.youtube-nocookie.com/embed/' . \Illuminate\Support\Str::of($pb['youtube_url'])->afterLast('v=')->before('&')->afterLast('/') : '' }}" allowfullscreen></iframe>
+                                                </div>
+                                            </div>
+                                            <p class="text-muted small mt-2 mb-0"><i class="bi bi-info-circle me-1"></i> {{ __('يمكنك نسخ ولصق رابط أي فيديو من يوتيوب وسيتم تحويله لمشغل متجاوب تلقائياً.') }}</p>
+                                        </div>
+                                    </div>
+
+                                    {{-- Content, Texts & Action Buttons --}}
+                                    <div class="p-3 bg-light rounded-4 border mb-4">
+                                        <h6 class="fw-bold mb-3 text-dark">
+                                            <i class="bi bi-pencil-square me-1 text-primary"></i> {{ __('النصوص وأزرار التوجيه (اختياري)') }}
+                                        </h6>
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-semibold small text-muted">{{ __('العنوان الرئيسي — عربي') }}</label>
+                                                <input type="text" name="home_promo_banner[title][ar]" class="form-control bg-white border-0"
+                                                    value="{{ $pb['title']['ar'] ?? '' }}"
+                                                    placeholder="مثال: عروض نهاية العام الحصرية على كافة الموديلات">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-semibold small text-muted">{{ __('العنوان الرئيسي — إنجليزي') }}</label>
+                                                <input type="text" name="home_promo_banner[title][en]" class="form-control bg-white border-0"
+                                                    value="{{ $pb['title']['en'] ?? '' }}"
+                                                    placeholder="e.g.: Exclusive Year-End Offers On All Models">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-semibold small text-muted">{{ __('الوصف أو العنوان الفرعي — عربي') }}</label>
+                                                <input type="text" name="home_promo_banner[subtitle][ar]" class="form-control bg-white border-0"
+                                                    value="{{ $pb['subtitle']['ar'] ?? '' }}"
+                                                    placeholder="مثال: استفد من حلول التمويل بدون دفعة أولى وأقل هامش ربح">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-semibold small text-muted">{{ __('الوصف أو العنوان الفرعي — إنجليزي') }}</label>
+                                                <input type="text" name="home_promo_banner[subtitle][en]" class="form-control bg-white border-0"
+                                                    value="{{ $pb['subtitle']['en'] ?? '' }}"
+                                                    placeholder="e.g.: Zero down payment and lowest profit margin options">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label fw-semibold small text-muted">{{ __('نص الزر — عربي') }}</label>
+                                                <input type="text" name="home_promo_banner[button_text][ar]" class="form-control bg-white border-0"
+                                                    value="{{ $pb['button_text']['ar'] ?? '' }}"
+                                                    placeholder="مثال: اكتشف العروض الآن">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label fw-semibold small text-muted">{{ __('نص الزر — إنجليزي') }}</label>
+                                                <input type="text" name="home_promo_banner[button_text][en]" class="form-control bg-white border-0"
+                                                    value="{{ $pb['button_text']['en'] ?? '' }}"
+                                                    placeholder="e.g.: Discover Offers">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label fw-semibold small text-muted">{{ __('رابط التوجيه (Link / URL)') }}</label>
+                                                <input type="text" name="home_promo_banner[button_url]" class="form-control bg-white border-0"
+                                                    value="{{ $pb['button_url'] ?? '' }}"
+                                                    placeholder="مثال: /offers أو /cars أو https://...">
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-check form-switch mt-1">
+                                                    <input class="form-check-input" type="checkbox" role="switch"
+                                                        name="home_promo_banner[open_in_new_tab]" value="1" id="promoOpenInNewTab"
+                                                        {{ !empty($pb['open_in_new_tab']) && in_array($pb['open_in_new_tab'], ['1', 1, true, 'true'], true) ? 'checked' : '' }}>
+                                                    <label class="form-check-label small fw-semibold text-muted" for="promoOpenInNewTab">
+                                                        {{ __('فتح الرابط في نافذة جديدة (Open in new tab)') }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -2049,5 +2341,108 @@
         }
         // Initialize simulator
         document.addEventListener('DOMContentLoaded', runDbrSimulator);
+
+        // ===== Promo Banner Type Switcher & Preview =====
+        function switchPromoBannerType(type) {
+            document.querySelectorAll('.promo-type-card').forEach(card => {
+                card.classList.remove('border-primary', 'bg-primary-subtle');
+                card.classList.add('bg-light');
+            });
+            const selectedRadio = document.querySelector(`.promo-type-radio[value="${type}"]`);
+            if (selectedRadio) {
+                selectedRadio.checked = true;
+                const card = selectedRadio.closest('.promo-type-card');
+                if (card) {
+                    card.classList.add('border-primary', 'bg-primary-subtle');
+                    card.classList.remove('bg-light');
+                }
+            }
+
+            document.querySelectorAll('.promo-type-section').forEach(sec => sec.classList.add('d-none'));
+            const targetSec = document.getElementById(`promo-section-${type}`);
+            if (targetSec) {
+                targetSec.classList.remove('d-none');
+            }
+        }
+
+        function previewPromoImage(input, imgId, containerId, placeholderId) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById(imgId);
+                    const container = document.getElementById(containerId);
+                    const placeholder = document.getElementById(placeholderId);
+                    if (img) img.src = e.target.result;
+                    if (container) container.classList.remove('d-none');
+                    if (placeholder) placeholder.classList.add('d-none');
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function deletePromoDesktopImage() {
+            document.getElementById('delete_promo_banner_desktop').value = '1';
+            document.getElementById('promo_banner_image_desktop').value = '';
+            document.getElementById('promo-desktop-preview-container').classList.add('d-none');
+            document.getElementById('promo-desktop-placeholder').classList.remove('d-none');
+        }
+
+        function deletePromoMobileImage() {
+            document.getElementById('delete_promo_banner_mobile').value = '1';
+            document.getElementById('promo_banner_image_mobile').value = '';
+            document.getElementById('promo-mobile-preview-container').classList.add('d-none');
+            document.getElementById('promo-mobile-placeholder').classList.remove('d-none');
+        }
+
+        function previewPromoVideo(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const video = document.getElementById('promo-video-preview');
+                const container = document.getElementById('promo-video-preview-container');
+                const placeholder = document.getElementById('promo-video-placeholder');
+                const url = URL.createObjectURL(file);
+                if (video) video.src = url;
+                if (container) container.classList.remove('d-none');
+                if (placeholder) placeholder.classList.add('d-none');
+                document.getElementById('delete_promo_banner_video').value = '0';
+            }
+        }
+
+        function deletePromoVideoFile() {
+            document.getElementById('delete_promo_banner_video').value = '1';
+            document.getElementById('promo_banner_video').value = '';
+            const video = document.getElementById('promo-video-preview');
+            if (video) video.src = '';
+            document.getElementById('promo-video-preview-container').classList.add('d-none');
+            document.getElementById('promo-video-placeholder').classList.remove('d-none');
+        }
+
+        function updateYoutubePreview(url) {
+            const container = document.getElementById('youtube-preview-container');
+            const iframe = document.getElementById('youtube-preview-iframe');
+            if (!url || !url.trim()) {
+                if (container) container.classList.add('d-none');
+                if (iframe) iframe.src = '';
+                return;
+            }
+
+            let videoId = '';
+            try {
+                if (url.includes('youtu.be/')) {
+                    videoId = url.split('youtu.be/')[1]?.split('?')[0]?.split('&')[0];
+                } else if (url.includes('watch?v='')) {
+                    videoId = url.split('watch?v=')[1]?.split('&')[0];
+                } else if (url.includes('embed/')) {
+                    videoId = url.split('embed/')[1]?.split('?')[0];
+                }
+            } catch(e) {}
+
+            if (videoId) {
+                if (iframe) iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}`;
+                if (container) container.classList.remove('d-none');
+            } else {
+                if (container) container.classList.add('d-none');
+            }
+        }
     </script>
 @endsection

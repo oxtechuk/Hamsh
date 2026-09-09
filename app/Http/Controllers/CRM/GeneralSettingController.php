@@ -64,6 +64,9 @@ class GeneralSettingController extends Controller
         $offersHeroRaw = $settings['store_offers_hero'] ?? [];
         $offersHero = is_array($offersHeroRaw) ? $offersHeroRaw : (json_decode((string) $offersHeroRaw, true) ?: []);
 
+        $promoBannerRaw = $settings['home_promo_banner'] ?? [];
+        $promoBanner = is_array($promoBannerRaw) ? $promoBannerRaw : (json_decode((string) $promoBannerRaw, true) ?: []);
+
         return view('crm.settings.general', compact(
             'settings',
             'cars',
@@ -77,7 +80,8 @@ class GeneralSettingController extends Controller
             'aboutBranches',
             'offersHero',
             'financeStats',
-            'mainOfferId'
+            'mainOfferId',
+            'promoBanner'
         ));
     }
 
@@ -413,6 +417,86 @@ class GeneralSettingController extends Controller
             $offersHeroData['image'] = is_array($existingOffersHero?->value) ? ($existingOffersHero->value['image'] ?? null) : null;
         }
         Setting::updateOrCreate(['key' => 'store_offers_hero'], ['value' => $offersHeroData]);
+
+        // Handle Home Promo Banner (Middle of Homepage)
+        if ($request->has('home_promo_banner_submitted')) {
+            $existingPromoBanner = Setting::where('key', 'home_promo_banner')->first();
+            $bannerData = [];
+            if ($existingPromoBanner && ! empty($existingPromoBanner->value)) {
+                $bannerData = is_array($existingPromoBanner->value) ? $existingPromoBanner->value : (json_decode((string) $existingPromoBanner->value, true) ?: []);
+            }
+
+            $inputBanner = $request->input('home_promo_banner', []);
+
+            $bannerData['enabled'] = ($request->has('home_promo_banner.enabled') && in_array($request->input('home_promo_banner.enabled'), ['1', 1, 'on', true], true)) ? '1' : '0';
+            $bannerData['type'] = $inputBanner['type'] ?? 'image';
+            $bannerData['title'] = [
+                'ar' => $inputBanner['title']['ar'] ?? '',
+                'en' => $inputBanner['title']['en'] ?? '',
+            ];
+            $bannerData['subtitle'] = [
+                'ar' => $inputBanner['subtitle']['ar'] ?? '',
+                'en' => $inputBanner['subtitle']['en'] ?? '',
+            ];
+            $bannerData['button_text'] = [
+                'ar' => $inputBanner['button_text']['ar'] ?? '',
+                'en' => $inputBanner['button_text']['en'] ?? '',
+            ];
+            $bannerData['button_url'] = $inputBanner['button_url'] ?? '';
+            $bannerData['open_in_new_tab'] = ($request->has('home_promo_banner.open_in_new_tab') && in_array($request->input('home_promo_banner.open_in_new_tab'), ['1', 1, 'on', true], true)) ? '1' : '0';
+            $bannerData['youtube_url'] = $inputBanner['youtube_url'] ?? '';
+
+            // Desktop Image
+            if ($request->hasFile('home_promo_banner_image_desktop')) {
+                $oldDesktop = $bannerData['image_desktop'] ?? null;
+                if ($oldDesktop && Storage::disk('public')->exists($oldDesktop)) {
+                    Storage::disk('public')->delete($oldDesktop);
+                }
+                $bannerData['image_desktop'] = $request->file('home_promo_banner_image_desktop')->store('settings/banner', 'public');
+            }
+
+            // Mobile Image
+            if ($request->hasFile('home_promo_banner_image_mobile')) {
+                $oldMobile = $bannerData['image_mobile'] ?? null;
+                if ($oldMobile && Storage::disk('public')->exists($oldMobile)) {
+                    Storage::disk('public')->delete($oldMobile);
+                }
+                $bannerData['image_mobile'] = $request->file('home_promo_banner_image_mobile')->store('settings/banner', 'public');
+            }
+
+            // Uploaded Video
+            if ($request->hasFile('home_promo_banner_video')) {
+                $oldVideo = $bannerData['video_file'] ?? null;
+                if ($oldVideo && Storage::disk('public')->exists($oldVideo)) {
+                    Storage::disk('public')->delete($oldVideo);
+                }
+                $bannerData['video_file'] = $request->file('home_promo_banner_video')->store('settings/banner', 'public');
+            }
+
+            // Deletions
+            if ($request->has('delete_promo_banner_desktop') && ! empty($bannerData['image_desktop'])) {
+                if (Storage::disk('public')->exists($bannerData['image_desktop'])) {
+                    Storage::disk('public')->delete($bannerData['image_desktop']);
+                }
+                $bannerData['image_desktop'] = null;
+            }
+
+            if ($request->has('delete_promo_banner_mobile') && ! empty($bannerData['image_mobile'])) {
+                if (Storage::disk('public')->exists($bannerData['image_mobile'])) {
+                    Storage::disk('public')->delete($bannerData['image_mobile']);
+                }
+                $bannerData['image_mobile'] = null;
+            }
+
+            if ($request->has('delete_promo_banner_video') && ! empty($bannerData['video_file'])) {
+                if (Storage::disk('public')->exists($bannerData['video_file'])) {
+                    Storage::disk('public')->delete($bannerData['video_file']);
+                }
+                $bannerData['video_file'] = null;
+            }
+
+            Setting::updateOrCreate(['key' => 'home_promo_banner'], ['value' => $bannerData]);
+        }
 
         // Invalidate cache
         app(BaseCacheService::class)->forgetSettings();

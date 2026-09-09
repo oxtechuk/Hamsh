@@ -108,6 +108,28 @@ final class HomeApiService
             ],
         ];
 
+        $rawBanner = $this->cache->rememberSetting('home_promo_banner', []);
+        if (! is_array($rawBanner)) {
+            $rawBanner = json_decode((string) $rawBanner, true) ?: [];
+        }
+
+        $isBannerEnabled = ! in_array($rawBanner['enabled'] ?? '0', [0, '0', false, 'false'], true);
+        $bannerType = $rawBanner['type'] ?? 'image';
+
+        $promoBanner = [
+            'enabled' => $isBannerEnabled,
+            'type' => $bannerType,
+            'image_desktop' => $this->resolveImage($rawBanner['image_desktop'] ?? null),
+            'image_mobile' => $this->resolveImage($rawBanner['image_mobile'] ?? null),
+            'video_url' => $this->resolveImage($rawBanner['video_file'] ?? null),
+            'youtube_url' => $rawBanner['youtube_url'] ?? '',
+            'title' => is_array($rawBanner['title'] ?? null) ? ($rawBanner['title'][$locale] ?? '') : ($rawBanner['title'] ?? ''),
+            'subtitle' => is_array($rawBanner['subtitle'] ?? null) ? ($rawBanner['subtitle'][$locale] ?? '') : ($rawBanner['subtitle'] ?? ''),
+            'button_text' => is_array($rawBanner['button_text'] ?? null) ? ($rawBanner['button_text'][$locale] ?? '') : ($rawBanner['button_text'] ?? ''),
+            'button_url' => $rawBanner['button_url'] ?? '',
+            'open_in_new_tab' => ! in_array($rawBanner['open_in_new_tab'] ?? '0', [0, '0', false, 'false'], true),
+        ];
+
         return [
             'hero' => $hero,
             'hero_slides' => $heroSlides,
@@ -135,6 +157,7 @@ final class HomeApiService
             'featured_section' => $featuredSection,
             'homepage_stats' => $homepageStats,
             'page_sections' => $pageSections,
+            'promo_banner' => $promoBanner,
         ];
     }
 

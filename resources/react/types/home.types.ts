@@ -256,6 +256,20 @@ export interface FinanceSettingsData {
   stats: HomepageStat[];
 }
 
+export interface HomePromoBannerData {
+  enabled: boolean;
+  type: "image" | "video" | "youtube";
+  image_desktop?: string | null;
+  image_mobile?: string | null;
+  video_url?: string | null;
+  youtube_url?: string | null;
+  title?: string;
+  subtitle?: string;
+  button_text?: string;
+  button_url?: string;
+  open_in_new_tab?: boolean;
+}
+
 export interface HomePageData {
   hero: HeroData;
   hero_slides: HeroSlideData[];
@@ -289,4 +303,5 @@ export interface HomePageData {
   filter_models?: string[];
   filter_prices?: FilterPrice[];
   active_offers?: ActiveOffer[];
+  promo_banner?: HomePromoBannerData;
 }
