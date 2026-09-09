@@ -2430,7 +2430,7 @@
             try {
                 if (url.includes('youtu.be/')) {
                     videoId = url.split('youtu.be/')[1]?.split('?')[0]?.split('&')[0];
-                } else if (url.includes('watch?v='')) {
+                } else if (url.includes('watch?v=')) {
                     videoId = url.split('watch?v=')[1]?.split('&')[0];
                 } else if (url.includes('embed/')) {
                     videoId = url.split('embed/')[1]?.split('?')[0];
