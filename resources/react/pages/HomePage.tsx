@@ -8,6 +8,7 @@ import PurchaseExperienceSection from "../components/PurchaseExperienceSection";
 import BrandsSection from "../components/BrandsSection";
 import CarsSearchSection from "../components/CarsSearchSection";
 import HomeOffersSection from "../components/HomeOffersSection";
+import HomePromoBanner from "../components/HomePromoBanner";
 import HomePageSkeleton from "../components/HomePageSkeleton";
 
 import { useHomePageData } from "../hooks/useHomePageData";
@@ -110,6 +111,8 @@ export default function Home() {
                     interval={5000}
                 />
             )}
+
+            <HomePromoBanner banner={data?.promo_banner} />
 
             <BudgetCarsSection
                 titleBlue={
