@@ -15,6 +15,7 @@ export function useCarsFilter() {
       searchParams.get("brand") ||
       searchParams.get("brand_id") ||
       searchParams.get("brandId");
+    const model = searchParams.get("model");
     const type = searchParams.get("type");
     const categoryId =
       searchParams.get("category_id") || searchParams.get("categoryId");
@@ -22,13 +23,14 @@ export function useCarsFilter() {
     const q = searchParams.get("q") || searchParams.get("search");
     const sort = searchParams.get("sort");
 
-    if (!brands && !type && !categoryId && !year && !q && !sort) {
+    if (!brands && !model && !type && !categoryId && !year && !q && !sort) {
       return DEFAULT_FILTER_VALUES;
     }
 
     return {
       ...DEFAULT_FILTER_VALUES,
       brandId: brands ? Number(brands) : null,
+      model: model ?? "",
       type: type ?? "all",
       categoryId: categoryId ? Number(categoryId) : null,
       year: year ?? "",
@@ -50,6 +52,9 @@ export function useCarsFilter() {
 
     if (filters.brandId !== null) {
       params.brands = [filters.brandId];
+    }
+    if (filters.model) {
+      params.model = filters.model;
     }
     if (filters.type !== "all") {
       params.type = filters.type;

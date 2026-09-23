@@ -2,6 +2,7 @@ export type SortValue = "" | "price_asc" | "price_desc" | "year_desc" | "year_as
 
 export interface IFilterValues {
   brandId: number | null;
+  model: string;
   type: string;
   categoryId: number | null;
   year: string;
@@ -16,6 +17,7 @@ export interface IFilterValues {
 
 export const DEFAULT_FILTER_VALUES: IFilterValues = {
   brandId: null,
+  model: "",
   type: "all",
   categoryId: null,
   year: "",

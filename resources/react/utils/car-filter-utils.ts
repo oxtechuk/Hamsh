@@ -7,6 +7,9 @@ export function filterStaticCars(filters: IFilterValues): CarItem[] {
     if (filters.brandId !== null && car.brand?.id !== filters.brandId) {
       return false;
     }
+    if (filters.model && (!car.model || !car.model.toLowerCase().includes(filters.model.toLowerCase()))) {
+      return false;
+    }
     if (filters.categoryId !== null && car.category?.id !== filters.categoryId) {
       return false;
     }
