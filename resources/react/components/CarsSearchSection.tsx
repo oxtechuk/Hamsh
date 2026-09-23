@@ -373,7 +373,6 @@ export default function CarsSearchSection({
                   value={brandId}
                   onChange={(val) => {
                     setBrandId(val);
-                    let nextModel = model;
                     if (val && model) {
                       const isValid = (models as any[]).some((m) => {
                         if (typeof m === "string") return true;
@@ -382,11 +381,9 @@ export default function CarsSearchSection({
                         return mBrand === String(val) && mName === model;
                       });
                       if (!isValid) {
-                        nextModel = "";
                         setModel("");
                       }
                     }
-                    onSearch({ search, brandId: val, model: nextModel, year });
                   }}
                   options={brands.map((b) => ({
                     label: localize(b.name, i18n.language),
@@ -403,7 +400,6 @@ export default function CarsSearchSection({
                   value={model}
                   onChange={(val) => {
                     setModel(val);
-                    onSearch({ search, brandId, model: val, year });
                   }}
                   options={uniqueModels.map((m) => ({
                     label: m,
@@ -420,7 +416,6 @@ export default function CarsSearchSection({
                   value={year}
                   onChange={(val) => {
                     setYear(val);
-                    onSearch({ search, brandId, model, year: val });
                   }}
                   options={years.map((y) => {
                     const val =
@@ -451,7 +446,6 @@ export default function CarsSearchSection({
                       type="button"
                       onClick={() => {
                         setBrandId("");
-                        onSearch({ search, brandId: "", model, year });
                       }}
                       className="hover:text-red-500"
                     >
@@ -467,7 +461,6 @@ export default function CarsSearchSection({
                       type="button"
                       onClick={() => {
                         setModel("");
-                        onSearch({ search, brandId, model: "", year });
                       }}
                       className="hover:text-red-500"
                     >
@@ -483,7 +476,6 @@ export default function CarsSearchSection({
                       type="button"
                       onClick={() => {
                         setYear("");
-                        onSearch({ search, brandId, model, year: "" });
                       }}
                       className="hover:text-red-500"
                     >
