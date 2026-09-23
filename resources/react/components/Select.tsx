@@ -14,7 +14,17 @@ export default function Select(props: ISelectProps) {
   return <SearchableSelect {...rest} />;
 }
 
-/* ── Native version ── */
+function getSafeLabel(label: any): string {
+  if (label === undefined || label === null) return "";
+  if (typeof label === "string" || typeof label === "number") return String(label);
+  if (typeof label === "object") {
+    if ("name" in label && typeof label.name === "string") return label.name;
+    if ("ar" in label && typeof label.ar === "string") return label.ar;
+    if ("en" in label && typeof label.en === "string") return label.en;
+    if ("model" in label && typeof label.model === "string") return label.model;
+  }
+  return "";
+}
 
 function NativeSelect({
   placeholder,
@@ -51,7 +61,7 @@ function NativeSelect({
 
         {options.map((option) => (
           <option key={option.value} value={option.value}>
-            {option.label}
+            {getSafeLabel(option.label)}
           </option>
         ))}
       </select>
@@ -87,14 +97,14 @@ function SearchableSelect({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const aboveRef = useRef(false);
 
-  const selectedLabel =
-    options.find((o) => o.value === value)?.label ?? "";
+  const matchedOpt = options.find((o) => o.value === value);
+  const selectedLabel = matchedOpt ? getSafeLabel(matchedOpt.label) : "";
 
   const filtered = useMemo(
     () =>
       query
         ? options.filter((o) =>
-            o.label.toLowerCase().includes(query.toLowerCase()),
+            getSafeLabel(o.label).toLowerCase().includes(query.toLowerCase()),
           )
         : options,
     [options, query],
@@ -242,7 +252,7 @@ function SearchableSelect({
                       : "text-[#111827]"
                   }`}
                 >
-                  {option.label}
+                  {getSafeLabel(option.label)}
                 </button>
               ))
             )}
