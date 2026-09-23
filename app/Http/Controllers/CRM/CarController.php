@@ -48,7 +48,7 @@ class CarController extends Controller
         $features_list = Feature::all();
         $safety_features = SafetyFeature::all();
         $carTypes = CarType::activeOrdered()->get();
-        $existingModels = Car::distinct()->whereNotNull('model')->where('model', '!=', '')->orderBy('model')->pluck('model');
+        $existingModels = Car::whereNotNull('model')->where('model', '!=', '')->select('model', 'brand_id')->distinct()->orderBy('model')->get();
 
         return view('crm.cars.create', compact('brands', 'categories', 'carTypes', 'specifications', 'features_list', 'safety_features', 'existingModels'));
     }
@@ -208,7 +208,7 @@ class CarController extends Controller
         $safety_features = SafetyFeature::all();
         $carTypes = CarType::activeOrdered()->get();
         $car->load(['images', 'specifications', 'features_list', 'safety_features']);
-        $existingModels = Car::distinct()->whereNotNull('model')->where('model', '!=', '')->orderBy('model')->pluck('model');
+        $existingModels = Car::whereNotNull('model')->where('model', '!=', '')->select('model', 'brand_id')->distinct()->orderBy('model')->get();
 
         return view('crm.cars.edit', compact('car', 'brands', 'categories', 'carTypes', 'specifications', 'features_list', 'safety_features', 'existingModels'));
     }

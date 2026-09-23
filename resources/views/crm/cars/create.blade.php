@@ -48,8 +48,8 @@
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <label class="form-label">{{ __('الماركة') }} <span class="text-danger">*</span></label>
-                                    <select name="brand_id" class="form-select @error('brand_id') is-invalid @enderror"
-                                        required>
+                                    <select name="brand_id" id="car_brand_select" class="form-select @error('brand_id') is-invalid @enderror"
+                                        onchange="filterModelsByBrand(this.value)" required>
                                         <option value="">{{ __('اختر الماركة') }}</option>
                                         @foreach($brands as $brand)
                                             <option value="{{ $brand->id }}" {{ old('brand_id') == $brand->id ? 'selected' : '' }}>{{ $brand->name }}</option>
@@ -94,9 +94,9 @@
                                                 <li class="dropdown-header text-muted small fw-bold px-2">{{ __('الموديلات السابقة المسجلة') }}</li>
                                                 <div id="models_items_container">
                                                     @foreach($existingModels as $m)
-                                                        <li>
-                                                            <a class="dropdown-item rounded-2 py-1.5 px-2 model-option-item" href="javascript:void(0)" onclick="selectModel('{{ $m }}')">
-                                                                <i class="bi bi-car-front text-muted me-1"></i> {{ $m }}
+                                                        <li class="model-item-wrapper" data-brand-id="{{ $m->brand_id }}">
+                                                            <a class="dropdown-item rounded-2 py-1.5 px-2 model-option-item" href="javascript:void(0)" onclick="selectModel('{{ $m->model }}')">
+                                                                <i class="bi bi-car-front text-muted me-1"></i> {{ $m->model }}
                                                             </a>
                                                         </li>
                                                     @endforeach
@@ -903,22 +903,43 @@
             if (dropdown) dropdown.hide();
         }
 
+        function filterModelsByBrand(brandId) {
+            const wrappers = document.querySelectorAll('.model-item-wrapper');
+            wrappers.forEach(wrapper => {
+                const itemBrandId = wrapper.getAttribute('data-brand-id');
+                if (!brandId || !itemBrandId || itemBrandId === brandId) {
+                    wrapper.style.display = '';
+                } else {
+                    wrapper.style.display = 'none';
+                }
+            });
+            const inlineSearch = document.getElementById('model_inline_search');
+            if (inlineSearch && inlineSearch.value) {
+                filterModelsList(inlineSearch.value);
+            }
+        }
+
         function filterModelsList(val) {
             val = (val || '').toLowerCase().trim();
-            const items = document.querySelectorAll('.model-option-item');
+            const brandId = document.getElementById('car_brand_select')?.value || '';
+            const wrappers = document.querySelectorAll('.model-item-wrapper');
             let found = 0;
-            items.forEach(item => {
-                const text = item.textContent.toLowerCase();
-                if (!val || text.includes(val)) {
-                    item.parentElement.style.display = '';
+            wrappers.forEach(wrapper => {
+                const itemBrandId = wrapper.getAttribute('data-brand-id');
+                const matchesBrand = !brandId || !itemBrandId || itemBrandId === brandId;
+                const text = wrapper.textContent.toLowerCase();
+                const matchesSearch = !val || text.includes(val);
+
+                if (matchesBrand && matchesSearch) {
+                    wrapper.style.display = '';
                     found++;
                 } else {
-                    item.parentElement.style.display = 'none';
+                    wrapper.style.display = 'none';
                 }
             });
             const noFound = document.getElementById('no_model_found');
             if (noFound) {
-                if (found === 0 && val.length > 0) {
+                if (found === 0) {
                     noFound.classList.remove('d-none');
                 } else {
                     noFound.classList.add('d-none');

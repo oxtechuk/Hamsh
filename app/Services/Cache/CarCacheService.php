@@ -123,7 +123,12 @@ class CarCacheService extends BaseCacheService
                 }
 
                 if (filled($row->model)) {
-                    $models[trim($row->model)] = true;
+                    $modelName = trim($row->model);
+                    $models[$modelName.'_'.$row->brand_id] = [
+                        'name' => $modelName,
+                        'brand_id' => (int) $row->brand_id,
+                        'brand_name' => $brands[$row->brand_id]['name'] ?? '',
+                    ];
                 }
 
                 if (filled($row->year)) {
@@ -147,7 +152,7 @@ class CarCacheService extends BaseCacheService
 
             return [
                 'brands' => collect($brands)->sortBy('name')->values()->all(),
-                'models' => collect(array_keys($models))->sort()->values()->all(),
+                'models' => collect($models)->sortBy('name')->values()->all(),
                 'years' => collect(array_keys($years))->sortDesc()->values()->all(),
                 'colors' => collect(array_keys($colors))->sort()->values()->all(),
             ];

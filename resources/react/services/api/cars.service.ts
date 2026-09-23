@@ -60,7 +60,7 @@ export async function getCarsMeta(): Promise<CarsMetaData> {
 
 export interface ISpecialOrderOptions {
   brands: { id: number; name: string }[];
-  models: string[];
+  models: (string | { name: string; brand_id: number; brand_name?: string })[];
   years: string[];
   colors: string[];
 }

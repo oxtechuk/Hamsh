@@ -65,10 +65,14 @@ class HomeCacheService extends BaseCacheService
             $filterModels = Car::where('is_active', true)
                 ->whereNotNull('model')
                 ->where('model', '!=', '')
-                ->select('model')
+                ->select('model', 'brand_id')
                 ->distinct()
                 ->orderBy('model')
-                ->pluck('model')
+                ->get()
+                ->map(fn ($car) => [
+                    'name' => $car->model,
+                    'brand_id' => (int) $car->brand_id,
+                ])
                 ->values();
 
             $filterBrandTypes = BrandType::where('is_active', true)->orderBy('sort_order')->orderBy('id')->get();

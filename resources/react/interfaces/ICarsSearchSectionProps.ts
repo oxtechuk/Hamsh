@@ -12,7 +12,7 @@ export interface ICarsSearchValues {
 export interface ICarsSearchSectionProps {
   title?: string;
   brands?: BrandInfo[];
-  models?: string[];
+  models?: (string | { name?: string; model?: string; brand_id?: number | string; brandId?: number | string })[];
   years?: (string | { year: string | number } | number)[];
   types?: FilterCategory[];
   categories?: FilterCategory[];

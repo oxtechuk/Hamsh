@@ -36,9 +36,24 @@ export default function SpecialOrderStepTwo({
     });
 
     const brandOptions = options?.brands ?? [];
-    const modelOptions = options?.models ?? [];
+    const rawModelOptions = options?.models ?? [];
     const yearOptions = options?.years ?? [];
     const colorOptions = options?.colors ?? [];
+
+    const selectedBrand = brandOptions.find(
+        (b) => b.name === data.brand || String(b.id) === data.brand
+    );
+
+    const modelOptions = rawModelOptions
+        .filter((m: any) => {
+            if (typeof m === "string") return true;
+            if (!data.brand) return true;
+            const mBrandId = String(m.brand_id ?? m.brandId ?? "");
+            const mBrandName = m.brand_name ?? "";
+            return (selectedBrand && mBrandId === String(selectedBrand.id)) || mBrandName === data.brand;
+        })
+        .map((m: any) => (typeof m === "string" ? m : (m.name || m.model || "")))
+        .filter((val: string, idx: number, arr: string[]) => Boolean(val) && arr.indexOf(val) === idx);
 
     const canContinue =
         data.brand.trim() &&
@@ -77,9 +92,23 @@ export default function SpecialOrderStepTwo({
 
                     <select
                         value={data.brand}
-                        onChange={(event) =>
-                            onChange("brand", event.target.value)
-                        }
+                        onChange={(event) => {
+                            const newBrand = event.target.value;
+                            onChange("brand", newBrand);
+                            const newBrandObj = brandOptions.find(
+                                (b) => b.name === newBrand || String(b.id) === newBrand
+                            );
+                            const isValid = (rawModelOptions as any[]).some((m) => {
+                                if (typeof m === "string") return true;
+                                const mBrandId = String(m.brand_id ?? m.brandId ?? "");
+                                const mBrandName = m.brand_name ?? "";
+                                const mName = m.name || m.model;
+                                return ((newBrandObj && mBrandId === String(newBrandObj.id)) || mBrandName === newBrand) && mName === data.model;
+                            });
+                            if (!isValid) {
+                                onChange("model", "");
+                            }
+                        }}
                         className={fieldCls}
                         required
                     >

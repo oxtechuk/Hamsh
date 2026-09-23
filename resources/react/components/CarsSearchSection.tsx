@@ -109,28 +109,39 @@ export default function CarsSearchSection({
     navigate(`/cars/${car.slug}`);
   };
 
-  // Distinct list of models
+  // Distinct list of models filtered by selected brand
   const uniqueModels = useMemo(() => {
+    const rawList = models.length
+      ? models
+      : [
+        "Camry LE",
+        "Yaris Y",
+        "Accent Fleet",
+        "Elantra Smart",
+        "Sonata Smart",
+        "K3 LX",
+        "K4 EX",
+        "K5 LX",
+        "Accord LX Turbo",
+        "Altima S",
+        "Cruze LT",
+      ];
+
+    const filtered = rawList.filter((item: any) => {
+      if (typeof item === "string") return true;
+      if (!brandId) return true;
+      const itemBrandId = item.brand_id ?? item.brandId;
+      return String(itemBrandId) === String(brandId);
+    });
+
     return Array.from(
       new Set(
-        models.length
-          ? models
-          : [
-            "Camry LE",
-            "Yaris Y",
-            "Accent Fleet",
-            "Elantra Smart",
-            "Sonata Smart",
-            "K3 LX",
-            "K4 EX",
-            "K5 LX",
-            "Accord LX Turbo",
-            "Altima S",
-            "Cruze LT",
-          ],
-      ),
+        filtered.map((item: any) =>
+          typeof item === "string" ? item : (item.name || item.model || "")
+        )
+      )
     ).filter(Boolean);
-  }, [models]);
+  }, [models, brandId]);
 
   const activeFiltersCount = [
     Boolean(search.trim()),
@@ -362,7 +373,20 @@ export default function CarsSearchSection({
                   value={brandId}
                   onChange={(val) => {
                     setBrandId(val);
-                    onSearch({ search, brandId: val, model, year });
+                    let nextModel = model;
+                    if (val && model) {
+                      const isValid = (models as any[]).some((m) => {
+                        if (typeof m === "string") return true;
+                        const mBrand = String(m.brand_id ?? m.brandId ?? "");
+                        const mName = m.name || m.model || "";
+                        return mBrand === String(val) && mName === model;
+                      });
+                      if (!isValid) {
+                        nextModel = "";
+                        setModel("");
+                      }
+                    }
+                    onSearch({ search, brandId: val, model: nextModel, year });
                   }}
                   options={brands.map((b) => ({
                     label: localize(b.name, i18n.language),
