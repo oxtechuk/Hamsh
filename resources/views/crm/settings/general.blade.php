@@ -778,7 +778,7 @@
                                                                     <label class="form-label fw-bold small mb-0 text-dark">
                                                                         <i class="bi bi-laptop me-1 text-primary"></i> {{ __('بانر الديسكتوب (Desktop Banner)') }}
                                                                     </label>
-                                                                    <span class="badge bg-white text-muted border text-xs">1920×600px</span>
+                                                                    <span class="badge bg-white text-muted border text-xs">1920×550px / 1920×600px</span>
                                                                 </div>
                                                                 <input type="hidden" name="hero_slides[{{ $idx }}][image_desktop_path]"
                                                                     value="{{ $desktopImg }}">
@@ -2006,7 +2006,7 @@
                                 <label class="form-label fw-bold small mb-0 text-dark">
                                     <i class="bi bi-laptop me-1 text-primary"></i> {{ __('بانر الديسكتوب (Desktop Banner)') }}
                                 </label>
-                                <span class="badge bg-white text-muted border text-xs">1920×600px</span>
+                                <span class="badge bg-white text-muted border text-xs">1920×550px / 1920×600px</span>
                             </div>
                             <input type="file" name="hero_slides[${idx}][image_desktop]" class="form-control bg-white border-0 form-control-sm" accept="image/*" required>
                         </div>
