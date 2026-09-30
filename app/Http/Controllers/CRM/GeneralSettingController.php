@@ -134,6 +134,9 @@ class GeneralSettingController extends Controller
             'show_footer_map',
             'show_home_search_filter',
             'show_home_brands_section',
+            'show_home_offers_section',
+            'show_home_budget_section',
+            'show_home_featured_cars_section',
             'finance_dbr_limit_personal',
             'finance_dbr_limit_real_estate',
             'finance_debt_solution_text',
@@ -159,8 +162,20 @@ class GeneralSettingController extends Controller
         if (! $request->has('show_footer_map')) {
             Setting::updateOrCreate(['key' => 'show_footer_map'], ['value' => '0']);
         }
+        if (! $request->has('show_home_search_filter')) {
+            Setting::updateOrCreate(['key' => 'show_home_search_filter'], ['value' => '0']);
+        }
         if (! $request->has('show_home_brands_section')) {
             Setting::updateOrCreate(['key' => 'show_home_brands_section'], ['value' => '0']);
+        }
+        if (! $request->has('show_home_offers_section')) {
+            Setting::updateOrCreate(['key' => 'show_home_offers_section'], ['value' => '0']);
+        }
+        if (! $request->has('show_home_budget_section')) {
+            Setting::updateOrCreate(['key' => 'show_home_budget_section'], ['value' => '0']);
+        }
+        if (! $request->has('show_home_featured_cars_section')) {
+            Setting::updateOrCreate(['key' => 'show_home_featured_cars_section'], ['value' => '0']);
         }
         if (! $request->has('maintenance_mode_enabled')) {
             Setting::updateOrCreate(['key' => 'maintenance_mode_enabled'], ['value' => '0']);

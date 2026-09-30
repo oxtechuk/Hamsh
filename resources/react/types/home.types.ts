@@ -233,6 +233,7 @@ export interface FilterPrice {
 }
 
 export interface PageSectionContent {
+  enabled?: boolean;
   badge?: string;
   title?: string;
   subtitle?: string;
@@ -275,6 +276,9 @@ export interface HomePageData {
   hero_slides: HeroSlideData[];
   show_search_filter?: boolean;
   show_home_brands?: boolean;
+  show_home_offers?: boolean;
+  show_home_budget?: boolean;
+  show_home_featured_cars?: boolean;
   brands: BrandInfo[];
   latest_cars: {
     section: SectionMeta;

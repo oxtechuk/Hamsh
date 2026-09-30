@@ -1144,26 +1144,149 @@
                         {{-- TAB: نصوص أقسام الرئيسية --}}
                         {{-- =============================== --}}
                         <div class="settings-pane d-none" id="tab-homepage-sections">
-                            @php $sec = $homepageSections; @endphp
+                            @php
+                                $sec = $homepageSections;
+                                $pb = $promoBanner;
+                            @endphp
                             <div class="d-flex flex-column gap-3">
-                                {{-- سوتش إظهار / إخفاء قسم العلامات التجارية (الماركات) --}}
+                                {{-- كارت مفاتيح التحكم في إظهار وإخفاء أقسام الصفحة الرئيسية (Section Visibility Toggles) --}}
                                 <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-2">
+                                    <div class="card-header bg-white border-bottom p-4">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="rounded-3 p-3 bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                                                <i class="bi bi-toggles fs-4 text-primary"></i>
+                                            </div>
+                                            <div>
+                                                <h6 class="fw-bold mb-1">{{ __('التحكم في إظهار وإخفاء أقسام الصفحة الرئيسية') }}</h6>
+                                                <p class="text-muted small mb-0">{{ __('يمكنك تفعيل أو إخفاء أي قسم أو بانر من الصفحة الرئيسية بسهولة عبر مفاتيح التبديل أدناه') }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="card-body p-4">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <div class="d-flex align-items-center gap-3">
-                                                <div class="rounded-3 p-3 bg-warning bg-opacity-10 text-warning d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
-                                                    <i class="bi bi-award fs-5 text-warning"></i>
+                                        <div class="d-flex flex-column gap-3">
+
+                                            {{-- 1. سوتش بانر سلايدر العروض الحصرية --}}
+                                            <div class="p-3 bg-light rounded-3 d-flex align-items-center justify-content-between">
+                                                <div class="d-flex align-items-center gap-3">
+                                                    <div class="rounded-3 p-2 bg-danger bg-opacity-10 text-danger d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                                        <i class="bi bi-tag-fill fs-5"></i>
+                                                    </div>
+                                                    <div>
+                                                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                                                            <h6 class="fw-bold mb-0">{{ __('بانر سلايدر العروض الحصرية') }}</h6>
+                                                            <span class="badge bg-secondary-subtle text-secondary small px-2"><code>relative overflow-hidden h-full w-full object-cover</code></span>
+                                                        </div>
+                                                        <p class="text-muted small mb-0">{{ __('إظهار أو إخفاء السلايدر الإعلاني للعروض الحصرية في منتصف الصفحة') }}</p>
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    <h6 class="fw-bold mb-1">{{ __('قسم العلامات التجارية (الماركات)') }}</h6>
-                                                    <p class="text-muted small mb-0">{{ __('إظهار أو إخفاء قسم استعراض السيارات حسب العلامات التجارية (ابحث حسب علامتك التجارية) في الصفحة الرئيسية') }}</p>
+                                                <div class="form-check form-switch fs-4 mb-0">
+                                                    <input type="hidden" name="show_home_offers_section" value="0">
+                                                    <input class="form-check-input" type="checkbox" name="show_home_offers_section"
+                                                        value="1" id="show_home_offers_section" {{ ($settings['show_home_offers_section'] ?? '1') == '1' ? 'checked' : '' }}>
                                                 </div>
                                             </div>
-                                            <div class="form-check form-switch fs-4 mb-0">
-                                                <input type="hidden" name="show_home_brands_section" value="0">
-                                                <input class="form-check-input" type="checkbox" name="show_home_brands_section"
-                                                    value="1" id="show_home_brands_section" {{ ($settings['show_home_brands_section'] ?? '1') == '1' ? 'checked' : '' }}>
+
+                                            {{-- 2. سوتش البانر الإعلاني (منتصف الصفحة) --}}
+                                            <div class="p-3 bg-light rounded-3 d-flex align-items-center justify-content-between">
+                                                <div class="d-flex align-items-center gap-3">
+                                                    <div class="rounded-3 p-2 bg-info bg-opacity-10 text-info d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                                        <i class="bi bi-badge-ad-fill fs-5"></i>
+                                                    </div>
+                                                    <div>
+                                                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                                                            <h6 class="fw-bold mb-0">{{ __('البانر الإعلاني (منتصف الصفحة)') }}</h6>
+                                                            <span class="badge bg-secondary-subtle text-secondary small px-2"><code>mx-auto max-w-7xl</code></span>
+                                                        </div>
+                                                        <p class="text-muted small mb-0">{{ __('عرض البانر الترويجي الفردي (صورة أو فيديو أو يوتيوب) مع زر التوجيه') }}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="document.querySelector('[data-tab=promo-banner]').click()">
+                                                        <i class="bi bi-pencil-square me-1"></i> {{ __('إعدادات البانر') }}
+                                                    </button>
+                                                    <div class="form-check form-switch fs-4 mb-0">
+                                                        <input class="form-check-input" type="checkbox" id="syncPromoBannerSwitch"
+                                                            {{ !empty($pb['enabled']) && in_array($pb['enabled'], ['1', 1, true, 'true'], true) ? 'checked' : '' }}
+                                                            onchange="const s = document.getElementById('promoBannerEnabledSwitch'); if(s) { s.checked = this.checked; }">
+                                                    </div>
+                                                </div>
                                             </div>
+
+                                            {{-- 3. سوتش قسم تسوّق حسب ميزانيتك --}}
+                                            <div class="p-3 bg-light rounded-3 d-flex align-items-center justify-content-between">
+                                                <div class="d-flex align-items-center gap-3">
+                                                    <div class="rounded-3 p-2 bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                                        <i class="bi bi-wallet2 fs-5"></i>
+                                                    </div>
+                                                    <div>
+                                                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                                                            <h6 class="fw-bold mb-0">{{ __('قسم تسوّق حسب ميزانيتك') }}</h6>
+                                                            <span class="badge bg-secondary-subtle text-secondary small px-2"><code>mx-auto max-w-7xl</code></span>
+                                                        </div>
+                                                        <p class="text-muted small mb-0">{{ __('إظهار أو إخفاء كاروسيل تصفح السيارات حسب نطاق الميزانية وأزرار الفئات السعرية') }}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="form-check form-switch fs-4 mb-0">
+                                                    <input type="hidden" name="show_home_budget_section" value="0">
+                                                    <input class="form-check-input" type="checkbox" name="show_home_budget_section"
+                                                        value="1" id="show_home_budget_section" {{ ($settings['show_home_budget_section'] ?? '1') == '1' ? 'checked' : '' }}>
+                                                </div>
+                                            </div>
+
+                                            {{-- 4. سوتش قسم السيارات المميزة --}}
+                                            <div class="p-3 bg-light rounded-3 d-flex align-items-center justify-content-between">
+                                                <div class="d-flex align-items-center gap-3">
+                                                    <div class="rounded-3 p-2 bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                                        <i class="bi bi-star-fill fs-5"></i>
+                                                    </div>
+                                                    <div>
+                                                        <h6 class="fw-bold mb-0">{{ __('قسم السيارات المميزة (أحدث السيارات)') }}</h6>
+                                                        <p class="text-muted small mb-0">{{ __('إظهار أو إخفاء قسم السيارات المختارة والمميزة في الصفحة الرئيسية') }}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="form-check form-switch fs-4 mb-0">
+                                                    <input type="hidden" name="show_home_featured_cars_section" value="0">
+                                                    <input class="form-check-input" type="checkbox" name="show_home_featured_cars_section"
+                                                        value="1" id="show_home_featured_cars_section" {{ ($settings['show_home_featured_cars_section'] ?? '1') == '1' ? 'checked' : '' }}>
+                                                </div>
+                                            </div>
+
+                                            {{-- 5. سوتش قسم البحث والفلترة السريعة --}}
+                                            <div class="p-3 bg-light rounded-3 d-flex align-items-center justify-content-between">
+                                                <div class="d-flex align-items-center gap-3">
+                                                    <div class="rounded-3 p-2 bg-secondary bg-opacity-10 text-secondary d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                                        <i class="bi bi-search fs-5"></i>
+                                                    </div>
+                                                    <div>
+                                                        <h6 class="fw-bold mb-0">{{ __('قسم البحث والفلترة السريعة') }}</h6>
+                                                        <p class="text-muted small mb-0">{{ __('إظهار أو إخفاء حقول الفلترة السريعة لاختيار الماركة والموديل وسنة الصنع أسفل الهيرو') }}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="form-check form-switch fs-4 mb-0">
+                                                    <input type="hidden" name="show_home_search_filter" value="0">
+                                                    <input class="form-check-input" type="checkbox" name="show_home_search_filter"
+                                                        value="1" id="show_home_search_filter" {{ ($settings['show_home_search_filter'] ?? '1') == '1' ? 'checked' : '' }}>
+                                                </div>
+                                            </div>
+
+                                            {{-- 6. سوتش قسم العلامات التجارية (الماركات) --}}
+                                            <div class="p-3 bg-light rounded-3 d-flex align-items-center justify-content-between">
+                                                <div class="d-flex align-items-center gap-3">
+                                                    <div class="rounded-3 p-2 bg-warning bg-opacity-10 text-warning d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                                        <i class="bi bi-award-fill fs-5"></i>
+                                                    </div>
+                                                    <div>
+                                                        <h6 class="fw-bold mb-0">{{ __('قسم العلامات التجارية (الماركات)') }}</h6>
+                                                        <p class="text-muted small mb-0">{{ __('إظهار أو إخفاء قسم استعراض السيارات حسب العلامات التجارية (ابحث حسب علامتك التجارية)') }}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="form-check form-switch fs-4 mb-0">
+                                                    <input type="hidden" name="show_home_brands_section" value="0">
+                                                    <input class="form-check-input" type="checkbox" name="show_home_brands_section"
+                                                        value="1" id="show_home_brands_section" {{ ($settings['show_home_brands_section'] ?? '1') == '1' ? 'checked' : '' }}>
+                                                </div>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>

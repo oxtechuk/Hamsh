@@ -70,13 +70,15 @@ export default function Home() {
                 }
             />
 
-            <CarsSearchSection
-                title={data?.page_sections?.filter?.title?.trim() || undefined}
-                brands={data?.filter_brands ?? data?.brands}
-                models={data?.filter_models}
-                years={data?.filter_years}
-                onSearch={handleSearch}
-            />
+            {data?.show_search_filter !== false && data?.page_sections?.filter?.enabled !== false && (
+                <CarsSearchSection
+                    title={data?.page_sections?.filter?.title?.trim() || undefined}
+                    brands={data?.filter_brands ?? data?.brands}
+                    models={data?.filter_models}
+                    years={data?.filter_years}
+                    onSearch={handleSearch}
+                />
+            )}
 
             {data?.show_home_brands !== false && data?.page_sections?.brands?.enabled !== false && (
                 <BrandsSection
@@ -91,20 +93,22 @@ export default function Home() {
                 />
             )}
 
-            <FeaturedCarsSection
-                titleBlue={
-                    // data?.page_sections?.featured_cars?.title?.trim() ||
-                    t("featuredCars.titleBlue")
-                }
-                buttonText={
-                    // data?.page_sections?.featured_cars?.button_text?.trim() ||
-                    t("featuredCars.buttonText")
-                }
-                buttonTo="/cars"
-                cars={latestCars}
-            />
+            {data?.show_home_featured_cars !== false && data?.page_sections?.featured_cars?.enabled !== false && (
+                <FeaturedCarsSection
+                    titleBlue={
+                        data?.page_sections?.featured_cars?.title?.trim() ||
+                        t("featuredCars.titleBlue")
+                    }
+                    buttonText={
+                        data?.page_sections?.featured_cars?.button_text?.trim() ||
+                        t("featuredCars.buttonText")
+                    }
+                    buttonTo="/cars"
+                    cars={latestCars}
+                />
+            )}
 
-            {homeOffers.length > 0 && (
+            {data?.show_home_offers !== false && data?.page_sections?.offers?.enabled !== false && homeOffers.length > 0 && (
                 <HomeOffersSection
                     slides={homeOffers}
                     autoPlay
@@ -114,25 +118,27 @@ export default function Home() {
 
             <HomePromoBanner banner={data?.promo_banner} />
 
-            <BudgetCarsSection
-                titleBlue={
-                    data?.page_sections?.budget?.title?.trim() ||
-                    t("budgetCars.titleBlue")
-                }
-                description={
-                    data?.page_sections?.budget?.description?.trim() ||
-                    t("budgetCars.description")
-                }
-                buttonText={
-                    data?.page_sections?.budget?.button_text?.trim() ||
-                    t("budgetCars.buttonText")
-                }
-                buttonTo="/cars"
-                cars={budgetCars}
-                ranges={priceRanges}
-                activeRange={activeBudgetRange}
-                onRangeChange={setActiveBudgetRange}
-            />
+            {data?.show_home_budget !== false && data?.page_sections?.budget?.enabled !== false && (
+                <BudgetCarsSection
+                    titleBlue={
+                        data?.page_sections?.budget?.title?.trim() ||
+                        t("budgetCars.titleBlue")
+                    }
+                    description={
+                        data?.page_sections?.budget?.description?.trim() ||
+                        t("budgetCars.description")
+                    }
+                    buttonText={
+                        data?.page_sections?.budget?.button_text?.trim() ||
+                        t("budgetCars.buttonText")
+                    }
+                    buttonTo="/cars"
+                    cars={budgetCars}
+                    ranges={priceRanges}
+                    activeRange={activeBudgetRange}
+                    onRangeChange={setActiveBudgetRange}
+                />
+            )}
 
             <PurchaseExperienceSection
                 features={

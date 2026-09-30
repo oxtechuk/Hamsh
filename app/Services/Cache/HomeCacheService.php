@@ -139,6 +139,14 @@ class HomeCacheService extends BaseCacheService
                 ->limit(8)
                 ->get();
 
+            if ($highlightedCars->isEmpty()) {
+                $highlightedCars = Car::where('is_active', true)
+                    ->with(['brand', 'images'])
+                    ->latest()
+                    ->limit(8)
+                    ->get();
+            }
+
             $highlightCounts = Car::where('is_active', true)
                 ->where('is_highlighted', '!=', 'none')
                 ->pluck('is_highlighted')

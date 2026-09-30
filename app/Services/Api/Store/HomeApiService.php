@@ -66,6 +66,9 @@ final class HomeApiService
 
         $showSearchFilter = ! in_array($this->cache->rememberSetting('show_home_search_filter', '1'), [0, '0', false, 'false'], true);
         $showHomeBrands = ! in_array($this->cache->rememberSetting('show_home_brands_section', '1'), [0, '0', false, 'false'], true);
+        $showHomeOffers = ! in_array($this->cache->rememberSetting('show_home_offers_section', '1'), [0, '0', false, 'false'], true);
+        $showHomeBudget = ! in_array($this->cache->rememberSetting('show_home_budget_section', '1'), [0, '0', false, 'false'], true);
+        $showHomeFeaturedCars = ! in_array($this->cache->rememberSetting('show_home_featured_cars_section', '1'), [0, '0', false, 'false'], true);
 
         $pageSections = [
             'filter' => [
@@ -73,12 +76,14 @@ final class HomeApiService
                 'title' => $rawSections['filter']['title'][$locale] ?? '',
             ],
             'featured_cars' => [
+                'enabled' => $showHomeFeaturedCars,
                 'badge' => $rawSections['featured_cars']['badge'][$locale] ?? '',
                 'title' => $rawSections['featured_cars']['title'][$locale] ?? '',
                 'subtitle' => $rawSections['featured_cars']['subtitle'][$locale] ?? '',
                 'button_text' => $rawSections['featured_cars']['button_text'][$locale] ?? '',
             ],
             'offers' => [
+                'enabled' => $showHomeOffers,
                 'badge' => $rawSections['offers']['badge'][$locale] ?? '',
                 'title' => $rawSections['offers']['title'][$locale] ?? '',
                 'button_text' => $rawSections['offers']['button_text'][$locale] ?? '',
@@ -101,6 +106,7 @@ final class HomeApiService
                 'subtitle' => $rawSections['brands']['subtitle'][$locale] ?? '',
             ],
             'budget' => [
+                'enabled' => $showHomeBudget,
                 'badge' => $rawSections['budget']['badge'][$locale] ?? '',
                 'title' => $rawSections['budget']['title'][$locale] ?? '',
                 'description' => $rawSections['budget']['description'][$locale] ?? '',
@@ -135,6 +141,9 @@ final class HomeApiService
             'hero_slides' => $heroSlides,
             'show_search_filter' => $showSearchFilter,
             'show_home_brands' => $showHomeBrands,
+            'show_home_offers' => $showHomeOffers,
+            'show_home_budget' => $showHomeBudget,
+            'show_home_featured_cars' => $showHomeFeaturedCars,
             'featured_cars' => ($data['featuredCars'] ?? collect())->values(),
             'active_offers' => ($data['activeOffers'] ?? collect())->values(),
             'brands' => ($data['brands'] ?? collect())->values(),

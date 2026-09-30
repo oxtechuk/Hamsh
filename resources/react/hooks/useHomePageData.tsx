@@ -137,30 +137,34 @@ export function useHomePageData() {
   const { data: budgetCarsData } = useQuery<CarsListResponse>({
     queryKey: ["budget-cars", activeBudgetRange, language],
     queryFn: () => {
+      if (!activeBudgetRange) {
+        return getCars({ per_page: 12 });
+      }
       const range = priceRanges.find((r) => r.value === activeBudgetRange);
       if (!range) {
-        return {
-          data: [],
-          meta: { current_page: 1, last_page: 1, per_page: 0, total: 0 },
-        };
+        return getCars({ per_page: 12 });
       }
       return getCars({
         min_price: range.min,
         max_price: range.max ?? undefined,
+        per_page: 12,
       });
     },
-    enabled: !!activeBudgetRange,
     staleTime: 5 * 60 * 1000,
   });
 
   const budgetCars = useMemo(() => {
-    if (activeBudgetRange && budgetCarsData?.data) {
+    if (budgetCarsData?.data && budgetCarsData.data.length > 0) {
       return budgetCarsData.data
         .map((car) => mapHomeCarToCardProps(car as unknown as HomeCarItem, language))
         .filter(Boolean) as ICarCardProps[];
     }
-    return highlightedCars;
-  }, [activeBudgetRange, budgetCarsData, highlightedCars, language]);
+    if (!activeBudgetRange) {
+      if (highlightedCars.length > 0) return highlightedCars;
+      if (latestCars.length > 0) return latestCars;
+    }
+    return [];
+  }, [activeBudgetRange, budgetCarsData, highlightedCars, latestCars, language]);
 
   const handleSearch = (values: ICarsSearchValues) => {
     const params = new URLSearchParams();
