@@ -56,27 +56,69 @@ export default function HomeHero({
         return null;
     }
 
+    const handleNavigate = useCallback(
+        (url?: string) => {
+            if (!url) {
+                return;
+            }
+
+            if (url.startsWith("http://") || url.startsWith("https://")) {
+                window.open(url, "_blank", "noopener,noreferrer");
+            } else {
+                navigate(url);
+            }
+        },
+        [navigate],
+    );
+
+    const hasAnyMobileImage = slides.some((slide) => Boolean(slide.imageMobile));
+
     return (
-        <section className="w-full py-6 sm:py-8 lg:py-10">
+        <section className="w-full py-4 sm:py-6 lg:py-8">
             <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
                 <div
                     dir="ltr"
-                    className="relative overflow-hidden rounded-[16px]"
+                    className="relative overflow-hidden rounded-[16px] shadow-sm bg-neutral-900"
                 >
-                    <div className="relative aspect-[4/3] sm:aspect-[16/7] md:aspect-[21/8] lg:h-[68vh] w-full">
+                    <div
+                        className={[
+                            "relative w-full overflow-hidden",
+                            hasAnyMobileImage
+                                ? "aspect-[4/3] sm:aspect-[16/7] md:aspect-[1920/550]"
+                                : "aspect-[1920/550]",
+                        ].join(" ")}
+                        style={{
+                            aspectRatio: hasAnyMobileImage ? undefined : "1920 / 550",
+                        }}
+                    >
                         {slides.map((slide, slideIndex) => {
                             const isCurrent = slideIndex === index;
                             const desktopSrc = slide.imageDesktop || slide.image;
+                            const hasLink = Boolean(slide.detailsTo);
 
                             return (
                                 <div
                                     key={slide.id}
+                                    role={isCurrent && hasLink ? "link" : undefined}
+                                    tabIndex={isCurrent && hasLink ? 0 : undefined}
+                                    onClick={() => {
+                                        if (isCurrent && hasLink) {
+                                            handleNavigate(slide.detailsTo);
+                                        }
+                                    }}
+                                    onKeyDown={(e) => {
+                                        if (isCurrent && hasLink && (e.key === "Enter" || e.key === " ")) {
+                                            e.preventDefault();
+                                            handleNavigate(slide.detailsTo);
+                                        }
+                                    }}
                                     className={[
                                         "absolute inset-0 h-full w-full",
                                         "transition-opacity duration-700 ease-in-out",
                                         isCurrent
                                             ? "opacity-100 z-10"
                                             : "pointer-events-none opacity-0 z-0",
+                                        isCurrent && hasLink ? "cursor-pointer" : "",
                                     ].join(" ")}
                                 >
                                     <picture className="block h-full w-full">
@@ -91,7 +133,7 @@ export default function HomeHero({
                                             alt={slide.alt || ""}
                                             loading={isCurrent ? "eager" : "lazy"}
                                             decoding="async"
-                                            className="h-full w-full object-cover"
+                                            className="h-full w-full object-cover object-center"
                                         />
                                     </picture>
                                 </div>
@@ -101,17 +143,17 @@ export default function HomeHero({
                         {current.buttonText && (
                             <button
                                 type="button"
-                                onClick={() =>
-                                    current.detailsTo &&
-                                    navigate(current.detailsTo)
-                                }
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleNavigate(current.detailsTo);
+                                }}
                                 style={{
                                     backgroundColor: "var(--brand-button-bg, var(--brand-primary-color))",
                                     color: "var(--brand-button-text, #20283A)",
                                 }}
                                 className={[
                                     "absolute bottom-6 start-6 z-20",
-                                    "flex h-[46px] items-center justify-center",
+                                    "hidden sm:flex h-[46px] items-center justify-center",
                                     "px-6 rounded-[8px]",
                                     "text-[14px] font-bold shadow-md",
                                     "transition duration-300 hover:brightness-95",
@@ -125,7 +167,10 @@ export default function HomeHero({
                             <>
                                 <button
                                     type="button"
-                                    onClick={() => goTo(index - 1)}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        goTo(index - 1);
+                                    }}
                                     aria-label={t("hero.slider.prev")}
                                     className={[
                                         "absolute start-3 top-1/2 z-20 -translate-y-1/2",
@@ -139,7 +184,10 @@ export default function HomeHero({
 
                                 <button
                                     type="button"
-                                    onClick={() => goTo(index + 1)}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        goTo(index + 1);
+                                    }}
                                     aria-label={t("hero.slider.next")}
                                     className={[
                                         "absolute end-3 top-1/2 z-20 -translate-y-1/2",
