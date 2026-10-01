@@ -11,17 +11,16 @@ export default function ContactMethodCard({
   const content = (
     <div
       className={[
-        "flex min-h-[185px] flex-col",
+        "flex min-h-[185px] h-full flex-col",
         "items-start justify-start",
         transparent ? "bg-transparent" : "bg-white",
         "px-6 py-8",
         "text-start",
         "transition duration-300",
-        "hover:-translate-y-1",
-        "hover:shadow-[0_12px_28px_rgba(48,58,84,0.08)]",
+        href ? "cursor-pointer hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(48,58,84,0.08)]" : "",
       ].join(" ")}
     >
-      <div className="text-[var(--brand-primary-color)]">
+      <div className="text-[var(--brand-primary-color)] transition-transform duration-300 group-hover:scale-105">
         {icon}
       </div>
 
@@ -44,6 +43,7 @@ export default function ContactMethodCard({
       href={href}
       target={external ? "_blank" : undefined}
       rel={external ? "noopener noreferrer" : undefined}
+      className="block h-full no-underline group cursor-pointer"
     >
       {content}
     </a>

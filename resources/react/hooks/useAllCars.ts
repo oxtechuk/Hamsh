@@ -15,7 +15,8 @@ interface IUseAllCarsParams {
   filters: IFilterValues;
   currentPage: number;
   offerId: string | null;
-  buildQueryParams: () => ICarsQueryParams;
+  buildQueryParams: (page?: number, perPage?: number) => ICarsQueryParams;
+  pageSize?: number;
 }
 
 export function useAllCars({
@@ -23,6 +24,7 @@ export function useAllCars({
   currentPage,
   offerId,
   buildQueryParams,
+  pageSize = 12,
 }: IUseAllCarsParams) {
   const { t } = useTranslation();
   const language = useLanguageStore((s) => s.language);
@@ -49,7 +51,7 @@ export function useAllCars({
     }));
 
     return [defaultAll, ...dynamicCategories];
-  }, [carsMeta, t]);
+  }, [carsMeta, t, language]);
 
   const filterBrands = useMemo(
     () => carsMeta?.filter_brands ?? [],
@@ -72,29 +74,40 @@ export function useAllCars({
   );
 
   const { data: carsResponse, isPending: isCarsPending } = useQuery({
-    queryKey: ["cars-data", language, filters, currentPage, offerId],
-    queryFn: () => getCars(buildQueryParams()),
+    queryKey: ["cars-data", language, filters, currentPage, pageSize, offerId],
+    queryFn: () => getCars(buildQueryParams(currentPage, pageSize)),
     staleTime: 5 * 60 * 1000,
     retry: 1,
     placeholderData: keepPreviousData,
   });
 
   const allCars = useMemo<ICarCardProps[]>(() => {
-    let rawCars = carsResponse?.data;
-    const isUsingStatic = !rawCars || rawCars.length === 0;
-
-    if (isUsingStatic) {
-      rawCars = filterStaticCars(filters);
+    const rawCars = carsResponse?.data;
+    if (!rawCars || rawCars.length === 0) {
+      if (!carsResponse) {
+        const staticCars = filterStaticCars(filters);
+        return staticCars
+          .map((car) => mapCarToCardProps(car, language))
+          .filter(Boolean) as ICarCardProps[];
+      }
+      return [];
     }
 
-    return (rawCars || [])
+    return rawCars
       .map((car) => mapCarToCardProps(car, language))
       .filter(Boolean) as ICarCardProps[];
   }, [carsResponse, language, filters]);
 
+  const totalCars = carsResponse?.meta?.total ?? allCars.length;
+  const totalPages =
+    carsResponse?.meta?.last_page ??
+    Math.max(1, Math.ceil(totalCars / pageSize));
+
   return {
     heroCategories,
     allCars,
+    totalCars,
+    totalPages,
     filterBrands,
     filterTypes,
     filterYears,

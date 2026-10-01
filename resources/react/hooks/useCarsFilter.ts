@@ -47,8 +47,15 @@ export function useCarsFilter() {
     setCurrentPage(1);
   }, [initialFilters]);
 
-  function buildQueryParams(): ICarsQueryParams {
+  function buildQueryParams(page?: number, perPage?: number): ICarsQueryParams {
     const params: ICarsQueryParams = {};
+
+    if (page !== undefined) {
+      params.page = page;
+    }
+    if (perPage !== undefined) {
+      params.per_page = perPage;
+    }
 
     if (filters.brandId !== null) {
       params.brands = [filters.brandId];
@@ -68,7 +75,7 @@ export function useCarsFilter() {
     if (filters.priceMin > 0) {
       params.min_price = filters.priceMin;
     }
-    if (filters.priceMax < 200000) {
+    if (filters.priceMax < 600000) {
       params.max_price = filters.priceMax;
     }
     if (filters.search) {

@@ -10,14 +10,79 @@ function normalizePhone(phone: string): string {
   return phone.replace(/[^\d+]/g, "");
 }
 
+function formatWhatsAppUrl(rawPhone: string): string {
+  if (!rawPhone) return "";
+  const trimmed = rawPhone.trim();
+  if (
+    trimmed.startsWith("http://") ||
+    trimmed.startsWith("https://") ||
+    trimmed.startsWith("wa.me/")
+  ) {
+    return trimmed.startsWith("wa.me/") ? `https://${trimmed}` : trimmed;
+  }
+
+  let digits = trimmed
+    .replace(/[٠-٩]/g, (d) => String("٠١٢٣٤٥٦٧٨٩".indexOf(d)))
+    .replace(/[۰-۹]/g, (d) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d)))
+    .replace(/\D/g, "");
+
+  if (!digits) return "";
+
+  if (digits.startsWith("00")) {
+    digits = digits.slice(2);
+  }
+
+  if (digits.startsWith("0")) {
+    // Saudi trunk prefix replacement: 05XXXXXXXX -> 9665XXXXXXXX, 01XXXXXXXX -> 9661XXXXXXXX
+    digits = "966" + digits.slice(1);
+  } else if (digits.length === 9 && digits.startsWith("5")) {
+    // Missing both country code and trunk 0: 5XXXXXXXX -> 9665XXXXXXXX
+    digits = "966" + digits;
+  }
+
+  return `https://wa.me/${digits}`;
+}
+
+function formatMapUrl(mapLink?: string, address?: string): string | undefined {
+  if (mapLink && mapLink.trim()) {
+    const trimmed = mapLink.trim();
+    if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
+      return trimmed;
+    }
+    if (/^-?\d+(\.\d+)?,\s*-?\d+(\.\d+)?$/.test(trimmed)) {
+      return `https://www.google.com/maps?q=${trimmed.replace(/\s+/g, "")}`;
+    }
+    return `https://${trimmed}`;
+  }
+
+  if (address && address.trim()) {
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+      address.trim()
+    )}`;
+  }
+
+  return undefined;
+}
+
 export default function ContactMethodsSection() {
   const { t } = useTranslation();
   const direction = useLanguageStore((state) => state.direction);
   const settings = useSettingsStore((state) => state.settings);
 
   const phone = settings?.contact?.phone;
-  const whatsapp = settings?.contact?.whatsapp;
-  const address = settings?.contact?.address ?? t("contactPage.hero.defaultAddress");
+  const whatsappNumber = settings?.contact?.whatsapp || phone;
+  const address =
+    settings?.contact?.address || t("contactPage.hero.defaultAddress");
+  const mapLink =
+    settings?.contact?.map_link || settings?.business_info?.map_link;
+
+  const mapUrl = formatMapUrl(mapLink, address);
+  const whatsappUrl = whatsappNumber ? formatWhatsAppUrl(whatsappNumber) : "";
+  const phoneUrl = phone ? `tel:${normalizePhone(phone)}` : "";
+
+  const whatsappDescription = whatsappNumber
+    ? `${t("contactPage.contactMethods.whatsappDescription")}، ${whatsappNumber}`
+    : t("contactPage.contactMethods.whatsappDescription");
 
   return (
     <section
@@ -56,6 +121,8 @@ export default function ContactMethodsSection() {
               icon={<MapPin size={30} strokeWidth={1.6} />}
               title={t("contactPage.contactMethods.visitTitle")}
               description={address}
+              href={mapUrl}
+              external
             />
           )}
 
@@ -64,17 +131,17 @@ export default function ContactMethodsSection() {
               icon={<Phone size={30} strokeWidth={1.6} />}
               title={t("contactPage.contactMethods.phoneLabel")}
               description={`${t("contactPage.contactMethods.hoursLabel")}، ${phone}`}
-              href={`tel:${normalizePhone(phone)}`}
+              href={phoneUrl}
               transparent
             />
           )}
 
-          {whatsapp && (
+          {whatsappNumber && (
             <ContactMethodCard
               icon={<MessageCircle size={30} strokeWidth={1.6} />}
               title={t("contactPage.contactMethods.whatsappLabel")}
-              description={t("contactPage.contactMethods.whatsappDescription")}
-              href={`https://wa.me/${normalizePhone(whatsapp).replace("+", "")}`}
+              description={whatsappDescription}
+              href={whatsappUrl}
               external
             />
           )}

@@ -18,6 +18,7 @@ export interface IContactInfo {
   phone: string;
   whatsapp?: string;
   address: string;
+  map_link?: string;
   sales_phone?: string | null;
   finance_phone?: string | null;
   aftersales_phone?: string | null;

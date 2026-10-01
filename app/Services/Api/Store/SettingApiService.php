@@ -83,6 +83,7 @@ final class SettingApiService
                 'phone' => $settings->get('contact_phone', ''),
                 'whatsapp' => $settings->get('contact_whatsapp', ''),
                 'address' => $settings->get('contact_address', ''),
+                'map_link' => $settings->get('gps_map_link', ''),
             ],
             'social_media' => $socialMedia,
             'about_branches' => $aboutBranches,

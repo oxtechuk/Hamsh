@@ -22,7 +22,7 @@ export const DEFAULT_FILTER_VALUES: IFilterValues = {
   categoryId: null,
   year: "",
   priceMin: 0,
-  priceMax: 200000,
+  priceMax: 600000,
   engine: "all",
   transmission: "all",
   fuelType: "all",

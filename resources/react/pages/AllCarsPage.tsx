@@ -1,17 +1,15 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import AllCarsHero from "../components/all-cars-page/AllCarsHero";
-import AllCarsSearchBar from "../components/all-cars-page/AllCarsSearchBar";
 import AllCarsFiltersModal from "../components/all-cars-page/AllCarsFiltersModal";
 import CarsResultsGrid from "../components/all-cars-page/CarsResultsGrid";
 import EmptyCarsState from "../components/all-cars-page/EmptyCarsState";
 import AllCarsPageSkeleton from "../components/AllCarsPageSkeleton";
 import { useAllCars } from "../hooks/useAllCars";
 import { useCarsFilter } from "../hooks/useCarsFilter";
-import { useCarsPagination } from "../hooks/useCarsPagination";
 import { useSEO } from "../utils/useSEO";
 
-const PAGE_SIZE = 6;
+const PAGE_SIZE = 12;
 
 export default function AllCarsPage() {
     const { t, i18n } = useTranslation();
@@ -29,6 +27,8 @@ export default function AllCarsPage() {
     const {
         heroCategories,
         allCars,
+        totalCars,
+        totalPages,
         filterBrands,
         filterTypes,
         filterYears,
@@ -38,20 +38,21 @@ export default function AllCarsPage() {
         currentPage,
         offerId,
         buildQueryParams,
+        pageSize: PAGE_SIZE,
     });
 
-    const { filteredCars, totalPages, safePage, pagedCars } = useCarsPagination(
-        allCars,
-        filters,
-        currentPage,
-        PAGE_SIZE,
-    );
-
     const [isFilterOpen, setIsFilterOpen] = useState(false);
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+        window.scrollTo({ top: 350, behavior: "smooth" });
+    };
 
     if (isPending) {
         return <AllCarsPageSkeleton />;
     }
+
+    const safePage = Math.min(Math.max(1, currentPage), totalPages || 1);
 
     return (
         <main dir={i18n.dir()}>
@@ -59,7 +60,7 @@ export default function AllCarsPage() {
                 eyebrow={t("allCarsPage.eyebrow")}
                 title={t("allCarsPage.title")}
                 countText={t("allCarsPage.countText", {
-                    count: filteredCars.length,
+                    count: totalCars,
                 })}
                 categories={heroCategories}
                 activeCategory={
@@ -128,12 +129,12 @@ export default function AllCarsPage() {
                         </div>
                     )}
 
-                    {pagedCars.length > 0 ? (
+                    {allCars.length > 0 ? (
                         <CarsResultsGrid
-                            cars={pagedCars}
+                            cars={allCars}
                             currentPage={safePage}
                             totalPages={totalPages}
-                            onPageChange={setCurrentPage}
+                            onPageChange={handlePageChange}
                         />
                     ) : (
                         <EmptyCarsState />
