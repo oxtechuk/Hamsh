@@ -19,6 +19,12 @@ final class ContactController extends ApiBaseController
     {
         $lead = $this->contactService->submitContactForm($request->validated());
 
+        \App\Services\TrackingService::sendLead([
+            'name' => $request->input('name'),
+            'phone' => $request->input('phone'),
+            'email' => $request->input('email'),
+        ]);
+
         return $this->respondCreated(
             ['lead_id' => $lead->id],
             'Message submitted successfully'

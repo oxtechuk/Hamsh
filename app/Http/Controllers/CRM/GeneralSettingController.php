@@ -108,7 +108,9 @@ class GeneralSettingController extends Controller
             'auto_assign_bookings', 'car_popup_enabled',
             'twilio_sid', 'twilio_auth_token', 'twilio_whatsapp_number', 'twilio_sms_number',
             'whatsapp_template_new_lead', 'whatsapp_template_status_update',
-            'google_analytics_id', 'meta_pixel_id',
+            'google_analytics_id', 'meta_pixel_id', 'meta_capi_token',
+            'tiktok_pixel_id', 'tiktok_access_token',
+            'snap_pixel_id', 'snap_capi_token',
             'homepage_sections',
             'about_sections',
             'main_offer_id',
@@ -147,7 +149,7 @@ class GeneralSettingController extends Controller
         foreach ($keys as $key) {
             if ($request->has($key)) {
                 Setting::updateOrCreate(['key' => $key], ['value' => $request->get($key)]);
-            } elseif (in_array($key, ['twilio_sid', 'twilio_auth_token', 'twilio_whatsapp_number', 'twilio_sms_number', 'whatsapp_template_new_lead', 'whatsapp_template_status_update'])) {
+            } elseif (in_array($key, ['twilio_sid', 'twilio_auth_token', 'twilio_whatsapp_number', 'twilio_sms_number', 'whatsapp_template_new_lead', 'whatsapp_template_status_update', 'meta_capi_token', 'tiktok_access_token', 'snap_capi_token'])) {
                 Setting::updateOrCreate(['key' => $key], ['value' => $request->get($key, '')]);
             }
         }

@@ -17,6 +17,9 @@ final class SettingApiService
         'whatsapp_template_new_lead',
         'whatsapp_template_status_update',
         'gemini_api_key',
+        'meta_capi_token',
+        'tiktok_access_token',
+        'snap_capi_token',
     ];
 
     private const IMAGE_KEYS = [

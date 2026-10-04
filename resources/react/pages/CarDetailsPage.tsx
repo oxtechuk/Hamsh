@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
@@ -11,6 +11,7 @@ import { localize } from "../utils/localize";
 import { formatPrice } from "../utils/format";
 import { useSEO } from "../utils/useSEO";
 import { getImageUrl } from "../constants/app-images";
+import { trackViewContent } from "../utils/analytics";
 
 export default function CarDetailsPage() {
   const { t } = useTranslation();
@@ -29,6 +30,17 @@ export default function CarDetailsPage() {
     enabled: !!slug,
     retry: 1,
   });
+
+  useEffect(() => {
+    if (car) {
+      trackViewContent({
+        id: car.id,
+        name: localize(car.name, language),
+        price: Number(car.selling_price || car.cash_price) || undefined,
+        category: "Car",
+      });
+    }
+  }, [car, language]);
 
   const tabs = useMemo(() => (car ? buildTabs(car, t) : []), [car, t]);
 

@@ -51,6 +51,13 @@ final class BookingController extends ApiBaseController
 
         $booking = $this->bookingService->create($data);
 
+        \App\Services\TrackingService::sendLead([
+            'name' => $booking->client_name,
+            'phone' => $booking->client_phone,
+            'value' => $booking->total_price,
+            'currency' => 'SAR',
+        ]);
+
         return $this->respondCreated([
             'booking_id' => $booking->id,
             'client_name' => $booking->client_name,

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -7,6 +7,7 @@ import { useLanguageStore } from "../store/language.store";
 import { APP_IMAGES, getImageUrl } from "../constants/app-images";
 import { getSettings } from "../services/api";
 import { useSettingsStore } from "../store/settings.store";
+import { trackPageView } from "../utils/analytics";
 import TopBar from "../components/top-bar";
 import Header from "../components/header";
 import Footer from "../components/Footer";
@@ -19,6 +20,12 @@ export default function RootLayout() {
   const { t } = useTranslation();
   const { language, direction, setLanguage } = useLanguageStore();
   const { loaded, settings, setSettings, setLoading } = useSettingsStore();
+  const location = useLocation();
+
+  // Track page views across SPA route transitions
+  useEffect(() => {
+    trackPageView(location.pathname + location.search);
+  }, [location.pathname, location.search]);
 
   useEffect(() => {
     if (loaded) return;

@@ -315,12 +315,17 @@ class SettingsSeeder extends Seeder
                 ],
             ],
 
-            // ── SEO ──
+            // ── SEO & Tracking Pixels ──
             'meta_title' => 'هامش — بيع وشراء السيارات في المملكة العربية السعودية',
             'meta_description' => 'هامش أكبر معرض سيارات في المملكة العربية السعودية. تشكيلة واسعة من السيارات الجديدة والمستعملة بأفضل الأسعار وخيارات تمويل مرنة.',
             'meta_keywords' => 'سيارات, بيع سيارات, شراء سيارات, سيارات مستعملة, سيارات جديدة, تمويل سيارات, هامش, السعودية',
             'google_analytics_id' => '',
-            'meta_pixel_id' => '',
+            'meta_pixel_id' => '1412701917496338',
+            'meta_capi_token' => 'EAAP6hWDA4mUBSq6CKWIfJAI2i12xR6p7WBzZCRxUsWo3ZAnwqStvWsg8mpcWq8GocyD8nRxZAQ15bHwpwOZCWrlbeprj3cBl9qat8zr2jZBqZAZCGMR1HZBWxAYsPgmoHzDeNPDCz4R3BXsa33dSc43DaLRc4cUQ1aRsCtXwBM353hQoQi7In6I29hPMfqftZBwZDZD',
+            'tiktok_pixel_id' => 'DB0V6ORC77U2LIICSES0',
+            'tiktok_access_token' => '2460e78c60008e3f5c6a221d5192af7ae0f5b3e6',
+            'snap_pixel_id' => '5954db06-5cce-4123-aa78-fa8be6e6db01',
+            'snap_capi_token' => 'eyJhbGciOiJIUzI1NiIsImtpZCI6IkNhbnZhc1MyU0hNQUNQcm9kIiwidHlwIjoiSldUIn0.eyJhdWQiOiJjYW52YXMtY2FudmFzYXBpIiwiaXNzIjoiY2FudmFzLXMyc3Rva2VuIiwibmJmIjoxNzY5NTkyNDQwLCJzdWIiOiI0NTE4NTIzNi0xZTVhLTQyM2UtOTQ3Yy1jNWRhMTI5NjAyM2V-UFJPRFVDVElPTn43MWY4MTE1My0xZDc1LTQ0ZDQtOGM5Ny05NzRkMjFhMjhlYTQifQ.Uuj7oapEO2zUudgHpKzVFYox8UB9MRTVTGqt_SPQOcg',
 
             // ── Integrations ──
             'twilio_sid' => '',

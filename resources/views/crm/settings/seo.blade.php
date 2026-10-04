@@ -46,9 +46,15 @@
                         <div class="card-body p-4">
                             @php
                                 $gaId = $settings['google_analytics_id'] ?? '';
-                                $pixelId = $settings['meta_pixel_id'] ?? '';
+                                $pixelId = $settings['meta_pixel_id'] ?? '1412701917496338';
+                                $metaCapiToken = $settings['meta_capi_token'] ?? '';
+                                $tiktokId = $settings['tiktok_pixel_id'] ?? 'DB0V6ORC77U2LIICSES0';
+                                $tiktokToken = $settings['tiktok_access_token'] ?? '';
+                                $snapId = $settings['snap_pixel_id'] ?? '5954db06-5cce-4123-aa78-fa8be6e6db01';
+                                $snapToken = $settings['snap_capi_token'] ?? '';
                             @endphp
 
+                            {{-- Google Analytics --}}
                             <div class="mb-4">
                                 <label class="form-label fw-bold small text-muted d-flex align-items-center gap-2">
                                     <i class="bi bi-google text-primary"></i>
@@ -70,7 +76,10 @@
                                 <small class="text-muted">{{ __('مثال: G-1234567890') }}</small>
                             </div>
 
-                            <div class="mb-0">
+                            <hr class="my-4 text-muted opacity-25">
+
+                            {{-- Meta / Facebook Pixel --}}
+                            <div class="mb-3">
                                 <label class="form-label fw-bold small text-muted d-flex align-items-center gap-2">
                                     <i class="bi bi-facebook text-primary" style="color:#1877F2 !important;"></i>
                                     {{ __('معرف Meta Pixel (Facebook)') }}
@@ -86,9 +95,83 @@
                                 </label>
                                 <input type="text" name="meta_pixel_id"
                                     class="form-control bg-light border-0 shadow-none py-2"
-                                    placeholder="1234567890"
+                                    placeholder="1412701917496338"
                                     value="{{ $pixelId }}" dir="ltr">
-                                <small class="text-muted">{{ __('مثال: 1234567890') }}</small>
+                                <small class="text-muted">{{ __('مثال: 1412701917496338') }}</small>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label fw-bold small text-muted">
+                                    {{ __('رمز الوصول Meta Conversions API (CAPI)') }}
+                                </label>
+                                <textarea name="meta_capi_token" rows="2"
+                                    class="form-control bg-light border-0 shadow-none py-2 font-monospace"
+                                    placeholder="EAAP..." dir="ltr" style="font-size: 11px;">{{ $metaCapiToken }}</textarea>
+                                <small class="text-muted">{{ __('لتتبع التحويلات من الخادم مباشرة وتخطي حواجز الإعلانات') }}</small>
+                            </div>
+
+                            <hr class="my-4 text-muted opacity-25">
+
+                            {{-- TikTok Pixel --}}
+                            <div class="mb-3">
+                                <label class="form-label fw-bold small text-muted d-flex align-items-center gap-2">
+                                    <i class="bi bi-tiktok text-dark"></i>
+                                    {{ __('معرف TikTok Pixel') }}
+                                    @if($tiktokId)
+                                        <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2 py-1 ms-auto" style="font-size:10px;">
+                                            <i class="bi bi-check-circle-fill me-1"></i>{{ __('مفعل') }}
+                                        </span>
+                                    @else
+                                        <span class="badge bg-secondary bg-opacity-10 text-secondary rounded-pill px-2 py-1 ms-auto" style="font-size:10px;">
+                                            <i class="bi bi-dash-circle me-1"></i>{{ __('غير مفعل') }}
+                                        </span>
+                                    @endif
+                                </label>
+                                <input type="text" name="tiktok_pixel_id"
+                                    class="form-control bg-light border-0 shadow-none py-2"
+                                    placeholder="DB0V6ORC77U2LIICSES0"
+                                    value="{{ $tiktokId }}" dir="ltr">
+                                <small class="text-muted">{{ __('مثال: DB0V6ORC77U2LIICSES0') }}</small>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label fw-bold small text-muted">
+                                    {{ __('رمز وصول TikTok Events API') }}
+                                </label>
+                                <input type="text" name="tiktok_access_token"
+                                    class="form-control bg-light border-0 shadow-none py-2 font-monospace"
+                                    placeholder="2460e78c60..."
+                                    value="{{ $tiktokToken }}" dir="ltr" style="font-size: 11px;">
+                            </div>
+
+                            <hr class="my-4 text-muted opacity-25">
+
+                            {{-- Snapchat Pixel --}}
+                            <div class="mb-3">
+                                <label class="form-label fw-bold small text-muted d-flex align-items-center gap-2">
+                                    <i class="bi bi-snapchat text-warning"></i>
+                                    {{ __('معرف Snap Pixel') }}
+                                    @if($snapId)
+                                        <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2 py-1 ms-auto" style="font-size:10px;">
+                                            <i class="bi bi-check-circle-fill me-1"></i>{{ __('مفعل') }}
+                                        </span>
+                                    @else
+                                        <span class="badge bg-secondary bg-opacity-10 text-secondary rounded-pill px-2 py-1 ms-auto" style="font-size:10px;">
+                                            <i class="bi bi-dash-circle me-1"></i>{{ __('غير مفعل') }}
+                                        </span>
+                                    @endif
+                                </label>
+                                <input type="text" name="snap_pixel_id"
+                                    class="form-control bg-light border-0 shadow-none py-2"
+                                    placeholder="5954db06-5cce-4123-aa78-fa8be6e6db01"
+                                    value="{{ $snapId }}" dir="ltr">
+                                <small class="text-muted">{{ __('مثال: 5954db06-5cce-4123-aa78-fa8be6e6db01') }}</small>
+                            </div>
+                            <div class="mb-0">
+                                <label class="form-label fw-bold small text-muted">
+                                    {{ __('رمز Snap Conversions API (CAPI)') }}
+                                </label>
+                                <textarea name="snap_capi_token" rows="2"
+                                    class="form-control bg-light border-0 shadow-none py-2 font-monospace"
+                                    placeholder="eyJhbGciOi..." dir="ltr" style="font-size: 11px;">{{ $snapToken }}</textarea>
                             </div>
                         </div>
                     </div>

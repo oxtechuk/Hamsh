@@ -65,6 +65,13 @@ final class CalculatorController extends ApiBaseController
     {
         $lead = $this->calculatorService->saveLead($request->validated());
 
+        \App\Services\TrackingService::sendLead([
+            'name' => $request->input('name'),
+            'phone' => $request->input('phone'),
+            'value' => $request->input('car_price'),
+            'currency' => 'SAR',
+        ]);
+
         return $this->respondCreated(
             ['lead_id' => $lead->id],
             'Lead saved successfully'
@@ -99,6 +106,12 @@ final class CalculatorController extends ApiBaseController
             $request->input('name'),
             $request->input('phone')
         );
+
+        \App\Services\TrackingService::sendLead([
+            'name' => $request->input('name'),
+            'phone' => $request->input('phone'),
+            'currency' => 'SAR',
+        ]);
 
         return $this->respondCreated(
             ['lead_id' => $lead->id],

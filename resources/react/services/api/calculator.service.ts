@@ -1,9 +1,14 @@
 import type { ICalculatorLeadRequest, ICalculatorLeadResponse } from "../../interfaces/ICalculatorLeadRequest";
 import type { IBankItem, ICalculateRequest, ICalculateData, IApiResponse } from "../../interfaces/ICalculatorTypes";
 import api from "./http";
+import { trackLead } from "../../utils/analytics";
 
 export async function submitCalculatorLead(data: ICalculatorLeadRequest): Promise<ICalculatorLeadResponse> {
   const response = await api.post<ICalculatorLeadResponse>("store/calculator/lead", data);
+  trackLead({
+    content_name: "Finance Calculator Lead",
+    value: data.car_price || 0,
+  });
   return response.data;
 }
 
@@ -37,6 +42,9 @@ export async function sendCalculatorOtp(phone: string): Promise<{ success: boole
 
 export async function verifyCalculatorOtp(phone: string, code: string, name?: string): Promise<{ lead_id?: number }> {
   const response = await api.post<IApiResponse<{ lead_id: number }>>("store/calculator/otp/verify", { phone, code, name });
+  trackLead({
+    content_name: "Finance Calculator Verified OTP Lead",
+  });
   return response.data.data;
 }
 
