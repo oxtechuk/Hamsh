@@ -320,6 +320,7 @@ class SettingsSeeder extends Seeder
             'meta_description' => 'هامش أكبر معرض سيارات في المملكة العربية السعودية. تشكيلة واسعة من السيارات الجديدة والمستعملة بأفضل الأسعار وخيارات تمويل مرنة.',
             'meta_keywords' => 'سيارات, بيع سيارات, شراء سيارات, سيارات مستعملة, سيارات جديدة, تمويل سيارات, هامش, السعودية',
             'google_analytics_id' => '',
+            'google_tag_manager_id' => 'GTM-T5Q9WGL4',
             'meta_pixel_id' => '1412701917496338',
             'meta_capi_token' => 'EAAP6hWDA4mUBSq6CKWIfJAI2i12xR6p7WBzZCRxUsWo3ZAnwqStvWsg8mpcWq8GocyD8nRxZAQ15bHwpwOZCWrlbeprj3cBl9qat8zr2jZBqZAZCGMR1HZBWxAYsPgmoHzDeNPDCz4R3BXsa33dSc43DaLRc4cUQ1aRsCtXwBM353hQoQi7In6I29hPMfqftZBwZDZD',
             'tiktok_pixel_id' => 'DB0V6ORC77U2LIICSES0',

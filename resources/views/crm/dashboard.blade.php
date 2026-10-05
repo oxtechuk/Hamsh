@@ -84,6 +84,19 @@
                         </div>
                         <div class="d-flex align-items-center gap-3">
                             <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-tag-fill" style="color:#20283A;font-size:15px;"></i>
+                                <span class="small fw-bold">{{ __('Google Tag Manager') }}</span>
+                                @if($trackingGTM)
+                                    <span class="badge rounded-pill" style="background:#EDFAF4;color:#12B76A;font-size:10px;">
+                                        <i class="bi bi-check-circle-fill me-1"></i>{{ $trackingGTM }}
+                                    </span>
+                                @else
+                                    <span class="badge rounded-pill" style="background:#F5F6FA;color:#8E92A4;font-size:10px;">
+                                        <i class="bi bi-dash-circle me-1"></i>{{ __('غير مفعل') }}
+                                    </span>
+                                @endif
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
                                 <i class="bi bi-google" style="color:#1877F2;font-size:15px;"></i>
                                 <span class="small fw-bold">{{ __('Google Analytics') }}</span>
                                 @if($trackingGA)

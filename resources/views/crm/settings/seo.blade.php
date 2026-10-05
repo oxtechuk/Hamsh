@@ -45,6 +45,7 @@
                         </div>
                         <div class="card-body p-4">
                             @php
+                                $gtmId = $settings['google_tag_manager_id'] ?? 'GTM-T5Q9WGL4';
                                 $gaId = $settings['google_analytics_id'] ?? '';
                                 $pixelId = $settings['meta_pixel_id'] ?? '1412701917496338';
                                 $metaCapiToken = $settings['meta_capi_token'] ?? '';
@@ -53,6 +54,30 @@
                                 $snapId = $settings['snap_pixel_id'] ?? '5954db06-5cce-4123-aa78-fa8be6e6db01';
                                 $snapToken = $settings['snap_capi_token'] ?? '';
                             @endphp
+
+                            {{-- Google Tag Manager (GTM) --}}
+                            <div class="mb-4">
+                                <label class="form-label fw-bold small text-muted d-flex align-items-center gap-2">
+                                    <i class="bi bi-tag-fill text-primary"></i>
+                                    {{ __('معرف Google Tag Manager (GTM)') }}
+                                    @if($gtmId)
+                                        <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2 py-1 ms-auto" style="font-size:10px;">
+                                            <i class="bi bi-check-circle-fill me-1"></i>{{ __('مفعل') }}
+                                        </span>
+                                    @else
+                                        <span class="badge bg-secondary bg-opacity-10 text-secondary rounded-pill px-2 py-1 ms-auto" style="font-size:10px;">
+                                            <i class="bi bi-dash-circle me-1"></i>{{ __('غير مفعل') }}
+                                        </span>
+                                    @endif
+                                </label>
+                                <input type="text" name="google_tag_manager_id"
+                                    class="form-control bg-light border-0 shadow-none py-2"
+                                    placeholder="GTM-XXXXXXX"
+                                    value="{{ $gtmId }}" dir="ltr">
+                                <small class="text-muted">{{ __('مثال: GTM-T5Q9WGL4') }}</small>
+                            </div>
+
+                            <hr class="my-4 text-muted opacity-25">
 
                             {{-- Google Analytics --}}
                             <div class="mb-4">

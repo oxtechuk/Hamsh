@@ -1,5 +1,6 @@
 declare global {
   interface Window {
+    dataLayer?: any[];
     fbq?: (...args: any[]) => void;
     ttq?: {
       page: () => void;
@@ -11,11 +12,17 @@ declare global {
 }
 
 /**
- * Tracks a PageView on all active tracking pixels (Meta, TikTok, Snapchat).
+ * Tracks a PageView on all active tracking pixels and GTM dataLayer.
  */
 export function trackPageView(_url?: string): void {
   try {
     if (typeof window !== "undefined") {
+      if (Array.isArray(window.dataLayer)) {
+        window.dataLayer.push({
+          event: "page_view",
+          page_path: _url || window.location.pathname + window.location.search,
+        });
+      }
       if (typeof window.fbq === "function") {
         window.fbq("track", "PageView");
       }
@@ -44,6 +51,15 @@ export function trackLead(params?: {
       const currency = params?.currency || "SAR";
       const value = params?.value || 0;
       const contentName = params?.content_name || "Lead Submission";
+
+      if (Array.isArray(window.dataLayer)) {
+        window.dataLayer.push({
+          event: "lead_submission",
+          lead_value: value,
+          currency,
+          content_name: contentName,
+        });
+      }
 
       if (typeof window.fbq === "function") {
         window.fbq("track", "Lead", {
@@ -81,6 +97,13 @@ export function trackContact(params?: {
     if (typeof window !== "undefined") {
       const contentName = params?.content_name || "Contact Us";
 
+      if (Array.isArray(window.dataLayer)) {
+        window.dataLayer.push({
+          event: "contact",
+          content_name: contentName,
+        });
+      }
+
       if (typeof window.fbq === "function") {
         window.fbq("track", "Contact", {
           content_name: contentName,
@@ -114,6 +137,17 @@ export function trackViewContent(params: {
   try {
     if (typeof window !== "undefined") {
       const currency = "SAR";
+
+      if (Array.isArray(window.dataLayer)) {
+        window.dataLayer.push({
+          event: "view_item",
+          item_id: params.id ? String(params.id) : undefined,
+          item_name: params.name,
+          item_category: params.category || "Vehicle",
+          price: params.price,
+          currency: params.price ? currency : undefined,
+        });
+      }
 
       if (typeof window.fbq === "function") {
         window.fbq("track", "ViewContent", {

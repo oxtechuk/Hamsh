@@ -9,10 +9,22 @@
     $tiktokPixelId = !empty($cachedSettings['tiktok_pixel_id']) ? $cachedSettings['tiktok_pixel_id'] : 'DB0V6ORC77U2LIICSES0';
     $snapPixelId = !empty($cachedSettings['snap_pixel_id']) ? $cachedSettings['snap_pixel_id'] : '5954db06-5cce-4123-aa78-fa8be6e6db01';
     $googleAnalyticsId = !empty($cachedSettings['google_analytics_id']) ? $cachedSettings['google_analytics_id'] : null;
+    $googleTagManagerId = !empty($cachedSettings['google_tag_manager_id']) ? $cachedSettings['google_tag_manager_id'] : 'GTM-T5Q9WGL4';
 @endphp
 <!doctype html>
 <html lang="{{ app()->getLocale() }}">
 <head>
+    {{-- ── Google Tag Manager ── --}}
+    @if(!empty($googleTagManagerId))
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','{{ $googleTagManagerId }}');</script>
+    <!-- End Google Tag Manager -->
+    @endif
+
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="{{ $favUrl }}" />
     <link rel="shortcut icon" href="{{ $favUrl }}" />
@@ -123,6 +135,14 @@
     @vite('resources/react/main.tsx')
 </head>
 <body>
+    {{-- ── Google Tag Manager (noscript) ── --}}
+    @if(!empty($googleTagManagerId))
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ $googleTagManagerId }}"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    @endif
+
     <div id="root"></div>
 </body>
 </html>

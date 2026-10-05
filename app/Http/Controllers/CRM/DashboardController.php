@@ -59,13 +59,14 @@ class DashboardController extends Controller
         $totalBrands = $totals['brands'];
         $totalEmployees = $totals['employees'];
 
+        $trackingGTM = Setting::where('key', 'google_tag_manager_id')->first()?->value ?? 'GTM-T5Q9WGL4';
         $trackingGA = Setting::where('key', 'google_analytics_id')->first()?->value ?? '';
         $trackingPixel = Setting::where('key', 'meta_pixel_id')->first()?->value ?? '';
 
         return view('crm.dashboard', compact(
             'stats', 'topCars', 'weeklyBookings', 'recentBookings',
             'totalCars', 'totalBrands', 'totalEmployees',
-            'trackingGA', 'trackingPixel'
+            'trackingGTM', 'trackingGA', 'trackingPixel'
         ));
     }
 }
