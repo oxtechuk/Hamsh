@@ -85,43 +85,10 @@ export default function AllCarsHero({
       <div className="border-t border-white/[0.04] bg-white">
         <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row lg:items-stretch">
-            {/* Categories */}
-            <div className="flex min-w-0 flex-1 overflow-x-auto">
-              {categories.map((category) => {
-                const isActive = category.value === activeCategory;
-
-                return (
-                  <button
-                    key={category.value}
-                    type="button"
-                    onClick={() => onCategoryChange?.(category.value)}
-                    className={[
-                      "flex h-[56px] min-w-[82px] items-center justify-center",
-                      "border-s border-[#ECECEC] px-5",
-                      "text-[13px] font-medium",
-                      "transition duration-300",
-                      isActive
-                        ? [
-                            "bg-[#303A54]",
-                            "text-[var(--brand-primary-color)]",
-                          ].join(" ")
-                        : [
-                            "bg-white",
-                            "text-[#303A54]",
-                            "hover:bg-[#F8F8F8]",
-                          ].join(" "),
-                    ].join(" ")}
-                  >
-                    {category.label}
-                  </button>
-                );
-              })}
-            </div>
-
             {/* Search */}
             <form
               onSubmit={handleSubmit}
-              className="relative min-w-0 flex-1 border-t border-[#ECECEC] px-10 lg:border-s lg:border-t-0"
+              className="relative min-w-0 flex-1 px-10"
             >
               <Search
                 size={17}

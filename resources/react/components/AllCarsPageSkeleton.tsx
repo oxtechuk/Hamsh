@@ -24,18 +24,7 @@ export default function AllCarsPageSkeleton() {
                 <div className="border-t border-white/[0.04] bg-white">
                     <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
                         <div className="flex flex-col lg:flex-row lg:items-stretch">
-                            <div className="flex min-w-0 flex-1 gap-2 overflow-x-auto py-3 lg:py-0 lg:gap-0">
-                                {Array.from({ length: 4 }).map((_, i) => (
-                                    <div
-                                        key={i}
-                                        className="flex h-[56px] min-w-[82px] items-center justify-center border-s border-[#ECECEC] px-5 lg:border-s"
-                                    >
-                                        <Skeleton className="h-4 w-14 rounded-md bg-gray-200/60" />
-                                    </div>
-                                ))}
-                            </div>
-
-                            <div className="flex h-[56px] min-w-0 flex-1 items-center border-t border-[#ECECEC] px-10 lg:border-s lg:border-t-0">
+                            <div className="flex h-[56px] min-w-0 flex-1 items-center px-10">
                                 <Skeleton className="h-4 w-full max-w-[240px] rounded-md bg-gray-200/50" />
                             </div>
 

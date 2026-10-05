@@ -5,8 +5,8 @@ export interface IAllCarsHeroProps {
   eyebrow?: string;
   title?: string;
   countText?: string;
-  categories: ICarsHeroCategory[];
-  activeCategory: string;
+  categories?: ICarsHeroCategory[];
+  activeCategory?: string;
   onCategoryChange?: (value: string) => void;
   searchValue: string;
   onSearchChange: (value: string) => void;

@@ -25,7 +25,6 @@ export default function AllCarsPage() {
     } = useCarsFilter();
 
     const {
-        heroCategories,
         allCars,
         totalCars,
         totalPages,
@@ -62,18 +61,6 @@ export default function AllCarsPage() {
                 countText={t("allCarsPage.countText", {
                     count: totalCars,
                 })}
-                categories={heroCategories}
-                activeCategory={
-                    filters.categoryId !== null
-                        ? String(filters.categoryId)
-                        : "all"
-                }
-                onCategoryChange={(value) =>
-                    handleFilterChange({
-                        ...filters,
-                        categoryId: value === "all" ? null : Number(value),
-                    })
-                }
                 searchValue={filters.search}
                 onSearchChange={(value) =>
                     handleFilterChange({ ...filters, search: value })
