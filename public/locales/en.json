@@ -70,6 +70,7 @@
         "subtitle": "Comfortable Family Cars",
         "cashPrice": "Cash Price",
         "monthlyPayment": "Monthly Installment",
+        "installmentStartsFrom": "Installment starts from",
         "installmentForSalary": "Installment for salary from {{salary}} SAR",
         "estimated": "Estimated",
         "reserve": "Reserve It Now",

@@ -1601,7 +1601,7 @@
                                                                 oninput="document.getElementById('preview_salary_val').textContent = Number(this.value || 0).toLocaleString();">
                                                             <span class="input-group-text bg-light border-0">{{ __('ر.س') }}</span>
                                                         </div>
-                                                        <p class="text-muted small mb-0 mt-1">{{ __('سيظهر في بطاقة كل سيارة: "القسط لراتب يبدأ من [الراتب] ر.س" متبوعاً بمبلغ القسط.') }}</p>
+                                                        <p class="text-muted small mb-0 mt-1">{{ __('سيظهر في بطاقة كل سيارة: "القسط لراتب يبدأ من" متبوعاً بمبلغ القسط.') }}</p>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="p-3 rounded-3 bg-light border">
@@ -1613,7 +1613,7 @@
                                                                 </div>
                                                                 <div class="text-end">
                                                                     <div class="text-muted fw-semibold" style="font-size: 11px;" id="preview_salary_text">
-                                                                        {{ __('القسط لراتب يبدأ من') }} <span id="preview_salary_val" class="fw-bold text-dark">{{ number_format((float)($settings['finance_min_salary'] ?? 4000)) }}</span> {{ __('ر.س') }}
+                                                                        {{ __('القسط لراتب يبدأ من') }}
                                                                     </div>
                                                                     <div class="fw-bold fs-6" style="color: #DFA655 !important;">582 <small style="font-size: 10px;">ر.س</small></div>
                                                                 </div>

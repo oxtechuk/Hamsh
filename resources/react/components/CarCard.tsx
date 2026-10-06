@@ -40,14 +40,13 @@ export default function CarCard({
     const direction = i18n.dir();
     const isRTL = direction === "rtl";
 
-    const settings = useSettingsStore((state) => state.settings);
     const carPopupEnabled = useSettingsStore(
         (state) => state.settings?.car_popup_enabled ?? SHOW_CAR_DETAILS_AS_MODAL,
     );
 
     const installmentLabel = isRTL
-        ? (t("carCard.monthlyPayment") || "القسط لراتب يبدأ من")
-        : (t("carCard.monthlyPayment") || "Installment starts from");
+        ? t("carCard.installmentStartsFrom", "القسط لراتب يبدأ من")
+        : t("carCard.installmentStartsFrom", "Installment starts from");
 
     const [showDetailsModal, setShowDetailsModal] = useState(false);
     const [showOrderModal, setShowOrderModal] = useState(false);

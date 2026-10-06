@@ -4,7 +4,6 @@ import { CreditCard, ShoppingBag, ChevronDown } from "lucide-react";
 
 import { formatPrice } from "../../utils/format";
 import { localize } from "../../utils/localize";
-import { useSettingsStore } from "../../store/settings.store";
 import type { ICarDetailsInfoPanelProps } from "../../interfaces/ICarDetailsInfoPanelProps";
 
 export default function CarDetailsInfoPanel({
@@ -18,24 +17,9 @@ export default function CarDetailsInfoPanel({
     const { t, i18n } = useTranslation();
     const isRTL = i18n.dir() === "rtl";
 
-    const settings = useSettingsStore((s) => s.settings);
-    const rawSalary =
-        (car as any).min_salary ??
-        (typeof car.specs === "object" && !Array.isArray(car.specs) ? (car.specs as any)?.min_salary : undefined) ??
-        settings?.finance_min_salary ??
-        settings?.finance_calculator?.min_salary ??
-        4000;
-    const numSalary =
-        typeof rawSalary === "number"
-            ? rawSalary
-            : parseFloat(String(rawSalary).replace(/[^\d.]/g, "")) || 4000;
-    const salaryDisplay = isRTL
-        ? `${numSalary.toLocaleString("ar-SA")} ر.س`
-        : `${numSalary.toLocaleString("en-US")} SAR`;
-
     const installmentLabel = isRTL
-        ? `القسط لراتب يبدأ من ${salaryDisplay}`
-        : `Installment for salary from ${salaryDisplay}`;
+        ? t("carCard.installmentStartsFrom", "القسط لراتب يبدأ من")
+        : t("carCard.installmentStartsFrom", "Installment starts from");
 
     const trims = car.trims && car.trims.length > 0 ? car.trims : [];
     const currentTrim = trims[selectedTrimIndex] ?? null;
