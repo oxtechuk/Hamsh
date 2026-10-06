@@ -186,7 +186,7 @@
                         </div>
                         <div class="car-section-body">
                             <div class="row g-3">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <label class="form-label">{{ __('سعر الكاش') }} <span
                                             class="text-danger">*</span></label>
                                     <div class="input-group">
@@ -195,7 +195,7 @@
                                         <span class="input-group-text">{!! __('ريال') !!}</span>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <label class="form-label">{{ __('أقل مقدم') }} <span
                                             class="text-danger">*</span></label>
                                     <div class="input-group">
@@ -204,12 +204,20 @@
                                         <span class="input-group-text">{!! __('ريال') !!}</span>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <label class="form-label">{{ __('أقل قسط شهري') }} <span
                                             class="text-danger">*</span></label>
                                     <div class="input-group">
                                         <input type="number" name="min_installment" class="form-control"
                                             value="{{ old('min_installment') }}" min="0" required>
+                                        <span class="input-group-text">{!! __('ريال') !!}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">{{ __('الراتب يبدأ من (اختياري)') }}</label>
+                                    <div class="input-group">
+                                        <input type="number" name="specs[min_salary]" class="form-control"
+                                            value="{{ old('specs.min_salary') }}" min="0" placeholder="اتركه للافتراضي">
                                         <span class="input-group-text">{!! __('ريال') !!}</span>
                                     </div>
                                 </div>

@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { useLanguageStore } from "../../store/language.store";
 import { useSettingsStore } from "../../store/settings.store";
+import { trackWhatsAppClick } from "../../utils/analytics";
 import type { IDriveSuccessProps } from "../../interfaces/IDriveSuccessProps";
 
 export default function DriveSuccess({
@@ -75,10 +76,17 @@ export default function DriveSuccess({
 
             <div className="mt-9 w-full max-w-[390px]">
                 <a
+                    id="drive-success-whatsapp-btn"
+                    data-id="whatsapp-btn"
+                    data-tracking="whatsapp"
+                    data-channel="whatsapp_drive_success"
+                    aria-label="WhatsApp"
                     href={whatsappHref}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() => trackWhatsAppClick("drive_success")}
                     className={[
+                        "whatsapp-btn whatsapp-button",
                         "flex h-[52px] w-full",
                         "items-center justify-center gap-3",
                         "bg-[#25D366]",

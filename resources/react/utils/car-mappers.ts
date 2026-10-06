@@ -53,6 +53,11 @@ export function mapCarToCardProps(
                     : undefined,
             price: formatPrice(car.current_price ?? car.cash_price ?? 0, "var(--brand-primary-color)", lang),
             monthlyPrice: formatPrice(car.min_installment ?? 0, "var(--brand-secondary-color)", lang),
+            minSalary:
+                car.min_salary ??
+                (car.specs && typeof car.specs === "object" && !Array.isArray(car.specs)
+                    ? ((car.specs as Record<string, unknown>).min_salary as string | number | undefined)
+                    : undefined),
             detailsTo: `/cars/${slug}`,
             badgeText: car.highlight?.text_ar ?? car.highlight?.text ?? undefined,
             badgeColor: car.highlight?.color ?? undefined,
@@ -102,6 +107,11 @@ export function mapRelatedCar(
                     : undefined,
             price: formatPrice(car.current_price ?? car.cash_price ?? 0, "var(--brand-primary-color)", lang),
             monthlyPrice: formatPrice(car.min_installment ?? 0, "var(--brand-secondary-color)", lang),
+            minSalary:
+                (car as any).min_salary ??
+                (car.specs && typeof car.specs === "object" && !Array.isArray(car.specs)
+                    ? ((car.specs as Record<string, unknown>).min_salary as string | number | undefined)
+                    : undefined),
             detailsTo: `/cars/${slug}`,
             badgeText: car.highlight?.text_ar ?? car.highlight?.text ?? undefined,
             badgeColor: car.highlight?.color ?? undefined,

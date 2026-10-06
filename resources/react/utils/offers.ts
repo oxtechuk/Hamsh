@@ -83,6 +83,11 @@ export function mapBentoCarToCardProps(
       seats: specValue(car, "Seats") || (car as any).seats || "",
       price: formatPrice(car.cash_price ?? 0, "var(--brand-primary-color)", locale),
       monthlyPrice: formatPrice(car.min_installment ?? 0, "var(--brand-secondary-color)", locale),
+      minSalary:
+        (car as any).min_salary ??
+        (car.specs && typeof car.specs === "object" && !Array.isArray(car.specs)
+          ? ((car.specs as Record<string, unknown>).min_salary as string | number | undefined)
+          : undefined),
       detailsTo: `/cars/${slug}`,
     };
   } catch {

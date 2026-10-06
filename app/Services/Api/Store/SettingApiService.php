@@ -115,7 +115,9 @@ final class SettingApiService
                 'dbr_limit_real_estate' => (int) ($settings->get('finance_dbr_limit_real_estate') ?: 65),
                 'debt_solution_text' => (string) ($settings->get('finance_debt_solution_text') ?: 'أرغب في الاستفادة من خيارات الحلول التمويلية وتوحيد الالتزامات'),
                 'exceeded_warning_text' => (string) ($settings->get('finance_exceeded_warning_text') ?: 'نسبة الاستقطاع تتجاوز الحد المسموح به للتمويل.'),
+                'min_salary' => (int) ($settings->get('finance_min_salary') ?: 4000),
             ],
+            'finance_min_salary' => (int) ($settings->get('finance_min_salary') ?: 4000),
             'maintenance' => [
                 'enabled' => in_array($settings->get('maintenance_mode_enabled', '0'), [1, '1', true, 'true'], true),
                 'title' => $maintenanceTitle,

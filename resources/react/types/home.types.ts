@@ -50,6 +50,7 @@ export interface CarItem {
   trims?: CarTrim[];
   cash_price: number;
   min_installment: number;
+  min_salary?: number;
   current_price: number;
   year: number | string;
   type: string;
@@ -80,6 +81,7 @@ export interface HomeCarItem {
   savings: number;
   min_installment: number;
   min_down_payment?: number;
+  min_salary?: number;
   year: string;
   type?: string;
   transmission?: string;

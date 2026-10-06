@@ -13,6 +13,8 @@ import {
 import { useSettingsStore } from "../store/settings.store";
 import { useLanguageStore } from "../store/language.store";
 import { APP_IMAGES, getImageUrl } from "../constants/app-images";
+import { trackWhatsAppClick } from "../utils/analytics";
+
 
 export default function MaintenancePage() {
   const { t } = useTranslation();
@@ -166,10 +168,16 @@ export default function MaintenancePage() {
                 <div className="flex flex-wrap items-center justify-center gap-3">
                   {contact.whatsapp && (
                     <a
+                      id="maintenance-whatsapp-btn"
+                      data-id="whatsapp-btn"
+                      data-tracking="whatsapp"
+                      data-channel="whatsapp_maintenance"
+                      aria-label="WhatsApp"
                       href={`https://wa.me/${contact.whatsapp.replace(/[^0-9]/g, "")}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#25D366]/10 hover:bg-[#25D366]/20 border border-[#25D366]/30 text-[#128C7E] text-xs sm:text-sm font-bold transition-all duration-200"
+                      onClick={() => trackWhatsAppClick("maintenance_page")}
+                      className="whatsapp-btn whatsapp-button inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#25D366]/10 hover:bg-[#25D366]/20 border border-[#25D366]/30 text-[#128C7E] text-xs sm:text-sm font-bold transition-all duration-200"
                     >
                       <MessageCircle className="w-4 h-4" />
                       <span>{t("maintenance.whatsapp")}</span>

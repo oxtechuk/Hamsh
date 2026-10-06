@@ -1,6 +1,7 @@
-import type { FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 import { useLanguageStore } from "../../store/language.store";
 import { getSpecialOrderOptions } from "../../services/api";
@@ -8,7 +9,8 @@ import type { ISpecialOrderStepTwoProps } from "../../interfaces/ISpecialOrderSt
 
 const fieldCls = [
     "h-[52px] w-full",
-    "border-0",
+    "border",
+    "border-transparent",
     "bg-white px-4 font-semibold!",
     "text-[13px] text-[#303A54]",
     "outline-none",
@@ -27,6 +29,7 @@ export default function SpecialOrderStepTwo({
     onBack,
 }: ISpecialOrderStepTwoProps) {
     const { t } = useTranslation();
+    const [attempted, setAttempted] = useState(false);
     const direction = useLanguageStore((state) => state.direction);
 
     const { data: options } = useQuery({
@@ -55,21 +58,64 @@ export default function SpecialOrderStepTwo({
         .map((m: any) => (typeof m === "string" ? m : (m.name || m.model || "")))
         .filter((val: string, idx: number, arr: string[]) => Boolean(val) && arr.indexOf(val) === idx);
 
+    const isBrandValid = Boolean(data.brand.trim());
+    const isModelValid = Boolean(data.model.trim());
+    const isColorValid = Boolean(data.color.trim());
+    const isYearValid = Boolean(data.year.trim());
+
     const canContinue =
-        data.brand.trim() &&
-        data.model.trim() &&
-        data.color.trim() &&
-        data.year.trim();
+        isBrandValid &&
+        isModelValid &&
+        isColorValid &&
+        isYearValid;
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        setAttempted(true);
 
-        if (!canContinue) {
+        if (!isBrandValid) {
+            toast.error(
+                t("specialOrder.step2.validation.brand", {
+                    defaultValue: "يرجى اختيار الماركة",
+                })
+            );
+            return;
+        }
+
+        if (!isModelValid) {
+            toast.error(
+                t("specialOrder.step2.validation.model", {
+                    defaultValue: "يرجى اختيار الموديل",
+                })
+            );
+            return;
+        }
+
+        if (!isColorValid) {
+            toast.error(
+                t("specialOrder.step2.validation.color", {
+                    defaultValue: "يرجى اختيار اللون المفضل",
+                })
+            );
+            return;
+        }
+
+        if (!isYearValid) {
+            toast.error(
+                t("specialOrder.step2.validation.year", {
+                    defaultValue: "يرجى اختيار سنة الصنع",
+                })
+            );
             return;
         }
 
         onNext();
     };
+
+    const getSelectCls = (isValid: boolean) =>
+        attempted && !isValid
+            ? `${fieldCls} border-red-500 ring-1 ring-red-400 bg-red-50/20`
+            : fieldCls;
 
     return (
         <section dir={direction} className="w-full">
@@ -84,10 +130,27 @@ export default function SpecialOrderStepTwo({
                 {t("specialOrder.step2.title")}
             </h2>
 
-            <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+            <div className="mt-2 flex items-center gap-1.5 text-[12px] text-[#6B7280]">
+                <span className="font-bold text-red-500">*</span>
+                <span>
+                    {t(
+                        "specialOrder.step2.requiredNote",
+                        "يرجى تحديد الماركة والموديل واللون وسنة الصنع (*) للمتابعة"
+                    )}
+                </span>
+            </div>
+
+            <form onSubmit={handleSubmit} className="mt-6 space-y-5">
                 <div>
                     <label className={labelCls}>
                         {t("specialOrder.step2.brand")}
+                        <span
+                            className="text-red-500 font-bold ms-1"
+                            title="حقل إجباري"
+                            aria-hidden="true"
+                        >
+                            *
+                        </span>
                     </label>
 
                     <select
@@ -109,7 +172,7 @@ export default function SpecialOrderStepTwo({
                                 onChange("model", "");
                             }
                         }}
-                        className={fieldCls}
+                        className={getSelectCls(isBrandValid)}
                         required
                     >
                         <option value="" disabled>
@@ -121,11 +184,26 @@ export default function SpecialOrderStepTwo({
                             </option>
                         ))}
                     </select>
+
+                    {attempted && !isBrandValid && (
+                        <p className="mt-1 text-start text-[11px] font-medium text-red-500 animate-fadeIn">
+                            {t("specialOrder.step2.validation.brand", {
+                                defaultValue: "يرجى اختيار الماركة",
+                            })}
+                        </p>
+                    )}
                 </div>
 
                 <div>
                     <label className={labelCls}>
                         {t("specialOrder.step2.model")}
+                        <span
+                            className="text-red-500 font-bold ms-1"
+                            title="حقل إجباري"
+                            aria-hidden="true"
+                        >
+                            *
+                        </span>
                     </label>
 
                     <select
@@ -133,7 +211,7 @@ export default function SpecialOrderStepTwo({
                         onChange={(event) =>
                             onChange("model", event.target.value)
                         }
-                        className={fieldCls}
+                        className={getSelectCls(isModelValid)}
                         required
                     >
                         <option value="" disabled>
@@ -145,11 +223,26 @@ export default function SpecialOrderStepTwo({
                             </option>
                         ))}
                     </select>
+
+                    {attempted && !isModelValid && (
+                        <p className="mt-1 text-start text-[11px] font-medium text-red-500 animate-fadeIn">
+                            {t("specialOrder.step2.validation.model", {
+                                defaultValue: "يرجى اختيار الموديل",
+                            })}
+                        </p>
+                    )}
                 </div>
 
                 <div>
                     <label className={labelCls}>
                         {t("specialOrder.step2.color")}
+                        <span
+                            className="text-red-500 font-bold ms-1"
+                            title="حقل إجباري"
+                            aria-hidden="true"
+                        >
+                            *
+                        </span>
                     </label>
 
                     <select
@@ -157,7 +250,7 @@ export default function SpecialOrderStepTwo({
                         onChange={(event) =>
                             onChange("color", event.target.value)
                         }
-                        className={fieldCls}
+                        className={getSelectCls(isColorValid)}
                         required
                     >
                         <option value="" disabled>
@@ -169,11 +262,26 @@ export default function SpecialOrderStepTwo({
                             </option>
                         ))}
                     </select>
+
+                    {attempted && !isColorValid && (
+                        <p className="mt-1 text-start text-[11px] font-medium text-red-500 animate-fadeIn">
+                            {t("specialOrder.step2.validation.color", {
+                                defaultValue: "يرجى اختيار اللون المفضل",
+                            })}
+                        </p>
+                    )}
                 </div>
 
                 <div>
                     <label className={labelCls}>
                         {t("specialOrder.step2.year")}
+                        <span
+                            className="text-red-500 font-bold ms-1"
+                            title="حقل إجباري"
+                            aria-hidden="true"
+                        >
+                            *
+                        </span>
                     </label>
 
                     <select
@@ -181,7 +289,7 @@ export default function SpecialOrderStepTwo({
                         onChange={(event) =>
                             onChange("year", event.target.value)
                         }
-                        className={fieldCls}
+                        className={getSelectCls(isYearValid)}
                         required
                     >
                         <option value="" disabled>
@@ -193,11 +301,22 @@ export default function SpecialOrderStepTwo({
                             </option>
                         ))}
                     </select>
+
+                    {attempted && !isYearValid && (
+                        <p className="mt-1 text-start text-[11px] font-medium text-red-500 animate-fadeIn">
+                            {t("specialOrder.step2.validation.year", {
+                                defaultValue: "يرجى اختيار سنة الصنع",
+                            })}
+                        </p>
+                    )}
                 </div>
 
                 <div>
                     <label className={labelCls}>
                         {t("specialOrder.step2.notes")}
+                        <span className="text-[#8B909A] font-normal text-[11px] ms-1">
+                            ({t("common.optional", { defaultValue: "اختياري" })})
+                        </span>
                     </label>
 
                     <textarea
@@ -221,41 +340,54 @@ export default function SpecialOrderStepTwo({
                     />
                 </div>
 
-                <div className="flex items-center gap-3 pt-3">
-                    <button
-                        type="submit"
-                        disabled={!canContinue}
-                        className={[
-                            "flex h-[52px] flex-[2.2]",
-                            "items-center justify-center",
-                            "bg-[var(--brand-primary-color)]",
-                            "px-6",
-                            "text-[14px] font-bold! text-[#20283A]",
-                            "transition duration-300",
-                            "hover:brightness-95",
-                            "disabled:cursor-not-allowed",
-                            "disabled:opacity-40",
-                        ].join(" ")}
-                    >
-                        {t("specialOrder.step2.nextButton")}
-                    </button>
+                <div className="pt-3">
+                    <div className="flex items-center gap-3">
+                        <button
+                            type="submit"
+                            className={[
+                                "flex h-[52px] flex-[2.2]",
+                                "items-center justify-center",
+                                "bg-[var(--brand-primary-color)]",
+                                "px-6",
+                                "text-[14px] font-bold! text-[#20283A]",
+                                "transition duration-300",
+                                "hover:brightness-95",
+                                "active:scale-[0.99]",
+                                !canContinue ? "opacity-80" : "",
+                            ].join(" ")}
+                        >
+                            {t("specialOrder.step2.nextButton")}
+                        </button>
 
-                    <button
-                        type="button"
-                        onClick={onBack}
-                        className={[
-                            "flex h-[52px] flex-1",
-                            "items-center justify-center",
-                            "bg-white",
-                            "px-5",
-                            "text-[13px] font-bold text-[#303A54]",
-                            "shadow-[0_4px_14px_rgba(48,58,84,0.05)]",
-                            "transition duration-300",
-                            "hover:bg-[#FAFAF8]",
-                        ].join(" ")}
-                    >
-                        {t("specialOrder.step2.backButton")}
-                    </button>
+                        <button
+                            type="button"
+                            onClick={onBack}
+                            className={[
+                                "flex h-[52px] flex-1",
+                                "items-center justify-center",
+                                "bg-white",
+                                "px-5",
+                                "text-[13px] font-bold text-[#303A54]",
+                                "shadow-[0_4px_14px_rgba(48,58,84,0.05)]",
+                                "transition duration-300",
+                                "hover:bg-[#FAFAF8]",
+                            ].join(" ")}
+                        >
+                            {t("specialOrder.step2.backButton")}
+                        </button>
+                    </div>
+
+                    {!canContinue && attempted && (
+                        <div className="mt-3 flex items-center justify-center gap-1.5 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[12px] font-medium text-amber-800 animate-fadeIn">
+                            <span>⚠️</span>
+                            <span>
+                                {t(
+                                    "specialOrder.step2.fillRequiredHint",
+                                    "يرجى تحديد جميع خيارات ومواصفات السيارة المطلوبة (*) للمتابعة"
+                                )}
+                            </span>
+                        </div>
+                    )}
                 </div>
             </form>
         </section>

@@ -1578,6 +1578,51 @@
                                             </div>
                                             <p class="text-muted small mb-0 mt-1">{{ __('يظهر هذا الخيار للعميل عندما تتجاوز التزاماته النسبة المحددة، ليتمكن من تقديم طلبه تحت بند حلول تمويلية.') }}</p>
                                         </div>
+
+                                        {{-- الحد الأدنى للراتب في بطاقات السيارات وعروض التمويل --}}
+                                        <div class="col-12">
+                                            <div class="p-3.5 rounded-4 border bg-white shadow-xs">
+                                                <div class="d-flex align-items-center gap-2 mb-2">
+                                                    <span class="badge bg-warning-subtle text-warning p-2 rounded-3"><i class="bi bi-cash-stack fs-6 text-dark"></i></span>
+                                                    <div>
+                                                        <h6 class="fw-bold mb-0 text-dark small">{{ __('الحد الأدنى للراتب لعرض القسط (بطاقات السيارات وعروض التمويل)') }}</h6>
+                                                        <p class="text-muted small mb-0">{{ __('يحدد قيمة الراتب الذي يبدأ منه القسط ويظهر على بطاقة كل سيارة في المتجر وصفحة تفاصيل السيارة.') }}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="row g-3 align-items-center mt-1">
+                                                    <div class="col-md-6">
+                                                        <label class="form-label fw-semibold small text-muted">{{ __('الراتب الأدنى الافتراضي (ر.س)') }}</label>
+                                                        <div class="input-group">
+                                                            <span class="input-group-text bg-light border-0"><i class="bi bi-wallet2 text-warning"></i></span>
+                                                            <input type="number" min="0" step="50" name="finance_min_salary" id="finance_min_salary"
+                                                                class="form-control bg-light border-0"
+                                                                value="{{ $settings['finance_min_salary'] ?? '4000' }}"
+                                                                placeholder="4000"
+                                                                oninput="document.getElementById('preview_salary_val').textContent = Number(this.value || 0).toLocaleString();">
+                                                            <span class="input-group-text bg-light border-0">{{ __('ر.س') }}</span>
+                                                        </div>
+                                                        <p class="text-muted small mb-0 mt-1">{{ __('سيظهر في بطاقة كل سيارة: "القسط لراتب يبدأ من [الراتب] ر.س" متبوعاً بمبلغ القسط.') }}</p>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="p-3 rounded-3 bg-light border">
+                                                            <span class="text-muted small d-block mb-1 fw-semibold">{{ __('معاينة كيف ستظهر في بطاقة السيارة:') }}</span>
+                                                            <div class="d-flex align-items-baseline justify-content-between p-2.5 rounded-2 bg-white border">
+                                                                <div>
+                                                                    <div class="text-muted" style="font-size: 11px;">{{ __('السعر النقدي') }}</div>
+                                                                    <div class="fw-bold text-dark fs-6">47,500 <small class="text-muted" style="font-size: 10px;">ر.س</small></div>
+                                                                </div>
+                                                                <div class="text-end">
+                                                                    <div class="text-muted fw-semibold" style="font-size: 11px;" id="preview_salary_text">
+                                                                        {{ __('القسط لراتب يبدأ من') }} <span id="preview_salary_val" class="fw-bold text-dark">{{ number_format((float)($settings['finance_min_salary'] ?? 4000)) }}</span> {{ __('ر.س') }}
+                                                                    </div>
+                                                                    <div class="fw-bold fs-6" style="color: #DFA655 !important;">582 <small style="font-size: 10px;">ر.س</small></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

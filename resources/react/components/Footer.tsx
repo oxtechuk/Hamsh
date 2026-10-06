@@ -9,6 +9,8 @@ import { useLanguageStore } from "../store/language.store";
 import { getSocialIcon } from "../utils/social-icons";
 import { APP_IMAGES, getImageUrl } from "../constants/app-images";
 import LazyImg from "./LazyImg";
+import { trackWhatsAppClick } from "../utils/analytics";
+
 
 interface FooterLink {
     label: string;
@@ -288,6 +290,13 @@ export default function Footer({
 
                             {whatsapp && (
                                 <ContactRow
+                                    id="footer-whatsapp-btn"
+                                    className="whatsapp-btn whatsapp-button footer-whatsapp-btn"
+                                    dataTracking="whatsapp"
+                                    dataId="whatsapp-btn"
+                                    dataChannel="whatsapp_footer"
+                                    ariaLabel="WhatsApp"
+                                    onClick={() => trackWhatsAppClick("footer")}
                                     value={whatsapp}
                                     href={`https://wa.me/${normalizePhone(
                                         whatsapp,
@@ -506,6 +515,13 @@ interface ContactRowProps {
     href?: string;
     dir?: "ltr" | "rtl" | "auto";
     external?: boolean;
+    id?: string;
+    className?: string;
+    dataTracking?: string;
+    dataId?: string;
+    dataChannel?: string;
+    ariaLabel?: string;
+    onClick?: () => void;
 }
 
 function ContactRow({
@@ -514,6 +530,13 @@ function ContactRow({
     href,
     dir = "auto",
     external = false,
+    id,
+    className,
+    dataTracking,
+    dataId,
+    dataChannel,
+    ariaLabel,
+    onClick,
 }: ContactRowProps) {
     const content = (
         <div className="group flex items-center gap-3">
@@ -550,10 +573,16 @@ function ContactRow({
 
     return (
         <a
+            id={id}
+            data-id={dataId}
+            data-tracking={dataTracking}
+            data-channel={dataChannel}
+            aria-label={ariaLabel}
             href={href}
+            onClick={onClick}
             target={external ? "_blank" : undefined}
             rel={external ? "noopener noreferrer" : undefined}
-            className="inline-flex"
+            className={`inline-flex ${className || ""}`}
         >
             {content}
         </a>

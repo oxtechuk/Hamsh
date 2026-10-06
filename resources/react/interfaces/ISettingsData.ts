@@ -47,6 +47,7 @@ export interface IFinanceLimits {
   dbr_limit_real_estate?: number;
   debt_solution_text?: string;
   exceeded_warning_text?: string;
+  min_salary?: number;
 }
 
 export interface ISettingsData {
@@ -58,6 +59,7 @@ export interface ISettingsData {
   contact: IContactInfo;
   business_info?: IBusinessInfo;
   finance_calculator?: IFinanceLimits;
+  finance_min_salary?: number;
   working_hours?: IWorkingHours;
   social_media: ISocialMediaItem[];
   car_popup_enabled?: boolean;

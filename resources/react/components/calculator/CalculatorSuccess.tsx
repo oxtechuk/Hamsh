@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { useLanguageStore } from "../../store/language.store";
 import { useSettingsStore } from "../../store/settings.store";
+import { trackWhatsAppClick } from "../../utils/analytics";
 import type { ICalculatorSuccessFullProps } from "../../interfaces/ICalculatorSuccessFullProps";
 
 export default function CalculatorSuccess({
@@ -59,10 +60,16 @@ export default function CalculatorSuccess({
 
       <div className="mt-9 w-full max-w-[390px]">
         <a
+          id="calculator-whatsapp-btn"
+          data-id="whatsapp-btn"
+          data-tracking="whatsapp"
+          data-channel="whatsapp_calculator_success"
+          aria-label="WhatsApp"
           href={whatsappHref}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex h-[52px] w-full items-center justify-center gap-3 bg-[#25D366] px-6 text-[14px] font-bold text-white! transition duration-300 hover:bg-[#20C55D]"
+          onClick={() => trackWhatsAppClick("calculator_success")}
+          className="whatsapp-btn whatsapp-button flex h-[52px] w-full items-center justify-center gap-3 bg-[#25D366] px-6 text-[14px] font-bold text-white! transition duration-300 hover:bg-[#20C55D]"
         >
           <SiWhatsapp size={20} />
           {t("financeCalculator.success.whatsapp")}

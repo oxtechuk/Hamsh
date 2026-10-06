@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { useLanguageStore } from "../../store/language.store";
 import { useSettingsStore } from "../../store/settings.store";
+import { trackWhatsAppClick } from "../../utils/analytics";
 import type { ISpecialOrderSuccessProps } from "../../interfaces/ISpecialOrderSuccessProps";
 
 export default function SpecialOrderSuccess({
@@ -73,10 +74,17 @@ export default function SpecialOrderSuccess({
 
       <div className="mt-9 w-full max-w-[390px]">
         <a
+          id="special-order-whatsapp-btn"
+          data-id="whatsapp-btn"
+          data-tracking="whatsapp"
+          data-channel="whatsapp_special_order_success"
+          aria-label="WhatsApp"
           href={whatsappHref}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={() => trackWhatsAppClick("special_order_success")}
           className={[
+            "whatsapp-btn whatsapp-button",
             "flex h-[52px] w-full",
             "items-center justify-center gap-3",
             "bg-[#25D366]",

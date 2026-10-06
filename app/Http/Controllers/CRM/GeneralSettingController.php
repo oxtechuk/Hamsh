@@ -143,6 +143,7 @@ class GeneralSettingController extends Controller
             'finance_dbr_limit_real_estate',
             'finance_debt_solution_text',
             'finance_exceeded_warning_text',
+            'finance_min_salary',
         ];
 
         // Update text/array settings

@@ -50,6 +50,7 @@
         "subtitle": "سيارات عائلية مريحة",
         "cashPrice": "السعر النقدي",
         "monthlyPayment": "قسط شهري",
+        "installmentForSalary": "القسط لراتب يبدأ من {{salary}} ر.س",
         "estimated": "تقديري",
         "reserve": "احجزها الآن",
         "details": "التفاصيل",

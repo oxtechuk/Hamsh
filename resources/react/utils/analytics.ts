@@ -184,3 +184,48 @@ export function trackViewContent(params: {
     console.debug("[Analytics] trackViewContent error:", error);
   }
 }
+
+/**
+ * Tracks a WhatsApp click event on GTM dataLayer, Meta Pixel, TikTok, and Snapchat.
+ */
+export function trackWhatsAppClick(source = "floating_widget"): void {
+  try {
+    if (typeof window !== "undefined") {
+      if (Array.isArray(window.dataLayer)) {
+        window.dataLayer.push({
+          event: "whatsapp_click",
+          event_category: "Engagement",
+          event_label: source,
+          click_source: source,
+        });
+      }
+
+      if (typeof window.fbq === "function") {
+        window.fbq("trackCustom", "WhatsAppClick", {
+          source,
+          content_name: "WhatsApp",
+        });
+        window.fbq("track", "Contact", {
+          content_name: "WhatsApp",
+          source,
+        });
+      }
+
+      if (window.ttq && typeof window.ttq.track === "function") {
+        window.ttq.track("Contact", {
+          content_name: "WhatsApp",
+          source,
+        });
+      }
+
+      if (typeof window.snaptr === "function") {
+        window.snaptr("track", "CUSTOM_EVENT_1", {
+          description: "WhatsApp Click - " + source,
+        });
+      }
+    }
+  } catch (error) {
+    console.debug("[Analytics] trackWhatsAppClick error:", error);
+  }
+}
+

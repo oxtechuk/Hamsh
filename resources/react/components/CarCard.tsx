@@ -26,6 +26,7 @@ export default function CarCard({
     seats,
     price,
     monthlyPrice,
+    minSalary,
     detailsTo,
     slug,
     compareText,
@@ -39,9 +40,27 @@ export default function CarCard({
     const direction = i18n.dir();
     const isRTL = direction === "rtl";
 
+    const settings = useSettingsStore((state) => state.settings);
     const carPopupEnabled = useSettingsStore(
         (state) => state.settings?.car_popup_enabled ?? SHOW_CAR_DETAILS_AS_MODAL,
     );
+
+    const rawSalary =
+        minSalary ??
+        settings?.finance_min_salary ??
+        settings?.finance_calculator?.min_salary ??
+        4000;
+    const numSalary =
+        typeof rawSalary === "number"
+            ? rawSalary
+            : parseFloat(String(rawSalary).replace(/[^\d.]/g, "")) || 4000;
+    const formattedSalary = isRTL
+        ? numSalary.toLocaleString("ar-SA")
+        : numSalary.toLocaleString("en-US");
+
+    const installmentLabel = isRTL
+        ? `القسط لراتب يبدأ من ${formattedSalary} ر.س`
+        : `Installment for salary from ${formattedSalary} SAR`;
 
     const [showDetailsModal, setShowDetailsModal] = useState(false);
     const [showOrderModal, setShowOrderModal] = useState(false);
@@ -179,8 +198,8 @@ export default function CarCard({
 
                             {monthlyPrice ? (
                                 <div className="text-end">
-                                    <p className="text-[12px] font-medium text-gray-500">
-                                        {t("carCard.monthlyPayment")}
+                                    <p className="text-[11px] sm:text-[12px] font-medium text-gray-500 leading-tight">
+                                        {installmentLabel}
                                     </p>
                                     <p className="mt-0.5 text-[17px] sm:text-[18px] font-extrabold text-[#DFA655]">
                                         {monthlyPrice}

@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { useLanguageStore } from "../../store/language.store";
 import { useSettingsStore } from "../../store/settings.store";
+import { trackWhatsAppClick } from "../../utils/analytics";
 import ContactMethodCard from "./ContactMethodCard";
 
 function normalizePhone(phone: string): string {
@@ -138,6 +139,13 @@ export default function ContactMethodsSection() {
 
           {whatsappNumber && (
             <ContactMethodCard
+              id="contact-page-whatsapp-btn"
+              className="whatsapp-btn whatsapp-button contact-page-whatsapp-btn"
+              dataTracking="whatsapp"
+              dataId="whatsapp-btn"
+              dataChannel="whatsapp_contact_page"
+              ariaLabel="WhatsApp"
+              onClick={() => trackWhatsAppClick("contact_page")}
               icon={<MessageCircle size={30} strokeWidth={1.6} />}
               title={t("contactPage.contactMethods.whatsappLabel")}
               description={whatsappDescription}

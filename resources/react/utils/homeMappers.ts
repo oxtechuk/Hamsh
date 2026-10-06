@@ -54,6 +54,11 @@ export function mapHomeCarToCardProps(
         "var(--brand-secondary-color)",
         lang,
       ),
+      minSalary:
+        car.min_salary ??
+        (car.specs && typeof car.specs === "object" && !Array.isArray(car.specs)
+          ? ((car.specs as Record<string, unknown>).min_salary as string | number | undefined)
+          : undefined),
       detailsTo: `/cars/${slug}`,
       slug,
       badgeText:

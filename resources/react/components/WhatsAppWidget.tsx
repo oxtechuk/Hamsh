@@ -1,5 +1,6 @@
 import { useSettingsStore } from "../store/settings.store";
 import { useLanguageStore } from "../store/language.store";
+import { trackWhatsAppClick } from "../utils/analytics";
 
 export default function WhatsAppWidget() {
   const { settings, loaded } = useSettingsStore();
@@ -18,7 +19,8 @@ export default function WhatsAppWidget() {
 
   return (
     <div
-      className={`fixed z-50 transition-all duration-300 ${
+      id="whatsapp-widget"
+      className={`whatsapp-widget whatsapp-widget-container fixed z-50 transition-all duration-300 ${
         direction === "rtl" ? "left-6 md:left-8" : "right-6 md:right-8"
       } bottom-24 md:bottom-8`}
     >
@@ -27,10 +29,17 @@ export default function WhatsAppWidget() {
 
       {/* Button */}
       <a
+        id="whatsapp-button"
+        data-id="whatsapp-button"
+        data-tracking="whatsapp"
+        data-channel="whatsapp"
+        data-action="chat"
+        aria-label="WhatsApp"
         href={whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="group relative flex items-center justify-center w-14 h-14 bg-[#25D366] rounded-full shadow-lg hover:bg-[#20ba5a] transition-all duration-300 hover:scale-110 active:scale-95"
+        onClick={() => trackWhatsAppClick("floating_widget")}
+        className="whatsapp-btn whatsapp-button whatsapp-floating-btn group relative flex items-center justify-center w-14 h-14 bg-[#25D366] rounded-full shadow-lg hover:bg-[#20ba5a] transition-all duration-300 hover:scale-110 active:scale-95"
         title={tooltipText}
       >
         {/* SVG WhatsApp Icon */}

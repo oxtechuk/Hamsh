@@ -25,6 +25,8 @@ import {
   Zap,
 } from "lucide-react";
 import LazyImg from "./LazyImg";
+import { trackWhatsAppClick } from "../utils/analytics";
+
 
 const drawerLinks = [
   { labelKey: "nav.cars", to: "/cars", icon: CarFront },
@@ -212,10 +214,17 @@ export default function MobileBottomNav() {
               {/* WhatsApp Sales */}
               {whatsappNumber && (
                 <a
+                  id="mobile-nav-whatsapp-btn"
+                  data-id="whatsapp-btn"
+                  data-tracking="whatsapp"
+                  data-channel="whatsapp_mobile_nav"
+                  data-action="chat"
+                  aria-label="WhatsApp Sales"
                   href={`https://wa.me/${whatsappNumber}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between rounded-2xl border border-emerald-100 bg-emerald-50/80 p-4 transition-all active:scale-[0.98] hover:bg-emerald-100/70"
+                  onClick={() => trackWhatsAppClick("mobile_bottom_nav")}
+                  className="whatsapp-btn whatsapp-button mobile-whatsapp-btn flex items-center justify-between rounded-2xl border border-emerald-100 bg-emerald-50/80 p-4 transition-all active:scale-[0.98] hover:bg-emerald-100/70"
                 >
                   <div className="flex items-center gap-3.5">
                     <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-500 text-white shadow-sm shadow-emerald-500/20">

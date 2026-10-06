@@ -4,6 +4,7 @@ import { CreditCard, ShoppingBag, ChevronDown } from "lucide-react";
 
 import { formatPrice } from "../../utils/format";
 import { localize } from "../../utils/localize";
+import { useSettingsStore } from "../../store/settings.store";
 import type { ICarDetailsInfoPanelProps } from "../../interfaces/ICarDetailsInfoPanelProps";
 
 export default function CarDetailsInfoPanel({
@@ -16,6 +17,25 @@ export default function CarDetailsInfoPanel({
 }: ICarDetailsInfoPanelProps) {
     const { t, i18n } = useTranslation();
     const isRTL = i18n.dir() === "rtl";
+
+    const settings = useSettingsStore((s) => s.settings);
+    const rawSalary =
+        (car as any).min_salary ??
+        (typeof car.specs === "object" && !Array.isArray(car.specs) ? (car.specs as any)?.min_salary : undefined) ??
+        settings?.finance_min_salary ??
+        settings?.finance_calculator?.min_salary ??
+        4000;
+    const numSalary =
+        typeof rawSalary === "number"
+            ? rawSalary
+            : parseFloat(String(rawSalary).replace(/[^\d.]/g, "")) || 4000;
+    const salaryDisplay = isRTL
+        ? `${numSalary.toLocaleString("ar-SA")} ر.س`
+        : `${numSalary.toLocaleString("en-US")} SAR`;
+
+    const installmentLabel = isRTL
+        ? `القسط لراتب يبدأ من ${salaryDisplay}`
+        : `Installment for salary from ${salaryDisplay}`;
 
     const trims = car.trims && car.trims.length > 0 ? car.trims : [];
     const currentTrim = trims[selectedTrimIndex] ?? null;
@@ -130,8 +150,8 @@ export default function CarDetailsInfoPanel({
 
                 {/* Installment */}
                 <div className="text-end">
-                    <p className="text-[12px] font-medium text-[#404E6A]">
-                        {isRTL ? "قسط شهري يبدأ من" : "Monthly starts from"}
+                    <p className="text-[11px] sm:text-[12px] font-medium text-[#404E6A] leading-tight">
+                        {installmentLabel}
                     </p>
                     <p className="mt-0.5 text-[22px] font-black text-[#DDBB72] sm:text-[26px]">
                         {formatPrice(displayInstallment, "#DDBB72", i18n.language)}

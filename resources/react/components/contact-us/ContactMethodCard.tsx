@@ -7,6 +7,13 @@ export default function ContactMethodCard({
   href,
   external = false,
   transparent = false,
+  id,
+  className,
+  dataTracking,
+  dataId,
+  dataChannel,
+  ariaLabel,
+  onClick,
 }: IContactMethodCardProps) {
   const content = (
     <div
@@ -40,10 +47,16 @@ export default function ContactMethodCard({
 
   return (
     <a
+      id={id}
+      data-id={dataId}
+      data-tracking={dataTracking}
+      data-channel={dataChannel}
+      aria-label={ariaLabel}
+      onClick={onClick}
       href={href}
       target={external ? "_blank" : undefined}
       rel={external ? "noopener noreferrer" : undefined}
-      className="block h-full no-underline group cursor-pointer"
+      className={`block h-full no-underline group cursor-pointer ${className || ""}`}
     >
       {content}
     </a>

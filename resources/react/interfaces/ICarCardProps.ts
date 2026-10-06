@@ -13,6 +13,7 @@ export interface ICarCardProps {
   oldPrice?: ReactNode;
   price: ReactNode;
   monthlyPrice: ReactNode;
+  minSalary?: string | number;
   detailsTo: string;
   slug?: string;
   compareText?: string;

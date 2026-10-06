@@ -7,4 +7,11 @@ export interface IContactMethodCardProps {
   href?: string;
   external?: boolean;
   transparent?: boolean;
+  id?: string;
+  className?: string;
+  dataTracking?: string;
+  dataId?: string;
+  dataChannel?: string;
+  ariaLabel?: string;
+  onClick?: () => void;
 }

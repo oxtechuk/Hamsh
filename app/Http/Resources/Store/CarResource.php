@@ -26,6 +26,7 @@ class CarResource extends JsonResource
             'savings' => max(0, $this->cash_price - $this->current_price),
             'min_installment' => $this->min_installment,
             'min_down_payment' => $this->min_down_payment,
+            'min_salary' => ! empty($this->specs['min_salary']) ? (float) $this->specs['min_salary'] : null,
             'year' => $this->year,
             'is_current_year' => now()->format('Y') == $this->year,
             'type' => $this->type,

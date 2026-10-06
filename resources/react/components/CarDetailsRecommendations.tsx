@@ -69,6 +69,7 @@ export default function CarDetailsRecommendations({
                                   type: (car as any).type,
                                   price: (car as any).price,
                                   monthlyPrice: (car as any).monthlyPrice || (car as any).monthly_price,
+                                  minSalary: (car as any).minSalary || (car as any).min_salary || (car as any).specs?.min_salary,
                                   detailsTo: (car as any).detailsTo || `/cars/${(car as any).slug || (car as any).id}`,
                                   slug: (car as any).slug,
                                   badgeText: (car as any).badgeText,
