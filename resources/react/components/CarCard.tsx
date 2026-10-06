@@ -45,22 +45,9 @@ export default function CarCard({
         (state) => state.settings?.car_popup_enabled ?? SHOW_CAR_DETAILS_AS_MODAL,
     );
 
-    const rawSalary =
-        minSalary ??
-        settings?.finance_min_salary ??
-        settings?.finance_calculator?.min_salary ??
-        4000;
-    const numSalary =
-        typeof rawSalary === "number"
-            ? rawSalary
-            : parseFloat(String(rawSalary).replace(/[^\d.]/g, "")) || 4000;
-    const formattedSalary = isRTL
-        ? numSalary.toLocaleString("ar-SA")
-        : numSalary.toLocaleString("en-US");
-
     const installmentLabel = isRTL
-        ? `القسط لراتب يبدأ من ${formattedSalary} ر.س`
-        : `Installment for salary from ${formattedSalary} SAR`;
+        ? (t("carCard.monthlyPayment") || "القسط لراتب يبدأ من")
+        : (t("carCard.monthlyPayment") || "Installment starts from");
 
     const [showDetailsModal, setShowDetailsModal] = useState(false);
     const [showOrderModal, setShowOrderModal] = useState(false);
