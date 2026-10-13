@@ -81,6 +81,7 @@ class BookingController extends Controller
             'car_id' => 'nullable|exists:cars,id',
             'total_price' => 'nullable|numeric|min:0',
             'down_payment' => 'nullable|numeric|min:0',
+            'last_payment' => 'nullable|numeric|min:0',
             'duration_years' => 'nullable|integer|min:1|max:10',
             'interest_rate' => 'nullable|numeric|min:0|max:100',
             'monthly_installment' => 'nullable|numeric|min:0',
@@ -102,21 +103,24 @@ class BookingController extends Controller
         $totalMonths = max(1, $durationYears * 12);
         $principal = max(0, $cashPrice - $downPayment);
 
+        $lastPayment = $request->filled('last_payment') ? (float) $request->last_payment : null;
+        if ($lastPayment === null && $request->booking_type === 'finance' && $cashPrice > 0) {
+            $defaultLastPaymentPct = (float) (Setting::where('key', 'finance_default_last_payment_pct')->value('value') ?? 45);
+            $lastPayment = round($cashPrice * ($defaultLastPaymentPct / 100));
+        }
+
         $monthlyInstallment = (float) ($request->monthly_installment ?? 0);
         if ($monthlyInstallment <= 0 && $request->booking_type === 'finance' && $cashPrice > 0) {
-            $monthlyRate = ($interestRate / 100) / 12;
-            if ($monthlyRate > 0) {
-                $compounded = pow(1 + $monthlyRate, $totalMonths);
-                $monthlyInstallment = round($principal * ($monthlyRate * $compounded) / ($compounded - 1));
-            } else {
-                $monthlyInstallment = round($principal / $totalMonths);
-            }
+            $durationYearsFloat = $totalMonths / 12;
+            $totalInterest = $principal * ($interestRate / 100) * $durationYearsFloat;
+            $repayable = max(0, ($principal + $totalInterest) - (float) ($lastPayment ?? 0));
+            $monthlyInstallment = round($repayable / $totalMonths);
         }
 
         $totalPrice = (float) ($request->total_price ?? 0);
         if ($totalPrice <= 0) {
             $totalPrice = $request->booking_type === 'finance'
-                ? ($monthlyInstallment * $totalMonths) + $downPayment
+                ? ($monthlyInstallment * $totalMonths) + $downPayment + (float) ($lastPayment ?? 0)
                 : $cashPrice;
         }
 
@@ -127,6 +131,7 @@ class BookingController extends Controller
             'car_id' => $request->car_id,
             'total_price' => $totalPrice,
             'down_payment' => $downPayment,
+            'last_payment' => $lastPayment,
             'duration_years' => $durationYears,
             'interest_rate' => $interestRate,
             'monthly_installment' => $monthlyInstallment,
@@ -165,6 +170,7 @@ class BookingController extends Controller
             'booking_type' => 'nullable|string|max:50',
             'total_price' => 'nullable|numeric|min:0',
             'down_payment' => 'nullable|numeric|min:0',
+            'last_payment' => 'nullable|numeric|min:0',
             'monthly_installment' => 'nullable|numeric|min:0',
             'interest_rate' => 'nullable|numeric|min:0|max:100',
             'duration_years' => 'nullable|integer|min:1|max:10',
@@ -181,17 +187,16 @@ class BookingController extends Controller
             $car = ! empty($validated['car_id']) ? Car::find($validated['car_id']) : $booking->car;
             $cashPrice = (float) (! empty($validated['total_price']) ? $validated['total_price'] : ($car?->cash_price ?? 0));
             $downPayment = (float) ($validated['down_payment'] ?? $booking->down_payment ?? 0);
+            $lastPayment = (float) ($validated['last_payment'] ?? $booking->last_payment ?? 0);
             $durationYears = (int) ($validated['duration_years'] ?? $booking->duration_years ?? 5);
             $totalMonths = max(1, $durationYears * 12);
             $principal = max(0, $cashPrice - $downPayment);
             $rate = (float) $validated['interest_rate'];
-            $monthlyRate = ($rate / 100) / 12;
-            if ($monthlyRate > 0) {
-                $comp = pow(1 + $monthlyRate, $totalMonths);
-                $validated['monthly_installment'] = round($principal * ($monthlyRate * $comp) / ($comp - 1));
-            } else {
-                $validated['monthly_installment'] = round($principal / $totalMonths);
-            }
+
+            $durationYearsFloat = $totalMonths / 12;
+            $totalInterest = $principal * ($rate / 100) * $durationYearsFloat;
+            $repayable = max(0, ($principal + $totalInterest) - $lastPayment);
+            $validated['monthly_installment'] = round($repayable / $totalMonths);
         }
 
         $oldStatus = $booking->status;

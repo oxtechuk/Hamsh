@@ -747,6 +747,17 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6">
+                                        <label
+                                            class="form-label fw-bold text-muted small">{{ __('الدفعة الأخيرة (المؤجلة)') }}</label>
+                                        <div class="input-group input-group-lg bg-white border-0 shadow-sm"
+                                            style="border-radius: 12px; overflow: hidden;">
+                                            <input type="number" name="last_payment" id="bookingLastPayment" class="form-control border-0"
+                                                style="font-size: 14px;">
+                                            <span class="input-group-text bg-white border-0 text-muted"
+                                                style="font-size: 14px;">ر.س</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
                                         <div class="d-flex justify-content-between align-items-center mb-1">
                                             <label class="form-label fw-bold text-muted small mb-0">{{ __('نسبة الفائدة %') }}</label>
                                             <span class="badge bg-white text-primary border" style="font-size:10px;">
@@ -894,24 +905,23 @@
             const interestRateInput = document.getElementById('bookingInterestRate');
             const bookingTypeSelect = document.querySelector('select[name="booking_type"]');
 
+            const lastPaymentInput = document.getElementById('bookingLastPayment') || document.querySelector('input[name="last_payment"]');
+
             function calculateInstallment() {
                 if (!priceInput || !installmentInput) return;
                 const price = parseFloat(priceInput.value) || 0;
                 const down = parseFloat(downPaymentInput ? downPaymentInput.value : 0) || 0;
+                const last = parseFloat(lastPaymentInput ? lastPaymentInput.value : 0) || 0;
                 const duration = parseInt(durationInput ? durationInput.value : 5) || 5;
                 const rate = parseFloat(interestRateInput ? interestRateInput.value : 3.5) || 3.5;
                 const principal = Math.max(0, price - down);
                 const totalMonths = duration * 12;
 
                 if (principal > 0 && totalMonths > 0) {
-                    const monthlyRate = (rate / 100) / 12;
-                    let monthly = 0;
-                    if (monthlyRate > 0) {
-                        const factor = Math.pow(1 + monthlyRate, totalMonths);
-                        monthly = Math.round(principal * (monthlyRate * factor) / (factor - 1));
-                    } else {
-                        monthly = Math.round(principal / totalMonths);
-                    }
+                    const durationYears = totalMonths / 12;
+                    const totalInterest = principal * (rate / 100) * durationYears;
+                    const repayable = Math.max(0, (principal + totalInterest) - last);
+                    const monthly = Math.round(repayable / totalMonths);
                     installmentInput.value = monthly;
                 } else if (principal === 0) {
                     installmentInput.value = 0;
@@ -936,6 +946,7 @@
             if (downPaymentInput) downPaymentInput.addEventListener('input', calculateInstallment);
             if (durationInput) durationInput.addEventListener('input', calculateInstallment);
             if (interestRateInput) interestRateInput.addEventListener('input', calculateInstallment);
+            if (lastPaymentInput) lastPaymentInput.addEventListener('input', calculateInstallment);
         });
     </script>
 @endsection

@@ -224,7 +224,34 @@ class BookingTest extends TestCase
         ]);
         $this->assertEquals(25000, $response->json('data.last_payment_amount'));
         $this->assertEquals(20, $response->json('data.last_payment_percentage'));
-        $this->assertGreaterThan(0, $response->json('data.monthly_payment'));
+        $this->assertEquals(15750, $response->json('data.total_interest')); // 112,500 * 3.5% * 4 years = 15,750
+        $this->assertEquals(2151, $response->json('data.monthly_payment'));
+    }
+
+    public function test_it_calculates_flat_interest_correctly_for_custom_bank_rate(): void
+    {
+        $car = $this->createCar(); // cash_price: 125,000
+        $bank = CalculatorBank::create([
+            'name' => 'بنك تجريبي 2.5%',
+            'annual_rate' => 2.5,
+            'is_active' => true,
+        ]);
+
+        $response = $this->postJson(route('store.api.calculator.calculate'), [
+            'car_id' => $car->id,
+            'down_payment_percentage' => 0,
+            'last_payment_percentage' => 45,
+            'period_months' => 60,
+            'bank_id' => $bank->id,
+        ]);
+
+        $response->assertStatus(200);
+        // Principal = 125,000, 2.5% annual rate, 5 years
+        // Total interest = 125,000 * 2.5% * 5 = 15,625
+        $this->assertEquals(15625, $response->json('data.total_interest'));
+        $this->assertEquals(56250, $response->json('data.last_payment_amount')); // 45% of 125,000
+        // (125,000 + 15,625 - 56,250) / 60 = 84,375 / 60 = 1,406.25 -> 1,406
+        $this->assertEquals(1406, $response->json('data.monthly_payment'));
     }
 
     public function test_booking_requires_car_id_and_client_details(): void

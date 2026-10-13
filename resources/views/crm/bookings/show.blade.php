@@ -526,6 +526,10 @@
                                         <input type="number" step="0.01" min="0" name="down_payment" class="form-control form-control-sm" value="{{ old('down_payment', $booking->down_payment) }}">
                                     </div>
                                     <div class="col-md-3">
+                                        <label class="form-label fw-bold small">{{ __('الدفعة الأخيرة (ر.س)') }}</label>
+                                        <input type="number" step="0.01" min="0" name="last_payment" class="form-control form-control-sm" value="{{ old('last_payment', $booking->last_payment) }}">
+                                    </div>
+                                    <div class="col-md-3">
                                         <label class="form-label fw-bold small">{{ __('نسبة الفائدة %') }}</label>
                                         <input type="number" step="0.01" min="0" max="100" name="interest_rate" class="form-control form-control-sm" value="{{ old('interest_rate', $booking->interest_rate ?: ($defaultBank?->annual_rate ?? 3.5)) }}" placeholder="{{ $defaultBank?->annual_rate ?? 3.5 }}%">
                                     </div>

@@ -49,13 +49,9 @@ final class CalculatorApiService
 
         if ($monthlyPayment === null && $carPrice > 0 && $periodMonths > 0) {
             $principal = max(0, $carPrice - $downPayment);
-            $monthlyRate = ($annualRate / 100) / 12;
-            if ($monthlyRate > 0) {
-                $compounded = pow(1 + $monthlyRate, $periodMonths);
-                $monthlyPayment = round((($principal * $compounded - $lastPayment) * $monthlyRate) / ($compounded - 1));
-            } else {
-                $monthlyPayment = round(($principal - $lastPayment) / $periodMonths);
-            }
+            $durationYearsFloat = $periodMonths / 12;
+            $totalInterest = $principal * ($annualRate / 100) * $durationYearsFloat;
+            $monthlyPayment = round(max(0, ($principal + $totalInterest - $lastPayment)) / $periodMonths);
         }
 
         $totalPrice = $monthlyPayment && $periodMonths
@@ -197,18 +193,18 @@ final class CalculatorApiService
         $downPaymentAmount = round($carPrice * $downPaymentPct / 100);
         $lastPaymentAmount = round($carPrice * $lastPaymentPct / 100);
         $principal = max(0, $carPrice - $downPaymentAmount);
-        $annualRate = $bank->annual_rate;
-        $monthlyRate = $annualRate / 12 / 100;
+        $annualRate = (float) $bank->annual_rate;
+        $durationYears = $periodMonths > 0 ? ($periodMonths / 12) : 1;
+        $totalInterest = round($principal * ($annualRate / 100) * $durationYears);
+        $totalToRepay = $principal + $totalInterest;
 
-        if ($monthlyRate > 0) {
-            $compounded = pow(1 + $monthlyRate, $periodMonths);
-            $monthlyPayment = round((($principal * $compounded - $lastPaymentAmount) * $monthlyRate) / ($compounded - 1));
+        if ($periodMonths > 0) {
+            $monthlyPayment = round(max(0, $totalToRepay - $lastPaymentAmount) / $periodMonths);
         } else {
-            $monthlyPayment = round(($principal - $lastPaymentAmount) / $periodMonths);
+            $monthlyPayment = 0;
         }
 
         $totalPayment = $monthlyPayment * $periodMonths + $downPaymentAmount + $lastPaymentAmount;
-        $totalInterest = max(0, ($monthlyPayment * $periodMonths + $lastPaymentAmount) - $principal);
 
         return [
             'car_price' => $carPrice,

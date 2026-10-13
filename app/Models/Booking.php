@@ -317,22 +317,22 @@ class Booking extends Model
         $totalMonths = max(1, $durationYears * 12);
         $principal = max(0, $cashPrice - $downPayment);
 
+        $durationYearsFloat = $totalMonths / 12;
+        $calculatedInterest = round($principal * ($annualRate / 100) * $durationYearsFloat);
+        $totalToRepay = $principal + $calculatedInterest;
+
         if ($this->monthly_installment > 0 && $this->last_payment !== null) {
             $monthlyInstallment = (float) $this->monthly_installment;
         } elseif ($principal > 0 && $totalMonths > 0) {
-            $monthlyRate = ($annualRate / 100) / 12;
-            if ($monthlyRate > 0) {
-                $compounded = pow(1 + $monthlyRate, $totalMonths);
-                $monthlyInstallment = round((($principal * $compounded - $lastPayment) * $monthlyRate) / ($compounded - 1));
-            } else {
-                $monthlyInstallment = round(($principal - $lastPayment) / $totalMonths);
-            }
+            $monthlyInstallment = round(max(0, $totalToRepay - $lastPayment) / $totalMonths);
         } else {
             $monthlyInstallment = (float) ($this->monthly_installment ?: 0);
         }
 
         $totalPayments = $monthlyInstallment * $totalMonths;
-        $totalInterest = max(0, ($totalPayments + $lastPayment) - $principal);
+        $totalInterest = $this->monthly_installment > 0 && $this->last_payment !== null
+            ? max(0, ($totalPayments + $lastPayment) - $principal)
+            : $calculatedInterest;
         $totalFinanced = $totalPayments + $downPayment + $lastPayment;
 
         return [
