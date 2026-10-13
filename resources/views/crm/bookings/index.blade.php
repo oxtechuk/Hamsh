@@ -127,20 +127,28 @@
             {{-- Desktop Table (hidden on mobile) --}}
             {{-- Desktop Table (hidden on mobile) --}}
             <style>
+                .bookings-table {
+                    width: 100% !important;
+                    table-layout: fixed;
+                }
                 .bookings-table thead th {
                     background: #F8FAFC !important;
                     color: #475569 !important;
-                    font-size: 12px;
+                    font-size: 11px;
                     font-weight: 700;
-                    padding: 13px 14px;
+                    padding: 8px 6px;
                     border-bottom: 1px solid #E2E8F0 !important;
                     white-space: nowrap;
+                    text-align: right;
+                }
+                .bookings-table thead th.text-center {
+                    text-align: center;
                 }
                 .bookings-table tbody td {
-                    padding: 12px 14px;
+                    padding: 7px 6px;
                     vertical-align: middle;
                     border-bottom: 1px solid #F1F5F9;
-                    font-size: 13px;
+                    font-size: 11.5px;
                 }
                 .bookings-table tbody tr:hover td {
                     background-color: #F8FAFC;
@@ -150,9 +158,9 @@
                     color: #BE123C;
                     border: 1px solid #FFE4E6;
                     font-weight: 700;
-                    font-size: 12px;
-                    padding: 4px 8px;
-                    border-radius: 6px;
+                    font-size: 11px;
+                    padding: 2px 5px;
+                    border-radius: 5px;
                     text-decoration: none;
                     transition: all 0.15s ease-in-out;
                     display: inline-block;
@@ -163,8 +171,8 @@
                     border-color: #FECDD3;
                 }
                 .bookings-table .avatar-initials {
-                    width: 32px;
-                    height: 32px;
+                    width: 24px;
+                    height: 24px;
                     background: #F1F5F9;
                     color: #334155;
                     border: 1px solid #E2E8F0;
@@ -173,23 +181,16 @@
                     align-items: center;
                     justify-content: center;
                     font-weight: 700;
-                    font-size: 12px;
+                    font-size: 10px;
                     flex-shrink: 0;
                 }
-                .bookings-table .finance-pill {
-                    background: #F8FAFC;
-                    border: 1px solid #E2E8F0;
-                    border-radius: 8px;
-                    padding: 6px 10px;
-                    min-width: 175px;
-                }
                 .bookings-table .action-btn {
-                    width: 30px;
-                    height: 30px;
+                    width: 24px;
+                    height: 24px;
                     display: inline-flex;
                     align-items: center;
                     justify-content: center;
-                    border-radius: 6px;
+                    border-radius: 5px;
                     border: 1px solid #E2E8F0;
                     background: #FFFFFF;
                     color: #475569;
@@ -212,19 +213,19 @@
                     border-color: #FECACA;
                 }
             </style>
-            <div class="table-responsive d-none d-md-block">
+            <div class="d-none d-md-block w-100" style="overflow-x:hidden;">
                 <table class="table align-middle mb-0 bookings-table">
                     <thead>
                         <tr>
-                            <th class="px-3" style="width:75px;">{{ __('رقم الطلب') }}</th>
-                            <th style="min-width:170px;">{{ __('العميل') }}</th>
-                            <th class="text-center" style="width:110px;">{{ __('نوع الطلب') }}</th>
-                            <th style="min-width:160px;">{{ __('السيارة المطلوبة') }}</th>
-                            <th style="min-width:145px;">{{ __('التفاصيل المالية') }}</th>
-                            <th style="min-width:145px;">{{ __('المسؤول') }}</th>
-                            <th style="min-width:145px;">{{ __('تاريخ ونشاط الطلب') }}</th>
-                            <th style="width:115px;">{{ __('الحالة') }}</th>
-                            <th class="text-center" style="width:105px;">{{ __('إجراءات') }}</th>
+                            <th class="text-center" style="width:5%;">#</th>
+                            <th style="width:17%;">{{ __('العميل') }}</th>
+                            <th class="text-center" style="width:8%;">{{ __('النوع') }}</th>
+                            <th style="width:16%;">{{ __('السيارة') }}</th>
+                            <th style="width:15%;">{{ __('المالية') }}</th>
+                            <th style="width:12%;">{{ __('المسؤول') }}</th>
+                            <th style="width:12%;">{{ __('التاريخ') }}</th>
+                            <th style="width:9%;">{{ __('الحالة') }}</th>
+                            <th class="text-center" style="width:6%;">{{ __('إجراء') }}</th>
                         </tr>
                     </thead>
                     <tbody class="border-top-0">
@@ -250,26 +251,26 @@
                             @endphp
                             <tr>
                                 {{-- رقم الطلب --}}
-                                <td class="px-3">
-                                    <a href="{{ route('crm.bookings.show', $b) }}" class="order-id-badge">
+                                <td class="text-center">
+                                    <a href="{{ route('crm.bookings.show', $b) }}" class="order-id-badge" title="{{ __('طلب رقم') }} #{{ $b->id }}">
                                         #{{ $b->id }}
                                     </a>
                                 </td>
 
                                 {{-- العميل --}}
                                 <td>
-                                    <div class="d-flex align-items-center gap-2">
+                                    <div class="d-flex align-items-center gap-1.5 overflow-hidden">
                                         <div class="avatar-initials">
                                             {{ mb_substr($b->client_name, 0, 1) }}
                                         </div>
-                                        <div class="overflow-hidden">
-                                            <div class="fw-bold text-dark text-truncate" style="font-size:13px;max-width:145px;" title="{{ $b->client_name }}">
+                                        <div class="overflow-hidden flex-grow-1" style="min-width:0;">
+                                            <div class="fw-bold text-dark text-truncate" style="font-size:11.5px;" title="{{ $b->client_name }}">
                                                 {{ $b->client_name }}
                                             </div>
-                                            <div class="d-flex align-items-center gap-1 mt-0.5 text-muted" style="font-size:11px;">
+                                            <div class="d-flex align-items-center gap-1 text-muted text-truncate" style="font-size:9.5px;">
                                                 <span dir="ltr" class="font-monospace">{{ $b->client_phone }}</span>
                                                 @if($b->city)
-                                                    <span class="text-secondary" style="font-size:10px;">• {{ $b->city }}</span>
+                                                    <span class="text-secondary text-truncate" title="{{ $b->city }}">• {{ $b->city }}</span>
                                                 @endif
                                             </div>
                                         </div>
@@ -279,38 +280,40 @@
                                 {{-- نوع الطلب --}}
                                 <td class="text-center">
                                     @if($bType === 'finance')
-                                        <span class="badge px-2.5 py-1 rounded-pill d-inline-flex align-items-center gap-1"
-                                            style="background:#EEF2FF;color:#4338CA;border:1px solid #C7D2FE;font-size:11px;font-weight:700;white-space:nowrap;">
-                                            <i class="bi bi-wallet2"></i> {{ __('طلب تمويل') }}
+                                        <span class="badge px-1.5 py-0.5 rounded-pill d-inline-block text-truncate"
+                                            style="background:#EEF2FF;color:#4338CA;border:1px solid #C7D2FE;font-size:9.5px;font-weight:700;max-width:100%;"
+                                            title="{{ __('طلب تمويل') }}">
+                                            {{ __('تمويل') }}
                                         </span>
                                     @elseif($bType === 'purchase')
-                                        <span class="badge px-2.5 py-1 rounded-pill d-inline-flex align-items-center gap-1"
-                                            style="background:#ECFDF5;color:#047857;border:1px solid #A7F3D0;font-size:11px;font-weight:700;white-space:nowrap;">
-                                            <i class="bi bi-cash-stack"></i> {{ __('شراء كاش') }}
+                                        <span class="badge px-1.5 py-0.5 rounded-pill d-inline-block text-truncate"
+                                            style="background:#ECFDF5;color:#047857;border:1px solid #A7F3D0;font-size:9.5px;font-weight:700;max-width:100%;"
+                                            title="{{ __('شراء كاش') }}">
+                                            {{ __('كاش') }}
                                         </span>
                                     @elseif($bType === 'test_drive')
-                                        <span class="badge px-2.5 py-1 rounded-pill d-inline-flex align-items-center gap-1"
-                                            style="background:#FFFBEB;color:#B45309;border:1px solid #FDE68A;font-size:11px;font-weight:700;white-space:nowrap;">
-                                            <i class="bi bi-speedometer2"></i> {{ __('تجربة قيادة') }}
+                                        <span class="badge px-1.5 py-0.5 rounded-pill d-inline-block text-truncate"
+                                            style="background:#FFFBEB;color:#B45309;border:1px solid #FDE68A;font-size:9.5px;font-weight:700;max-width:100%;"
+                                            title="{{ __('تجربة قيادة') }}">
+                                            {{ __('قيادة') }}
                                         </span>
                                     @else
-                                        <span class="badge px-2.5 py-1 rounded-pill d-inline-flex align-items-center gap-1"
-                                            style="background:#F1F5F9;color:#475569;border:1px solid #CBD5E1;font-size:11px;font-weight:700;white-space:nowrap;">
-                                            <i class="bi bi-chat-left-text"></i> {{ __('استفسار') }}
+                                        <span class="badge px-1.5 py-0.5 rounded-pill d-inline-block text-truncate"
+                                            style="background:#F1F5F9;color:#475569;border:1px solid #CBD5E1;font-size:9.5px;font-weight:700;max-width:100%;"
+                                            title="{{ __('استفسار') }}">
+                                            {{ __('استفسار') }}
                                         </span>
                                     @endif
                                 </td>
 
                                 {{-- السيارة --}}
                                 <td>
-                                    <div class="fw-bold text-dark text-truncate" style="font-size:13px;max-width:180px;" title="{{ $displayCarName }}">
+                                    <div class="fw-bold text-dark text-truncate" style="font-size:11.5px;" title="{{ $displayCarName }}">
                                         {{ $displayCarName }}
                                     </div>
                                     @if($b->car?->year)
-                                        <div class="d-flex align-items-center gap-1 mt-0.5">
-                                            <span class="badge bg-light text-muted border px-1.5 py-0" style="font-size:10px;font-weight:600;">
-                                                موديل {{ $b->car->year }}
-                                            </span>
+                                        <div class="text-muted text-truncate" style="font-size:9.5px;">
+                                            {{ __('موديل') }} {{ $b->car->year }}
                                         </div>
                                     @endif
                                 </td>
@@ -321,46 +324,44 @@
                                         $fin = $b->getFinanceDetails();
                                     @endphp
                                     @if($bType === 'finance')
-                                        <div style="line-height:1.35;white-space:nowrap;">
-                                            <div>
-                                                <span class="fw-bold" style="color:#4338CA;font-size:13px;">{{ number_format($fin['monthly_installment']) }}</span>
-                                                <span class="text-muted" style="font-size:10px;">ر.س/ش</span>
+                                        <div class="overflow-hidden" style="line-height:1.25;">
+                                            <div class="text-truncate">
+                                                <span class="fw-bold" style="color:#4338CA;font-size:11.5px;">{{ number_format($fin['monthly_installment']) }}</span>
+                                                <span class="text-muted" style="font-size:9px;">ر.س/ش</span>
                                             </div>
-                                            <div class="d-flex align-items-center gap-1 my-0.5">
-                                                <span class="badge px-1 py-0 rounded-1" style="background:#ECFDF5;color:#047857;border:1px solid #A7F3D0;font-size:9.5px;font-weight:700;">
+                                            <div class="d-flex align-items-center gap-1 my-0.5 text-truncate" title="{{ $fin['bank_name'] }} (%{{ number_format($fin['annual_rate'], 1) }})">
+                                                <span class="badge px-1 py-0 rounded-1 flex-shrink-0" style="background:#ECFDF5;color:#047857;border:1px solid #A7F3D0;font-size:8.5px;font-weight:700;">
                                                     %{{ number_format($fin['annual_rate'], 1) }}
                                                 </span>
-                                                <span class="text-muted text-truncate" style="font-size:10px;max-width:95px;" title="{{ $fin['bank_name'] }}">({{ $fin['bank_name'] }})</span>
+                                                <span class="text-muted text-truncate" style="font-size:9.5px;">{{ $fin['bank_name'] }}</span>
                                             </div>
                                             @if(($fin['last_payment'] ?? 0) > 0)
-                                                <div class="text-muted" style="font-size:10px;">
-                                                    <span>{{ __('الدفعة الأخيرة:') }}</span>
+                                                <div class="text-muted text-truncate" style="font-size:9px;" title="{{ __('الدفعة الأخيرة:') }} {{ number_format($fin['last_payment']) }} {{ __('ر.س') }} | {{ __('الإجمالي:') }} {{ number_format($fin['total_financed']) }} {{ __('ر.س') }}">
+                                                    <span>{{ __('أخيرة:') }}</span>
                                                     <span class="fw-bold" style="color:#4338CA;">{{ number_format($fin['last_payment']) }}</span>
-                                                    <span>ر.س</span>
+                                                </div>
+                                            @else
+                                                <div class="text-muted text-truncate" style="font-size:9px;" title="{{ __('الإجمالي:') }} {{ number_format($fin['total_financed']) }} {{ __('ر.س') }}">
+                                                    <span>{{ __('إجمالي:') }}</span>
+                                                    <span class="fw-semibold text-dark">{{ number_format($fin['total_financed']) }}</span>
                                                 </div>
                                             @endif
-                                            <div class="text-muted" style="font-size:10px;">
-                                                <span>{{ __('الإجمالي:') }}</span>
-                                                <span class="fw-semibold text-dark">{{ number_format($fin['total_financed']) }}</span>
-                                                <span>ر.س</span>
-                                            </div>
                                         </div>
                                     @else
-                                        <div style="line-height:1.35;white-space:nowrap;">
-                                            <div>
-                                                <span class="fw-bold text-success" style="font-size:13px;">{{ number_format($fin['cash_price']) }}</span>
-                                                <span class="text-muted" style="font-size:10px;">ر.س</span>
+                                        <div class="overflow-hidden" style="line-height:1.25;">
+                                            <div class="text-truncate">
+                                                <span class="fw-bold text-success" style="font-size:11.5px;">{{ number_format($fin['cash_price']) }}</span>
+                                                <span class="text-muted" style="font-size:9px;">ر.س</span>
                                             </div>
-                                            <div class="my-0.5">
-                                                <span class="badge px-1.5 py-0 rounded-1" style="background:#F0FDF4;color:#16A34A;border:1px solid #BBF7D0;font-size:10px;font-weight:600;">
-                                                    {{ __('شراء نقدي') }}
+                                            <div class="my-0.5 text-truncate">
+                                                <span class="badge px-1 py-0 rounded-1" style="background:#F0FDF4;color:#16A34A;border:1px solid #BBF7D0;font-size:8.5px;font-weight:600;">
+                                                    {{ __('نقدي') }}
                                                 </span>
                                             </div>
                                             @if($fin['down_payment'] > 0)
-                                                <div class="text-muted" style="font-size:10px;">
-                                                    <span>{{ __('الدفعة:') }}</span>
+                                                <div class="text-muted text-truncate" style="font-size:9px;" title="{{ __('الدفعة الأولى:') }} {{ number_format($fin['down_payment']) }} {{ __('ر.س') }}">
+                                                    <span>{{ __('مقدم:') }}</span>
                                                     <span class="fw-semibold text-dark">{{ number_format($fin['down_payment']) }}</span>
-                                                    <span>ر.س</span>
                                                 </div>
                                             @endif
                                         </div>
@@ -371,59 +372,56 @@
                                 <td>
                                     <form action="{{ route('crm.bookings.assign', $b) }}" method="POST" class="m-0">
                                         @csrf @method('PATCH')
-                                        <div class="d-inline-flex align-items-center gap-1.5 bg-light rounded-pill px-2 py-1 border"
-                                            style="border-color:#E2E8F0!important;transition:all 0.2s;"
+                                        <div class="d-inline-flex align-items-center gap-1 bg-light rounded-pill px-1.5 py-0.5 border"
+                                            style="border-color:#E2E8F0!important;max-width:100%;transition:all 0.2s;"
                                             onmouseover="this.style.borderColor='var(--crm-red)'"
                                             onmouseout="this.style.borderColor='#E2E8F0'">
                                             @if($b->employee)
                                                 <div class="rounded-circle d-flex align-items-center justify-content-center text-white flex-shrink-0 fw-bold"
-                                                    style="width:22px;height:22px;font-size:10px;background:#D97706;">
+                                                    style="width:18px;height:18px;font-size:9px;background:#D97706;"
+                                                    title="{{ $b->employee->name }}">
                                                     {{ mb_substr($b->employee->name, 0, 1) }}
                                                 </div>
                                             @else
                                                 <div class="rounded-circle d-flex align-items-center justify-content-center bg-white text-muted flex-shrink-0 border"
-                                                    style="width:22px;height:22px;font-size:10px;">
+                                                    style="width:18px;height:18px;font-size:9px;">
                                                     <i class="bi bi-person"></i>
                                                 </div>
                                             @endif
                                             <select @disabled(!auth()->user()->hasRole('admin')) name="employee_id"
-                                                class="form-select form-select-sm border-0 shadow-none bg-transparent fw-bold p-0 ps-1 text-truncate"
-                                                style="font-size:11px;color:var(--crm-text);max-width:90px;cursor:pointer;background-image:none;outline:none;"
+                                                class="form-select form-select-sm border-0 shadow-none bg-transparent fw-bold p-0 text-truncate"
+                                                style="font-size:10px;color:var(--crm-text);max-width:60px;cursor:pointer;background-image:none;outline:none;"
+                                                title="{{ $b->employee?->name ?? __('غير معين') }}"
                                                 onchange="this.form.submit()">
                                                 <option value="">{{ __('غير معين') }}</option>
                                                 @foreach($employees as $emp)
                                                     <option value="{{ $emp->id }}" {{ $b->assigned_to == $emp->id ? 'selected' : '' }}>{{ $emp->name }}</option>
                                                 @endforeach
                                             </select>
-                                            <i class="bi bi-chevron-down text-muted" style="font-size:9px;pointer-events:none;"></i>
+                                            <i class="bi bi-chevron-down text-muted flex-shrink-0" style="font-size:8px;pointer-events:none;"></i>
                                         </div>
                                     </form>
                                 </td>
 
                                 {{-- تاريخ ونشاط الطلب --}}
-                                <td style="white-space:nowrap;">
+                                <td>
                                     @php
                                         $act = $b->getLastActivity();
                                     @endphp
-                                    <div class="fw-semibold text-dark" style="font-size:12px;">
+                                    <div class="fw-semibold text-dark text-truncate" style="font-size:11px;">
                                         {{ $b->created_at->format('d/m/Y') }}
-                                        <small class="text-muted fw-normal" style="font-size:10px;">{{ $b->created_at->format('h:i A') }}</small>
+                                        <small class="text-muted fw-normal" style="font-size:9px;">{{ $b->created_at->format('h:i A') }}</small>
                                     </div>
-                                    <div class="mt-1 d-flex align-items-center gap-1" title="{{ $act['action'] }}{{ $act['by'] ? ' (بواسطة ' . $act['by'] . ')' : '' }}">
-                                        <span class="badge bg-light text-secondary border px-1.5 py-0.5 d-inline-flex align-items-center gap-1" style="font-size:10px;font-weight:600;">
-                                            <i class="bi bi-clock-history text-primary" style="font-size:9px;"></i>
-                                            <span>{{ $act['time_ago'] }}</span>
+                                    <div class="mt-0.5 text-truncate" title="{{ $act['action'] }}{{ $act['by'] ? ' (بواسطة ' . $act['by'] . ')' : '' }} - {{ $act['time_ago'] }}">
+                                        <span class="badge bg-light text-secondary border px-1 py-0 d-inline-flex align-items-center gap-1 text-truncate" style="font-size:9px;max-width:100%;">
+                                            <i class="bi bi-clock-history text-primary" style="font-size:8px;"></i>
+                                            <span class="text-truncate">{{ $act['time_ago'] }}</span>
                                         </span>
-                                        @if($act['action'])
-                                            <span class="text-muted text-truncate" style="font-size:10px;max-width:125px;" title="{{ $act['note'] ?: $act['action'] }}">
-                                                {{ $act['action'] }}
-                                            </span>
-                                        @endif
                                     </div>
                                 </td>
 
                                 {{-- الحالة --}}
-                                <td style="white-space:nowrap;">
+                                <td>
                                     <form action="{{ route('crm.bookings.status', $b) }}" method="POST" class="m-0">
                                         @csrf @method('PATCH')
                                         @php
@@ -437,7 +435,7 @@
                                         @endphp
                                         <select name="status"
                                             class="form-select form-select-sm border-0 shadow-none status-dot {{ $dotClass }}"
-                                            style="font-size:11px;font-weight:700;padding:4px 8px;min-width:96px;display:inline-block;border-radius:20px;"
+                                            style="font-size:10px;font-weight:700;padding:2px 4px;width:100%;max-width:85px;display:inline-block;border-radius:14px;"
                                             onchange="this.form.submit()">
                                             @foreach($statuses as $key => $s)
                                                 <option value="{{ $key }}" {{ $b->status === $key ? 'selected' : '' }}>
@@ -448,15 +446,15 @@
                                 </td>
 
                                 {{-- إجراءات --}}
-                                <td class="text-center" style="white-space:nowrap;">
+                                <td class="text-center">
                                     <div class="d-inline-flex gap-1 align-items-center justify-content-center">
                                         <a href="{{ route('crm.bookings.show', $b) }}" class="action-btn"
-                                            title="{{ __('عرض كامل التفاصيل') }}">
-                                            <i class="bi bi-eye text-primary" style="font-size:14px;"></i>
+                                            title="{{ __('عرض التفاصيل') }}">
+                                            <i class="bi bi-eye text-primary" style="font-size:11px;"></i>
                                         </a>
                                         <a href="https://wa.me/{{ $b->client_phone }}" target="_blank"
-                                            class="action-btn wa" title="{{ __('مراسلة واتساب') }}">
-                                            <i class="bi bi-whatsapp" style="font-size:14px;color:#25D366;"></i>
+                                            class="action-btn wa" title="{{ __('واتساب') }}">
+                                            <i class="bi bi-whatsapp" style="font-size:11px;color:#25D366;"></i>
                                         </a>
                                         @can('manage-bookings')
                                             <form action="{{ route('crm.bookings.destroy', $b) }}" method="POST" class="m-0"
@@ -464,7 +462,7 @@
                                                 @csrf @method('DELETE')
                                                 <button type="submit" class="action-btn del"
                                                     title="{{ __('حذف') }}">
-                                                    <i class="bi bi-trash" style="font-size:14px;color:var(--crm-red);"></i>
+                                                    <i class="bi bi-trash" style="font-size:11px;color:var(--crm-red);"></i>
                                                 </button>
                                             </form>
                                         @endcan
