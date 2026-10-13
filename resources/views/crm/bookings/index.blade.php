@@ -103,7 +103,7 @@
         {{-- Table --}}
         <div class="card border-0 shadow-sm rounded-4 overflow-hidden"
             style="border:1px solid var(--crm-border)!important;">
-            <div class="card-header bg-white border-0 px-4 py-3 d-flex justify-content-between align-items-center flex-wrap gap-2"
+            <div class="card-header bg-white border-0 px-3 py-2.5 d-flex justify-content-between align-items-center flex-wrap gap-2"
                 style="border-bottom:1px solid var(--crm-border)!important;">
                 <div class="d-flex align-items-center gap-2">
                     <h6 class="fw-bold mb-0">{{ __('سجل الطلبات') }}</h6>
@@ -125,7 +125,6 @@
             </div>
 
             {{-- Desktop Table (hidden on mobile) --}}
-            {{-- Desktop Table (hidden on mobile) --}}
             <style>
                 .bookings-table {
                     width: 100% !important;
@@ -136,7 +135,7 @@
                     color: #475569 !important;
                     font-size: 11px;
                     font-weight: 700;
-                    padding: 8px 6px;
+                    padding: 8px 4px;
                     border-bottom: 1px solid #E2E8F0 !important;
                     white-space: nowrap;
                     text-align: right;
@@ -145,10 +144,10 @@
                     text-align: center;
                 }
                 .bookings-table tbody td {
-                    padding: 7px 6px;
+                    padding: 6px 4px;
                     vertical-align: middle;
                     border-bottom: 1px solid #F1F5F9;
-                    font-size: 11.5px;
+                    font-size: 11px;
                 }
                 .bookings-table tbody tr:hover td {
                     background-color: #F8FAFC;
@@ -213,19 +212,19 @@
                     border-color: #FECACA;
                 }
             </style>
-            <div class="d-none d-md-block w-100" style="overflow-x:hidden;">
+            <div class="d-none d-md-block w-100" style="overflow-x:auto;">
                 <table class="table align-middle mb-0 bookings-table">
                     <thead>
                         <tr>
-                            <th class="text-center" style="width:5%;">#</th>
-                            <th style="width:17%;">{{ __('العميل') }}</th>
-                            <th class="text-center" style="width:8%;">{{ __('النوع') }}</th>
-                            <th style="width:16%;">{{ __('السيارة') }}</th>
-                            <th style="width:15%;">{{ __('المالية') }}</th>
-                            <th style="width:12%;">{{ __('المسؤول') }}</th>
-                            <th style="width:12%;">{{ __('التاريخ') }}</th>
-                            <th style="width:9%;">{{ __('الحالة') }}</th>
-                            <th class="text-center" style="width:6%;">{{ __('إجراء') }}</th>
+                            <th class="text-center" style="width:4%;">#</th>
+                            <th style="width:15%;">{{ __('العميل') }}</th>
+                            <th class="text-center" style="width:6%;">{{ __('النوع') }}</th>
+                            <th style="width:15%;">{{ __('السيارة') }}</th>
+                            <th style="width:18%;">{{ __('المالية') }}</th>
+                            <th style="width:11%;">{{ __('المسؤول') }}</th>
+                            <th style="width:11%;">{{ __('التاريخ') }}</th>
+                            <th style="width:10%;">{{ __('الحالة') }}</th>
+                            <th class="text-center" style="width:10%;">{{ __('إجراء') }}</th>
                         </tr>
                     </thead>
                     <tbody class="border-top-0">
@@ -264,7 +263,7 @@
                                             {{ mb_substr($b->client_name, 0, 1) }}
                                         </div>
                                         <div class="overflow-hidden flex-grow-1" style="min-width:0;">
-                                            <div class="fw-bold text-dark text-truncate" style="font-size:11.5px;" title="{{ $b->client_name }}">
+                                            <div class="fw-bold text-dark text-truncate" style="font-size:11px;" title="{{ $b->client_name }}">
                                                 {{ $b->client_name }}
                                             </div>
                                             <div class="d-flex align-items-center gap-1 text-muted text-truncate" style="font-size:9.5px;">
@@ -308,7 +307,7 @@
 
                                 {{-- السيارة --}}
                                 <td>
-                                    <div class="fw-bold text-dark text-truncate" style="font-size:11.5px;" title="{{ $displayCarName }}">
+                                    <div class="fw-bold text-dark text-truncate" style="font-size:11px;" title="{{ $displayCarName }}">
                                         {{ $displayCarName }}
                                     </div>
                                     @if($b->car?->year)
@@ -324,7 +323,7 @@
                                         $fin = $b->getFinanceDetails();
                                     @endphp
                                     @if($bType === 'finance')
-                                        <div class="overflow-hidden" style="line-height:1.25;">
+                                        <div class="overflow-hidden" style="line-height:1.3;">
                                             <div class="text-truncate">
                                                 <span class="fw-bold" style="color:#4338CA;font-size:11.5px;">{{ number_format($fin['monthly_installment']) }}</span>
                                                 <span class="text-muted" style="font-size:9px;">ر.س/ش</span>
@@ -336,19 +335,25 @@
                                                 <span class="text-muted text-truncate" style="font-size:9.5px;">{{ $fin['bank_name'] }}</span>
                                             </div>
                                             @if(($fin['last_payment'] ?? 0) > 0)
-                                                <div class="text-muted text-truncate" style="font-size:9px;" title="{{ __('الدفعة الأخيرة:') }} {{ number_format($fin['last_payment']) }} {{ __('ر.س') }} | {{ __('الإجمالي:') }} {{ number_format($fin['total_financed']) }} {{ __('ر.س') }}">
+                                                <div class="d-flex align-items-center gap-1 text-muted text-truncate" style="font-size:9px;" title="{{ __('الدفعة الأخيرة:') }} {{ number_format($fin['last_payment']) }} {{ __('ر.س') }}{{ ($fin['down_payment'] ?? 0) > 0 ? ' | ' . __('الدفعة الأولى:') . ' ' . number_format($fin['down_payment']) . ' ' . __('ر.س') : '' }} | {{ __('الإجمالي:') }} {{ number_format($fin['total_financed']) }} {{ __('ر.س') }}">
                                                     <span>{{ __('أخيرة:') }}</span>
                                                     <span class="fw-bold" style="color:#4338CA;">{{ number_format($fin['last_payment']) }}</span>
+                                                    @if(($fin['down_payment'] ?? 0) > 0)
+                                                        <span class="text-secondary text-truncate">• {{ __('مقدم:') }} {{ number_format($fin['down_payment']) }}</span>
+                                                    @endif
                                                 </div>
                                             @else
                                                 <div class="text-muted text-truncate" style="font-size:9px;" title="{{ __('الإجمالي:') }} {{ number_format($fin['total_financed']) }} {{ __('ر.س') }}">
                                                     <span>{{ __('إجمالي:') }}</span>
                                                     <span class="fw-semibold text-dark">{{ number_format($fin['total_financed']) }}</span>
+                                                    @if(($fin['down_payment'] ?? 0) > 0)
+                                                        <span class="text-secondary text-truncate">• {{ __('مقدم:') }} {{ number_format($fin['down_payment']) }}</span>
+                                                    @endif
                                                 </div>
                                             @endif
                                         </div>
                                     @else
-                                        <div class="overflow-hidden" style="line-height:1.25;">
+                                        <div class="overflow-hidden" style="line-height:1.3;">
                                             <div class="text-truncate">
                                                 <span class="fw-bold text-success" style="font-size:11.5px;">{{ number_format($fin['cash_price']) }}</span>
                                                 <span class="text-muted" style="font-size:9px;">ر.س</span>
@@ -390,7 +395,7 @@
                                             @endif
                                             <select @disabled(!auth()->user()->hasRole('admin')) name="employee_id"
                                                 class="form-select form-select-sm border-0 shadow-none bg-transparent fw-bold p-0 text-truncate"
-                                                style="font-size:10px;color:var(--crm-text);max-width:60px;cursor:pointer;background-image:none;outline:none;"
+                                                style="font-size:10px;color:var(--crm-text);max-width:85px;cursor:pointer;background-image:none;outline:none;"
                                                 title="{{ $b->employee?->name ?? __('غير معين') }}"
                                                 onchange="this.form.submit()">
                                                 <option value="">{{ __('غير معين') }}</option>
@@ -408,12 +413,12 @@
                                     @php
                                         $act = $b->getLastActivity();
                                     @endphp
-                                    <div class="fw-semibold text-dark text-truncate" style="font-size:11px;">
+                                    <div class="fw-semibold text-dark text-truncate" style="font-size:10.5px;">
                                         {{ $b->created_at->format('d/m/Y') }}
                                         <small class="text-muted fw-normal" style="font-size:9px;">{{ $b->created_at->format('h:i A') }}</small>
                                     </div>
                                     <div class="mt-0.5 text-truncate" title="{{ $act['action'] }}{{ $act['by'] ? ' (بواسطة ' . $act['by'] . ')' : '' }} - {{ $act['time_ago'] }}">
-                                        <span class="badge bg-light text-secondary border px-1 py-0 d-inline-flex align-items-center gap-1 text-truncate" style="font-size:9px;max-width:100%;">
+                                        <span class="badge bg-light text-secondary border px-1 py-0 d-inline-flex align-items-center gap-1 text-truncate" style="font-size:8.5px;max-width:100%;">
                                             <i class="bi bi-clock-history text-primary" style="font-size:8px;"></i>
                                             <span class="text-truncate">{{ $act['time_ago'] }}</span>
                                         </span>

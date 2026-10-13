@@ -67,6 +67,9 @@ class CrmBookingManagementTest extends TestCase
         $response->assertSee('سجل الطلبات');
         $response->assertSee('تصدير إكسيل');
         $response->assertSee('استيراد إكسيل');
+        $response->assertSee('bookings-table');
+        $response->assertSee('width:18%');
+        $response->assertSee('width:10%');
         $response->assertSee('page=1');
         $response->assertSee('status=new');
     }
