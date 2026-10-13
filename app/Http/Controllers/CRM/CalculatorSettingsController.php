@@ -18,7 +18,20 @@ class CalculatorSettingsController extends Controller
         $otpSetting = Setting::where('key', 'enable_twilio_otp')->first();
         $otpEnabled = $otpSetting ? (bool) $otpSetting->value : false;
 
-        return view('crm.calculator.index', compact('banks', 'factors', 'otpEnabled'));
+        $lastPaymentEnabledSetting = Setting::where('key', 'finance_enable_last_payment')->first();
+        $lastPaymentEnabled = $lastPaymentEnabledSetting !== null ? (bool) $lastPaymentEnabledSetting->value : true;
+
+        $defaultLastPaymentPct = (int) (Setting::where('key', 'finance_default_last_payment_pct')->value('value') ?? 20);
+        $maxLastPaymentPct = (int) (Setting::where('key', 'finance_max_last_payment_pct')->value('value') ?? 40);
+
+        return view('crm.calculator.index', compact(
+            'banks',
+            'factors',
+            'otpEnabled',
+            'lastPaymentEnabled',
+            'defaultLastPaymentPct',
+            'maxLastPaymentPct'
+        ));
     }
 
     public function toggleOtp(Request $request)
@@ -30,6 +43,31 @@ class CalculatorSettingsController extends Controller
         );
 
         return back()->with('success', __('تم تحديث إعداد رمز التحقق OTP بنجاح'));
+    }
+
+    public function updateLastPaymentSettings(Request $request)
+    {
+        $request->validate([
+            'finance_default_last_payment_pct' => 'required|numeric|min:0|max:100',
+            'finance_max_last_payment_pct' => 'required|numeric|min:0|max:100|gte:finance_default_last_payment_pct',
+        ]);
+
+        Setting::updateOrCreate(
+            ['key' => 'finance_enable_last_payment'],
+            ['value' => $request->boolean('finance_enable_last_payment')]
+        );
+
+        Setting::updateOrCreate(
+            ['key' => 'finance_default_last_payment_pct'],
+            ['value' => (float) $request->input('finance_default_last_payment_pct')]
+        );
+
+        Setting::updateOrCreate(
+            ['key' => 'finance_max_last_payment_pct'],
+            ['value' => (float) $request->input('finance_max_last_payment_pct')]
+        );
+
+        return back()->with('success', __('تم تحديث إعدادات الدفعة الأخيرة بنجاح'));
     }
 
     public function storeBank(Request $request)

@@ -59,6 +59,62 @@
         </div>
         @endcan
 
+        {{-- إعداد الدفعة الأخيرة (Balloon Payment) --}}
+        @can('manage-calculator-settings')
+        <div class="card border-0 shadow-sm mb-4 rounded-4 overflow-hidden">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3 pb-3 border-bottom">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="avatar avatar-md bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                            <i class="bi bi-cash-coin fs-4"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-1 fw-bold text-dark">{{ __('إعدادات الدفعة الأخيرة (الدفعة التكميلية / Balloon Payment)') }}</h6>
+                            <p class="text-muted mb-0 small">{{ __('التحكم في خيار الدفعة الأخيرة في حاسبة التمويل، وتحديد النسبة الافتراضية والحد الأقصى المسموح به.') }}</p>
+                        </div>
+                    </div>
+                </div>
+                <form action="{{ route('crm.calculator.last-payment.update') }}" method="POST">
+                    @csrf
+                    <div class="row g-3 align-items-center">
+                        <div class="col-md-4">
+                            <div class="p-3 bg-light rounded-3 d-flex align-items-center justify-content-between h-100">
+                                <div>
+                                    <label class="form-check-label fw-bold text-dark d-block" for="enableLastPaymentSwitch">
+                                        {{ __('تفعيل حقل الدفعة الأخيرة') }}
+                                    </label>
+                                    <span class="text-muted small">{{ __('إظهار سلايدر الدفعة الأخيرة للعميل') }}</span>
+                                </div>
+                                <div class="form-check form-switch fs-5 mb-0">
+                                    <input class="form-check-input" type="checkbox" name="finance_enable_last_payment" value="1" role="switch" id="enableLastPaymentSwitch" {{ !empty($lastPaymentEnabled) ? 'checked' : '' }}>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold small text-muted mb-1">{{ __('النسبة الافتراضية للدفعة الأخيرة (%)') }}</label>
+                            <div class="input-group">
+                                <input type="number" name="finance_default_last_payment_pct" class="form-control bg-light border-0 shadow-none fw-bold" min="0" max="100" step="1" value="{{ $defaultLastPaymentPct }}" required>
+                                <span class="input-group-text bg-light border-0 text-muted">%</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold small text-muted mb-1">{{ __('الحد الأقصى للدفعة الأخيرة (%)') }}</label>
+                            <div class="input-group">
+                                <input type="number" name="finance_max_last_payment_pct" class="form-control bg-light border-0 shadow-none fw-bold" min="0" max="100" step="1" value="{{ $maxLastPaymentPct }}" required>
+                                <span class="input-group-text bg-light border-0 text-muted">%</span>
+                            </div>
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100 rounded-3 py-2 fw-bold shadow-sm">
+                                <i class="bi bi-check2-circle me-1"></i> {{ __('حفظ الإعدادات') }}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        @endcan
+
         {{-- البنوك --}}
         <div class="card border-0 shadow-sm mb-5 rounded-4 overflow-hidden">
             <div class="card-header bg-white border-0 pt-4 px-4">

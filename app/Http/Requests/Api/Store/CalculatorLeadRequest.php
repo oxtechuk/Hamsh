@@ -22,6 +22,8 @@ final class CalculatorLeadRequest extends ApiBaseRequest
             'car_ids.*' => ['integer', 'exists:cars,id'],
             'notes' => ['nullable', 'string', 'max:1000'],
             'down_payment' => ['nullable', 'numeric', 'min:0'],
+            'last_payment' => ['nullable', 'numeric', 'min:0'],
+            'last_payment_percentage' => ['nullable', 'numeric', 'min:0', 'max:100'],
             'period_months' => ['nullable', 'integer', 'min:1', 'max:120'],
             'monthly_payment' => ['nullable', 'numeric', 'min:0'],
             'car_price' => ['nullable', 'numeric', 'min:0'],

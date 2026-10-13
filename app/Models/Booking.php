@@ -12,7 +12,7 @@ class Booking extends Model
 {
     protected $fillable = [
         'car_id', 'assigned_to', 'client_name', 'client_phone', 'client_email',
-        'down_payment', 'duration_years', 'interest_rate', 'monthly_installment',
+        'down_payment', 'last_payment', 'duration_years', 'interest_rate', 'monthly_installment',
         'total_price', 'notes', 'status', 'source', 'last_contacted_at',
         'booking_type', 'location', 'city', 'brand_name', 'model_name',
         'model_year', 'preferred_color', 'salary_range',
@@ -300,6 +300,7 @@ class Booking extends Model
 
         $cashPrice = (float) ($this->car?->cash_price ?: ($this->total_price ?: 0));
         $downPayment = (float) ($this->down_payment ?? 0);
+        $lastPayment = (float) ($this->last_payment ?? 0);
         $durationYears = (int) ($this->duration_years ?: 5);
         $totalMonths = max(1, $durationYears * 12);
         $principal = max(0, $cashPrice - $downPayment);
@@ -310,23 +311,24 @@ class Booking extends Model
             $monthlyRate = ($annualRate / 100) / 12;
             if ($monthlyRate > 0) {
                 $compounded = pow(1 + $monthlyRate, $totalMonths);
-                $monthlyInstallment = round($principal * ($monthlyRate * $compounded) / ($compounded - 1));
+                $monthlyInstallment = round((($principal * $compounded - $lastPayment) * $monthlyRate) / ($compounded - 1));
             } else {
-                $monthlyInstallment = round($principal / $totalMonths);
+                $monthlyInstallment = round(($principal - $lastPayment) / $totalMonths);
             }
         } else {
             $monthlyInstallment = 0;
         }
 
         $totalPayments = $monthlyInstallment * $totalMonths;
-        $totalInterest = max(0, $totalPayments - $principal);
-        $totalFinanced = $totalPayments + $downPayment;
+        $totalInterest = max(0, ($totalPayments + $lastPayment) - $principal);
+        $totalFinanced = $totalPayments + $downPayment + $lastPayment;
 
         return [
             'bank_name' => $bankName,
             'annual_rate' => $annualRate,
             'cash_price' => $cashPrice,
             'down_payment' => $downPayment,
+            'last_payment' => $lastPayment,
             'principal' => $principal,
             'duration_years' => $durationYears,
             'total_months' => $totalMonths,
