@@ -303,7 +303,7 @@ class Booking extends Model
 
         $lastPaymentEnabledSetting = Setting::where('key', 'finance_enable_last_payment')->value('value');
         $lastPaymentEnabled = $lastPaymentEnabledSetting !== null ? (bool) $lastPaymentEnabledSetting : true;
-        $defaultLastPaymentPct = (float) (Setting::where('key', 'finance_default_last_payment_pct')->value('value') ?? 20);
+        $defaultLastPaymentPct = (float) (Setting::where('key', 'finance_default_last_payment_pct')->value('value') ?? 45);
 
         if ($this->last_payment !== null && (float) $this->last_payment > 0) {
             $lastPayment = (float) $this->last_payment;

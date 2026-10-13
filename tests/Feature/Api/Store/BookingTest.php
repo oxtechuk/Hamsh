@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api\Store;
 
+use App\Models\Booking;
 use App\Models\Brand;
 use App\Models\CalculatorBank;
 use App\Models\Car;
@@ -232,5 +233,32 @@ class BookingTest extends TestCase
 
         $response->assertStatus(422);
         $response->assertJsonValidationErrors(['client_name', 'client_phone', 'city', 'brand_name']);
+    }
+
+    public function test_finance_booking_calculates_and_defaults_last_payment(): void
+    {
+        $car = $this->createCar();
+
+        // 1. When submitting finance booking from modal without explicit last_payment
+        $payload = [
+            'car_id' => $car->id,
+            'client_name' => 'فهد المطيري',
+            'client_phone' => '0509876543',
+            'city' => 'الرياض',
+            'down_payment' => 0,
+            'booking_type' => 'finance',
+        ];
+
+        $response = $this->postJson(route('store.api.booking.store'), $payload);
+        $response->assertStatus(201);
+
+        $booking = Booking::where('client_phone', '0509876543')->firstOrFail();
+        $this->assertEquals(56250, $booking->last_payment); // 45% of 125,000
+
+        $fin = $booking->getFinanceDetails();
+        $this->assertEquals(56250, $fin['last_payment']);
+        $this->assertEquals(5, $fin['duration_years']);
+        $this->assertEquals(60, $fin['total_months']);
+        $this->assertGreaterThan(0, $fin['monthly_installment']);
     }
 }

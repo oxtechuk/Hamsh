@@ -29,17 +29,6 @@ interface CarOrderFinanceFormProps {
         barColor: string;
         status: string;
     };
-    financeDetails?: {
-        cashPrice: number;
-        lastPaymentEnabled: boolean;
-        defaultLastPaymentPct: number;
-        maxLastPaymentPct: number;
-        currentLastPaymentPct: number;
-        lastPaymentAmount: number;
-        downPaymentAmount: number;
-        estimatedMonthlyInstallment: number;
-        termMonths: number;
-    };
     otpEnabled?: boolean;
     sendingOtp?: boolean;
     verifyingOtp?: boolean;
@@ -60,7 +49,6 @@ export default function CarOrderFinanceForm({
     form,
     cityOptions,
     dbrAnalysis,
-    financeDetails,
     otpEnabled,
     sendingOtp,
     verifyingOtp,
@@ -297,106 +285,6 @@ export default function CarOrderFinanceForm({
                         placeholder={isRTL ? "مثال 1500" : "e.g. 1500"}
                         className={carOrderFieldCls}
                     />
-                </div>
-            )}
-
-            {/* بطاقة احتساب التمويل والدفعة الأخيرة */}
-            {financeDetails && financeDetails.cashPrice > 0 && (
-                <div className="rounded-xl border border-indigo-100 bg-indigo-50/40 p-3 sm:p-3.5 flex flex-col gap-3">
-                    <div className="flex items-center justify-between border-b border-indigo-100/70 pb-2">
-                        <span className="text-[12px] sm:text-[13px] font-bold text-gray-800">
-                            {isRTL ? "تفاصيل حسبة التمويل" : "Finance Calculation"}
-                        </span>
-                        <span className="text-[11px] font-semibold text-gray-500">
-                            {isRTL ? `سعر السيارة: ${financeDetails.cashPrice.toLocaleString()} ر.س` : `Car: ${financeDetails.cashPrice.toLocaleString()} SAR`}
-                        </span>
-                    </div>
-
-                    {/* الدفعة الأخيرة (Balloon Payment) */}
-                    {financeDetails.lastPaymentEnabled && (
-                        <div className="flex flex-col gap-1.5">
-                            <div className="flex items-center justify-between text-[12px] font-bold">
-                                <span className="text-gray-700">
-                                    {isRTL ? "الدفعة الأخيرة (المؤجلة):" : "Last Payment (Balloon):"}
-                                </span>
-                                <span className="text-indigo-700 font-extrabold text-[13px]">
-                                    {financeDetails.lastPaymentAmount.toLocaleString()} {isRTL ? "ر.س" : "SAR"}{" "}
-                                    <span className="text-[11px] font-normal text-indigo-500">
-                                        ({financeDetails.currentLastPaymentPct}%)
-                                    </span>
-                                </span>
-                            </div>
-
-                            {/* Slider */}
-                            <div className="flex items-center gap-2">
-                                <span className="text-[10px] text-gray-400 font-bold">0%</span>
-                                <input
-                                    type="range"
-                                    min={0}
-                                    max={financeDetails.maxLastPaymentPct || 35}
-                                    step={5}
-                                    value={financeDetails.currentLastPaymentPct}
-                                    onChange={(e) => onFieldChange("lastPaymentPercent", Number(e.target.value))}
-                                    className="h-1.5 flex-1 cursor-pointer appearance-none rounded-lg bg-gray-200 accent-indigo-600"
-                                />
-                                <span className="text-[10px] text-gray-400 font-bold">{financeDetails.maxLastPaymentPct || 35}%</span>
-                            </div>
-
-                            {/* Quick percentage chips */}
-                            <div className="flex items-center justify-between gap-1 pt-0.5">
-                                {[0, 10, 20, 30, financeDetails.maxLastPaymentPct || 35].map((pct) => (
-                                    <button
-                                        key={pct}
-                                        type="button"
-                                        onClick={() => onFieldChange("lastPaymentPercent", pct)}
-                                        className={[
-                                            "flex-1 py-0.5 text-[10px] font-bold rounded border transition cursor-pointer",
-                                            financeDetails.currentLastPaymentPct === pct
-                                                ? "bg-indigo-600 text-white border-indigo-600 shadow-xs"
-                                                : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50",
-                                        ].join(" ")}
-                                    >
-                                        {pct}%
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-
-                    {/* الدفعة الأولى (المقدم) الاختيارية */}
-                    <div className="flex items-center justify-between gap-2 pt-1 border-t border-indigo-100/60">
-                        <span className="text-[11px] sm:text-[12px] font-semibold text-gray-600">
-                            {isRTL ? "الدفعة الأولى (اختياري):" : "Down Payment (optional):"}
-                        </span>
-                        <div className="flex items-center gap-1 w-[130px]">
-                            <input
-                                type="number"
-                                min={0}
-                                max={financeDetails.cashPrice}
-                                value={form.downPayment || ""}
-                                onChange={(e) => onFieldChange("downPayment", e.target.value)}
-                                placeholder="0"
-                                className="h-[30px] w-full rounded border border-gray-200 bg-white px-2 text-center text-xs font-bold text-gray-800 outline-none focus:border-indigo-500"
-                            />
-                            <span className="text-[10px] text-gray-500 font-bold">{isRTL ? "ر.س" : "SAR"}</span>
-                        </div>
-                    </div>
-
-                    {/* القسط الشهري التقديري */}
-                    <div className="flex items-center justify-between rounded-lg bg-white p-2.5 border border-indigo-100 shadow-2xs">
-                        <div className="flex flex-col text-start">
-                            <span className="text-[10.5px] font-bold text-gray-500">
-                                {isRTL ? "القسط الشهري التقديري (60 شهر):" : "Estimated Monthly Installment (60m):"}
-                            </span>
-                            <span className="text-[10px] text-gray-400">
-                                {isRTL ? "شامل الفائدة والدفعة الأخيرة" : "Includes interest & balloon"}
-                            </span>
-                        </div>
-                        <span className="text-[15px] sm:text-[16px] font-black text-indigo-700">
-                            {financeDetails.estimatedMonthlyInstallment.toLocaleString()}{" "}
-                            <span className="text-[11px] font-bold">{isRTL ? "ر.س/ش" : "SAR/m"}</span>
-                        </span>
-                    </div>
                 </div>
             )}
 

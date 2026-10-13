@@ -38,7 +38,6 @@ export default function CarOrderModal({
         canSubmitCash,
         canSubmitFinance,
         dbrAnalysis,
-        financeDetails,
         handleFormSubmit,
     } = useCarOrderForm(car, initialMode);
 
@@ -132,7 +131,6 @@ export default function CarOrderModal({
                                         form={form}
                                         cityOptions={cityOptions}
                                         dbrAnalysis={dbrAnalysis}
-                                        financeDetails={financeDetails}
                                         otpEnabled={otpEnabled}
                                         sendingOtp={sendingOtp}
                                         verifyingOtp={verifyingOtp}

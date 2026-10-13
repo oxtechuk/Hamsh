@@ -43,8 +43,8 @@ final class CalculatorController extends ApiBaseController
 
         $lastPaymentSetting = Setting::where('key', 'finance_enable_last_payment')->first();
         $lastPaymentEnabled = $lastPaymentSetting !== null ? (bool) $lastPaymentSetting->value : true;
-        $defaultLastPaymentPct = (int) (Setting::where('key', 'finance_default_last_payment_pct')->value('value') ?? 20);
-        $maxLastPaymentPct = (int) (Setting::where('key', 'finance_max_last_payment_pct')->value('value') ?? 40);
+        $defaultLastPaymentPct = (int) (Setting::where('key', 'finance_default_last_payment_pct')->value('value') ?? 45);
+        $maxLastPaymentPct = (int) (Setting::where('key', 'finance_max_last_payment_pct')->value('value') ?? 50);
 
         return $this->respondSuccess([
             'otp_enabled' => $otpEnabled,
