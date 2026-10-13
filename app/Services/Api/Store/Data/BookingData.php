@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Services\Api\Store\Data;
 
+use App\Models\Booking;
 use App\Services\Api\Store\Helpers\InstallmentCalculator;
+use App\Services\Tracking\AttributionResolverService;
+use App\Services\Tracking\FraudDetectionService;
 
 final class BookingData
 {
@@ -29,17 +32,31 @@ final class BookingData
         public readonly ?string $model_year = null,
         public readonly ?string $preferred_color = null,
         public readonly ?string $salary_range = null,
+        public readonly ?string $traffic_source = 'direct',
+        public readonly ?string $traffic_medium = null,
+        public readonly ?string $campaign_name = null,
+        public readonly ?string $referrer_url = null,
+        public readonly ?string $landing_page = null,
+        public readonly ?string $click_id = null,
+        public readonly ?string $ip_address = null,
+        public readonly ?string $user_agent = null,
+        public readonly ?string $device_type = 'desktop',
+        public readonly int $fraud_score = 0,
+        public readonly bool $is_suspicious = false,
+        public readonly ?array $fraud_flags = null,
     ) {}
 
     public static function fromRequest(array $validated, ?float $cashPrice = null): self
     {
         $carId = $validated['car_id'] ?? null;
+        $attribution = app(AttributionResolverService::class)->resolve($validated);
+        $fraud = app(FraudDetectionService::class)->inspect($validated, request()->ip());
 
         if ($carId && $cashPrice !== null) {
             // Type 2: Direct purchase — calculate installment
             $interestRate = isset($validated['interest_rate']) && $validated['interest_rate'] > 0
                 ? (float) $validated['interest_rate']
-                : (float) config('store-api.booking.default_interest_rate', 4.0);
+                : (float) Booking::getDefaultInterestRate();
 
             $principal = max(0, $cashPrice - (float) $validated['down_payment']);
             $totalMonths = (int) ($validated['duration_years'] ?? 1) * 12;
@@ -66,6 +83,18 @@ final class BookingData
                 model_year: null,
                 preferred_color: null,
                 salary_range: null,
+                traffic_source: $attribution['traffic_source'],
+                traffic_medium: $attribution['traffic_medium'],
+                campaign_name: $attribution['campaign_name'],
+                referrer_url: $attribution['referrer_url'],
+                landing_page: $attribution['landing_page'],
+                click_id: $attribution['click_id'],
+                ip_address: request()->ip(),
+                user_agent: request()->userAgent(),
+                device_type: $attribution['device_type'],
+                fraud_score: $fraud['fraud_score'],
+                is_suspicious: $fraud['is_suspicious'],
+                fraud_flags: $fraud['fraud_flags'],
             );
         }
 
@@ -89,6 +118,18 @@ final class BookingData
             model_year: $validated['model_year'] ?? null,
             preferred_color: $validated['preferred_color'] ?? null,
             salary_range: $validated['salary_range'] ?? null,
+            traffic_source: $attribution['traffic_source'],
+            traffic_medium: $attribution['traffic_medium'],
+            campaign_name: $attribution['campaign_name'],
+            referrer_url: $attribution['referrer_url'],
+            landing_page: $attribution['landing_page'],
+            click_id: $attribution['click_id'],
+            ip_address: request()->ip(),
+            user_agent: request()->userAgent(),
+            device_type: $attribution['device_type'],
+            fraud_score: $fraud['fraud_score'],
+            is_suspicious: $fraud['is_suspicious'],
+            fraud_flags: $fraud['fraud_flags'],
         );
     }
 
@@ -115,6 +156,18 @@ final class BookingData
             'model_year' => $this->model_year,
             'preferred_color' => $this->preferred_color,
             'salary_range' => $this->salary_range,
+            'traffic_source' => $this->traffic_source,
+            'traffic_medium' => $this->traffic_medium,
+            'campaign_name' => $this->campaign_name,
+            'referrer_url' => $this->referrer_url,
+            'landing_page' => $this->landing_page,
+            'click_id' => $this->click_id,
+            'ip_address' => $this->ip_address,
+            'user_agent' => $this->user_agent,
+            'device_type' => $this->device_type,
+            'fraud_score' => $this->fraud_score,
+            'is_suspicious' => $this->is_suspicious,
+            'fraud_flags' => $this->fraud_flags,
         ];
     }
 }

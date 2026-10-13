@@ -114,43 +114,67 @@
                 </div>
             </div>
 
-            {{-- تفاصيل الدفع --}}
+            {{-- تفاصيل الدفع والتمويل --}}
             <div class="col-12 col-md-6">
                 <div class="card border-0 shadow-sm rounded-4 h-100" style="border:1px solid var(--crm-border)!important;">
-                    <div class="card-header bg-white border-0 px-4 pt-4 pb-3"
+                    <div class="card-header bg-white border-0 px-4 pt-4 pb-3 d-flex justify-content-between align-items-center"
                         style="border-bottom:1px solid var(--crm-border)!important;">
-                        <h6 class="fw-bold mb-0">{{ __('تفاصيل الدفع') }}</h6>
+                        <h6 class="fw-bold mb-0">{{ __('التفاصيل المالية والتمويل') }}</h6>
+                        @php
+                            $fin = $booking->getFinanceDetails();
+                        @endphp
+                        <span class="badge bg-light text-primary border px-2 py-1" style="font-size:11px;">
+                            <i class="bi bi-bank me-1"></i>{{ $fin['bank_name'] }}
+                        </span>
                     </div>
                     <div class="card-body px-4 py-3">
-                        @php
-                            $commission = $booking->monthly_installment * 0.035;
-                            $delivery = 125;
-                            $total = $booking->monthly_installment + $commission + $delivery;
-                        @endphp
                         <div class="d-flex justify-content-between py-2" style="border-bottom:1px solid var(--crm-border);">
-                            <span style="font-size:13px;color:var(--crm-text-muted);">{{ __('إجمالي القسط') }}</span>
-                            <span style="font-size:13px;font-weight:700;">{{ number_format($booking->monthly_installment) }}
-                                {!! __('ريال') !!}</span>
+                            <span style="font-size:13px;color:var(--crm-text-muted);">{{ __('البنك المعتمد') }}</span>
+                            <span style="font-size:13px;font-weight:700;color:#1E293B;">
+                                {{ $fin['bank_name'] }} <small class="text-muted">({{ __('البنك الافتراضي بالحاسبة') }})</small>
+                            </span>
                         </div>
                         <div class="d-flex justify-content-between py-2" style="border-bottom:1px solid var(--crm-border);">
-                            <span style="font-size:13px;color:var(--crm-text-muted);">{{ __('الدفعة الأولى') }}</span>
-                            <span style="font-size:13px;font-weight:700;">{{ number_format($booking->down_payment) }}
-                                {!! __('ريال') !!}</span>
+                            <span style="font-size:13px;color:var(--crm-text-muted);">{{ __('نسبة الفائدة السنوية') }}</span>
+                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1" style="font-size:12px;font-weight:700;">
+                                {{ number_format($fin['annual_rate'], 2) }}%
+                            </span>
                         </div>
                         <div class="d-flex justify-content-between py-2" style="border-bottom:1px solid var(--crm-border);">
-                            <span style="font-size:13px;color:var(--crm-text-muted);">{{ __('السعر الإجمالي') }}</span>
-                            <span style="font-size:13px;font-weight:700;">{{ number_format($booking->total_price) }}
-                                {!! __('ريال') !!}</span>
+                            <span style="font-size:13px;color:var(--crm-text-muted);">{{ __('سعر السيارة الأساسي (كاش)') }}</span>
+                            <span style="font-size:13px;font-weight:700;">{{ number_format($fin['cash_price']) }} {!! __('ر.س') !!}</span>
                         </div>
                         <div class="d-flex justify-content-between py-2" style="border-bottom:1px solid var(--crm-border);">
-                            <span style="font-size:13px;color:var(--crm-text-muted);">{{ __('مدة التمويل') }}</span>
-                            <span style="font-size:13px;font-weight:700;">{{ $booking->duration_years ?? 5 }} {{ __('سنوات') }}</span>
+                            <span style="font-size:13px;color:var(--crm-text-muted);">{{ __('الدفعة الأولى (المقدم)') }}</span>
+                            <span style="font-size:13px;font-weight:700;color:var(--crm-text);">{{ number_format($fin['down_payment']) }} {!! __('ر.س') !!}</span>
                         </div>
-                        <div class="d-flex justify-content-between py-3">
-                            <span style="font-size:14px;font-weight:800;color:var(--crm-text);">{{ __('الإجمالي') }}</span>
-                            <span style="font-size:14px;font-weight:900;color:var(--crm-red);">{{ number_format($total) }}
-                                {!! __('ريال') !!}</span>
-                        </div>
+                        @if($booking->booking_type === 'finance' || $fin['principal'] > 0)
+                            <div class="d-flex justify-content-between py-2" style="border-bottom:1px solid var(--crm-border);">
+                                <span style="font-size:13px;color:var(--crm-text-muted);">{{ __('صافي مبلغ التمويل المطلوب') }}</span>
+                                <span style="font-size:13px;font-weight:700;">{{ number_format($fin['principal']) }} {!! __('ر.س') !!}</span>
+                            </div>
+                            <div class="d-flex justify-content-between py-2" style="border-bottom:1px solid var(--crm-border);">
+                                <span style="font-size:13px;color:var(--crm-text-muted);">{{ __('مدة التمويل') }}</span>
+                                <span style="font-size:13px;font-weight:700;">{{ $fin['duration_years'] }} {{ __('سنوات') }} ({{ $fin['total_months'] }} {{ __('شهر') }})</span>
+                            </div>
+                            <div class="d-flex justify-content-between py-2" style="border-bottom:1px solid var(--crm-border);">
+                                <span style="font-size:13px;color:var(--crm-text-muted);">{{ __('القسط الشهري الفعلي') }}</span>
+                                <span style="font-size:14px;font-weight:800;color:#4338CA;">{{ number_format($fin['monthly_installment']) }} {!! __('ر.س/شهر') !!}</span>
+                            </div>
+                            <div class="d-flex justify-content-between py-2" style="border-bottom:1px solid var(--crm-border);">
+                                <span style="font-size:13px;color:var(--crm-text-muted);">{{ __('إجمالي أرباح / فوائد التمويل') }}</span>
+                                <span style="font-size:13px;font-weight:700;color:#D97706;">{{ number_format($fin['total_interest']) }} {!! __('ر.س') !!}</span>
+                            </div>
+                            <div class="d-flex justify-content-between py-3">
+                                <span style="font-size:14px;font-weight:800;color:var(--crm-text);">{{ __('إجمالي قيمة التمويل بالأرباح') }}</span>
+                                <span style="font-size:15px;font-weight:900;color:var(--crm-red);">{{ number_format($fin['total_financed']) }} {!! __('ر.س') !!}</span>
+                            </div>
+                        @else
+                            <div class="d-flex justify-content-between py-3">
+                                <span style="font-size:14px;font-weight:800;color:var(--crm-text);">{{ __('المبلغ الإجمالي المطلوب') }}</span>
+                                <span style="font-size:15px;font-weight:900;color:var(--crm-red);">{{ number_format($fin['cash_price']) }} {!! __('ر.س') !!}</span>
+                            </div>
+                        @endif
 
                         {{-- حالة الطلب + تقرير --}}
                         <div class="mt-3 p-3 rounded-3" style="background:#F8F9FC;border:1px solid var(--crm-border);">
@@ -487,15 +511,19 @@
                                         <label class="form-label fw-bold small">{{ __('اللون المطلوب') }}</label>
                                         <input type="text" name="preferred_color" class="form-control form-control-sm" value="{{ old('preferred_color', $booking->preferred_color) }}" placeholder="{{ __('مثال: أبيض لؤلؤي، أسود...') }}">
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <label class="form-label fw-bold small">{{ __('السعر الإجمالي (ر.س)') }}</label>
                                         <input type="number" step="0.01" min="0" name="total_price" class="form-control form-control-sm" value="{{ old('total_price', $booking->total_price) }}">
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <label class="form-label fw-bold small">{{ __('الدفعة الأولى (ر.س)') }}</label>
                                         <input type="number" step="0.01" min="0" name="down_payment" class="form-control form-control-sm" value="{{ old('down_payment', $booking->down_payment) }}">
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
+                                        <label class="form-label fw-bold small">{{ __('نسبة الفائدة %') }}</label>
+                                        <input type="number" step="0.01" min="0" max="100" name="interest_rate" class="form-control form-control-sm" value="{{ old('interest_rate', $booking->interest_rate ?: ($defaultBank?->annual_rate ?? 3.5)) }}" placeholder="{{ $defaultBank?->annual_rate ?? 3.5 }}%">
+                                    </div>
+                                    <div class="col-md-3">
                                         <label class="form-label fw-bold small">{{ __('القسط الشهري (ر.س)') }}</label>
                                         <input type="number" step="0.01" min="0" name="monthly_installment" class="form-control form-control-sm" value="{{ old('monthly_installment', $booking->monthly_installment) }}">
                                     </div>

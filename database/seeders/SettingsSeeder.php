@@ -87,8 +87,8 @@ class SettingsSeeder extends Seeder
                 ],
                 [
                     'icon' => 'bi-truck',
-                    'title' => ['ar' => 'توصيل مجاني', 'en' => 'Free Delivery'],
-                    'description' => ['ar' => 'خدمة توصيل مجانية لجميع مناطق المملكة العربية السعودية.', 'en' => 'Free delivery service to all regions of the Kingdom of Saudi Arabia.'],
+                    'title' => ['ar' => 'توصيل لجميع أنحاء المملكة', 'en' => 'Nationwide Delivery'],
+                    'description' => ['ar' => 'خدمة توصيل لجميع مناطق المملكة العربية السعودية.', 'en' => 'Delivery service to all regions of the Kingdom of Saudi Arabia.'],
                 ],
             ],
 
@@ -293,7 +293,7 @@ class SettingsSeeder extends Seeder
                 [
                     'icon' => 'bi-key',
                     'title' => ['ar' => 'استلام سيارتك', 'en' => 'Receive Your Car'],
-                    'description' => ['ar' => 'استلم سيارتك الجديدة من أقرب فرع لك أو احصل على التوصيل المجاني.', 'en' => 'Receive your new car from the nearest branch or get free delivery.'],
+                    'description' => ['ar' => 'استلم سيارتك الجديدة من أقرب فرع لك أو من خلال خدمة التوصيل.', 'en' => 'Receive your new car from the nearest branch or through our delivery service.'],
                 ],
             ],
 

@@ -12,6 +12,7 @@ use App\Http\Resources\Store\CalculatorBankResource;
 use App\Models\CalculatorBank;
 use App\Models\Setting;
 use App\Services\Api\Store\CalculatorApiService;
+use App\Services\TrackingService;
 
 final class CalculatorController extends ApiBaseController
 {
@@ -65,7 +66,7 @@ final class CalculatorController extends ApiBaseController
     {
         $lead = $this->calculatorService->saveLead($request->validated());
 
-        \App\Services\TrackingService::sendLead([
+        TrackingService::sendLead([
             'name' => $request->input('name'),
             'phone' => $request->input('phone'),
             'value' => $request->input('car_price'),
@@ -107,7 +108,7 @@ final class CalculatorController extends ApiBaseController
             $request->input('phone')
         );
 
-        \App\Services\TrackingService::sendLead([
+        TrackingService::sendLead([
             'name' => $request->input('name'),
             'phone' => $request->input('phone'),
             'currency' => 'SAR',

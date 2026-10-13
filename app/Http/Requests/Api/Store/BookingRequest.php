@@ -41,6 +41,22 @@ final class BookingRequest extends ApiBaseRequest
 
         $rules['booking_type'] = ['nullable', 'string', 'in:test_drive,purchase,finance,inquiry'];
 
+        // Attribution & Anti-Fraud Rules
+        $rules['traffic_source'] = ['nullable', 'string', 'max:50'];
+        $rules['traffic_medium'] = ['nullable', 'string', 'max:100'];
+        $rules['campaign_name'] = ['nullable', 'string', 'max:150'];
+        $rules['referrer_url'] = ['nullable', 'string', 'max:500'];
+        $rules['landing_page'] = ['nullable', 'string', 'max:255'];
+        $rules['click_id'] = ['nullable', 'string', 'max:255'];
+        $rules['utm_source'] = ['nullable', 'string', 'max:100'];
+        $rules['utm_medium'] = ['nullable', 'string', 'max:100'];
+        $rules['utm_campaign'] = ['nullable', 'string', 'max:150'];
+        $rules['utm_content'] = ['nullable', 'string', 'max:150'];
+        $rules['utm_term'] = ['nullable', 'string', 'max:150'];
+        $rules['form_duration'] = ['nullable', 'numeric'];
+        $rules['hp_field'] = ['nullable', 'string'];
+        $rules['website_hp'] = ['nullable', 'string'];
+
         return $rules;
     }
 }

@@ -11,6 +11,19 @@
             <span class="current">{{ __('الطلبات') }}</span>
         </nav>
 
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm rounded-3 mb-3" style="font-size:13px;">
+                <i class="bi bi-check-circle me-1"></i> {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
+        @if (session('error'))
+            <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm rounded-3 mb-3" style="font-size:13px;">
+                <i class="bi bi-exclamation-triangle me-1"></i> {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
+
 
         {{-- Stat Cards --}}
         <div class="row g-3 mb-4">
@@ -90,11 +103,25 @@
         {{-- Table --}}
         <div class="card border-0 shadow-sm rounded-4 overflow-hidden"
             style="border:1px solid var(--crm-border)!important;">
-            <div class="card-header bg-white border-0 px-4 py-3 d-flex justify-content-between align-items-center"
+            <div class="card-header bg-white border-0 px-4 py-3 d-flex justify-content-between align-items-center flex-wrap gap-2"
                 style="border-bottom:1px solid var(--crm-border)!important;">
-                <h6 class="fw-bold mb-0">{{ __('سجل الطلبات') }}</h6>
-                <span style="font-size:12px;color:var(--crm-text-muted);">{{ __('إجمالي الطلبات') }}:
-                    <strong>{{ $bookings->total() }}</strong></span>
+                <div class="d-flex align-items-center gap-2">
+                    <h6 class="fw-bold mb-0">{{ __('سجل الطلبات') }}</h6>
+                    <span class="badge bg-light text-muted border" style="font-size:12px;">{{ __('إجمالي الطلبات') }}:
+                        <strong>{{ $bookings->total() }}</strong></span>
+                </div>
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                    <a href="{{ route('crm.bookings.export', request()->query()) }}" class="btn btn-sm btn-outline-success rounded-2 d-inline-flex align-items-center gap-1 fw-bold px-3" style="font-size:12px;">
+                        <i class="bi bi-file-earmark-excel"></i>
+                        <span>{{ __('تصدير إكسيل') }}</span>
+                    </a>
+                    @can('manage-bookings')
+                        <button type="button" class="btn btn-sm btn-outline-primary rounded-2 d-inline-flex align-items-center gap-1 fw-bold px-3" data-bs-toggle="modal" data-bs-target="#importBookingsModal" style="font-size:12px;">
+                            <i class="bi bi-file-earmark-arrow-up"></i>
+                            <span>{{ __('استيراد إكسيل') }}</span>
+                        </button>
+                    @endcan
+                </div>
             </div>
 
             {{-- Desktop Table (hidden on mobile) --}}
@@ -181,24 +208,29 @@
 
                                 {{-- التفاصيل المالية --}}
                                 <td>
-                                    @if($bType === 'finance' && $b->monthly_installment > 0)
+                                    @php
+                                        $fin = $b->getFinanceDetails();
+                                    @endphp
+                                    @if($bType === 'finance' || $fin['principal'] > 0)
                                         <div style="font-size:13px;font-weight:700;color:#4338CA;">
-                                            <span style="font-size:11px;font-weight:600;color:#6B7280;">{{ __('القسط:') }} </span>{{ number_format($b->monthly_installment) }}
+                                            <span style="font-size:11px;font-weight:600;color:#6B7280;">{{ __('القسط:') }} </span>{{ number_format($fin['monthly_installment']) }}
                                             <small class="text-muted fw-normal">{!! __('ر.س/ش') !!}</small>
                                         </div>
-                                        @if($b->total_price > 0 || ($b->car?->cash_price ?? 0) > 0)
-                                            <small class="text-muted d-block" style="font-size:11px;">
-                                                {{ __('الإجمالي:') }} {{ number_format($b->total_price ?: ($b->car?->cash_price ?? 0)) }} {!! __('ر.س') !!}
-                                            </small>
-                                        @endif
+                                        <div style="font-size:11px;color:#059669;font-weight:600;">
+                                            <span style="color:#6B7280;">{{ __('فائدة:') }}</span> {{ number_format($fin['annual_rate'], 1) }}%
+                                            <span class="text-muted fw-normal" style="font-size:10px;">({{ $fin['bank_name'] }})</span>
+                                        </div>
+                                        <small class="text-muted d-block" style="font-size:11px;">
+                                            {{ __('الإجمالي:') }} {{ number_format($fin['total_financed']) }} {!! __('ر.س') !!}
+                                        </small>
                                     @else
                                         <div style="font-size:13px;font-weight:700;color:var(--crm-text);">
-                                            {{ number_format($b->total_price ?: ($b->car?->cash_price ?? 0)) }}
+                                            {{ number_format($fin['cash_price']) }}
                                             <small class="text-muted fw-normal">{!! __('ر.س') !!}</small>
                                         </div>
-                                        @if($b->down_payment > 0)
+                                        @if($fin['down_payment'] > 0)
                                             <small class="text-muted d-block" style="font-size:11px;">
-                                                {{ __('الدفعة:') }} {{ number_format($b->down_payment) }} {!! __('ر.س') !!}
+                                                {{ __('الدفعة:') }} {{ number_format($fin['down_payment']) }} {!! __('ر.س') !!}
                                             </small>
                                         @endif
                                     @endif
@@ -379,6 +411,16 @@
                                 <i class="bi bi-car-front me-1"></i>
                                 {{ $b->car?->brand?->name }} {{ $b->car?->name ?? '—' }}
                             </div>
+                            @php
+                                $finM = $b->getFinanceDetails();
+                            @endphp
+                            <div>
+                                @if($bTypeM === 'finance' || $finM['principal'] > 0)
+                                    <span class="fw-bold" style="color:#4338CA;">{{ number_format($finM['monthly_installment']) }} <small>{!! __('ر.س/ش') !!}</small></span>
+                                @else
+                                    <span class="fw-bold" style="color:var(--crm-text);">{{ number_format($finM['cash_price']) }} <small>{!! __('ر.س') !!}</small></span>
+                                @endif
+                            </div>
                             <div>
                                 <form action="{{ route('crm.bookings.assign', $b) }}" method="POST" class="m-0 d-inline-block">
                                     @csrf @method('PATCH')
@@ -438,8 +480,13 @@
             </div>
 
             @if($bookings->hasPages())
-                <div class="card-footer bg-white border-0 py-3" style="border-top:1px solid var(--crm-border)!important;">
-                    {{ $bookings->links() }}
+                <div class="card-footer bg-white border-0 py-3 d-flex flex-wrap align-items-center justify-content-between gap-2" style="border-top:1px solid var(--crm-border)!important;">
+                    <div style="font-size:12px;color:var(--crm-text-muted);">
+                        {{ __('عرض') }} <strong>{{ $bookings->firstItem() ?? 0 }}</strong> - <strong>{{ $bookings->lastItem() ?? 0 }}</strong> {{ __('من أصل') }} <strong>{{ $bookings->total() }}</strong> {{ __('طلب') }}
+                    </div>
+                    <div>
+                        {{ $bookings->links('pagination::bootstrap-5') }}
+                    </div>
                 </div>
             @endif
         </div>
@@ -546,11 +593,26 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6">
+                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                            <label class="form-label fw-bold text-muted small mb-0">{{ __('نسبة الفائدة %') }}</label>
+                                            <span class="badge bg-white text-primary border" style="font-size:10px;">
+                                                <i class="bi bi-bank me-1"></i>{{ $defaultBank?->name ?? 'البنك الافتراضي' }}
+                                            </span>
+                                        </div>
+                                        <div class="input-group input-group-lg bg-white border-0 shadow-sm"
+                                            style="border-radius: 12px; overflow: hidden;">
+                                            <input type="number" step="0.01" min="0" max="100" name="interest_rate" id="bookingInterestRate" class="form-control border-0"
+                                                style="font-size: 14px;" value="{{ $defaultBank?->annual_rate ?? 3.5 }}">
+                                            <span class="input-group-text bg-white border-0 text-muted"
+                                                style="font-size: 14px;">%</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
                                         <label
                                             class="form-label fw-bold text-muted small">{{ __('القسط الشهري المتوقع') }}</label>
                                         <div class="input-group input-group-lg bg-white border-0 shadow-sm"
                                             style="border-radius: 12px; overflow: hidden;">
-                                            <input type="number" name="monthly_installment" class="form-control border-0"
+                                            <input type="number" name="monthly_installment" id="bookingInstallment" class="form-control border-0"
                                                 style="font-size: 14px;">
                                             <span class="input-group-text bg-white border-0 text-muted"
                                                 style="font-size: 14px;">ر.س</span>
@@ -559,9 +621,9 @@
                                     <div class="col-md-6">
                                         <label
                                             class="form-label fw-bold text-muted small">{{ __('مدة التمويل (سنوات)') }}</label>
-                                        <input type="number" name="duration_years"
+                                        <input type="number" name="duration_years" id="bookingDurationYears"
                                             class="form-control form-control-lg bg-white border-0 shadow-sm"
-                                            style="border-radius: 12px; font-size: 14px;" value="5">
+                                            style="border-radius: 12px; font-size: 14px;" value="5" min="1" max="10">
                                     </div>
                                 </div>
                             </div>
@@ -587,6 +649,60 @@
             </div>
         </div>
 
+        {{-- Import Bookings Modal --}}
+        @can('manage-bookings')
+        <div class="modal fade" id="importBookingsModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+                    <div class="modal-header border-0 pb-0 px-4 pt-4">
+                        <h5 class="modal-title fw-bold" style="color: var(--crm-text);">
+                            <i class="bi bi-file-earmark-excel text-success me-2"></i>{{ __('استيراد الطلبات من ملف إكسيل') }}
+                        </h5>
+                        <button type="button" class="btn-close {{ app()->getLocale() == 'ar' ? 'ms-0 me-auto' : '' }}"
+                            data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('crm.bookings.import') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="modal-body px-4 py-3">
+                            <p class="text-muted small mb-3">
+                                {{ __('يمكنك استيراد الطلبات مباشرة من ملف إكسيل بصيغة XLSX أو CSV. سيتم احتساب الأقساط والفوائد بناءً على إعدادات الحاسبة الافتراضية.') }}
+                            </p>
+
+                            <div class="mb-3 p-3 rounded-3" style="background:#F0FDF4;border:1px solid #BBF7D0;">
+                                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                                    <span style="font-size:12px;font-weight:700;color:#166534;">
+                                        <i class="bi bi-download me-1"></i> {{ __('نموذج إكسيل جاهز للتعبئة') }}
+                                    </span>
+                                    <a href="{{ route('crm.bookings.sample-excel') }}" class="btn btn-sm btn-success rounded-pill px-3 fw-bold" style="font-size:11px;">
+                                        {{ __('تحميل النموذج') }}
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold small text-muted">{{ __('اختر ملف الإكسيل (XLSX, XLS, CSV)') }} <span class="text-danger">*</span></label>
+                                <input type="file" name="file" class="form-control" accept=".xlsx,.xls,.csv" required style="border-radius: 10px; font-size: 13px;">
+                                <small class="text-muted d-block mt-1" style="font-size:11px;">
+                                    {{ __('الأعمدة المدعومة: اسم العميل، رقم الجوال، البريد، المدينة، نوع الطلب، السيارة، السعر، الدفعة، مدة التمويل، الملاحظات.') }}
+                                </small>
+                            </div>
+                        </div>
+                        <div class="modal-footer border-0 px-4 pb-4 pt-0 gap-2 flex-nowrap">
+                            <button type="submit" class="btn flex-fill fw-bold py-2 text-white"
+                                style="background: var(--crm-primary); border-radius: 10px;">
+                                <i class="bi bi-upload me-1"></i> {{ __('بدء الاستيراد الآن') }}
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary flex-fill fw-bold py-2"
+                                data-bs-dismiss="modal" style="border-radius: 10px;">
+                                {{ __('إلغاء') }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        @endcan
+
     </div>
 
     <style>
@@ -603,29 +719,69 @@
             opacity: 0.6;
             backdrop-filter: blur(4px);
         }
+
+        .page-item.active .page-link {
+            background-color: var(--crm-gold, #c59b27) !important;
+            border-color: var(--crm-gold, #c59b27) !important;
+            color: #fff !important;
+        }
+        .page-link {
+            color: var(--crm-text, #0f172a);
+        }
     </style>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const carSelect = document.getElementById('bookingCarSelect');
             const priceInput = document.querySelector('input[name="total_price"]');
-            const installmentInput = document.querySelector('input[name="monthly_installment"]');
+            const downPaymentInput = document.querySelector('input[name="down_payment"]');
+            const installmentInput = document.getElementById('bookingInstallment');
+            const durationInput = document.getElementById('bookingDurationYears');
+            const interestRateInput = document.getElementById('bookingInterestRate');
+            const bookingTypeSelect = document.querySelector('select[name="booking_type"]');
+
+            function calculateInstallment() {
+                if (!priceInput || !installmentInput) return;
+                const price = parseFloat(priceInput.value) || 0;
+                const down = parseFloat(downPaymentInput ? downPaymentInput.value : 0) || 0;
+                const duration = parseInt(durationInput ? durationInput.value : 5) || 5;
+                const rate = parseFloat(interestRateInput ? interestRateInput.value : 3.5) || 3.5;
+                const principal = Math.max(0, price - down);
+                const totalMonths = duration * 12;
+
+                if (principal > 0 && totalMonths > 0) {
+                    const monthlyRate = (rate / 100) / 12;
+                    let monthly = 0;
+                    if (monthlyRate > 0) {
+                        const factor = Math.pow(1 + monthlyRate, totalMonths);
+                        monthly = Math.round(principal * (monthlyRate * factor) / (factor - 1));
+                    } else {
+                        monthly = Math.round(principal / totalMonths);
+                    }
+                    installmentInput.value = monthly;
+                } else if (principal === 0) {
+                    installmentInput.value = 0;
+                }
+            }
 
             if (carSelect) {
                 carSelect.addEventListener('change', function () {
                     const selectedOption = this.options[this.selectedIndex];
                     if (selectedOption.value) {
                         const price = selectedOption.getAttribute('data-price');
-                        const installment = selectedOption.getAttribute('data-installment');
-
                         if (priceInput) priceInput.value = price || '';
-                        if (installmentInput) installmentInput.value = installment || '';
+                        calculateInstallment();
                     } else {
                         if (priceInput) priceInput.value = '';
                         if (installmentInput) installmentInput.value = '';
                     }
                 });
             }
+
+            if (priceInput) priceInput.addEventListener('input', calculateInstallment);
+            if (downPaymentInput) downPaymentInput.addEventListener('input', calculateInstallment);
+            if (durationInput) durationInput.addEventListener('input', calculateInstallment);
+            if (interestRateInput) interestRateInput.addEventListener('input', calculateInstallment);
         });
     </script>
 @endsection

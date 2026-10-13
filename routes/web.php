@@ -81,9 +81,10 @@ Route::prefix('crm')->name('crm.')->middleware(['auth:employee', 'guard.employee
         Route::delete('tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
     });
 
-    // === تتبع الحالات (Kanban) ===
+    // === تتبع الحالات ومصادر الطلبات (Kanban & Attribution) ===
     Route::middleware('permission:manage-tracking')->group(function () {
         Route::get('tracking', [TrackingController::class, 'index'])->name('tracking.index');
+        Route::patch('tracking/{booking}/toggle-suspicious', [TrackingController::class, 'toggleSuspicious'])->name('tracking.toggle-suspicious');
     });
 
     // === السيارات ===
@@ -186,6 +187,9 @@ Route::prefix('crm')->name('crm.')->middleware(['auth:employee', 'guard.employee
         Route::get('bookings/new', [BookingController::class, 'index'])->name('bookings.new')->defaults('status', 'new');
         Route::get('bookings/inprogress', [BookingController::class, 'index'])->name('bookings.inprogress');
         Route::get('bookings/completed', [BookingController::class, 'index'])->name('bookings.completed');
+        Route::get('bookings/export', [BookingController::class, 'export'])->name('bookings.export');
+        Route::get('bookings/sample-excel', [BookingController::class, 'downloadSampleExcel'])->name('bookings.sample-excel');
+        Route::post('bookings/import', [BookingController::class, 'import'])->name('bookings.import');
         Route::post('bookings', [BookingController::class, 'store'])->name('bookings.store');
         Route::get('bookings/{booking}', [BookingController::class, 'show'])->name('bookings.show');
         Route::put('bookings/{booking}', [BookingController::class, 'update'])->name('bookings.update');

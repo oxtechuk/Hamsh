@@ -6,6 +6,7 @@ use App\Http\Api\Response\Builder\ApiResponseBuilder;
 use App\Http\Controllers\Api\ApiBaseController;
 use App\Http\Requests\Api\Store\ContactRequest;
 use App\Services\Api\Store\ContactApiService;
+use App\Services\TrackingService;
 
 final class ContactController extends ApiBaseController
 {
@@ -19,7 +20,7 @@ final class ContactController extends ApiBaseController
     {
         $lead = $this->contactService->submitContactForm($request->validated());
 
-        \App\Services\TrackingService::sendLead([
+        TrackingService::sendLead([
             'name' => $request->input('name'),
             'phone' => $request->input('phone'),
             'email' => $request->input('email'),

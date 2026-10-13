@@ -29,6 +29,7 @@ use App\Observers\SettingObserver;
 use App\Observers\SpecificationObserver;
 use App\Observers\TestimonialObserver;
 use App\Services\Cache\BaseCacheService;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
@@ -63,6 +64,9 @@ class AppServiceProvider extends ServiceProvider
 
         // Fix for MySQL older versions (index key length)
         Schema::defaultStringLength(191);
+
+        // Enable Bootstrap 5 pagination styling across CRM
+        Paginator::useBootstrapFive();
 
         // Force HTTPS if APP_URL starts with https
         if (str_contains(config('app.url'), 'https')) {

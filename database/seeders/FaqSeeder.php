@@ -36,7 +36,7 @@ class FaqSeeder extends Seeder
             ],
             [
                 'question' => ['ar' => 'هل تقدمون خدمة التوصيل؟', 'en' => 'Do you offer delivery service?'],
-                'answer' => ['ar' => 'نعم، نقدم خدمة توصيل مجانية لجميع مناطق المملكة العربية السعودية. يتم توصيل السيارة إلى باب منزلك بمنتهى العناية والسلامة.', 'en' => 'Yes, we offer free delivery service to all regions of Saudi Arabia. The car is delivered to your doorstep with utmost care and safety.'],
+                'answer' => ['ar' => 'نعم، نقدم خدمة توصيل لجميع أنحاء المملكة العربية السعودية. يتم توصيل السيارة إلى باب منزلك بمنتهى العناية والسلامة.', 'en' => 'Yes, we offer delivery service across the Kingdom of Saudi Arabia. The car is delivered to your doorstep with utmost care and safety.'],
                 'is_visible' => true,
                 'sort_order' => 5,
             ],

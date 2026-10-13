@@ -9,6 +9,7 @@ use App\Models\Car;
 use App\Services\Api\Store\BookingApiService;
 use App\Services\Api\Store\Data\BookingData;
 use App\Services\Cache\BookingCacheService;
+use App\Services\TrackingService;
 
 final class BookingController extends ApiBaseController
 {
@@ -51,12 +52,16 @@ final class BookingController extends ApiBaseController
 
         $booking = $this->bookingService->create($data);
 
-        \App\Services\TrackingService::sendLead([
-            'name' => $booking->client_name,
-            'phone' => $booking->client_phone,
-            'value' => $booking->total_price,
-            'currency' => 'SAR',
-        ]);
+        if (! $booking->is_suspicious) {
+            TrackingService::sendLead([
+                'name' => $booking->client_name,
+                'phone' => $booking->client_phone,
+                'email' => $booking->client_email,
+                'value' => $booking->total_price,
+                'currency' => 'SAR',
+                'event_source_url' => $booking->landing_page ?? request()->fullUrl(),
+            ]);
+        }
 
         return $this->respondCreated([
             'booking_id' => $booking->id,

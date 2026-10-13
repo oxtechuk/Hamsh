@@ -7,6 +7,10 @@ import "./style.css";
 import "./i18n";
 import { router } from "./routes";
 import { queryClient } from "./lib/query-client";
+import { captureAttribution } from "./utils/attribution";
+
+// Initialize and capture visitor attribution (Snap, Instagram, Facebook, TikTok, UTMs)
+captureAttribution();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
