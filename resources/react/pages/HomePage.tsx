@@ -140,18 +140,20 @@ export default function Home() {
                 />
             )}
 
-            <PurchaseExperienceSection
-                features={
-                    data?.hero?.features?.length
-                        ? data.hero.features.map((f, i) => ({
-                              id: f.icon || String(i),
-                              title: f.title,
-                              description: f.description,
-                              icon: f.icon,
-                          }))
-                        : undefined
-                }
-            />
+            {data?.show_home_features !== false && (
+                <PurchaseExperienceSection
+                    features={
+                        data?.hero?.features?.length
+                            ? data.hero.features.map((f, i) => ({
+                                  id: f.icon || String(i),
+                                  title: f.title,
+                                  description: f.description,
+                                  icon: f.icon,
+                              }))
+                            : undefined
+                    }
+                />
+            )}
         </div>
     );
 }

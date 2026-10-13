@@ -15,6 +15,7 @@
             @csrf
             <input type="hidden" name="hero_slides_submitted" value="1">
             <input type="hidden" name="home_promo_banner_submitted" value="1">
+            <input type="hidden" name="store_home_features_submitted" value="1">
 
             <div class="row g-4 align-items-start">
 
@@ -52,6 +53,9 @@
                                 </button>
                                 <button type="button" class="settings-nav-btn" data-tab="homepage-sections">
                                     <i class="bi bi-layout-text-window"></i> {{ __('نصوص الأقسام') }}
+                                </button>
+                                <button type="button" class="settings-nav-btn" data-tab="home-features">
+                                    <i class="bi bi-shield-check"></i> {{ __('مميزات الشراء والخدمات') }}
                                 </button>
                                 <button type="button" class="settings-nav-btn" data-tab="homepage-stats">
                                     <i class="bi bi-bar-chart-line"></i> {{ __('الإحصائيات العامة') }}
@@ -1287,6 +1291,32 @@
                                                 </div>
                                             </div>
 
+                                            {{-- 7. سوتش قسم مميزات الشراء والخدمات --}}
+                                            <div class="p-3 bg-light rounded-3 d-flex align-items-center justify-content-between">
+                                                <div class="d-flex align-items-center gap-3">
+                                                    <div class="rounded-3 p-2 bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                                        <i class="bi bi-shield-check fs-5"></i>
+                                                    </div>
+                                                    <div>
+                                                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                                                            <h6 class="fw-bold mb-0">{{ __('قسم مميزات الشراء والخدمات') }}</h6>
+                                                            <span class="badge bg-secondary-subtle text-secondary small px-2"><code>mx-auto max-w-7xl</code></span>
+                                                        </div>
+                                                        <p class="text-muted small mb-0">{{ __('إظهار أو إخفاء كروت مميزات الشراء (الضمان، التمويل، التوصيل) أسفل الصفحة الرئيسية') }}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="document.querySelector('[data-tab=home-features]').click()">
+                                                        <i class="bi bi-pencil-square me-1"></i> {{ __('تعديل المميزات') }}
+                                                    </button>
+                                                    <div class="form-check form-switch fs-4 mb-0">
+                                                        <input type="hidden" name="show_home_features_section" value="0">
+                                                        <input class="form-check-input" type="checkbox" name="show_home_features_section"
+                                                            value="1" id="show_home_features_section" {{ ($settings['show_home_features_section'] ?? '1') == '1' ? 'checked' : '' }}>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -1357,6 +1387,135 @@
                                         </div>
                                     </div>
                                 @endforeach
+                            </div>
+                        </div>
+
+                        {{-- =============================== --}}
+                        {{-- TAB: مميزات الشراء والخدمات --}}
+                        {{-- =============================== --}}
+                        <div class="settings-pane d-none" id="tab-home-features">
+                            <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
+                                <div class="card-header bg-white border-bottom p-4">
+                                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="rounded-3 p-3 bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                                                <i class="bi bi-shield-check fs-4 text-success"></i>
+                                            </div>
+                                            <div>
+                                                <div class="d-flex align-items-center gap-2 flex-wrap">
+                                                    <h6 class="fw-bold mb-1">{{ __('مميزات الشراء والخدمات (أسفل الصفحة الرئيسية)') }}</h6>
+                                                    <span class="badge bg-secondary-subtle text-secondary small px-2"><code>mx-auto max-w-7xl</code></span>
+                                                </div>
+                                                <p class="text-muted small mb-0">{{ __('تحكم كامل في نصوص الكروت الترويجية (الضمان، التسهيلات، التوصيل)، أيقوناتها، وإمكانية إضافة أو حذف كروت بحرية') }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <button type="button" class="btn btn-sm btn-primary rounded-pill px-3" onclick="addFeatureCard()">
+                                                <i class="bi bi-plus-lg me-1"></i> {{ __('إضافة كرت ميزة') }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card-body p-4">
+                                    <div id="features-list-container" class="d-flex flex-column gap-3">
+                                        @foreach($homeFeatures as $fIdx => $feature)
+                                            @php
+                                                $fIcon = $feature['icon'] ?? 'bi-shield-check';
+                                                $fTitleAr = is_array($feature['title'] ?? null) ? ($feature['title']['ar'] ?? '') : ($feature['title'] ?? '');
+                                                $fTitleEn = is_array($feature['title'] ?? null) ? ($feature['title']['en'] ?? '') : '';
+                                                $fDescAr = is_array($feature['description'] ?? null) ? ($feature['description']['ar'] ?? '') : ($feature['description'] ?? '');
+                                                $fDescEn = is_array($feature['description'] ?? null) ? ($feature['description']['en'] ?? '') : '';
+                                            @endphp
+                                            <div class="feature-card-item card border border-light-subtle rounded-4 shadow-sm overflow-hidden" id="feature-card-{{ $fIdx }}">
+                                                <div class="card-header bg-light d-flex align-items-center justify-content-between px-3 py-2 border-bottom">
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <span class="badge bg-dark rounded-pill px-2 py-1 feature-card-number">#{{ $fIdx + 1 }}</span>
+                                                        <span class="fw-bold text-dark small feature-card-title-preview">{{ !empty($fTitleAr) ? $fTitleAr : __('كرت ميزة') }}</span>
+                                                    </div>
+                                                    <button type="button" class="btn btn-sm btn-outline-danger border-0 rounded-circle p-1 lh-1" onclick="removeFeatureCard(this)" title="{{ __('حذف هذا الكرت') }}">
+                                                        <i class="bi bi-trash fs-6"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="card-body p-3">
+                                                    {{-- Icon row --}}
+                                                    <div class="mb-3 p-3 bg-light rounded-3 border">
+                                                        <label class="form-label fw-semibold small text-muted d-block mb-2">{{ __('أيقونة الميزة') }}</label>
+                                                        <div class="d-flex align-items-center gap-3 flex-wrap">
+                                                            <div class="feature-icon-preview-box rounded-3 bg-white border d-flex align-items-center justify-content-center shadow-sm" style="width: 48px; height: 48px;">
+                                                                <i class="bi {{ $fIcon }} fs-4 text-warning feature-icon-display"></i>
+                                                            </div>
+                                                            <div class="flex-grow-1" style="min-width: 200px;">
+                                                                <input type="text" name="feature_icon[]" class="form-control form-control-sm bg-white border feature-icon-input"
+                                                                    value="{{ $fIcon }}" placeholder="مثال: bi-shield-check"
+                                                                    oninput="updateFeatureIconPreview(this)">
+                                                            </div>
+                                                        </div>
+                                                        {{-- Popular icons quick chips --}}
+                                                        <div class="d-flex flex-wrap gap-1 mt-2 align-items-center">
+                                                            <span class="text-muted text-xs me-1">{{ __('أيقونات سريعة:') }}</span>
+                                                            @foreach([
+                                                                'bi-shield-check' => 'ضمان',
+                                                                'bi-cash-coin' => 'تمويل',
+                                                                'bi-truck' => 'توصيل',
+                                                                'bi-award' => 'جودة',
+                                                                'bi-patch-check' => 'فحص',
+                                                                'bi-headset' => 'دعم',
+                                                                'bi-tools' => 'صيانة',
+                                                                'bi-speedometer2' => 'سرعة/أميال',
+                                                                'bi-star' => 'تميز',
+                                                                'bi-clock-history' => 'وقت قياسي',
+                                                            ] as $quickIcon => $quickLabel)
+                                                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 rounded-pill quick-icon-btn {{ $fIcon === $quickIcon ? 'active btn-secondary text-white' : '' }}"
+                                                                    onclick="selectQuickIcon(this, '{{ $quickIcon }}')">
+                                                                    <i class="bi {{ $quickIcon }} me-1"></i>{{ $quickLabel }}
+                                                                </button>
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
+
+                                                    {{-- Titles --}}
+                                                    <div class="row g-2 mb-2">
+                                                        <div class="col-md-6">
+                                                            <label class="form-label fw-semibold small text-muted mb-1">{{ __('العنوان — عربي') }} <span class="text-danger">*</span></label>
+                                                            <input type="text" name="feature_title_ar[]" class="form-control form-control-sm bg-light border-0 fw-bold"
+                                                                value="{{ $fTitleAr }}" placeholder="مثال: ضمان شامل"
+                                                                oninput="updateFeatureTitlePreview(this)" required>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label class="form-label fw-semibold small text-muted mb-1">{{ __('العنوان — إنجليزي') }}</label>
+                                                            <input type="text" name="feature_title_en[]" class="form-control form-control-sm bg-light border-0"
+                                                                value="{{ $fTitleEn }}" placeholder="e.g.: Comprehensive Warranty">
+                                                        </div>
+                                                    </div>
+
+                                                    {{-- Descriptions --}}
+                                                    <div class="row g-2">
+                                                        <div class="col-md-6">
+                                                            <label class="form-label fw-semibold small text-muted mb-1">{{ __('الوصف — عربي') }} <span class="text-danger">*</span></label>
+                                                            <textarea name="feature_desc_ar[]" class="form-control form-control-sm bg-light border-0" rows="2"
+                                                                placeholder="اكتب شرح الميزة باللغة العربية..." required>{{ $fDescAr }}</textarea>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label class="form-label fw-semibold small text-muted mb-1">{{ __('الوصف — إنجليزي') }}</label>
+                                                            <textarea name="feature_desc_en[]" class="form-control form-control-sm bg-light border-0" rows="2"
+                                                                placeholder="Write feature description in English...">{{ $fDescEn }}</textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+
+                                    <div id="no-features-msg" class="text-center py-5 bg-light rounded-4 {{ count($homeFeatures) > 0 ? 'd-none' : '' }}">
+                                        <i class="bi bi-shield-x fs-1 text-muted opacity-50 d-block mb-2"></i>
+                                        <h6 class="fw-bold text-muted mb-1">{{ __('لا توجد كروت مميزات مضافة حالياً') }}</h6>
+                                        <p class="text-muted small mb-3">{{ __('اضغط على زر "إضافة كرت ميزة" لبدء إضافة خدمات ومميزات المتجر') }}</p>
+                                        <button type="button" class="btn btn-sm btn-primary rounded-pill px-4" onclick="addFeatureCard()">
+                                            <i class="bi bi-plus-lg me-1"></i> {{ __('إضافة كرت ميزة الآن') }}
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -2610,6 +2769,142 @@
                 if (container) container.classList.remove('d-none');
             } else {
                 if (container) container.classList.add('d-none');
+            }
+        }
+
+        // ===== Home Features Functions =====
+        function addFeatureCard() {
+            const container = document.getElementById('features-list-container');
+            const noMsg = document.getElementById('no-features-msg');
+            if (noMsg) noMsg.classList.add('d-none');
+
+            const count = container.querySelectorAll('.feature-card-item').length;
+            const newIdx = count + 1;
+
+            const card = document.createElement('div');
+            card.className = 'feature-card-item card border border-light-subtle rounded-4 shadow-sm overflow-hidden';
+            card.id = 'feature-card-' + count;
+            card.innerHTML = `
+                <div class="card-header bg-light d-flex align-items-center justify-content-between px-3 py-2 border-bottom">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="badge bg-dark rounded-pill px-2 py-1 feature-card-number">#${newIdx}</span>
+                        <span class="fw-bold text-dark small feature-card-title-preview">{{ __('ميزة جديدة') }}</span>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-danger border-0 rounded-circle p-1 lh-1" onclick="removeFeatureCard(this)" title="{{ __('حذف هذا الكرت') }}">
+                        <i class="bi bi-trash fs-6"></i>
+                    </button>
+                </div>
+                <div class="card-body p-3">
+                    <div class="mb-3 p-3 bg-light rounded-3 border">
+                        <label class="form-label fw-semibold small text-muted d-block mb-2">{{ __('أيقونة الميزة') }}</label>
+                        <div class="d-flex align-items-center gap-3 flex-wrap">
+                            <div class="feature-icon-preview-box rounded-3 bg-white border d-flex align-items-center justify-content-center shadow-sm" style="width: 48px; height: 48px;">
+                                <i class="bi bi-shield-check fs-4 text-warning feature-icon-display"></i>
+                            </div>
+                            <div class="flex-grow-1" style="min-width: 200px;">
+                                <input type="text" name="feature_icon[]" class="form-control form-control-sm bg-white border feature-icon-input"
+                                    value="bi-shield-check" placeholder="مثال: bi-shield-check"
+                                    oninput="updateFeatureIconPreview(this)">
+                            </div>
+                        </div>
+                        <div class="d-flex flex-wrap gap-1 mt-2 align-items-center">
+                            <span class="text-muted text-xs me-1">{{ __('أيقونات سريعة:') }}</span>
+                            <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 rounded-pill quick-icon-btn active btn-secondary text-white" onclick="selectQuickIcon(this, 'bi-shield-check')"><i class="bi bi-shield-check me-1"></i>{{ __('ضمان') }}</button>
+                            <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 rounded-pill quick-icon-btn" onclick="selectQuickIcon(this, 'bi-cash-coin')"><i class="bi bi-cash-coin me-1"></i>{{ __('تمويل') }}</button>
+                            <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 rounded-pill quick-icon-btn" onclick="selectQuickIcon(this, 'bi-truck')"><i class="bi bi-truck me-1"></i>{{ __('توصيل') }}</button>
+                            <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 rounded-pill quick-icon-btn" onclick="selectQuickIcon(this, 'bi-award')"><i class="bi bi-award me-1"></i>{{ __('جودة') }}</button>
+                            <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 rounded-pill quick-icon-btn" onclick="selectQuickIcon(this, 'bi-patch-check')"><i class="bi bi-patch-check me-1"></i>{{ __('فحص') }}</button>
+                            <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 rounded-pill quick-icon-btn" onclick="selectQuickIcon(this, 'bi-headset')"><i class="bi bi-headset me-1"></i>{{ __('دعم') }}</button>
+                            <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 rounded-pill quick-icon-btn" onclick="selectQuickIcon(this, 'bi-tools')"><i class="bi bi-tools me-1"></i>{{ __('صيانة') }}</button>
+                            <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 rounded-pill quick-icon-btn" onclick="selectQuickIcon(this, 'bi-speedometer2')"><i class="bi bi-speedometer2 me-1"></i>{{ __('سرعة/أميال') }}</button>
+                        </div>
+                    </div>
+                    <div class="row g-2 mb-2">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small text-muted mb-1">{{ __('العنوان — عربي') }} <span class="text-danger">*</span></label>
+                            <input type="text" name="feature_title_ar[]" class="form-control form-control-sm bg-light border-0 fw-bold"
+                                value="" placeholder="مثال: ضمان شامل"
+                                oninput="updateFeatureTitlePreview(this)" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small text-muted mb-1">{{ __('العنوان — إنجليزي') }}</label>
+                            <input type="text" name="feature_title_en[]" class="form-control form-control-sm bg-light border-0"
+                                value="" placeholder="e.g.: Comprehensive Warranty">
+                        </div>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small text-muted mb-1">{{ __('الوصف — عربي') }} <span class="text-danger">*</span></label>
+                            <textarea name="feature_desc_ar[]" class="form-control form-control-sm bg-light border-0" rows="2"
+                                placeholder="اكتب شرح الميزة باللغة العربية..." required></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small text-muted mb-1">{{ __('الوصف — إنجليزي') }}</label>
+                            <textarea name="feature_desc_en[]" class="form-control form-control-sm bg-light border-0" rows="2"
+                                placeholder="Write feature description in English..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(card);
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function removeFeatureCard(btn) {
+            const card = btn.closest('.feature-card-item');
+            if (!card) return;
+            card.remove();
+            const container = document.getElementById('features-list-container');
+            const items = container.querySelectorAll('.feature-card-item');
+            items.forEach((item, idx) => {
+                const num = item.querySelector('.feature-card-number');
+                if (num) num.textContent = '#' + (idx + 1);
+            });
+            const noMsg = document.getElementById('no-features-msg');
+            if (noMsg && items.length === 0) {
+                noMsg.classList.remove('d-none');
+            }
+        }
+
+        function updateFeatureIconPreview(input) {
+            const card = input.closest('.feature-card-item');
+            if (!card) return;
+            const display = card.querySelector('.feature-icon-display');
+            if (!display) return;
+            let iconClass = input.value.trim();
+            if (!iconClass) {
+                display.className = 'bi bi-shield-check fs-4 text-warning feature-icon-display';
+                return;
+            }
+            if (iconClass.startsWith('bi ')) {
+                display.className = 'fs-4 text-warning feature-icon-display ' + iconClass;
+            } else if (iconClass.startsWith('bi-')) {
+                display.className = 'bi fs-4 text-warning feature-icon-display ' + iconClass;
+            } else {
+                display.className = 'bi bi-' + iconClass + ' fs-4 text-warning feature-icon-display';
+            }
+        }
+
+        function selectQuickIcon(btn, iconClass) {
+            const card = btn.closest('.feature-card-item');
+            if (!card) return;
+            const input = card.querySelector('.feature-icon-input');
+            if (input) {
+                input.value = iconClass;
+                updateFeatureIconPreview(input);
+            }
+            card.querySelectorAll('.quick-icon-btn').forEach(b => {
+                b.classList.remove('active', 'btn-secondary', 'text-white');
+            });
+            btn.classList.add('active', 'btn-secondary', 'text-white');
+        }
+
+        function updateFeatureTitlePreview(input) {
+            const card = input.closest('.feature-card-item');
+            if (!card) return;
+            const preview = card.querySelector('.feature-card-title-preview');
+            if (preview) {
+                preview.textContent = input.value.trim() || '{{ __('كرت ميزة') }}';
             }
         }
     </script>

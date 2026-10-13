@@ -67,6 +67,29 @@ class GeneralSettingController extends Controller
         $promoBannerRaw = $settings['home_promo_banner'] ?? [];
         $promoBanner = is_array($promoBannerRaw) ? $promoBannerRaw : (json_decode((string) $promoBannerRaw, true) ?: []);
 
+        $homeFeaturesRaw = $settings['store_home_features'] ?? null;
+        if ($homeFeaturesRaw === null) {
+            $homeFeatures = [
+                [
+                    'icon' => 'bi-shield-check',
+                    'title' => ['ar' => 'ضمان شامل', 'en' => 'Comprehensive Warranty'],
+                    'description' => ['ar' => 'جميع سياراتنا مدعومة بضمان شامل يغطي المكونات الرئيسية والمحرك.', 'en' => 'All our cars are backed by a comprehensive warranty covering major components and engine.'],
+                ],
+                [
+                    'icon' => 'bi-cash-coin',
+                    'title' => ['ar' => 'تسهيلات تمويلية', 'en' => 'Flexible Financing'],
+                    'description' => ['ar' => 'خطط تمويل مرنة بمعدلات فائدة تنافسية تناسب جميع الميزانيات.', 'en' => 'Flexible financing plans with competitive interest rates to suit all budgets.'],
+                ],
+                [
+                    'icon' => 'bi-truck',
+                    'title' => ['ar' => 'توصيل لجميع أنحاء المملكة', 'en' => 'Nationwide Delivery'],
+                    'description' => ['ar' => 'خدمة توصيل لجميع مناطق المملكة العربية السعودية.', 'en' => 'Delivery service to all regions of the Kingdom of Saudi Arabia.'],
+                ],
+            ];
+        } else {
+            $homeFeatures = is_array($homeFeaturesRaw) ? $homeFeaturesRaw : (json_decode((string) $homeFeaturesRaw, true) ?: []);
+        }
+
         return view('crm.settings.general', compact(
             'settings',
             'cars',
@@ -81,7 +104,8 @@ class GeneralSettingController extends Controller
             'offersHero',
             'financeStats',
             'mainOfferId',
-            'promoBanner'
+            'promoBanner',
+            'homeFeatures'
         ));
     }
 
@@ -139,6 +163,7 @@ class GeneralSettingController extends Controller
             'show_home_offers_section',
             'show_home_budget_section',
             'show_home_featured_cars_section',
+            'show_home_features_section',
             'finance_dbr_limit_personal',
             'finance_dbr_limit_real_estate',
             'finance_debt_solution_text',
@@ -179,6 +204,9 @@ class GeneralSettingController extends Controller
         }
         if (! $request->has('show_home_featured_cars_section')) {
             Setting::updateOrCreate(['key' => 'show_home_featured_cars_section'], ['value' => '0']);
+        }
+        if (! $request->has('show_home_features_section')) {
+            Setting::updateOrCreate(['key' => 'show_home_features_section'], ['value' => '0']);
         }
         if (! $request->has('maintenance_mode_enabled')) {
             Setting::updateOrCreate(['key' => 'maintenance_mode_enabled'], ['value' => '0']);
@@ -514,6 +542,39 @@ class GeneralSettingController extends Controller
             }
 
             Setting::updateOrCreate(['key' => 'home_promo_banner'], ['value' => $bannerData]);
+        }
+
+        // Handle Home Features (Purchase Experience & Services)
+        if ($request->has('store_home_features_submitted')) {
+            $featuresIcons = $request->input('feature_icon', []);
+            $featuresTitleAr = $request->input('feature_title_ar', []);
+            $featuresTitleEn = $request->input('feature_title_en', []);
+            $featuresDescAr = $request->input('feature_desc_ar', []);
+            $featuresDescEn = $request->input('feature_desc_en', []);
+
+            $homeFeatures = [];
+            foreach ($featuresIcons as $index => $icon) {
+                $tAr = trim($featuresTitleAr[$index] ?? '');
+                $tEn = trim($featuresTitleEn[$index] ?? '');
+                $dAr = trim($featuresDescAr[$index] ?? '');
+                $dEn = trim($featuresDescEn[$index] ?? '');
+
+                if (! empty($tAr) || ! empty($tEn) || ! empty($dAr) || ! empty($dEn)) {
+                    $homeFeatures[] = [
+                        'icon' => $icon ?: 'bi-shield-check',
+                        'title' => [
+                            'ar' => $tAr,
+                            'en' => $tEn ?: $tAr,
+                        ],
+                        'description' => [
+                            'ar' => $dAr,
+                            'en' => $dEn ?: $dAr,
+                        ],
+                    ];
+                }
+            }
+
+            Setting::updateOrCreate(['key' => 'store_home_features'], ['value' => $homeFeatures]);
         }
 
         // Invalidate cache

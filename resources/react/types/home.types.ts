@@ -281,6 +281,7 @@ export interface HomePageData {
   show_home_offers?: boolean;
   show_home_budget?: boolean;
   show_home_featured_cars?: boolean;
+  show_home_features?: boolean;
   brands: BrandInfo[];
   latest_cars: {
     section: SectionMeta;

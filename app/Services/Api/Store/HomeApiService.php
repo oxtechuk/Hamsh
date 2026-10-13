@@ -46,13 +46,32 @@ final class HomeApiService
         if (! is_array($homeFeatures)) {
             $homeFeatures = json_decode((string) $homeFeatures, true) ?: [];
         }
+        if (empty($homeFeatures)) {
+            $homeFeatures = [
+                [
+                    'icon' => 'bi-shield-check',
+                    'title' => ['ar' => 'ضمان شامل', 'en' => 'Comprehensive Warranty'],
+                    'description' => ['ar' => 'جميع سياراتنا مدعومة بضمان شامل يغطي المكونات الرئيسية والمحرك.', 'en' => 'All our cars are backed by a comprehensive warranty covering major components and engine.'],
+                ],
+                [
+                    'icon' => 'bi-cash-coin',
+                    'title' => ['ar' => 'تسهيلات تمويلية', 'en' => 'Flexible Financing'],
+                    'description' => ['ar' => 'خطط تمويل مرنة بمعدلات فائدة تنافسية تناسب جميع الميزانيات.', 'en' => 'Flexible financing plans with competitive interest rates to suit all budgets.'],
+                ],
+                [
+                    'icon' => 'bi-truck',
+                    'title' => ['ar' => 'توصيل لجميع أنحاء المملكة', 'en' => 'Nationwide Delivery'],
+                    'description' => ['ar' => 'خدمة توصيل لجميع مناطق المملكة العربية السعودية.', 'en' => 'Delivery service to all regions of the Kingdom of Saudi Arabia.'],
+                ],
+            ];
+        }
 
         $locale = app()->getLocale();
 
         $hero['features'] = array_map(fn (array $feature) => [
             'icon' => $feature['icon'] ?? '',
-            'title' => is_array($feature['title'] ?? null) ? ($feature['title'][$locale] ?? '') : ($feature['title'] ?? ''),
-            'description' => is_array($feature['description'] ?? null) ? ($feature['description'][$locale] ?? '') : ($feature['description'] ?? ''),
+            'title' => is_array($feature['title'] ?? null) ? ($feature['title'][$locale] ?? $feature['title']['ar'] ?? '') : ($feature['title'] ?? ''),
+            'description' => is_array($feature['description'] ?? null) ? ($feature['description'][$locale] ?? $feature['description']['ar'] ?? '') : ($feature['description'] ?? ''),
         ], $homeFeatures);
         $carId = $featuredSetting['car_id'] ?? null;
         $offerId = $featuredSetting['offer_id'] ?? null;
@@ -69,6 +88,7 @@ final class HomeApiService
         $showHomeOffers = ! in_array($this->cache->rememberSetting('show_home_offers_section', '1'), [0, '0', false, 'false'], true);
         $showHomeBudget = ! in_array($this->cache->rememberSetting('show_home_budget_section', '1'), [0, '0', false, 'false'], true);
         $showHomeFeaturedCars = ! in_array($this->cache->rememberSetting('show_home_featured_cars_section', '1'), [0, '0', false, 'false'], true);
+        $showHomeFeatures = ! in_array($this->cache->rememberSetting('show_home_features_section', '1'), [0, '0', false, 'false'], true);
 
         $pageSections = [
             'filter' => [
@@ -144,6 +164,7 @@ final class HomeApiService
             'show_home_offers' => $showHomeOffers,
             'show_home_budget' => $showHomeBudget,
             'show_home_featured_cars' => $showHomeFeaturedCars,
+            'show_home_features' => $showHomeFeatures,
             'featured_cars' => ($data['featuredCars'] ?? collect())->values(),
             'active_offers' => ($data['activeOffers'] ?? collect())->values(),
             'brands' => ($data['brands'] ?? collect())->values(),

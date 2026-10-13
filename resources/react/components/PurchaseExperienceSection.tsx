@@ -20,7 +20,8 @@ const ICON_MAP: Record<string, string> = {
     "bi-shield": "bi bi-shield",
 };
 
-function resolveIcon(icon: string): string {
+function resolveIcon(icon?: string): string {
+    if (!icon) return "bi bi-shield-check";
     if (icon.startsWith("bi ")) return icon;
     if (icon.startsWith("bi-")) return `bi ${icon}`;
     return ICON_MAP[icon] || `bi ${icon}`;
@@ -29,20 +30,20 @@ function resolveIcon(icon: string): string {
 const DEFAULT_FEATURES: IPurchaseFeature[] = [
     {
         id: "finance",
-        title: "purchaseExperience.features.finance.title",
-        description: "purchaseExperience.features.finance.description",
+        title: "ضمان شامل",
+        description: "جميع سياراتنا مدعومة بضمان شامل يغطي المكونات الرئيسية والمحرك.",
         icon: "bi-shield-check",
     },
     {
         id: "ownership",
-        title: "purchaseExperience.features.ownership.title",
-        description: "purchaseExperience.features.ownership.description",
+        title: "تسهيلات تمويلية",
+        description: "خطط تمويل مرنة بمعدلات فائدة تنافسية تناسب جميع الميزانيات.",
         icon: "bi-cash-coin",
     },
     {
         id: "options",
-        title: "purchaseExperience.features.options.title",
-        description: "purchaseExperience.features.options.description",
+        title: "توصيل لجميع أنحاء المملكة",
+        description: "خدمة توصيل لجميع مناطق المملكة العربية السعودية.",
         icon: "bi-truck",
     },
 ];
