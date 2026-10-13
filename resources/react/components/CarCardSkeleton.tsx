@@ -33,22 +33,22 @@ export default function CarCardSkeleton() {
                 </div>
 
                 <div>
-                    {/* Prices Row Skeleton */}
-                    <div className="mb-5 flex items-baseline justify-between gap-2">
-                        <div className="space-y-1">
-                            <Skeleton className="h-3 w-14 rounded bg-gray-200/60" />
-                            <Skeleton className="h-6 w-24 rounded bg-gray-200/60" />
+                    {/* Finance Box Skeleton */}
+                    <div className="mb-3.5 flex items-center justify-between rounded-xl border border-gray-100 bg-gray-50/70 p-3">
+                        <div className="space-y-1.5">
+                            <Skeleton className="h-3 w-20 rounded bg-gray-200/60" />
+                            <Skeleton className="h-5 w-28 rounded bg-gray-200/60" />
                         </div>
-                        <div className="space-y-1">
-                            <Skeleton className="h-3 w-14 rounded bg-gray-200/60" />
-                            <Skeleton className="h-5 w-20 rounded bg-gray-200/60" />
+                        <div className="flex flex-col items-end space-y-1.5">
+                            <Skeleton className="h-3 w-20 rounded bg-gray-200/60" />
+                            <Skeleton className="h-5 w-20 rounded-md bg-gray-200/60" />
                         </div>
                     </div>
 
                     {/* Action Buttons Row Skeleton */}
                     <div className="grid grid-cols-2 gap-2.5">
-                        <Skeleton className="h-[44px] w-full rounded-[6px] bg-gray-200/60" />
-                        <Skeleton className="h-[44px] w-full rounded-[6px] bg-gray-200/60" />
+                        <Skeleton className="h-[52px] w-full rounded-xl bg-gray-200/60" />
+                        <Skeleton className="h-[52px] w-full rounded-xl bg-gray-200/60" />
                     </div>
                 </div>
             </div>

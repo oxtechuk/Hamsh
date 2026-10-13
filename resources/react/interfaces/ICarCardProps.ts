@@ -14,6 +14,8 @@ export interface ICarCardProps {
   price: ReactNode;
   monthlyPrice: ReactNode;
   minSalary?: string | number;
+  rawPrice?: number;
+  rawMonthlyPrice?: number;
   detailsTo: string;
   slug?: string;
   compareText?: string;

@@ -83,6 +83,8 @@ export function mapBentoCarToCardProps(
       seats: specValue(car, "Seats") || (car as any).seats || "",
       price: formatPrice(car.cash_price ?? 0, "var(--brand-primary-color)", locale),
       monthlyPrice: formatPrice(car.min_installment ?? 0, "var(--brand-secondary-color)", locale),
+      rawPrice: Number(car.cash_price) || undefined,
+      rawMonthlyPrice: Number(car.min_installment) || undefined,
       minSalary:
         (car as any).min_salary ??
         (car.specs && typeof car.specs === "object" && !Array.isArray(car.specs)

@@ -53,6 +53,8 @@ export function mapCarToCardProps(
                     : undefined,
             price: formatPrice(car.current_price ?? car.cash_price ?? 0, "var(--brand-primary-color)", lang),
             monthlyPrice: formatPrice(car.min_installment ?? 0, "var(--brand-secondary-color)", lang),
+            rawPrice: Number(car.current_price ?? car.cash_price) || undefined,
+            rawMonthlyPrice: Number(car.min_installment) || undefined,
             minSalary:
                 car.min_salary ??
                 (car.specs && typeof car.specs === "object" && !Array.isArray(car.specs)

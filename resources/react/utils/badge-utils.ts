@@ -1,25 +1,58 @@
 import type { ICarHighlightResult } from "../interfaces/ICarHighlightResult";
 
+const HIGHLIGHT_MAP: Record<string, { ar: string; en: string; color?: string }> = {
+  new_arrival: { ar: "أحدث السيارات", en: "New Arrival", color: "rgb(223, 166, 85)" },
+  featured: { ar: "سيارات مختارة", en: "Featured", color: "rgb(223, 166, 85)" },
+  trending: { ar: "الأكثر طلباً", en: "Trending", color: "rgb(190, 18, 60)" },
+  exclusive: { ar: "إصدار خاص", en: "Exclusive", color: "rgb(124, 58, 237)" },
+};
+
 export function resolveHighlight(
   value: unknown,
   locale: string,
 ): ICarHighlightResult | undefined {
-  if (!value) {
+  if (!value || value === "none") {
     return undefined;
   }
 
+  const isAr = locale.startsWith("ar");
+
   if (typeof value === "string") {
-    return value ? { text: value } : undefined;
+    const trimmed = value.trim();
+    if (!trimmed || trimmed === "none") return undefined;
+
+    const key = trimmed.toLowerCase();
+    if (HIGHLIGHT_MAP[key]) {
+      return {
+        text: isAr ? HIGHLIGHT_MAP[key].ar : HIGHLIGHT_MAP[key].en,
+        color: HIGHLIGHT_MAP[key].color,
+      };
+    }
+
+    return { text: trimmed };
   }
 
   if (typeof value === "object" && value !== null) {
     const objectValue = value as Record<string, unknown>;
 
-    const languageKey = locale.startsWith("ar") ? "text_ar" : "text";
+    const languageKey = isAr ? "text_ar" : "text";
 
-    const text = String(
+    let text = String(
       objectValue[languageKey] ?? objectValue.text_ar ?? objectValue.text ?? "",
     );
+
+    if (text) {
+      const key = text.trim().toLowerCase();
+      if (HIGHLIGHT_MAP[key]) {
+        return {
+          text: isAr ? HIGHLIGHT_MAP[key].ar : HIGHLIGHT_MAP[key].en,
+          color:
+            typeof objectValue.color === "string"
+              ? objectValue.color
+              : HIGHLIGHT_MAP[key].color,
+        };
+      }
+    }
 
     if (!text) {
       return undefined;

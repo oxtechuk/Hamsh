@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { ShoppingCart } from "lucide-react";
 
 import LazyImg from "./LazyImg";
 import CarDetailsModal from "./CarDetailsModal";
@@ -27,6 +28,8 @@ export default function CarCard({
     price,
     monthlyPrice,
     minSalary,
+    rawPrice,
+    rawMonthlyPrice,
     detailsTo,
     slug,
     compareText,
@@ -65,7 +68,7 @@ export default function CarCard({
               text: resolvedBadge.text,
               color: badgeColor ?? resolvedBadge.color ?? "rgb(223, 166, 85)",
           }
-        : { text: "new_arrival", color: "rgb(223, 166, 85)" };
+        : { text: isRTL ? "أحدث السيارات" : "New Arrival", color: "rgb(223, 166, 85)" };
 
     const handleOpenDetails = () => {
         if (carPopupEnabled && slug) {
@@ -93,6 +96,45 @@ export default function CarCard({
     const specPills = buildCarSpecPills(t, transmission, fuelType, seats);
     const visiblePills = specPills.slice(0, MAX_VISIBLE_PILLS);
     const hiddenPillsCount = specPills.length - visiblePills.length;
+
+    const numericMonthly =
+        typeof rawMonthlyPrice === "number" && rawMonthlyPrice > 0
+            ? rawMonthlyPrice
+            : typeof monthlyPrice === "number" && monthlyPrice > 0
+            ? monthlyPrice
+            : typeof monthlyPrice === "string"
+            ? parseFloat(monthlyPrice.replace(/[^\d.]/g, "")) || 0
+            : 0;
+
+    const displayMonthlyText = numericMonthly > 0
+        ? `${numericMonthly.toLocaleString(isRTL ? "ar-SA" : "en-US")} ${isRTL ? "ر.س / شهرياً" : "SAR / month"}`
+        : monthlyPrice
+        ? <>{monthlyPrice} {isRTL ? "/ شهرياً" : "/ month"}</>
+        : (isRTL ? "1,650 ر.س / شهرياً" : "1,650 SAR / month");
+
+    const numericSalary =
+        typeof minSalary === "number" && minSalary > 0
+            ? minSalary
+            : typeof minSalary === "string"
+            ? parseFloat(minSalary.replace(/[^\d.]/g, "")) || 0
+            : 0;
+
+    const salaryBadgeText = numericSalary > 0
+        ? (isRTL ? `من ${numericSalary.toLocaleString("ar-SA")} ر.س` : `From ${numericSalary.toLocaleString("en-US")} SAR`)
+        : (isRTL ? "من 5,000 ر.س" : "From 5,000 SAR");
+
+    const numericCash =
+        typeof rawPrice === "number" && rawPrice > 0
+            ? rawPrice
+            : typeof price === "number" && price > 0
+            ? price
+            : typeof price === "string"
+            ? parseFloat(price.replace(/[^\d.]/g, "")) || 0
+            : 0;
+
+    const displayCashText = numericCash > 0
+        ? `${numericCash.toLocaleString(isRTL ? "ar-SA" : "en-US")} ${isRTL ? "ر.س" : "SAR"}`
+        : price;
 
     return (
         <>
@@ -172,64 +214,56 @@ export default function CarCard({
                     </div>
 
                     <div>
-                        <div className="mb-5 flex items-baseline justify-between gap-2 text-start">
+                        {/* Finance Details Box */}
+                        <div className="mb-3.5 flex items-center justify-between rounded-xl border border-[#EEF2F6] bg-[#F8FAFC] px-3.5 py-2.5 text-start">
+                            {/* Installment Starts From */}
                             <div className="text-start">
-                                <p className="text-[12px] font-medium text-gray-500">
-                                    {t("carCard.cashPrice")}
+                                <p className="text-[11px] sm:text-[12px] font-medium text-[#737C8E]">
+                                    {isRTL ? "القسط يبدأ من:" : "Installment starts from:"}
                                 </p>
-                                <p className="mt-0.5 text-[21px] sm:text-[23px] font-black text-[#111111]">
-                                    {price}
+                                <p className="mt-0.5 text-[15px] sm:text-[16px] font-black text-[#1E283A]">
+                                    {displayMonthlyText}
                                 </p>
                             </div>
 
-                            {monthlyPrice ? (
-                                <div className="text-end">
-                                    <p className="text-[11px] sm:text-[12px] font-medium text-gray-500 leading-tight">
-                                        {installmentLabel}
-                                    </p>
-                                    <p className="mt-0.5 text-[17px] sm:text-[18px] font-extrabold text-[#DFA655]">
-                                        {monthlyPrice}
-                                    </p>
-                                </div>
-                            ) : (
-                                <div />
-                            )}
+                            {/* Salary Required */}
+                            <div className="flex flex-col items-end text-end">
+                                <p className="text-[11px] sm:text-[12px] font-medium text-[#737C8E]">
+                                    {isRTL ? "بدون دفعة لراتب:" : "Zero down payment for salary:"}
+                                </p>
+                                <span className="mt-1 inline-flex items-center rounded-md bg-[#EDF0F5] px-2.5 py-0.5 text-[11px] sm:text-[12px] font-bold text-[#1E283A]">
+                                    {salaryBadgeText}
+                                </span>
+                            </div>
                         </div>
 
+                        {/* Action Buttons: Cash Order & Finance Request */}
                         <div
                             className="grid grid-cols-2 gap-2.5"
                             onClick={(event) => event.stopPropagation()}
                         >
+                            {/* Direct Cash Order Button (Dashed Green) */}
                             <button
                                 type="button"
                                 onClick={() => handleOpenOrder("cash")}
-                                className="flex h-[44px] w-full items-center justify-center gap-1.5 rounded-[6px] bg-[#DFA655] text-[14px] font-bold text-white shadow-xs transition hover:bg-[#c89345] active:scale-95 cursor-pointer"
+                                className="flex h-[52px] w-full flex-col items-center justify-center rounded-xl border-2 border-dashed border-[#22C55E] bg-[#F0FDF4]/50 p-1 transition duration-200 hover:border-[#16A34A] hover:bg-[#DCFCE7]/70 active:scale-95 cursor-pointer shadow-xs"
                             >
-                                <span>{isRTL ? "طلب كاش" : "Cash Order"}</span>
+                                <div className="flex items-center gap-1 text-[11px] sm:text-[12px] font-bold text-[#15803D]">
+                                    <ShoppingCart size={13} strokeWidth={2.5} className="shrink-0" />
+                                    <span>{isRTL ? "طلب كاش مباشر" : "Direct Cash Order"}</span>
+                                </div>
+                                <div className="mt-0.5 text-[13px] sm:text-[14px] font-black text-[#15803D] leading-tight">
+                                    {displayCashText}
+                                </div>
                             </button>
 
+                            {/* Finance Request Button (Solid Red) */}
                             <button
                                 type="button"
                                 onClick={() => handleOpenOrder("finance")}
-                                className="flex h-[44px] w-full items-center justify-center gap-1.5 rounded-[6px] border border-[#172139] bg-[#172139] text-[14px] font-bold text-white transition hover:bg-[#202d4d] active:scale-95 cursor-pointer shadow-xs"
+                                className="flex h-[52px] w-full items-center justify-center rounded-xl bg-[#C01A24] px-3 text-[14px] sm:text-[15px] font-bold text-white shadow-xs transition duration-200 hover:bg-[#A3151E] active:scale-95 cursor-pointer"
                             >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="15"
-                                    height="15"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    className="lucide lucide-credit-card text-[#DDBB72]"
-                                    aria-hidden="true"
-                                >
-                                    <rect width="20" height="14" x="2" y="5" rx="2"></rect>
-                                    <line x1="2" x2="22" y1="10" y2="10"></line>
-                                </svg>
-                                <span>{isRTL ? "تمويل" : "Finance"}</span>
+                                <span>{isRTL ? "طلب تمويل" : "Finance Request"}</span>
                             </button>
                         </div>
                     </div>
