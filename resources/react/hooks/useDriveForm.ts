@@ -31,7 +31,7 @@ export function useDriveForm() {
 
     const { data: carsResponse, isLoading } = useQuery({
         queryKey: ["drive-cars", i18n.language],
-        queryFn: () => getCars(),
+        queryFn: () => getCars({ per_page: 500 }),
         staleTime: 5 * 60 * 1000,
     });
 

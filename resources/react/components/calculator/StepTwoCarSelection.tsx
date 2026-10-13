@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Check, Plus } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
@@ -8,6 +8,7 @@ import LazyImg from "../LazyImg";
 
 import { APP_IMAGES, getImageUrl } from "../../constants/app-images";
 import { useLanguageStore } from "../../store/language.store";
+import { localize } from "../../utils/localize";
 
 import type { CarItem } from "../../types/home.types";
 import type { IStepTwoCarSelectionProps } from "../../interfaces/IStepTwoCarSelectionProps";
@@ -26,6 +27,12 @@ export default function StepTwoCarSelection({
 
     const [activeId, setActiveId] = useState<number>(selectedCarId || 0);
     const [showModal, setShowModal] = useState(false);
+
+    useEffect(() => {
+        if (selectedCarId && selectedCarId !== activeId) {
+            setActiveId(selectedCarId);
+        }
+    }, [selectedCarId]);
 
     const activeCar = cars.find((car) => car.id === activeId) ?? null;
 
@@ -72,11 +79,11 @@ export default function StepTwoCarSelection({
                         <button
                             type="button"
                             onClick={() => setShowModal(true)}
-                            className="flex min-h-[72px] w-full items-center justify-between gap-4 border border-[#E7E0D4] bg-white px-5 text-start shadow-[0_6px_18px_rgba(48,58,84,0.04)] transition duration-300 hover:border-[var(--brand-primary-color)]"
+                            className="flex min-h-[76px] w-full items-center justify-between gap-4 border-2 border-dashed border-[#E7E0D4] bg-white px-5 text-start shadow-[0_6px_18px_rgba(48,58,84,0.04)] transition duration-300 hover:border-[var(--brand-primary-color)] hover:bg-[#FCFAF5]"
                         >
                             <div>
                                 <p className="text-[11px] text-[#737C8E]">
-                                    {t("financeCalculator.step2.otherCars")}
+                                    {t("financeCalculator.step2.selectCar")}
                                 </p>
                                 <p className="mt-1 text-[13px] font-bold text-[#20283A]">
                                     {t(
@@ -85,7 +92,7 @@ export default function StepTwoCarSelection({
                                 </p>
                             </div>
                             <span className="flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-[6px] bg-[var(--brand-primary-color)]/15 text-[var(--brand-primary-color)]">
-                                <Plus size={21} strokeWidth={1.8} />
+                                <Plus size={21} strokeWidth={2} />
                             </span>
                         </button>
                     )}
@@ -121,7 +128,8 @@ function SelectedCarRow({ car, onClick }: ISelectedCarRowProps) {
     const { i18n, t } = useTranslation();
 
     const image = getImageUrl(car.main_image) || APP_IMAGES.CAR_PLACEHOLDER;
-    const brand = typeof car.brand?.name === "string" ? car.brand.name : "";
+    const brand = localize(car.brand?.name, i18n.language);
+    const carName = localize(car.name, i18n.language);
 
     return (
         <button
@@ -132,12 +140,12 @@ function SelectedCarRow({ car, onClick }: ISelectedCarRowProps) {
             <div className="flex min-w-0 items-center gap-4">
                 <LazyImg
                     src={image}
-                    alt={car.name}
+                    alt={carName}
                     className="h-[52px] w-[78px] shrink-0 object-cover"
                 />
                 <div className="min-w-0">
                     <p className="truncate text-[13px] font-bold text-[#20283A]">
-                        {car.name}
+                        {carName}
                     </p>
                     <p className="mt-1 text-[10px] text-[#737C8E]">
                         {brand}

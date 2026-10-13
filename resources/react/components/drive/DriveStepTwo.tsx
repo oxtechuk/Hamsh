@@ -6,6 +6,7 @@ import CarSearchModal from "../calculator/CarSearchModal";
 import LazyImg from "../LazyImg";
 
 import { APP_IMAGES, getImageUrl } from "../../constants/app-images";
+import { localize } from "../../utils/localize";
 
 import type { IDriveStepTwoProps } from "../../interfaces/IDriveStepTwoProps";
 import type { ISelectedDriveCarProps } from "../../interfaces/ISelectedDriveCarProps";
@@ -129,11 +130,12 @@ export default function DriveStepTwo({
 }
 
 function SelectedDriveCar({ car, onClick }: ISelectedDriveCarProps) {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     const image = getImageUrl(car.main_image) || APP_IMAGES.CAR_PLACEHOLDER;
 
-    const brand = typeof car.brand?.name === "string" ? car.brand.name : "";
+    const brand = localize(car.brand?.name, i18n.language);
+    const carName = localize(car.name, i18n.language);
 
     return (
         <button
@@ -153,13 +155,13 @@ function SelectedDriveCar({ car, onClick }: ISelectedDriveCarProps) {
             <div className="flex min-w-0 items-center gap-4">
                 <LazyImg
                     src={image}
-                    alt={car.name}
+                    alt={carName}
                     className="h-[50px] w-[76px] shrink-0 object-cover"
                 />
 
                 <div className="min-w-0">
                     <p className="truncate text-[12px] font-extrabold text-[#20283A]">
-                        {car.name}
+                        {carName}
                     </p>
 
                     <p className="mt-1 text-[10px] text-[#737C8E]">

@@ -46,7 +46,7 @@ export default function FinanceCalculatorPage() {
 
   const { data: carsData, isLoading: carsLoading } = useQuery({
     queryKey: ["calculator-cars"],
-    queryFn: () => getCars(),
+    queryFn: () => getCars({ per_page: 500 }),
     staleTime: 5 * 60 * 1000,
   });
   const cars = carsData?.data ?? [];
