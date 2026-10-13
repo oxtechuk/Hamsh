@@ -133,6 +133,61 @@ class BookingTest extends TestCase
         $this->assertEquals('finance', $response->json('data.booking_type'));
     }
 
+    public function test_it_creates_a_finance_booking_from_calculator_lead(): void
+    {
+        $car = $this->createCar();
+
+        $payload = [
+            'name' => 'محمد عبدالله',
+            'phone' => '0551234567',
+            'email' => 'mohammed@example.com',
+            'city' => 'الرياض',
+            'salary' => 12000,
+            'monthly_obligations' => 2000,
+            'car_ids' => [$car->id],
+            'down_payment' => 15000,
+            'period_months' => 48,
+            'monthly_payment' => 2850,
+            'car_price' => 125000,
+            'annual_rate' => 3.5,
+            'notes' => 'أرغب بالتمويل بدون كفيل',
+        ];
+
+        $response = $this->postJson(route('store.api.calculator.lead'), $payload);
+
+        $response->assertStatus(201);
+        $response->assertJsonStructure([
+            'success',
+            'message',
+            'data' => ['lead_id'],
+        ]);
+
+        $this->assertDatabaseHas('bookings', [
+            'client_name' => 'محمد عبدالله',
+            'client_phone' => '0551234567',
+            'car_id' => $car->id,
+            'city' => 'الرياض',
+            'booking_type' => 'finance',
+            'status' => 'new',
+            'source' => 'finance_calculator',
+            'down_payment' => 15000,
+            'monthly_installment' => 2850,
+            'salary_range' => '12000',
+        ]);
+
+        $this->assertDatabaseHas('calculator_leads', [
+            'name' => 'محمد عبدالله',
+            'phone' => '0551234567',
+            'car_id' => $car->id,
+        ]);
+
+        $this->assertDatabaseHas('leads', [
+            'client_name' => 'محمد عبدالله',
+            'client_phone' => '0551234567',
+            'status' => 'new',
+        ]);
+    }
+
     public function test_booking_requires_car_id_and_client_details(): void
     {
         $response = $this->postJson(route('store.api.booking.store'), []);

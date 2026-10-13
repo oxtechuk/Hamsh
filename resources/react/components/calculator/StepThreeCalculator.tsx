@@ -81,6 +81,11 @@ export default function StepThreeCalculator({
                 salary: Number(personalInfo.salary) || 0,
                 city: personalInfo.city,
                 monthly_obligations: Number(personalInfo.obligations) || 0,
+                down_payment: downPayment,
+                period_months: term,
+                monthly_payment: monthlyPayment,
+                car_price: carPrice,
+                annual_rate: annualRate,
             });
             toast.success(t("financeCalculator.step3.successToast"));
             onSuccess();

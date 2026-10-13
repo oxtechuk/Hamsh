@@ -33,7 +33,7 @@ class Booking extends Model
     const BOOKING_TYPES_LABELS = [
         'test_drive' => 'تجربة قيادة',
         'purchase' => 'شراء كاش',
-        'finance' => 'تمويل',
+        'finance' => 'طلب تمويل',
         'inquiry' => 'استفسار',
     ];
 
