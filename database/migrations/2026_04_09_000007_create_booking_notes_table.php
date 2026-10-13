@@ -13,7 +13,7 @@ return new class extends Migration
             $table->foreignId('booking_id')->constrained('bookings')->onDelete('cascade');
             $table->foreignId('employee_id')->nullable()->constrained('employees')->onDelete('set null');
             $table->text('note');
-            $table->enum('type', ['note', 'call', 'status_change'])->default('note');
+            $table->string('type', 50)->default('note');
             $table->string('old_status')->nullable(); // للـ status_change
             $table->string('new_status')->nullable(); // للـ status_change
             $table->timestamps();
