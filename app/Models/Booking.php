@@ -300,12 +300,24 @@ class Booking extends Model
 
         $cashPrice = (float) ($this->car?->cash_price ?: ($this->total_price ?: 0));
         $downPayment = (float) ($this->down_payment ?? 0);
-        $lastPayment = (float) ($this->last_payment ?? 0);
+
+        $lastPaymentEnabledSetting = Setting::where('key', 'finance_enable_last_payment')->value('value');
+        $lastPaymentEnabled = $lastPaymentEnabledSetting !== null ? (bool) $lastPaymentEnabledSetting : true;
+        $defaultLastPaymentPct = (float) (Setting::where('key', 'finance_default_last_payment_pct')->value('value') ?? 20);
+
+        if ($this->last_payment !== null && (float) $this->last_payment > 0) {
+            $lastPayment = (float) $this->last_payment;
+        } elseif ($this->booking_type === 'finance' && $lastPaymentEnabled && $cashPrice > 0) {
+            $lastPayment = round($cashPrice * ($defaultLastPaymentPct / 100));
+        } else {
+            $lastPayment = (float) ($this->last_payment ?? 0);
+        }
+
         $durationYears = (int) ($this->duration_years ?: 5);
         $totalMonths = max(1, $durationYears * 12);
         $principal = max(0, $cashPrice - $downPayment);
 
-        if ($this->monthly_installment > 0) {
+        if ($this->monthly_installment > 0 && $this->last_payment !== null) {
             $monthlyInstallment = (float) $this->monthly_installment;
         } elseif ($principal > 0 && $totalMonths > 0) {
             $monthlyRate = ($annualRate / 100) / 12;
@@ -316,7 +328,7 @@ class Booking extends Model
                 $monthlyInstallment = round(($principal - $lastPayment) / $totalMonths);
             }
         } else {
-            $monthlyInstallment = 0;
+            $monthlyInstallment = (float) ($this->monthly_installment ?: 0);
         }
 
         $totalPayments = $monthlyInstallment * $totalMonths;

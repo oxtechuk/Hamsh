@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Api\Store\Data;
 
 use App\Models\Booking;
+use App\Models\Setting;
 use App\Services\Api\Store\Helpers\InstallmentCalculator;
 use App\Services\Tracking\AttributionResolverService;
 use App\Services\Tracking\FraudDetectionService;
@@ -54,28 +55,42 @@ final class BookingData
         $fraud = app(FraudDetectionService::class)->inspect($validated, request()->ip());
 
         if ($carId && $cashPrice !== null) {
-            // Type 2: Direct purchase — calculate installment
+            // Type 2: Direct purchase or finance — calculate installment
             $interestRate = isset($validated['interest_rate']) && $validated['interest_rate'] > 0
                 ? (float) $validated['interest_rate']
                 : (float) Booking::getDefaultInterestRate();
 
-            $principal = max(0, $cashPrice - (float) $validated['down_payment']);
-            $totalMonths = (int) ($validated['duration_years'] ?? 1) * 12;
+            $bookingType = $validated['booking_type'] ?? 'purchase';
+            $isFinance = $bookingType === 'finance';
+
+            $downPayment = (float) ($validated['down_payment'] ?? 0);
+            $principal = max(0, $cashPrice - $downPayment);
+            $durationYears = (int) ($validated['duration_years'] ?? ($isFinance ? 5 : 1));
+            $totalMonths = max(1, $durationYears * 12);
+
+            if (isset($validated['last_payment']) && is_numeric($validated['last_payment'])) {
+                $lastPayment = (float) $validated['last_payment'];
+            } elseif ($isFinance) {
+                $defaultLastPaymentPct = (float) (Setting::where('key', 'finance_default_last_payment_pct')->value('value') ?? 20);
+                $lastPayment = round($cashPrice * ($defaultLastPaymentPct / 100));
+            } else {
+                $lastPayment = null;
+            }
 
             $calculator = new InstallmentCalculator;
-            $monthly = $calculator->calculate($principal, $totalMonths, $interestRate);
+            $monthly = $calculator->calculate($principal, $totalMonths, $interestRate, (float) ($lastPayment ?? 0));
 
             return new self(
                 car_id: (int) $carId,
                 client_name: $validated['client_name'],
                 client_phone: $validated['client_phone'],
-                down_payment: (float) $validated['down_payment'],
-                duration_years: (int) ($validated['duration_years'] ?? 1),
+                down_payment: $downPayment,
+                duration_years: $durationYears,
                 interest_rate: $interestRate,
                 monthly_installment: (int) round($monthly),
-                total_price: (int) round($monthly * $totalMonths + (float) $validated['down_payment']),
-                last_payment: isset($validated['last_payment']) ? (float) $validated['last_payment'] : null,
-                booking_type: $validated['booking_type'] ?? 'purchase',
+                total_price: (int) round($monthly * $totalMonths + $downPayment + (float) ($lastPayment ?? 0)),
+                last_payment: $lastPayment,
+                booking_type: $bookingType,
                 location: $validated['location'] ?? null,
                 client_email: $validated['client_email'] ?? null,
                 notes: $validated['notes'] ?? null,

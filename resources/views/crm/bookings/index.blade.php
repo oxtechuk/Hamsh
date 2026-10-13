@@ -332,6 +332,13 @@
                                                 </span>
                                                 <span class="text-muted text-truncate" style="font-size:10px;max-width:95px;" title="{{ $fin['bank_name'] }}">({{ $fin['bank_name'] }})</span>
                                             </div>
+                                            @if(($fin['last_payment'] ?? 0) > 0)
+                                                <div class="text-muted" style="font-size:10px;">
+                                                    <span>{{ __('الدفعة الأخيرة:') }}</span>
+                                                    <span class="fw-bold" style="color:#4338CA;">{{ number_format($fin['last_payment']) }}</span>
+                                                    <span>ر.س</span>
+                                                </div>
+                                            @endif
                                             <div class="text-muted" style="font-size:10px;">
                                                 <span>{{ __('الإجمالي:') }}</span>
                                                 <span class="fw-semibold text-dark">{{ number_format($fin['total_financed']) }}</span>
@@ -557,6 +564,13 @@
                             <div>
                                 @if($bTypeM === 'finance')
                                     <span class="fw-bold" style="color:#4338CA;">{{ number_format($finM['monthly_installment']) }} <small>{!! __('ر.س/ش') !!}</small></span>
+                                    @if(($finM['last_payment'] ?? 0) > 0)
+                                        <div class="text-muted" style="font-size:10px;">
+                                            <span>{{ __('دفعة أخيرة:') }}</span>
+                                            <span class="fw-bold" style="color:#4338CA;">{{ number_format($finM['last_payment']) }}</span>
+                                            <span>ر.س</span>
+                                        </div>
+                                    @endif
                                 @else
                                     <span class="fw-bold text-success">{{ number_format($finM['cash_price']) }} <small>{!! __('ر.س') !!}</small></span>
                                 @endif

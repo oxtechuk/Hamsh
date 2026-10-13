@@ -28,6 +28,8 @@ export interface ICarOrderFormData {
   workSector: string;
   obligations: string;
   obligationType: ObligationType;
+  downPayment?: string;
+  lastPaymentPercent?: number;
   otpCode?: string;
   otpVerified?: boolean;
   consolidateDebts?: boolean;

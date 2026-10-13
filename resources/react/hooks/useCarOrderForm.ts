@@ -152,6 +152,34 @@ export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash"
         }
     };
 
+    // Financial calculation for vehicle
+    const cashPrice = Number(car.current_price || car.cash_price || 0);
+    const lastPaymentEnabled = calcSettings?.last_payment_enabled ?? true;
+    const defaultLastPaymentPct = calcSettings?.default_last_payment_pct ?? 20;
+    const maxLastPaymentPct = calcSettings?.max_last_payment_pct ?? 35;
+
+    const currentLastPaymentPct = form.lastPaymentPercent !== undefined
+        ? form.lastPaymentPercent
+        : defaultLastPaymentPct;
+
+    const lastPaymentAmount = lastPaymentEnabled
+        ? Math.round(cashPrice * (currentLastPaymentPct / 100))
+        : 0;
+
+    const downPaymentAmount = parseNumericValue(form.downPayment || 0);
+    const principal = Math.max(0, cashPrice - downPaymentAmount);
+
+    const termMonths = 60; // 5 years
+    const annualRate = 3.5;
+    const monthlyRate = (annualRate / 100) / 12;
+    const factor = Math.pow(1 + monthlyRate, termMonths);
+
+    const estimatedMonthlyInstallment = useMemo(() => {
+        if (principal <= 0) return 0;
+        if (monthlyRate <= 0) return Math.round((principal - lastPaymentAmount) / termMonths);
+        return Math.max(0, Math.round(((principal * factor - lastPaymentAmount) * monthlyRate) / (factor - 1)));
+    }, [principal, lastPaymentAmount, monthlyRate, factor, termMonths]);
+
     // Calculate DBR and Acceptance Score based on dynamic limits from settings
     const dbrAnalysis = useMemo(() => {
         const salary = parseNumericValue(form.salary);
@@ -185,7 +213,9 @@ export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash"
             };
         }
 
-        const actualDeductionPct = Math.round((obligations / salary) * 100);
+        // Total monthly deduction includes existing obligations + estimated installment for finance
+        const totalDeduction = obligations + (mode === "finance" ? (estimatedMonthlyInstallment || 0) : 0);
+        const actualDeductionPct = Math.round((totalDeduction / salary) * 100);
         const isExceeded = actualDeductionPct > maxLimit;
 
         if (isExceeded) {
@@ -244,7 +274,7 @@ export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash"
             barColor: "#16A34A",
             status: "good_dbr",
         };
-    }, [form.salary, form.obligations, form.obligationType, calcSettings, generalSettings]);
+    }, [form.salary, form.obligations, form.obligationType, mode, estimatedMonthlyInstallment, calcSettings, generalSettings]);
 
     const canSubmitCash = Boolean(
         form.fullName.trim() &&
@@ -288,6 +318,9 @@ export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash"
                 form.workSector ? `جهة العمل: ${form.workSector}` : "",
                 `طبيعة الالتزامات: ${obligationTypeLabel}`,
                 form.obligations ? `قيمة الالتزامات: ${form.obligations} ر.س` : "",
+                mode === "finance" && lastPaymentAmount > 0 ? `الدفعة الأخيرة: ${lastPaymentAmount} ر.س (${currentLastPaymentPct}%)` : "",
+                mode === "finance" && downPaymentAmount > 0 ? `الدفعة الأولى: ${downPaymentAmount} ر.س` : "",
+                mode === "finance" && estimatedMonthlyInstallment > 0 ? `القسط التقديري: ${estimatedMonthlyInstallment} ر.س/شهر (60 شهر)` : "",
                 `نسبة الاستقطاع الفعلية: ${dbrAnalysis.actualDeductionPct}% (الحد الأقصى: ${dbrAnalysis.maxLimit}%)`,
                 form.consolidateDebts ? `يرغب في الاستفادة من خيار: ${dbrAnalysis.debtSolutionText}` : "",
             ]
@@ -300,7 +333,9 @@ export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash"
                 client_email: form.email || undefined,
                 city: form.city || "الرياض",
                 car_id: car.id,
-                down_payment: 0,
+                down_payment: downPaymentAmount,
+                last_payment: mode === "finance" ? lastPaymentAmount : null,
+                duration_years: mode === "finance" ? 5 : 1,
                 booking_type: mode === "finance" ? "finance" : "purchase",
                 notes,
             });
@@ -311,6 +346,18 @@ export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash"
         } finally {
             setSubmitting(false);
         }
+    };
+
+    const financeDetails = {
+        cashPrice,
+        lastPaymentEnabled,
+        defaultLastPaymentPct,
+        maxLastPaymentPct,
+        currentLastPaymentPct,
+        lastPaymentAmount,
+        downPaymentAmount,
+        estimatedMonthlyInstallment,
+        termMonths,
     };
 
     return {
@@ -333,6 +380,7 @@ export function useCarOrderForm(car: CarDetails, initialMode: "finance" | "cash"
         canSubmitCash,
         canSubmitFinance,
         dbrAnalysis,
+        financeDetails,
         handleFormSubmit,
     };
 }

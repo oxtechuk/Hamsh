@@ -6,7 +6,7 @@ namespace App\Services\Api\Store\Helpers;
 
 final class InstallmentCalculator
 {
-    public function calculate(float $principal, int $totalMonths, float $annualRate): float
+    public function calculate(float $principal, int $totalMonths, float $annualRate, float $lastPayment = 0.0): float
     {
         if ($totalMonths <= 0) {
             return 0;
@@ -15,11 +15,11 @@ final class InstallmentCalculator
         $monthlyRate = ($annualRate / 100) / 12;
 
         if ($monthlyRate <= 0) {
-            return $principal / $totalMonths;
+            return max(0, ($principal - $lastPayment) / $totalMonths);
         }
 
         $factor = pow(1 + $monthlyRate, $totalMonths);
 
-        return $principal * ($monthlyRate * $factor) / ($factor - 1);
+        return max(0, (($principal * $factor - $lastPayment) * $monthlyRate) / ($factor - 1));
     }
 }
