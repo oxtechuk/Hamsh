@@ -213,4 +213,44 @@ class CrmBookingManagementTest extends TestCase
         $this->assertGreaterThan(0, $imported->monthly_installment);
         $this->assertEquals(3.5, $imported->interest_rate);
     }
+
+    public function test_booking_assignment_creates_note_with_assignment_type(): void
+    {
+        $assignee = Employee::create([
+            'name' => 'موسى الحقوي',
+            'username' => 'musa_test',
+            'email' => 'musa@test.com',
+            'password' => 'Password123!',
+            'role' => 'sales',
+            'is_active' => true,
+        ]);
+
+        $booking = Booking::create([
+            'client_name' => 'عميل توزيع تجريبي',
+            'client_phone' => '0555551234',
+            'booking_type' => 'finance',
+            'status' => 'new',
+        ]);
+
+        $response = $this->actingAs($this->employee, 'employee')
+            ->patch(route('crm.bookings.assign', $booking), [
+                'employee_id' => $assignee->id,
+            ]);
+
+        $response->assertRedirect();
+        $response->assertSessionHas('success');
+
+        $this->assertDatabaseHas('bookings', [
+            'id' => $booking->id,
+            'assigned_to' => $assignee->id,
+        ]);
+
+        $this->assertDatabaseHas('booking_notes', [
+            'booking_id' => $booking->id,
+            'type' => 'assignment',
+        ]);
+
+        $activity = $booking->fresh()->getLastActivity();
+        $this->assertEquals('توزيع الطلب', $activity['action']);
+    }
 }
