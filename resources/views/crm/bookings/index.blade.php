@@ -217,15 +217,14 @@
                     <thead>
                         <tr>
                             <th class="px-3" style="width:75px;">{{ __('رقم الطلب') }}</th>
-                            <th style="min-width:175px;">{{ __('العميل') }}</th>
-                            <th class="text-center" style="width:115px;">{{ __('نوع الطلب') }}</th>
-                            <th style="min-width:170px;">{{ __('السيارة المطلوبة') }}</th>
-                            <th style="min-width:195px;">{{ __('التفاصيل المالية') }}</th>
-                            <th style="min-width:155px;">{{ __('المسؤول') }}</th>
-                            <th style="width:110px;">{{ __('تاريخ الطلب') }}</th>
-                            <th style="width:105px;">{{ __('آخر تعديل') }}</th>
+                            <th style="min-width:170px;">{{ __('العميل') }}</th>
+                            <th class="text-center" style="width:110px;">{{ __('نوع الطلب') }}</th>
+                            <th style="min-width:160px;">{{ __('السيارة المطلوبة') }}</th>
+                            <th style="min-width:145px;">{{ __('التفاصيل المالية') }}</th>
+                            <th style="min-width:145px;">{{ __('المسؤول') }}</th>
+                            <th style="min-width:145px;">{{ __('تاريخ ونشاط الطلب') }}</th>
                             <th style="width:115px;">{{ __('الحالة') }}</th>
-                            <th class="text-center" style="width:110px;">{{ __('إجراءات') }}</th>
+                            <th class="text-center" style="width:105px;">{{ __('إجراءات') }}</th>
                         </tr>
                     </thead>
                     <tbody class="border-top-0">
@@ -321,50 +320,44 @@
                                     @php
                                         $fin = $b->getFinanceDetails();
                                     @endphp
-                                    <div class="finance-pill">
-                                        @if($bType === 'finance')
-                                            <div class="d-flex align-items-baseline justify-content-between gap-2" style="white-space:nowrap;">
-                                                <span class="text-muted" style="font-size:11px;">{{ __('القسط:') }}</span>
-                                                <div>
-                                                    <span class="fw-bold" style="color:#4338CA;font-size:13px;">{{ number_format($fin['monthly_installment']) }}</span>
-                                                    <small class="text-muted" style="font-size:10px;">{{ __('ر.س/ش') }}</small>
-                                                </div>
+                                    @if($bType === 'finance')
+                                        <div style="line-height:1.35;white-space:nowrap;">
+                                            <div>
+                                                <span class="fw-bold" style="color:#4338CA;font-size:13px;">{{ number_format($fin['monthly_installment']) }}</span>
+                                                <span class="text-muted" style="font-size:10px;">ر.س/ش</span>
                                             </div>
-                                            <div class="d-flex align-items-center justify-content-between gap-1 my-0.5" style="white-space:nowrap;">
-                                                <span class="text-muted" style="font-size:10px;">{{ __('فائدة:') }}</span>
-                                                <span class="badge px-1.5 py-0 rounded-1" style="background:#ECFDF5;color:#047857;border:1px solid #A7F3D0;font-size:10px;font-weight:700;">
-                                                    %{{ number_format($fin['annual_rate'], 1) }} ({{ $fin['bank_name'] }})
+                                            <div class="d-flex align-items-center gap-1 my-0.5">
+                                                <span class="badge px-1 py-0 rounded-1" style="background:#ECFDF5;color:#047857;border:1px solid #A7F3D0;font-size:9.5px;font-weight:700;">
+                                                    %{{ number_format($fin['annual_rate'], 1) }}
                                                 </span>
+                                                <span class="text-muted text-truncate" style="font-size:10px;max-width:95px;" title="{{ $fin['bank_name'] }}">({{ $fin['bank_name'] }})</span>
                                             </div>
-                                            <div class="d-flex align-items-baseline justify-content-between gap-2 text-muted" style="font-size:11px;white-space:nowrap;">
+                                            <div class="text-muted" style="font-size:10px;">
                                                 <span>{{ __('الإجمالي:') }}</span>
-                                                <span class="fw-semibold text-dark" style="font-size:11px;">
-                                                    {{ number_format($fin['total_financed']) }} <small class="text-muted" style="font-size:9px;">{{ __('ر.س') }}</small>
-                                                </span>
+                                                <span class="fw-semibold text-dark">{{ number_format($fin['total_financed']) }}</span>
+                                                <span>ر.س</span>
                                             </div>
-                                        @else
-                                            <div class="d-flex align-items-baseline justify-content-between gap-2" style="white-space:nowrap;">
-                                                <span class="text-muted" style="font-size:11px;">{{ __('السعر:') }}</span>
-                                                <div>
-                                                    <span class="fw-bold text-success" style="font-size:13px;">{{ number_format($fin['cash_price']) }}</span>
-                                                    <small class="text-muted" style="font-size:10px;">{{ __('ر.س') }}</small>
-                                                </div>
+                                        </div>
+                                    @else
+                                        <div style="line-height:1.35;white-space:nowrap;">
+                                            <div>
+                                                <span class="fw-bold text-success" style="font-size:13px;">{{ number_format($fin['cash_price']) }}</span>
+                                                <span class="text-muted" style="font-size:10px;">ر.س</span>
                                             </div>
-                                            <div class="my-0.5" style="white-space:nowrap;">
+                                            <div class="my-0.5">
                                                 <span class="badge px-1.5 py-0 rounded-1" style="background:#F0FDF4;color:#16A34A;border:1px solid #BBF7D0;font-size:10px;font-weight:600;">
-                                                    <i class="bi bi-cash-stack me-1"></i>{{ __('شراء نقدي') }}
+                                                    {{ __('شراء نقدي') }}
                                                 </span>
                                             </div>
                                             @if($fin['down_payment'] > 0)
-                                                <div class="d-flex align-items-baseline justify-content-between gap-2 text-muted" style="font-size:11px;white-space:nowrap;">
-                                                    <span>{{ __('المدفوع:') }}</span>
-                                                    <span class="fw-semibold text-dark" style="font-size:11px;">
-                                                        {{ number_format($fin['down_payment']) }} <small class="text-muted" style="font-size:9px;">{{ __('ر.س') }}</small>
-                                                    </span>
+                                                <div class="text-muted" style="font-size:10px;">
+                                                    <span>{{ __('الدفعة:') }}</span>
+                                                    <span class="fw-semibold text-dark">{{ number_format($fin['down_payment']) }}</span>
+                                                    <span>ر.س</span>
                                                 </div>
                                             @endif
-                                        @endif
-                                    </div>
+                                        </div>
+                                    @endif
                                 </td>
 
                                 {{-- المسؤول --}}
@@ -400,17 +393,26 @@
                                     </form>
                                 </td>
 
-                                {{-- تاريخ الطلب --}}
+                                {{-- تاريخ ونشاط الطلب --}}
                                 <td style="white-space:nowrap;">
-                                    <div class="fw-semibold text-dark" style="font-size:12px;">{{ $b->created_at->format('d/m/Y') }}</div>
-                                    <small class="text-muted" style="font-size:11px;">{{ $b->created_at->format('h:i A') }}</small>
-                                </td>
-
-                                {{-- آخر تعديل --}}
-                                <td style="white-space:nowrap;">
-                                    <span class="badge bg-light text-muted border px-2 py-1" style="font-size:11px;font-weight:500;" title="{{ $b->updated_at->format('d/m/Y H:i') }}">
-                                        <i class="bi bi-clock-history me-1 text-secondary"></i>{{ $b->updated_at->diffForHumans() }}
-                                    </span>
+                                    @php
+                                        $act = $b->getLastActivity();
+                                    @endphp
+                                    <div class="fw-semibold text-dark" style="font-size:12px;">
+                                        {{ $b->created_at->format('d/m/Y') }}
+                                        <small class="text-muted fw-normal" style="font-size:10px;">{{ $b->created_at->format('h:i A') }}</small>
+                                    </div>
+                                    <div class="mt-1 d-flex align-items-center gap-1" title="{{ $act['action'] }}{{ $act['by'] ? ' (بواسطة ' . $act['by'] . ')' : '' }}">
+                                        <span class="badge bg-light text-secondary border px-1.5 py-0.5 d-inline-flex align-items-center gap-1" style="font-size:10px;font-weight:600;">
+                                            <i class="bi bi-clock-history text-primary" style="font-size:9px;"></i>
+                                            <span>{{ $act['time_ago'] }}</span>
+                                        </span>
+                                        @if($act['action'])
+                                            <span class="text-muted text-truncate" style="font-size:10px;max-width:125px;" title="{{ $act['note'] ?: $act['action'] }}">
+                                                {{ $act['action'] }}
+                                            </span>
+                                        @endif
+                                    </div>
                                 </td>
 
                                 {{-- الحالة --}}
@@ -464,7 +466,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="10" class="text-center text-muted py-5">
+                                <td colspan="9" class="text-center text-muted py-5">
                                     <i class="bi bi-inbox fs-1 d-block mb-2 opacity-25"></i>
                                     {{ __('لا توجد طلبات حالياً') }}
                                 </td>

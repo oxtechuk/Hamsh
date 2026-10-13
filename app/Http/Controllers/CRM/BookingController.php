@@ -18,7 +18,7 @@ class BookingController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Booking::with(['car.brand', 'employee'])->latest();
+        $query = Booking::with(['car.brand', 'employee', 'latestNote.employee'])->latest();
 
         // فلترة بالحالة
         if ($request->filled('status')) {
@@ -266,12 +266,21 @@ class BookingController extends Controller
     public function assign(Request $request, Booking $booking)
     {
         $request->validate(['employee_id' => 'required|exists:employees,id']);
+        $oldEmp = $booking->assignedTo?->name;
         $booking->update(['assigned_to' => $request->employee_id]);
+        $newEmp = Employee::find($request->employee_id);
+
+        BookingNote::create([
+            'booking_id' => $booking->id,
+            'employee_id' => auth('employee')->id(),
+            'note' => 'تم تعيين الطلب إلى: '.($newEmp?->name ?? 'غير محدد').($oldEmp ? ' (سابقاً: '.$oldEmp.')' : ''),
+            'type' => 'assignment',
+        ]);
+        $booking->touch();
 
         // Notify the assigned employee
-        $employee = Employee::find($request->employee_id);
-        if ($employee) {
-            $employee->notify(new NewBookingNotification($booking, __('طلب جديد'), __('تم تعيين طلب جديد لك للعميل').' '.$booking->client_name));
+        if ($newEmp) {
+            $newEmp->notify(new NewBookingNotification($booking, __('طلب جديد'), __('تم تعيين طلب جديد لك للعميل').' '.$booking->client_name));
         }
 
         return back()->with('success', 'تم توزيع الطلب على الموظف');
@@ -286,6 +295,7 @@ class BookingController extends Controller
             'note' => $request->note,
             'type' => $request->type ?? 'note',
         ]);
+        $booking->touch();
 
         return back()->with('success', 'تمت إضافة الملاحظة');
     }
@@ -299,13 +309,22 @@ class BookingController extends Controller
 
         $file = $request->file('file');
         $path = $file->store('booking_documents', 'public');
+        $docTitle = $request->title ?? $file->getClientOriginalName();
 
         $booking->documents()->create([
             'employee_id' => auth('employee')->id(),
-            'title' => $request->title ?? $file->getClientOriginalName(),
+            'title' => $docTitle,
             'file_path' => $path,
             'file_type' => $file->getClientOriginalExtension(),
         ]);
+
+        BookingNote::create([
+            'booking_id' => $booking->id,
+            'employee_id' => auth('employee')->id(),
+            'note' => 'تم رفع مستند: '.$docTitle,
+            'type' => 'document',
+        ]);
+        $booking->touch();
 
         return back()->with('success', 'تم رفع المستند بنجاح');
     }

@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Str;
 
 class Booking extends Model
 {
@@ -106,6 +108,43 @@ class Booking extends Model
     public function notes_list(): HasMany
     {
         return $this->hasMany(BookingNote::class)->latest();
+    }
+
+    public function latestNote(): HasOne
+    {
+        return $this->hasOne(BookingNote::class)->latestOfMany();
+    }
+
+    public function getLastActivity(): array
+    {
+        $latestNote = $this->relationLoaded('latestNote') ? $this->latestNote : $this->latestNote()->with('employee')->first();
+
+        $bookingUpdated = $this->updated_at ?? $this->created_at;
+        $noteDate = $latestNote?->created_at;
+
+        if ($noteDate && $noteDate >= $bookingUpdated) {
+            $date = $noteDate;
+            $by = $latestNote->employee?->name;
+            $action = match ($latestNote->type) {
+                'status_change' => 'تغيير الحالة',
+                'call' => 'تسجيل اتصال',
+                'document' => 'رفع مستند',
+                'assignment' => 'توزيع الطلب',
+                default => 'ملاحظة'.($latestNote->note ? ': '.Str::limit($latestNote->note, 30) : ''),
+            };
+        } else {
+            $date = $bookingUpdated;
+            $by = $this->employee?->name;
+            $action = 'تحديث الطلب';
+        }
+
+        return [
+            'date' => $date,
+            'time_ago' => $date->diffForHumans(),
+            'action' => $action,
+            'by' => $by,
+            'note' => $latestNote?->note,
+        ];
     }
 
     public function documents(): HasMany
