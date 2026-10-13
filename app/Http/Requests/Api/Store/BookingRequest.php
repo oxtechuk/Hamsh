@@ -24,6 +24,7 @@ final class BookingRequest extends ApiBaseRequest
             // Type 2: Direct purchase (car selected)
             $rules['car_id'] = ['required', 'exists:cars,id'];
             $rules['down_payment'] = ['required', 'integer', 'min:0'];
+            $rules['last_payment'] = ['nullable', 'numeric', 'min:0'];
             $rules['duration_years'] = ['nullable', 'integer', 'min:1', 'max:10'];
             $rules['interest_rate'] = ['nullable', 'numeric', 'min:0', 'max:50'];
         } else {
@@ -35,6 +36,7 @@ final class BookingRequest extends ApiBaseRequest
             $rules['preferred_color'] = ['nullable', 'string', 'max:100'];
             $rules['salary_range'] = ['nullable', 'string', 'max:100'];
             $rules['down_payment'] = ['nullable', 'integer', 'min:0'];
+            $rules['last_payment'] = ['nullable', 'numeric', 'min:0'];
             $rules['duration_years'] = ['nullable', 'integer', 'min:1', 'max:10'];
             $rules['interest_rate'] = ['nullable', 'numeric', 'min:0', 'max:50'];
         }
