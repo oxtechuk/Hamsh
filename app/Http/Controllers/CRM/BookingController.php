@@ -104,9 +104,9 @@ class BookingController extends Controller
         $principal = max(0, $cashPrice - $downPayment);
 
         $lastPayment = $request->filled('last_payment') ? (float) $request->last_payment : null;
-        if ($lastPayment === null && $request->booking_type === 'finance' && $cashPrice > 0) {
+        if ($lastPayment === null && $request->booking_type === 'finance' && $principal > 0) {
             $defaultLastPaymentPct = (float) (Setting::where('key', 'finance_default_last_payment_pct')->value('value') ?? 45);
-            $lastPayment = round($cashPrice * ($defaultLastPaymentPct / 100));
+            $lastPayment = round($principal * ($defaultLastPaymentPct / 100));
         }
 
         $monthlyInstallment = (float) ($request->monthly_installment ?? 0);

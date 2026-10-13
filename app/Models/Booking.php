@@ -301,21 +301,21 @@ class Booking extends Model
         $cashPrice = (float) ($this->car?->cash_price ?: ($this->total_price ?: 0));
         $downPayment = (float) ($this->down_payment ?? 0);
 
+        $durationYears = (int) ($this->duration_years ?: 5);
+        $totalMonths = max(1, $durationYears * 12);
+        $principal = max(0, $cashPrice - $downPayment);
+
         $lastPaymentEnabledSetting = Setting::where('key', 'finance_enable_last_payment')->value('value');
         $lastPaymentEnabled = $lastPaymentEnabledSetting !== null ? (bool) $lastPaymentEnabledSetting : true;
         $defaultLastPaymentPct = (float) (Setting::where('key', 'finance_default_last_payment_pct')->value('value') ?? 45);
 
         if ($this->last_payment !== null && (float) $this->last_payment > 0) {
             $lastPayment = (float) $this->last_payment;
-        } elseif ($this->booking_type === 'finance' && $lastPaymentEnabled && $cashPrice > 0) {
-            $lastPayment = round($cashPrice * ($defaultLastPaymentPct / 100));
+        } elseif ($this->booking_type === 'finance' && $lastPaymentEnabled && $principal > 0) {
+            $lastPayment = round($principal * ($defaultLastPaymentPct / 100));
         } else {
             $lastPayment = (float) ($this->last_payment ?? 0);
         }
-
-        $durationYears = (int) ($this->duration_years ?: 5);
-        $totalMonths = max(1, $durationYears * 12);
-        $principal = max(0, $cashPrice - $downPayment);
 
         $durationYearsFloat = $totalMonths / 12;
         $calculatedInterest = round($principal * ($annualRate / 100) * $durationYearsFloat);

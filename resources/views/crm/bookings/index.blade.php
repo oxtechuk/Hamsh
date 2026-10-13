@@ -932,12 +932,18 @@
                 carSelect.addEventListener('change', function () {
                     const selectedOption = this.options[this.selectedIndex];
                     if (selectedOption.value) {
-                        const price = selectedOption.getAttribute('data-price');
+                        const price = parseFloat(selectedOption.getAttribute('data-price')) || 0;
                         if (priceInput) priceInput.value = price || '';
+                        const down = parseFloat(downPaymentInput ? downPaymentInput.value : 0) || 0;
+                        const principal = Math.max(0, price - down);
+                        if (lastPaymentInput && (!lastPaymentInput.value || parseFloat(lastPaymentInput.value) === 0)) {
+                            lastPaymentInput.value = Math.round(principal * 0.45);
+                        }
                         calculateInstallment();
                     } else {
                         if (priceInput) priceInput.value = '';
                         if (installmentInput) installmentInput.value = '';
+                        if (lastPaymentInput) lastPaymentInput.value = '';
                     }
                 });
             }

@@ -35,9 +35,11 @@ final class CalculatorApiService
             ? (float) $data['car_price']
             : (float) ($car?->current_price ?? $car?->cash_price ?? 0);
 
+        $principal = max(0, $carPrice - $downPayment);
+
         $lastPayment = isset($data['last_payment']) && (float) $data['last_payment'] > 0
             ? (float) $data['last_payment']
-            : (isset($data['last_payment_percentage']) ? round($carPrice * (float) $data['last_payment_percentage'] / 100) : 0.0);
+            : (isset($data['last_payment_percentage']) ? round($principal * (float) $data['last_payment_percentage'] / 100) : 0.0);
 
         $annualRate = isset($data['annual_rate']) && (float) $data['annual_rate'] > 0
             ? (float) $data['annual_rate']
@@ -191,8 +193,8 @@ final class CalculatorApiService
 
         $carPrice = (float) ($car->current_price ?? $car->cash_price);
         $downPaymentAmount = round($carPrice * $downPaymentPct / 100);
-        $lastPaymentAmount = round($carPrice * $lastPaymentPct / 100);
         $principal = max(0, $carPrice - $downPaymentAmount);
+        $lastPaymentAmount = round($principal * $lastPaymentPct / 100);
         $annualRate = (float) $bank->annual_rate;
         $durationYears = $periodMonths > 0 ? ($periodMonths / 12) : 1;
         $totalInterest = round($principal * ($annualRate / 100) * $durationYears);

@@ -222,10 +222,10 @@ class BookingTest extends TestCase
                 'period_months',
             ],
         ]);
-        $this->assertEquals(25000, $response->json('data.last_payment_amount'));
+        $this->assertEquals(22500, $response->json('data.last_payment_amount')); // 20% of 112,500 principal = 22,500
         $this->assertEquals(20, $response->json('data.last_payment_percentage'));
         $this->assertEquals(15750, $response->json('data.total_interest')); // 112,500 * 3.5% * 4 years = 15,750
-        $this->assertEquals(2151, $response->json('data.monthly_payment'));
+        $this->assertEquals(2203, $response->json('data.monthly_payment'));
     }
 
     public function test_it_calculates_flat_interest_correctly_for_custom_bank_rate(): void
@@ -252,6 +252,39 @@ class BookingTest extends TestCase
         $this->assertEquals(56250, $response->json('data.last_payment_amount')); // 45% of 125,000
         // (125,000 + 15,625 - 56,250) / 60 = 84,375 / 60 = 1,406.25 -> 1,406
         $this->assertEquals(1406, $response->json('data.monthly_payment'));
+    }
+
+    public function test_it_calculates_last_payment_from_principal_after_down_payment(): void
+    {
+        $brand = Brand::create(['name' => 'تويوتا', 'slug' => 'toyota-55k']);
+        $car = Car::create([
+            'brand_id' => $brand->id,
+            'name' => 'يارس 2026',
+            'slug' => 'yaris-55k',
+            'model' => 'Yaris',
+            'year' => 2026,
+            'cash_price' => 55000,
+            'min_down_payment' => 0,
+            'min_installment' => 500,
+            'is_active' => true,
+        ]);
+
+        $booking = Booking::create([
+            'client_name' => 'محمد علي',
+            'client_phone' => '0555555555',
+            'car_id' => $car->id,
+            'booking_type' => 'finance',
+            'total_price' => 55000,
+            'down_payment' => 7500,
+            'duration_years' => 5,
+        ]);
+
+        $fin = $booking->getFinanceDetails();
+        $this->assertEquals(55000, $fin['cash_price']);
+        $this->assertEquals(7500, $fin['down_payment']);
+        $this->assertEquals(47500, $fin['principal']);
+        // 45% of 47,500 = 21,375 (not 24,750)
+        $this->assertEquals(21375, $fin['last_payment']);
     }
 
     public function test_booking_requires_car_id_and_client_details(): void

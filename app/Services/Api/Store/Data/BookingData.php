@@ -72,7 +72,7 @@ final class BookingData
                 $lastPayment = (float) $validated['last_payment'];
             } elseif ($isFinance) {
                 $defaultLastPaymentPct = (float) (Setting::where('key', 'finance_default_last_payment_pct')->value('value') ?? 45);
-                $lastPayment = round($cashPrice * ($defaultLastPaymentPct / 100));
+                $lastPayment = round($principal * ($defaultLastPaymentPct / 100));
             } else {
                 $lastPayment = null;
             }

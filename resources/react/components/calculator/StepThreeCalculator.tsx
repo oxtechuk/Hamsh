@@ -35,7 +35,8 @@ export default function StepThreeCalculator({
     const carPrice = Number(selectedCar.price) || 0;
     const carId = Number(selectedCar.id) || 0;
     const downPayment = Math.round((carPrice * downPaymentPercent) / 100);
-    const lastPayment = Math.round((carPrice * lastPaymentPercent) / 100);
+    const principal = Math.max(0, carPrice - downPayment);
+    const lastPayment = Math.round((principal * lastPaymentPercent) / 100);
     const riyal = t("financeCalculator.step3.riyal");
 
     useEffect(() => {
