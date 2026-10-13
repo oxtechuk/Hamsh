@@ -6,6 +6,8 @@ export interface ICalculatorLeadRequest {
   city?: string;
   monthly_obligations?: number;
   down_payment?: number;
+  last_payment?: number;
+  last_payment_percentage?: number;
   period_months?: number;
   monthly_payment?: number;
   car_price?: number;

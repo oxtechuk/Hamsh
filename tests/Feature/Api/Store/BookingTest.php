@@ -3,6 +3,7 @@
 namespace Tests\Feature\Api\Store;
 
 use App\Models\Brand;
+use App\Models\CalculatorBank;
 use App\Models\Car;
 use App\Models\Setting;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -146,8 +147,9 @@ class BookingTest extends TestCase
             'monthly_obligations' => 2000,
             'car_ids' => [$car->id],
             'down_payment' => 15000,
+            'last_payment' => 25000,
             'period_months' => 48,
-            'monthly_payment' => 2850,
+            'monthly_payment' => 2450,
             'car_price' => 125000,
             'annual_rate' => 3.5,
             'notes' => 'أرغب بالتمويل بدون كفيل',
@@ -171,7 +173,8 @@ class BookingTest extends TestCase
             'status' => 'new',
             'source' => 'finance_calculator',
             'down_payment' => 15000,
-            'monthly_installment' => 2850,
+            'last_payment' => 25000,
+            'monthly_installment' => 2450,
             'salary_range' => '12000',
         ]);
 
@@ -186,6 +189,41 @@ class BookingTest extends TestCase
             'client_phone' => '0551234567',
             'status' => 'new',
         ]);
+    }
+
+    public function test_it_calculates_finance_with_last_payment(): void
+    {
+        $car = $this->createCar();
+        $bank = CalculatorBank::create([
+            'name' => 'بنك الراجحي',
+            'annual_rate' => 3.5,
+            'is_active' => true,
+        ]);
+
+        $response = $this->postJson(route('store.api.calculator.calculate'), [
+            'car_id' => $car->id,
+            'down_payment_percentage' => 10,
+            'last_payment_percentage' => 20,
+            'period_months' => 48,
+            'bank_id' => $bank->id,
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'success',
+            'data' => [
+                'car_price',
+                'down_payment_amount',
+                'down_payment_percentage',
+                'last_payment_amount',
+                'last_payment_percentage',
+                'monthly_payment',
+                'period_months',
+            ],
+        ]);
+        $this->assertEquals(25000, $response->json('data.last_payment_amount'));
+        $this->assertEquals(20, $response->json('data.last_payment_percentage'));
+        $this->assertGreaterThan(0, $response->json('data.monthly_payment'));
     }
 
     public function test_booking_requires_car_id_and_client_details(): void

@@ -35,6 +35,10 @@ final class CalculatorApiService
             ? (float) $data['car_price']
             : (float) ($car?->current_price ?? $car?->cash_price ?? 0);
 
+        $lastPayment = isset($data['last_payment']) && (float) $data['last_payment'] > 0
+            ? (float) $data['last_payment']
+            : (isset($data['last_payment_percentage']) ? round($carPrice * (float) $data['last_payment_percentage'] / 100) : 0.0);
+
         $annualRate = isset($data['annual_rate']) && (float) $data['annual_rate'] > 0
             ? (float) $data['annual_rate']
             : (float) Booking::getDefaultInterestRate();
@@ -48,14 +52,14 @@ final class CalculatorApiService
             $monthlyRate = ($annualRate / 100) / 12;
             if ($monthlyRate > 0) {
                 $compounded = pow(1 + $monthlyRate, $periodMonths);
-                $monthlyPayment = round($principal * ($monthlyRate * $compounded) / ($compounded - 1));
+                $monthlyPayment = round((($principal * $compounded - $lastPayment) * $monthlyRate) / ($compounded - 1));
             } else {
-                $monthlyPayment = round($principal / $periodMonths);
+                $monthlyPayment = round(($principal - $lastPayment) / $periodMonths);
             }
         }
 
         $totalPrice = $monthlyPayment && $periodMonths
-            ? ($monthlyPayment * $periodMonths + $downPayment)
+            ? ($monthlyPayment * $periodMonths + $downPayment + $lastPayment)
             : $carPrice;
 
         $notesLines = [
@@ -63,6 +67,7 @@ final class CalculatorApiService
             ! empty($data['salary']) ? 'الدخل الشهري: '.number_format((float) $data['salary']).' ر.س' : null,
             ! empty($data['monthly_obligations']) ? 'الالتزامات الشهرية: '.number_format((float) $data['monthly_obligations']).' ر.س' : null,
             $downPayment > 0 ? 'الدفعة الأولى: '.number_format($downPayment).' ر.س' : null,
+            $lastPayment > 0 ? 'الدفعة الأخيرة: '.number_format($lastPayment).' ر.س' : null,
             $periodMonths > 0 ? "مدة التمويل: {$periodMonths} شهر ({$durationYears} سنوات)" : null,
             $monthlyPayment > 0 ? 'القسط الشهري التقديري: '.number_format($monthlyPayment).' ر.س' : null,
             ! empty($data['notes']) ? 'ملاحظات إضافية: '.$data['notes'] : null,
@@ -89,6 +94,7 @@ final class CalculatorApiService
             client_name: $data['name'],
             client_phone: $data['phone'],
             down_payment: $downPayment,
+            last_payment: $lastPayment,
             duration_years: $durationYears,
             interest_rate: $annualRate,
             monthly_installment: $monthlyPayment ? (int) round($monthlyPayment) : null,
@@ -132,6 +138,7 @@ final class CalculatorApiService
                 'salary' => $data['salary'] ?? null,
                 'monthly_obligations' => $data['monthly_obligations'] ?? null,
                 'down_payment' => $downPayment,
+                'last_payment' => $lastPayment,
                 'period_months' => $periodMonths,
                 'monthly_payment' => $monthlyPayment,
                 'car_price' => $carPrice,
@@ -181,36 +188,39 @@ final class CalculatorApiService
         return CalculatorBank::query()->activeOrdered()->get();
     }
 
-    public function calculate(int $carId, float $downPaymentPct, int $periodMonths, int $bankId): array
+    public function calculate(int $carId, float $downPaymentPct, int $periodMonths, int $bankId, float $lastPaymentPct = 0): array
     {
         $car = Car::findOrFail($carId);
         $bank = CalculatorBank::findOrFail($bankId);
 
         $carPrice = (float) ($car->current_price ?? $car->cash_price);
         $downPaymentAmount = round($carPrice * $downPaymentPct / 100);
-        $loanAmount = $carPrice - $downPaymentAmount;
+        $lastPaymentAmount = round($carPrice * $lastPaymentPct / 100);
+        $principal = max(0, $carPrice - $downPaymentAmount);
         $annualRate = $bank->annual_rate;
         $monthlyRate = $annualRate / 12 / 100;
 
         if ($monthlyRate > 0) {
             $compounded = pow(1 + $monthlyRate, $periodMonths);
-            $monthlyPayment = round($loanAmount * ($monthlyRate * $compounded) / ($compounded - 1));
+            $monthlyPayment = round((($principal * $compounded - $lastPaymentAmount) * $monthlyRate) / ($compounded - 1));
         } else {
-            $monthlyPayment = round($loanAmount / $periodMonths);
+            $monthlyPayment = round(($principal - $lastPaymentAmount) / $periodMonths);
         }
 
-        $totalPayment = $monthlyPayment * $periodMonths;
-        $totalInterest = $totalPayment - $loanAmount;
+        $totalPayment = $monthlyPayment * $periodMonths + $downPaymentAmount + $lastPaymentAmount;
+        $totalInterest = max(0, ($monthlyPayment * $periodMonths + $lastPaymentAmount) - $principal);
 
         return [
             'car_price' => $carPrice,
             'down_payment_amount' => $downPaymentAmount,
             'down_payment_percentage' => $downPaymentPct,
-            'loan_amount' => $loanAmount,
+            'last_payment_amount' => $lastPaymentAmount,
+            'last_payment_percentage' => $lastPaymentPct,
+            'loan_amount' => $principal,
             'monthly_payment' => $monthlyPayment,
             'period_months' => $periodMonths,
             'total_payment' => $totalPayment,
-            'total_interest' => max(0, $totalInterest),
+            'total_interest' => $totalInterest,
             'annual_rate' => $annualRate,
             'bank' => [
                 'id' => $bank->id,

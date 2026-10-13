@@ -28,6 +28,9 @@ export interface ICalculatorSettingsResponse {
   dbr_limit_real_estate?: number;
   debt_solution_text?: string;
   exceeded_warning_text?: string;
+  last_payment_enabled?: boolean;
+  default_last_payment_pct?: number;
+  max_last_payment_pct?: number;
 }
 
 export async function getCalculatorSettings(): Promise<ICalculatorSettingsResponse> {

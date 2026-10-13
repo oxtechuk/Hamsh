@@ -148,6 +148,12 @@
                             <span style="font-size:13px;color:var(--crm-text-muted);">{{ __('الدفعة الأولى (المقدم)') }}</span>
                             <span style="font-size:13px;font-weight:700;color:var(--crm-text);">{{ number_format($fin['down_payment']) }} {!! __('ر.س') !!}</span>
                         </div>
+                        @if(($fin['last_payment'] ?? 0) > 0 || ($booking->last_payment ?? 0) > 0)
+                            <div class="d-flex justify-content-between py-2" style="border-bottom:1px solid var(--crm-border);">
+                                <span style="font-size:13px;color:var(--crm-text-muted);">{{ __('الدفعة الأخيرة (المؤجلة)') }}</span>
+                                <span style="font-size:13px;font-weight:700;color:#4338CA;">{{ number_format($fin['last_payment'] ?? $booking->last_payment) }} {!! __('ر.س') !!}</span>
+                            </div>
+                        @endif
                         @if($booking->booking_type === 'finance' || $fin['principal'] > 0)
                             <div class="d-flex justify-content-between py-2" style="border-bottom:1px solid var(--crm-border);">
                                 <span style="font-size:13px;color:var(--crm-text-muted);">{{ __('صافي مبلغ التمويل المطلوب') }}</span>

@@ -9,6 +9,9 @@ export interface ICalculateRequest {
   car_id: number;
   price: number;
   down_payment: number;
+  down_payment_percentage?: number;
+  last_payment?: number;
+  last_payment_percentage?: number;
   period_months: number;
 }
 
@@ -16,6 +19,8 @@ export interface ICalculateData {
   car_price: number;
   down_payment_amount: number;
   down_payment_percentage: number;
+  last_payment_amount?: number;
+  last_payment_percentage?: number;
   loan_amount: number;
   monthly_payment: number;
   period_months: number;

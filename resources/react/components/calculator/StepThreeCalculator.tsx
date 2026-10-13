@@ -12,7 +12,7 @@ import type { ICalculateData } from "../../interfaces/ICalculatorTypes";
 import type { IStepTwoCalculatorProps } from "../../interfaces/IStepTwoCalculatorProps";
 import type { ISummaryItemProps } from "../../interfaces/ISummaryItemProps";
 
-const TERM_OPTIONS = [24, 36, 48, 60, 72];
+const TERM_OPTIONS = [24, 36, 48, 60];
 
 export default function StepThreeCalculator({
     selectedCar,
@@ -30,11 +30,19 @@ export default function StepThreeCalculator({
     const [calculation, setCalculation] = useState<ICalculateData | null>(null);
     const [isCalculating, setIsCalculating] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [lastPaymentPercent, setLastPaymentPercent] = useState(20);
 
     const carPrice = Number(selectedCar.price) || 0;
     const carId = Number(selectedCar.id) || 0;
     const downPayment = Math.round((carPrice * downPaymentPercent) / 100);
+    const lastPayment = Math.round((carPrice * lastPaymentPercent) / 100);
     const riyal = t("financeCalculator.step3.riyal");
+
+    useEffect(() => {
+        if (term === 72) {
+            setTerm(60);
+        }
+    }, [term, setTerm]);
 
     useEffect(() => {
         if (!carPrice || !carId) {
@@ -49,6 +57,9 @@ export default function StepThreeCalculator({
             car_id: carId,
             price: carPrice,
             down_payment: downPayment,
+            down_payment_percentage: downPaymentPercent,
+            last_payment: lastPayment,
+            last_payment_percentage: lastPaymentPercent,
             period_months: term,
         })
             .then((result) => {
@@ -64,7 +75,7 @@ export default function StepThreeCalculator({
         return () => {
             alive = false;
         };
-    }, [carPrice, carId, downPaymentPercent, term]);
+    }, [carPrice, carId, downPaymentPercent, lastPaymentPercent, term]);
 
     const monthlyPayment = calculation?.monthly_payment ?? 0;
     const financeAmount =
@@ -82,6 +93,8 @@ export default function StepThreeCalculator({
                 city: personalInfo.city,
                 monthly_obligations: Number(personalInfo.obligations) || 0,
                 down_payment: downPayment,
+                last_payment: lastPayment,
+                last_payment_percentage: lastPaymentPercent,
                 period_months: term,
                 monthly_payment: monthlyPayment,
                 car_price: carPrice,
@@ -159,10 +172,66 @@ export default function StepThreeCalculator({
             </div>
 
             <div className="mt-7">
+                <div className="mb-3 flex items-center justify-between gap-4 text-[11px]">
+                    <span className="font-medium text-[#303A54]">
+                        {t("financeCalculator.step3.lastPayment", { defaultValue: "الدفعة الأخيرة" })}
+                    </span>
+                    <span className="font-bold text-[var(--brand-primary-color)]">
+                        {lastPayment.toLocaleString()} {riyal} ({lastPaymentPercent}%)
+                    </span>
+                </div>
+
+                <div dir="ltr">
+                    {(() => {
+                        const minPct = 0;
+                        const maxPct = 35;
+                        const rawProgress =
+                            ((lastPaymentPercent - minPct) / (maxPct - minPct)) * 100;
+                        const sliderProgress =
+                            direction === "rtl"
+                                ? 100 - rawProgress
+                                : rawProgress;
+                        return (
+                            <input
+                                type="range"
+                                min={minPct}
+                                max={maxPct}
+                                step={1}
+                                value={lastPaymentPercent}
+                                onChange={(event) =>
+                                    setLastPaymentPercent(
+                                        Number(event.target.value),
+                                    )
+                                }
+                                className={`finance-slider w-full${
+                                    direction === "rtl"
+                                        ? " finance-slider--rtl"
+                                        : ""
+                                }`}
+                                style={
+                                    {
+                                        "--slider-progress": `${sliderProgress}%`,
+                                    } as React.CSSProperties
+                                }
+                            />
+                        );
+                    })()}
+                </div>
+
+                <div
+                    dir="ltr"
+                    className="mt-2 flex items-center justify-between text-[9px] text-[#8B909C]"
+                >
+                    <span>{direction === "rtl" ? "35%" : "0%"}</span>
+                    <span>{direction === "rtl" ? "0%" : "35%"}</span>
+                </div>
+            </div>
+
+            <div className="mt-7">
                 <p className="mb-4 text-start text-[11px] font-medium text-[#303A54]">
                     {t("financeCalculator.step3.financeTerm")}
                 </p>
-                <div className="grid grid-cols-5 gap-3">
+                <div className="grid grid-cols-4 gap-3">
                     {TERM_OPTIONS.map((option) => {
                         const isActive = option === term;
                         return (
@@ -210,14 +279,18 @@ export default function StepThreeCalculator({
 
                 <div className="my-6 h-px w-full bg-[#ECE7DD]" />
 
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
                     <SummaryItem
                         label={t("financeCalculator.step3.carPrice")}
                         value={`${carPrice.toLocaleString()} ${riyal}`}
                     />
                     <SummaryItem
-                        label={t("financeCalculator.step3.financeAmount")}
-                        value={`${financeAmount.toLocaleString()} ${riyal}`}
+                        label={t("financeCalculator.step3.downPayment")}
+                        value={`${downPayment.toLocaleString()} ${riyal}`}
+                    />
+                    <SummaryItem
+                        label={t("financeCalculator.step3.lastPayment", { defaultValue: "الدفعة الأخيرة" })}
+                        value={`${lastPayment.toLocaleString()} ${riyal}`}
                     />
                     <SummaryItem
                         label={t("financeCalculator.step3.term")}
