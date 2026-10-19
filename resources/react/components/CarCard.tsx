@@ -65,9 +65,9 @@ export default function CarCard({
     const resolvedBadge = resolveHighlight(badgeText, i18n.language);
     const finalBadge = resolvedBadge
         ? {
-              text: resolvedBadge.text,
-              color: badgeColor ?? resolvedBadge.color ?? "rgb(223, 166, 85)",
-          }
+            text: resolvedBadge.text,
+            color: badgeColor ?? resolvedBadge.color ?? "rgb(223, 166, 85)",
+        }
         : { text: isRTL ? "أحدث السيارات" : "New Arrival", color: "rgb(223, 166, 85)" };
 
     const handleOpenDetails = () => {
@@ -101,23 +101,23 @@ export default function CarCard({
         typeof rawMonthlyPrice === "number" && rawMonthlyPrice > 0
             ? rawMonthlyPrice
             : typeof monthlyPrice === "number" && monthlyPrice > 0
-            ? monthlyPrice
-            : typeof monthlyPrice === "string"
-            ? parseFloat(monthlyPrice.replace(/[^\d.]/g, "")) || 0
-            : 0;
+                ? monthlyPrice
+                : typeof monthlyPrice === "string"
+                    ? parseFloat(monthlyPrice.replace(/[^\d.]/g, "")) || 0
+                    : 0;
 
     const displayMonthlyText = numericMonthly > 0
         ? `${numericMonthly.toLocaleString(isRTL ? "ar-SA" : "en-US")} ${isRTL ? "ر.س / شهرياً" : "SAR / month"}`
         : monthlyPrice
-        ? <>{monthlyPrice} {isRTL ? "/ شهرياً" : "/ month"}</>
-        : (isRTL ? "1,650 ر.س / شهرياً" : "1,650 SAR / month");
+            ? <>{monthlyPrice} {isRTL ? "/ شهرياً" : "/ month"}</>
+            : (isRTL ? "1,650 ر.س / شهرياً" : "1,650 SAR / month");
 
     const numericSalary =
         typeof minSalary === "number" && minSalary > 0
             ? minSalary
             : typeof minSalary === "string"
-            ? parseFloat(minSalary.replace(/[^\d.]/g, "")) || 0
-            : 0;
+                ? parseFloat(minSalary.replace(/[^\d.]/g, "")) || 0
+                : 0;
 
     const salaryBadgeText = numericSalary > 0
         ? (isRTL ? `من ${numericSalary.toLocaleString("ar-SA")} ر.س` : `From ${numericSalary.toLocaleString("en-US")} SAR`)
@@ -127,10 +127,10 @@ export default function CarCard({
         typeof rawPrice === "number" && rawPrice > 0
             ? rawPrice
             : typeof price === "number" && price > 0
-            ? price
-            : typeof price === "string"
-            ? parseFloat(price.replace(/[^\d.]/g, "")) || 0
-            : 0;
+                ? price
+                : typeof price === "string"
+                    ? parseFloat(price.replace(/[^\d.]/g, "")) || 0
+                    : 0;
 
     const displayCashText = numericCash > 0
         ? `${numericCash.toLocaleString(isRTL ? "ar-SA" : "en-US")} ${isRTL ? "ر.س" : "SAR"}`
@@ -229,7 +229,7 @@ export default function CarCard({
                             {/* Salary Required */}
                             <div className="flex flex-col items-end text-end">
                                 <p className="text-[11px] sm:text-[12px] font-medium text-[#737C8E]">
-                                    {isRTL ? "بدون دفعة لراتب:" : "Zero down payment for salary:"}
+                                    {isRTL ? "بدون دفعة  اولة لراتب:" : "Zero down payment for salary:"}
                                 </p>
                                 <span className="mt-1 inline-flex items-center rounded-md bg-[#EDF0F5] px-2.5 py-0.5 text-[11px] sm:text-[12px] font-bold text-[#1E283A]">
                                     {salaryBadgeText}
