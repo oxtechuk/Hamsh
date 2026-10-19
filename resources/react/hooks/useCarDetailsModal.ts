@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -19,16 +19,21 @@ export function useCarDetailsModal(slug: string, onClose: () => void) {
     const [activeTab, setActiveTab] = useState<CarDetailsModalTab>("features");
     const [showOrderModal, setShowOrderModal] = useState(false);
     const [orderMode, setOrderMode] = useState<"finance" | "cash">("cash");
-    const [selectedTrimIndex, setSelectedTrimIndex] = useState<number>(0);
+    const [selectedTrimIndex, setSelectedTrimIndex] = useState<number>(-1);
 
     const { data: car, isLoading } = useQuery({
         queryKey: ["car-details-modal", slug],
         queryFn: () => getCarBySlug(slug),
     });
 
+    useEffect(() => {
+        setSelectedTrimIndex(-1);
+        setActiveImage(0);
+    }, [slug]);
+
     const selectedTrim = useMemo(() => {
-        if (!car?.trims || car.trims.length === 0) return null;
-        return car.trims[selectedTrimIndex] ?? car.trims[0];
+        if (!car?.trims || car.trims.length === 0 || selectedTrimIndex < 0) return null;
+        return car.trims[selectedTrimIndex] ?? null;
     }, [car?.trims, selectedTrimIndex]);
 
     const effectiveCar = useMemo(() => {
@@ -59,11 +64,10 @@ export function useCarDetailsModal(slug: string, onClose: () => void) {
 
     const images = useMemo(() => {
         if (!car) return [];
-        let list = car.images?.length ? [...car.images] : [car.main_image];
-        if (selectedTrim?.image && !list.includes(selectedTrim.image)) {
-            list = [selectedTrim.image, ...list];
+        if (selectedTrim?.image) {
+            return [selectedTrim.image];
         }
-        return list;
+        return car.images?.length ? [...car.images] : [car.main_image];
     }, [car, selectedTrim?.image]);
 
     const badge = car
@@ -72,15 +76,7 @@ export function useCarDetailsModal(slug: string, onClose: () => void) {
 
     const handleSelectTrim = (index: number) => {
         setSelectedTrimIndex(index);
-        const trim = car?.trims?.[index];
-        if (trim?.image) {
-            const imgIdx = images.findIndex((img) => img === trim.image);
-            if (imgIdx !== -1) {
-                setActiveImage(imgIdx);
-            } else {
-                setActiveImage(0);
-            }
-        }
+        setActiveImage(0);
     };
 
     const handlePrev = () => {

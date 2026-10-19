@@ -30,6 +30,7 @@ use App\Observers\SpecificationObserver;
 use App\Observers\TestimonialObserver;
 use App\Services\Cache\BaseCacheService;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
@@ -72,6 +73,15 @@ class AppServiceProvider extends ServiceProvider
         if (str_contains(config('app.url'), 'https')) {
             URL::forceScheme('https');
         }
+
+        // Grant full access to super admins
+        Gate::before(function ($user, string $ability): ?bool {
+            if ($user && method_exists($user, 'isAdmin') && $user->isAdmin()) {
+                return true;
+            }
+
+            return null;
+        });
     }
 
     private function registerObservers(): void

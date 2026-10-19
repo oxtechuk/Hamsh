@@ -8,7 +8,7 @@ import type { ICarDetailsInfoPanelProps } from "../../interfaces/ICarDetailsInfo
 
 export default function CarDetailsInfoPanel({
     car,
-    selectedTrimIndex = 0,
+    selectedTrimIndex = -1,
     onSelectTrimIndex,
     featureRows = [],
     onOrder,
@@ -18,11 +18,11 @@ export default function CarDetailsInfoPanel({
     const isRTL = i18n.dir() === "rtl";
 
     const installmentLabel = isRTL
-        ? t("carCard.installmentStartsFrom", "القسط لراتب يبدأ من")
-        : t("carCard.installmentStartsFrom", "Installment starts from");
+        ? t("carCard.installmentPrice", "سعر القسط")
+        : t("carCard.installmentPrice", "Installment");
 
     const trims = car.trims && car.trims.length > 0 ? car.trims : [];
-    const currentTrim = trims[selectedTrimIndex] ?? null;
+    const currentTrim = selectedTrimIndex >= 0 ? trims[selectedTrimIndex] ?? null : null;
 
     // Derived Specs for the selected trim or fallback
     const engineSpec =
@@ -164,6 +164,9 @@ export default function CarDetailsInfoPanel({
                                 onChange={(e) => onSelectTrimIndex?.(Number(e.target.value))}
                                 className="w-full appearance-none rounded-lg border border-[#E2E8F0] bg-white px-3 py-2 pe-8 text-[13px] sm:text-[14px] font-bold text-[#1E293B] shadow-xs transition hover:border-[#C22026]/40 focus:border-[#C22026] focus:outline-none focus:ring-2 focus:ring-[#C22026]/10 cursor-pointer text-start"
                             >
+                                <option value={-1} className="font-semibold text-gray-800 py-1">
+                                    {isRTL ? "الفئة الأساسية (القياسية)" : "Standard / Base Model"}
+                                </option>
                                 {trims.map((trim, idx) => (
                                     <option key={idx} value={idx} className="font-semibold text-gray-800 py-1">
                                         {trim.name}

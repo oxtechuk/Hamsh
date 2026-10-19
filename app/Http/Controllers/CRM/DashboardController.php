@@ -14,6 +14,14 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        $user = auth()->guard('employee')->user();
+        if ($user && ! $user->isAdmin() && ! $user->can('manage-dashboard')) {
+            $homeRoute = $user->getHomeRouteName();
+            if ($homeRoute !== 'crm.dashboard') {
+                return redirect()->route($homeRoute);
+            }
+        }
+
         $stats = Cache::remember('crm_dashboard_stats', 300, function () {
             return [
                 'total' => Booking::count(),

@@ -19,7 +19,7 @@ export default function CarDetailsModalGallery({
             <div className="relative h-[260px] w-full overflow-hidden sm:h-[340px]">
                 <div className="relative overflow-hidden h-full w-full object-cover">
                     <LazyImg
-                        src={images[activeImage] ?? car.main_image}
+                        src={images[activeImage] ?? images[0] ?? car.main_image}
                         alt={localize(car.name, i18n.language)}
                         className="w-full h-full object-cover relative z-10 transition-opacity duration-300 opacity-100"
                     />

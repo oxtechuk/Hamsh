@@ -24,7 +24,7 @@
 
     {{-- Logo --}}
     <div class="crm-sidebar-logo">
-        <a href="{{ route('crm.dashboard') }}" style="text-decoration:none;display:inline-block;">
+        <a href="{{ route($currentUser?->getHomeRouteName() ?? 'crm.dashboard') }}" style="text-decoration:none;display:inline-block;">
             @if($logo && \Illuminate\Support\Facades\Storage::disk('public')->exists($logo))
                 <img src="{{ asset('storage/' . $logo) }}" alt="{{ $siteNameText }}" style="max-height: 48px; object-fit: contain;">
             @elseif(file_exists(public_path('images/logo_without_bg.svg')))

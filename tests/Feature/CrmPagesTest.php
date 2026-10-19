@@ -71,4 +71,61 @@ class CrmPagesTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('لوحة الإدارة والمتابعة');
     }
+
+    public function test_employee_with_only_bookings_permission_is_redirected_to_bookings(): void
+    {
+        $permission = Permission::create([
+            'name' => 'manage-bookings',
+            'guard_name' => 'employee',
+        ]);
+
+        $employee = Employee::create([
+            'name' => 'Sales Agent',
+            'username' => 'sales_test',
+            'email' => 'sales@test.com',
+            'password' => 'Password123!',
+            'role' => 'employee',
+            'is_active' => true,
+        ]);
+
+        $employee->givePermissionTo($permission);
+
+        // When accessing /crm/dashboard, redirected to /crm/bookings
+        $response = $this->actingAs($employee, 'employee')
+            ->get(route('crm.dashboard'));
+
+        $response->assertRedirect(route('crm.bookings.index'));
+
+        // When accessing /crm root, redirected to /crm/bookings
+        $rootResponse = $this->actingAs($employee, 'employee')
+            ->get('/crm');
+
+        $rootResponse->assertRedirect(route('crm.bookings.index'));
+    }
+
+    public function test_employee_without_reports_permission_does_not_see_income_stat(): void
+    {
+        $dashboardPerm = Permission::create([
+            'name' => 'manage-dashboard',
+            'guard_name' => 'employee',
+        ]);
+
+        $employee = Employee::create([
+            'name' => 'Supervisor',
+            'username' => 'supervisor_test',
+            'email' => 'sup@test.com',
+            'password' => 'Password123!',
+            'role' => 'employee',
+            'is_active' => true,
+        ]);
+
+        $employee->givePermissionTo($dashboardPerm);
+
+        $response = $this->actingAs($employee, 'employee')
+            ->get(route('crm.dashboard'));
+
+        $response->assertStatus(200);
+        $response->assertSee('لوحة الإدارة والمتابعة');
+        $response->assertDontSee('إجمالي الدخل');
+    }
 }

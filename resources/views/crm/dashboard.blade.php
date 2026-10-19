@@ -2,6 +2,9 @@
 @section('title', __('الرئيسية') . ' | ' . config('app.name', 'هامش'))
 
 @section('content')
+@php
+    $currentUser = auth()->guard('employee')->user();
+@endphp
     <div class="container-fluid" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
 
         {{-- ===== Header Row ===== --}}
@@ -13,7 +16,7 @@
                     </span>
                 </div>
                 <h4 class="mb-0 fw-bold" style="color:var(--crm-text);">
-                    👋 {{ __('أهلاً بك') }}، {{ auth()->guard('employee')->user()?->name }}
+                    👋 {{ __('أهلاً بك') }}، {{ $currentUser?->name }}
                 </h4>
             </div>
             <div class="d-flex gap-2">
@@ -33,6 +36,7 @@
         </div>
 
         {{-- ===== Stat Cards ===== --}}
+        @if($currentUser && ($currentUser->isAdmin() || $currentUser->can('manage-bookings') || $currentUser->can('manage-leads')))
         <div class="row g-3 mb-4">
             {{-- الطلبات المعلقة --}}
             <div class="col-6 col-xl-3">
@@ -71,6 +75,7 @@
                 </div>
             </div>
         </div>
+        @endif
 
         {{-- ===== Tracking Status Widget ===== --}}
         @can('manage-settings')
@@ -136,6 +141,7 @@
         <div class="row g-3 mb-4">
 
             {{-- نظرة عامة على الطلبات --}}
+            @can('manage-bookings')
             <div class="col-12 col-xl-7">
                 <div class="card border-0 shadow-sm rounded-4 h-100" style="border:1px solid var(--crm-border)!important;">
                     <div class="card-header bg-white border-0 pt-4 px-4 pb-2 d-flex justify-content-between align-items-center"
@@ -204,11 +210,14 @@
                     </div>
                 </div>
             </div>
+            @endcan
 
             {{-- إجمالي الدخل + الشكاوي --}}
-            <div class="col-12 col-xl-5">
+            @if($currentUser && ($currentUser->isAdmin() || $currentUser->can('manage-reports') || $currentUser->can('manage-bookings')))
+            <div class="col-12 {{ auth()->user()?->can('manage-bookings') ? 'col-xl-5' : 'col-xl-12' }}">
                 <div class="row g-3 h-100">
-                    {{-- إجمالي الدخل --}}
+                    {{-- إجمالي الدخل (فقط للإدارة والتقارير) --}}
+                    @if($currentUser->isAdmin() || $currentUser->can('manage-reports'))
                     <div class="col-12">
                         <div class="card border-0 shadow-sm rounded-4"
                             style="border:1px solid var(--crm-border)!important;">
@@ -236,7 +245,9 @@
                             </div>
                         </div>
                     </div>
+                    @endif
                     {{-- الشكاوي --}}
+                    @if($currentUser->isAdmin() || $currentUser->can('manage-bookings'))
                     <div class="col-12">
                         <div class="card border-0 shadow-sm rounded-4"
                             style="border:1px solid var(--crm-border)!important;">
@@ -260,14 +271,17 @@
                             </div>
                         </div>
                     </div>
+                    @endif
                 </div>
             </div>
+            @endif
         </div>
 
         {{-- ===== Row 3: Orders Rate Chart + Notifications ===== --}}
         <div class="row g-3">
 
             {{-- معدل الطلبات --}}
+            @can('manage-bookings')
             <div class="col-12 col-xl-7">
                 <div class="card border-0 shadow-sm rounded-4" style="border:1px solid var(--crm-border)!important;">
                     <div class="card-header bg-white border-0 pt-4 px-4 pb-2 d-flex justify-content-between align-items-center"
@@ -289,9 +303,10 @@
                     </div>
                 </div>
             </div>
+            @endcan
 
             {{-- الإشعارات --}}
-            <div class="col-12 col-xl-5">
+            <div class="col-12 {{ auth()->user()?->can('manage-bookings') ? 'col-xl-5' : 'col-xl-12' }}">
                 <div class="card border-0 shadow-sm rounded-4 h-100" style="border:1px solid var(--crm-border)!important;">
                     <div class="card-header bg-white border-0 pt-4 px-4 pb-2 d-flex justify-content-between align-items-center"
                         style="border-bottom:1px solid var(--crm-border)!important;">
@@ -376,34 +391,40 @@
 @section('scripts')
     <script>
         // Chart معدل الطلبات
-        const weeklyData = @json($weeklyBookings);
-        const dates = weeklyData.map(d => d.date);
-        const counts = weeklyData.map(d => d.count);
+        const weeklyEl = document.querySelector("#weeklyChart");
+        if (weeklyEl) {
+            const weeklyData = @json($weeklyBookings);
+            const dates = weeklyData.map(d => d.date);
+            const counts = weeklyData.map(d => d.count);
 
-        new ApexCharts(document.querySelector("#weeklyChart"), {
-            series: [
-                { name: '{{ __("الطلبات") }}', data: counts },
-                { name: '{{ __("المكتملة") }}', data: counts.map(v => Math.max(0, v - Math.floor(Math.random() * 3))) }
-            ],
-            chart: { type: 'area', height: 220, toolbar: { show: false }, fontFamily: 'Cairo, sans-serif' },
-            colors: ['#c59b27', '#10b981'],
-            fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.35, opacityTo: 0.03 } },
-            stroke: { curve: 'smooth', width: 2.5 },
-            xaxis: { categories: dates, labels: { style: { fontSize: '11px', colors: '#64748b' } } },
-            yaxis: { labels: { style: { fontSize: '11px', colors: '#64748b' } } },
-            dataLabels: { enabled: false },
-            grid: { borderColor: '#e2e8f0', strokeDashArray: 4 },
-            legend: { show: true, position: 'top', horizontalAlign: '{{ app()->getLocale() == "ar" ? "right" : "left" }}' },
-        }).render();
+            new ApexCharts(weeklyEl, {
+                series: [
+                    { name: '{{ __("الطلبات") }}', data: counts },
+                    { name: '{{ __("المكتملة") }}', data: counts.map(v => Math.max(0, v - Math.floor(Math.random() * 3))) }
+                ],
+                chart: { type: 'area', height: 220, toolbar: { show: false }, fontFamily: 'Cairo, sans-serif' },
+                colors: ['#c59b27', '#10b981'],
+                fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.35, opacityTo: 0.03 } },
+                stroke: { curve: 'smooth', width: 2.5 },
+                xaxis: { categories: dates, labels: { style: { fontSize: '11px', colors: '#64748b' } } },
+                yaxis: { labels: { style: { fontSize: '11px', colors: '#64748b' } } },
+                dataLabels: { enabled: false },
+                grid: { borderColor: '#e2e8f0', strokeDashArray: 4 },
+                legend: { show: true, position: 'top', horizontalAlign: '{{ app()->getLocale() == "ar" ? "right" : "left" }}' },
+            }).render();
+        }
 
         // Sparkline للدخل
-        new ApexCharts(document.querySelector("#incomeSparkline"), {
-            series: [{ data: [30, 40, 35, 50, 49, 60, 70, 91, 125] }],
-            chart: { type: 'line', height: 50, sparkline: { enabled: true } },
-            colors: ['#c59b27'],
-            stroke: { curve: 'smooth', width: 2.5 },
-            tooltip: { enabled: false },
-        }).render();
+        const incomeEl = document.querySelector("#incomeSparkline");
+        if (incomeEl) {
+            new ApexCharts(incomeEl, {
+                series: [{ data: [30, 40, 35, 50, 49, 60, 70, 91, 125] }],
+                chart: { type: 'line', height: 50, sparkline: { enabled: true } },
+                colors: ['#c59b27'],
+                stroke: { curve: 'smooth', width: 2.5 },
+                tooltip: { enabled: false },
+            }).render();
+        }
 
         // Badge الطلبات الجديدة
         const newCount = {{ $stats['new'] }};

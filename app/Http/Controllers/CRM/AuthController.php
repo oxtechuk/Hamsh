@@ -15,7 +15,9 @@ class AuthController extends Controller
     public function showLoginForm()
     {
         if (Auth::guard('employee')->check()) {
-            return redirect()->route('crm.dashboard');
+            $user = Auth::guard('employee')->user();
+
+            return redirect()->route($user->getHomeRouteName());
         }
 
         return view('crm.auth.login');
@@ -38,8 +40,9 @@ class AuthController extends Controller
 
         if (Auth::guard('employee')->attempt($credentials, $remember)) {
             $request->session()->regenerate();
+            $user = Auth::guard('employee')->user();
 
-            return redirect()->intended(route('crm.dashboard'));
+            return redirect()->intended(route($user->getHomeRouteName()));
         }
 
         throw ValidationException::withMessages([

@@ -18,56 +18,63 @@ class SearchController extends Controller
             return response()->json([]);
         }
 
+        $user = auth()->guard('employee')->user();
         $results = [];
 
         // 1. Search Customers (Leads)
-        $leads = Lead::where('client_name', 'LIKE', "%{$query}%")
-            ->orWhere('client_phone', 'LIKE', "%{$query}%")
-            ->limit(5)
-            ->get();
+        if ($user && ($user->isAdmin() || $user->can('manage-leads'))) {
+            $leads = Lead::where('client_name', 'LIKE', "%{$query}%")
+                ->orWhere('client_phone', 'LIKE', "%{$query}%")
+                ->limit(5)
+                ->get();
 
-        foreach ($leads as $lead) {
-            $results[] = [
-                'type' => 'customer',
-                'category' => __('عميل'),
-                'title' => $lead->client_name,
-                'subtitle' => $lead->client_phone,
-                'link' => route('crm.leads.edit', $lead->id),
-                'icon' => 'bi-person-badge',
-            ];
+            foreach ($leads as $lead) {
+                $results[] = [
+                    'type' => 'customer',
+                    'category' => __('عميل'),
+                    'title' => $lead->client_name,
+                    'subtitle' => $lead->client_phone,
+                    'link' => route('crm.leads.edit', $lead->id),
+                    'icon' => 'bi-person-badge',
+                ];
+            }
         }
 
         // 2. Search Bookings (Orders)
-        $bookings = Booking::where('client_name', 'LIKE', "%{$query}%")
-            ->orWhere('id', 'LIKE', "%{$query}%")
-            ->limit(5)
-            ->get();
+        if ($user && ($user->isAdmin() || $user->can('manage-bookings'))) {
+            $bookings = Booking::where('client_name', 'LIKE', "%{$query}%")
+                ->orWhere('id', 'LIKE', "%{$query}%")
+                ->limit(5)
+                ->get();
 
-        foreach ($bookings as $booking) {
-            $results[] = [
-                'type' => 'booking',
-                'category' => __('طلب حجز'),
-                'title' => "#{$booking->id} - {$booking->client_name}",
-                'subtitle' => $booking->car->name ?? '',
-                'link' => route('crm.bookings.show', $booking->id),
-                'icon' => 'bi-cart-check',
-            ];
+            foreach ($bookings as $booking) {
+                $results[] = [
+                    'type' => 'booking',
+                    'category' => __('طلب حجز'),
+                    'title' => "#{$booking->id} - {$booking->client_name}",
+                    'subtitle' => $booking->car->name ?? '',
+                    'link' => route('crm.bookings.show', $booking->id),
+                    'icon' => 'bi-cart-check',
+                ];
+            }
         }
 
         // 3. Search Employees (Staff)
-        $employees = Employee::where('name', 'LIKE', "%{$query}%")
-            ->limit(5)
-            ->get();
+        if ($user && ($user->isAdmin() || $user->can('manage-employees'))) {
+            $employees = Employee::where('name', 'LIKE', "%{$query}%")
+                ->limit(5)
+                ->get();
 
-        foreach ($employees as $employee) {
-            $results[] = [
-                'type' => 'employee',
-                'category' => __('موظف مبيعات'),
-                'title' => $employee->name,
-                'subtitle' => $employee->email,
-                'link' => '#', // No direct edit link for staff sometimes, but could link to their report
-                'icon' => 'bi-person-workspace',
-            ];
+            foreach ($employees as $employee) {
+                $results[] = [
+                    'type' => 'employee',
+                    'category' => __('موظف مبيعات'),
+                    'title' => $employee->name,
+                    'subtitle' => $employee->email,
+                    'link' => route('crm.employees.index'),
+                    'icon' => 'bi-person-workspace',
+                ];
+            }
         }
 
         return response()->json($results);

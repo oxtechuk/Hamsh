@@ -50,6 +50,7 @@
         "subtitle": "سيارات عائلية مريحة",
         "cashPrice": "السعر النقدي",
         "monthlyPayment": "قسط شهري",
+        "installmentPrice": "سعر القسط",
         "installmentStartsFrom": "القسط لراتب يبدأ من",
         "installmentForSalary": "القسط لراتب يبدأ من {{salary}} ر.س",
         "estimated": "تقديري",

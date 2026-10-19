@@ -62,7 +62,11 @@ Route::get('/manager-login', [AuthController::class, 'showLoginForm'])->name('cr
 Route::post('/manager-login', [AuthController::class, 'login'])->name('crm.login.post');
 
 Route::prefix('crm')->name('crm.')->middleware(['auth:employee', 'guard.employee'])->group(function () {
-    Route::redirect('/', '/crm/dashboard');
+    Route::get('/', function () {
+        $user = auth()->guard('employee')->user();
+
+        return redirect()->route($user ? $user->getHomeRouteName() : 'crm.login');
+    });
     // === Open routes (accessible to all authenticated employees) ===
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');

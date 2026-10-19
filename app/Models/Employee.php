@@ -38,4 +38,53 @@ class Employee extends Authenticatable
     {
         return $this->hasRole('admin') || $this->role === 'admin';
     }
+
+    public function getHomeRouteName(): string
+    {
+        if ($this->isAdmin() || $this->can('manage-dashboard')) {
+            return 'crm.dashboard';
+        }
+
+        if ($this->can('manage-bookings')) {
+            return 'crm.bookings.index';
+        }
+
+        if ($this->can('manage-leads')) {
+            return 'crm.leads.index';
+        }
+
+        if ($this->can('manage-tracking')) {
+            return 'crm.tracking.index';
+        }
+
+        if ($this->can('manage-cars')) {
+            return 'crm.cars.index';
+        }
+
+        if ($this->can('manage-calculator-leads')) {
+            return 'crm.calculator-leads.index';
+        }
+
+        if ($this->can('manage-tasks')) {
+            return 'crm.tasks.index';
+        }
+
+        if ($this->can('manage-reports')) {
+            return 'crm.reports.bookings';
+        }
+
+        if ($this->can('manage-blog')) {
+            return 'crm.blogs.index';
+        }
+
+        if ($this->can('manage-employees')) {
+            return 'crm.employees.index';
+        }
+
+        if ($this->can('manage-settings')) {
+            return 'crm.settings.general';
+        }
+
+        return 'crm.profile.index';
+    }
 }
