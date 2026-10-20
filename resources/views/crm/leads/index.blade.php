@@ -158,7 +158,6 @@
                             <th class="px-3 py-3 text-muted fw-bold" style="font-size:12px;">{{ __('رقم العميل') }}</th>
                             <th class="py-3 text-muted fw-bold" style="font-size:12px;">{{ __('اسم العميل') }}</th>
                             <th class="py-3 text-muted fw-bold" style="font-size:12px;">{{ __('الهاتف') }}</th>
-                            <th class="py-3 text-muted fw-bold" style="font-size:12px;">{{ __('المصدر') }}</th>
                             <th class="py-3 text-muted fw-bold" style="font-size:12px;">{{ __('السيارة المطلوبة') }}</th>
                             <th class="py-3 text-muted fw-bold text-center" style="font-size:12px;">{{ __('الراتب') }}</th>
                             <th class="py-3 text-muted fw-bold text-center" style="font-size:12px;">{{ __('الالتزامات') }}</th>
@@ -187,11 +186,6 @@
                                 </td>
                                 <td style="font-size:13px;" dir="ltr">
                                     {{ $lead->client_phone ?? '—' }}
-                                </td>
-                                <td>
-                                    <span class="badge bg-light text-dark border px-2 py-1" style="font-size:11px;font-weight:600;">
-                                        {{ $lead->contactSource?->name ?? '—' }}
-                                    </span>
                                 </td>
                                 <td style="font-size:12px;color:var(--crm-text-muted);">
                                     @if($lead->car)
@@ -222,10 +216,13 @@
                                     @endif
                                 </td>
                                 <td style="font-size:12px;">
-                                    @if($lead->employee)
-                                        <span class="d-inline-flex align-items-center gap-1">
-                                            <i class="bi bi-person text-muted"></i>
-                                            {{ $lead->employee->name }}
+                                    @php
+                                        $emp = $lead->effective_employee ?? $lead->employee;
+                                    @endphp
+                                    @if($emp)
+                                        <span class="d-inline-flex align-items-center gap-1 fw-semibold text-dark">
+                                            <i class="bi bi-person text-primary"></i>
+                                            {{ $emp->name }}
                                         </span>
                                     @else
                                         <span class="text-muted small">{{ __('غير محدد') }}</span>
@@ -280,7 +277,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="13" class="text-center text-muted py-5">
+                                <td colspan="12" class="text-center text-muted py-5">
                                     <i class="bi bi-person-x fs-1 d-block mb-2 opacity-25"></i>
                                     {{ __('لا يوجد عملاء يطابقون خيارات البحث والتصفية') }}
                                 </td>

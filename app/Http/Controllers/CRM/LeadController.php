@@ -16,7 +16,7 @@ class LeadController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Lead::with(['contactSource', 'car.brand', 'car.category', 'employee'])
+        $query = Lead::with(['contactSource', 'car.brand', 'car.category', 'employee', 'orders.employee'])
             ->withCount('orders')
             ->latest();
 
@@ -165,7 +165,7 @@ class LeadController extends Controller
 
     public function export(Request $request)
     {
-        $query = Lead::with(['contactSource', 'car.brand', 'employee'])
+        $query = Lead::with(['contactSource', 'car.brand', 'employee', 'orders.employee'])
             ->latest();
 
         if ($request->filled('search')) {
@@ -215,6 +215,7 @@ class LeadController extends Controller
             $salaryVal = $lead->salary !== null ? number_format((float) $lead->salary, 2, '.', '') : '';
             $obligationsVal = $lead->obligations !== null ? number_format((float) $lead->obligations, 2, '.', '') : '';
             $netSalary = ($lead->salary !== null) ? number_format((float) max(0, (float) $lead->salary - (float) ($lead->obligations ?? 0)), 2, '.', '') : '';
+            $employeeName = ($lead->effective_employee ?? $lead->employee)?->name ?: 'غير محدد';
 
             $row = [
                 $lead->id,
@@ -226,7 +227,7 @@ class LeadController extends Controller
                 $salaryVal,
                 $obligationsVal,
                 $netSalary,
-                $lead->employee?->name ?: 'غير محدد',
+                $employeeName,
                 $lead->status_label,
                 $lead->started_at?->format('Y-m-d') ?: '',
                 str_replace(["\r", "\n", '"'], [' ', ' ', '""'], (string) ($lead->status_details ?? '')),

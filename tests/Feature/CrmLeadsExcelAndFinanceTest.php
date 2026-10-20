@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Booking;
 use App\Models\ContactSource;
 use App\Models\Employee;
 use App\Models\Lead;
@@ -195,5 +196,79 @@ class CrmLeadsExcelAndFinanceTest extends TestCase
             'obligations' => 800.00,
             'status' => 'contacted',
         ]);
+    }
+
+    public function test_leads_extracts_salary_and_obligations_from_status_details_when_columns_are_null(): void
+    {
+        $source = ContactSource::create(['name' => 'المتجر الإلكتروني', 'is_active' => true]);
+
+        $lead = Lead::create([
+            'client_name' => 'عميل قديم',
+            'client_phone' => '0509988776',
+            'contact_source_id' => $source->id,
+            'status' => 'new',
+            'started_at' => now(),
+            'status_details' => 'طلب تمويل سيارة | الدخل الشهري: 13,500 ر.س | جهة العمل: خاص | طبيعة الالتزامات: التزام شخصي | قيمة الالتزامات: 2,750 ر.س',
+            'salary' => null,
+            'obligations' => null,
+        ]);
+
+        $this->assertEquals('13500', $lead->salary);
+        $this->assertEquals('2750', $lead->obligations);
+
+        $response = $this->actingAs($this->employee, 'employee')
+            ->get(route('crm.leads.index'));
+
+        $response->assertStatus(200);
+        $response->assertSee('13,500');
+        $response->assertSee('2,750');
+    }
+
+    public function test_leads_resolves_assigned_employee_from_related_booking_when_lead_assigned_to_is_null(): void
+    {
+        $source = ContactSource::create(['name' => 'المتجر', 'is_active' => true]);
+
+        $salesRep = Employee::create([
+            'name' => 'مندوب المبيعات سامي',
+            'username' => 'sami_rep',
+            'email' => 'sami@test.com',
+            'password' => 'Password123!',
+            'role' => 'sales',
+            'is_active' => true,
+        ]);
+
+        $lead = Lead::create([
+            'client_name' => 'عميل بحجز إلكتروني',
+            'client_phone' => '0533344455',
+            'contact_source_id' => $source->id,
+            'status' => 'new',
+            'started_at' => now(),
+            'assigned_to' => null,
+        ]);
+
+        Booking::create([
+            'client_name' => 'عميل بحجز إلكتروني',
+            'client_phone' => '0533344455',
+            'assigned_to' => $salesRep->id,
+            'status' => 'new',
+        ]);
+
+        $this->assertEquals($salesRep->id, $lead->effective_employee?->id);
+
+        $response = $this->actingAs($this->employee, 'employee')
+            ->get(route('crm.leads.index'));
+
+        $response->assertStatus(200);
+        $response->assertSee('مندوب المبيعات سامي');
+    }
+
+    public function test_source_column_is_not_displayed_in_leads_table(): void
+    {
+        $response = $this->actingAs($this->employee, 'employee')
+            ->get(route('crm.leads.index'));
+
+        $response->assertStatus(200);
+        // The table header shouldn't contain Source
+        $response->assertDontSee('<th class="py-3 text-muted fw-bold" style="font-size:12px;">المصدر</th>', false);
     }
 }

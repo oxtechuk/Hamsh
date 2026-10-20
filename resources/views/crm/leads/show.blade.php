@@ -60,10 +60,13 @@
 
                             <dt class="col-sm-4 text-muted fw-normal small">المسؤول عن المتابعة</dt>
                             <dd class="col-sm-8">
-                                @if($lead->employee)
+                                @php
+                                    $emp = $lead->effective_employee ?? $lead->employee;
+                                @endphp
+                                @if($emp)
                                     <div class="d-flex align-items-center gap-2">
-                                        <div class="avatar-xs bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width:24px;height:24px;font-size:10px;">{{ mb_substr($lead->employee->name, 0, 1) }}</div>
-                                        <span class="fw-bold">{{ $lead->employee->name }}</span>
+                                        <div class="avatar-xs bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width:24px;height:24px;font-size:10px;">{{ mb_substr($emp->name, 0, 1) }}</div>
+                                        <span class="fw-bold">{{ $emp->name }}</span>
                                     </div>
                                 @else
                                     <span class="text-muted">غير مسند</span>
