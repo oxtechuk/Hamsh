@@ -79,6 +79,31 @@
                                     <span class="text-muted">غير محدد</span>
                                 @endif
                             </dd>
+
+                            <dt class="col-sm-4 text-muted fw-normal small">الراتب الشهري</dt>
+                            <dd class="col-sm-8 fw-bold">
+                                @if ($lead->salary !== null)
+                                    <span class="text-success">{{ number_format((float) $lead->salary, 2) }} ر.س</span>
+                                @else
+                                    <span class="text-muted">—</span>
+                                @endif
+                            </dd>
+
+                            <dt class="col-sm-4 text-muted fw-normal small">الالتزامات الشهرية</dt>
+                            <dd class="col-sm-8 fw-bold">
+                                @if ($lead->obligations !== null)
+                                    <span class="text-dark">{{ number_format((float) $lead->obligations, 2) }} ر.س</span>
+                                @else
+                                    <span class="text-muted">—</span>
+                                @endif
+                            </dd>
+
+                            @if ($lead->salary !== null)
+                                <dt class="col-sm-4 text-muted fw-normal small">صافي الراتب التقديري</dt>
+                                <dd class="col-sm-8 fw-bold text-primary">
+                                    {{ number_format(max(0, (float) $lead->salary - (float) ($lead->obligations ?? 0)), 2) }} ر.س
+                                </dd>
+                            @endif
                         </dl>
                     </div>
                 </div>

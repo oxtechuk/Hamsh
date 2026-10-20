@@ -14,13 +14,23 @@
         </nav>
 
         {{-- Header --}}
-        <div class="d-flex align-items-center justify-content-between mb-4">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
             <h5 class="fw-bold mb-0">{{ __('العملاء') }}</h5>
-            @can('manage-leads')
-                <a href="{{ route('crm.leads.create') }}" class="btn-crm-primary">
-                    <i class="bi bi-person-plus"></i> {{ __('إضافة عميل') }}
-                </a>
-            @endcan
+            <div class="d-flex flex-wrap align-items-center gap-2">
+                @can('manage-leads')
+                    <a href="{{ route('crm.leads.export', request()->query()) }}" class="btn btn-outline-success d-inline-flex align-items-center gap-2" style="border-radius:10px;padding:8px 16px;font-size:13px;font-weight:600;">
+                        <i class="bi bi-file-earmark-arrow-down fs-6"></i>
+                        <span>{{ __('تصدير إكسيل') }}</span>
+                    </a>
+                    <button type="button" class="btn btn-outline-primary d-inline-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#importLeadsModal" style="border-radius:10px;padding:8px 16px;font-size:13px;font-weight:600;">
+                        <i class="bi bi-file-earmark-arrow-up fs-6"></i>
+                        <span>{{ __('استيراد إكسيل') }}</span>
+                    </button>
+                    <a href="{{ route('crm.leads.create') }}" class="btn-crm-primary">
+                        <i class="bi bi-person-plus"></i> {{ __('إضافة عميل') }}
+                    </a>
+                @endcan
+            </div>
         </div>
 
         {{-- Stat Cards --}}
@@ -145,11 +155,13 @@
                             <th class="px-4 py-3 text-muted fw-bold" style="font-size:12px;width:40px;">
                                 <input type="checkbox" id="selectAllLeads" class="form-check-input">
                             </th>
-                            <th class="px-4 py-3 text-muted fw-bold" style="font-size:12px;">{{ __('رقم العميل') }}</th>
+                            <th class="px-3 py-3 text-muted fw-bold" style="font-size:12px;">{{ __('رقم العميل') }}</th>
                             <th class="py-3 text-muted fw-bold" style="font-size:12px;">{{ __('اسم العميل') }}</th>
                             <th class="py-3 text-muted fw-bold" style="font-size:12px;">{{ __('الهاتف') }}</th>
                             <th class="py-3 text-muted fw-bold" style="font-size:12px;">{{ __('المصدر') }}</th>
                             <th class="py-3 text-muted fw-bold" style="font-size:12px;">{{ __('السيارة المطلوبة') }}</th>
+                            <th class="py-3 text-muted fw-bold text-center" style="font-size:12px;">{{ __('الراتب') }}</th>
+                            <th class="py-3 text-muted fw-bold text-center" style="font-size:12px;">{{ __('الالتزامات') }}</th>
                             <th class="py-3 text-muted fw-bold" style="font-size:12px;">{{ __('المسؤول') }}</th>
                             <th class="py-3 text-muted fw-bold text-center" style="font-size:12px;">{{ __('عدد الطلبات') }}</th>
                             <th class="py-3 text-muted fw-bold" style="font-size:12px;">{{ __('ميعاد البدء') }}</th>
@@ -164,7 +176,7 @@
                                     <input type="checkbox" name="lead_ids[]" value="{{ $lead->id }}"
                                         class="form-check-input lead-checkbox" {{ $lead->client_phone ? '' : 'disabled' }}>
                                 </td>
-                                <td class="px-4 fw-bold" style="font-size:13px;">#{{ $lead->id }}</td>
+                                <td class="px-3 fw-bold" style="font-size:13px;">#{{ $lead->id }}</td>
                                 <td>
                                     <div class="fw-bold" style="font-size:13px;color:var(--crm-text);">
                                         {{ $lead->client_name }}
@@ -191,6 +203,24 @@
                                         <span>—</span>
                                     @endif
                                 </td>
+                                <td class="text-center" style="font-size:12px;">
+                                    @if($lead->salary !== null)
+                                        <span class="badge bg-success-subtle text-success px-2 py-1 fw-bold" style="font-size:12px;">
+                                            {{ number_format((float) $lead->salary) }} <small style="font-size:10px;">ر.س</small>
+                                        </span>
+                                    @else
+                                        <span class="text-muted">—</span>
+                                    @endif
+                                </td>
+                                <td class="text-center" style="font-size:12px;">
+                                    @if($lead->obligations !== null)
+                                        <span class="badge {{ (float)$lead->obligations > 0 ? 'bg-warning-subtle text-warning-emphasis' : 'bg-light text-muted border' }} px-2 py-1 fw-bold" style="font-size:12px;">
+                                            {{ number_format((float) $lead->obligations) }} <small style="font-size:10px;">ر.س</small>
+                                        </span>
+                                    @else
+                                        <span class="text-muted">—</span>
+                                    @endif
+                                </td>
                                 <td style="font-size:12px;">
                                     @if($lead->employee)
                                         <span class="d-inline-flex align-items-center gap-1">
@@ -212,14 +242,14 @@
                                 <td>
                                     @php
                                         $dotClass = match ($lead->status) {
-                                            'new' => 'confirmed',
-                                            'contacted' => 'planned',
-                                            'interested' => 'waiting',
-                                            'negotiation' => 'planned',
-                                            'converted' => 'done',
-                                            'lost' => 'late',
-                                            default => 'waiting',
-                                        };
+                                             'new' => 'confirmed',
+                                             'contacted' => 'planned',
+                                             'interested' => 'waiting',
+                                             'negotiation' => 'planned',
+                                             'converted' => 'done',
+                                             'lost' => 'late',
+                                             default => 'waiting',
+                                         };
                                     @endphp
                                     <span class="status-dot {{ $dotClass }}">{{ $lead->status_label }}</span>
                                 </td>
@@ -250,7 +280,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="11" class="text-center text-muted py-5">
+                                <td colspan="13" class="text-center text-muted py-5">
                                     <i class="bi bi-person-x fs-1 d-block mb-2 opacity-25"></i>
                                     {{ __('لا يوجد عملاء يطابقون خيارات البحث والتصفية') }}
                                 </td>
@@ -264,6 +294,57 @@
                     {{ $leads->links() }}
                 </div>
             @endif
+        </div>
+
+        {{-- Import Leads Modal --}}
+        <div class="modal fade" id="importLeadsModal" tabindex="-1"
+            dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content rounded-4 border-0 shadow">
+                    <form action="{{ route('crm.leads.import') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="modal-header border-0 pb-0">
+                            <h6 class="modal-title fw-bold d-flex align-items-center gap-2">
+                                <i class="bi bi-file-earmark-excel text-success fs-5"></i>
+                                <span>{{ __('استيراد العملاء من ملف إكسيل / CSV') }}</span>
+                            </h6>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="p-3 mb-3 rounded-3" style="background:#F8F9FC;border:1px dashed var(--crm-border);">
+                                <div class="d-flex align-items-start gap-2 mb-2">
+                                    <i class="bi bi-info-circle-fill text-primary mt-1"></i>
+                                    <div>
+                                        <p class="small text-muted mb-1 fw-semibold">{{ __('تعليمات الاستيراد:') }}</p>
+                                        <ul class="small text-muted mb-0 ps-3">
+                                            <li>{{ __('الصيغ المدعومة:') }} <code>.xlsx</code>, <code>.xls</code>, <code>.csv</code></li>
+                                            <li>{{ __('الأعمدة المدعومة:') }} {{ __('الاسم، رقم الجوال، البريد، المصدر، السيارة، الراتب، الالتزامات، الحالة، الملاحظات') }}</li>
+                                            <li>{{ __('يتم احتساب الراتب والالتزامات وإظهارها فوراً في جدول العملاء') }}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="mt-2 text-start">
+                                    <a href="{{ route('crm.leads.sample') }}" class="btn btn-sm btn-link text-decoration-none px-0 fw-bold">
+                                        <i class="bi bi-download me-1"></i> {{ __('تحميل نموذج إكسيل تجريبي') }}
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold small text-muted">{{ __('اختر ملف الإكسيل أو CSV') }} <span class="text-danger">*</span></label>
+                                <input type="file" name="file" class="form-control rounded-3" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" required>
+                                <small class="text-muted d-block mt-1">{{ __('الحجم الأقصى المسموح به 10 ميجابايت') }}</small>
+                            </div>
+                        </div>
+                        <div class="modal-footer border-0 pt-0">
+                            <button type="button" class="btn btn-light rounded-3" data-bs-dismiss="modal">{{ __('إلغاء') }}</button>
+                            <button type="submit" class="btn-crm-primary px-4">
+                                <i class="bi bi-cloud-arrow-up me-1"></i> {{ __('بدء الاستيراد') }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
 
         {{-- WhatsApp Campaign Floating Button --}}

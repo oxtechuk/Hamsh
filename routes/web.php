@@ -150,6 +150,9 @@ Route::prefix('crm')->name('crm.')->middleware(['auth:employee', 'guard.employee
 
     // === العملاء المحتملون + مصادر التواصل ===
     Route::middleware('permission:manage-leads')->group(function () {
+        Route::get('leads/export', [LeadController::class, 'export'])->name('leads.export');
+        Route::get('leads/sample', [LeadController::class, 'downloadSampleExcel'])->name('leads.sample');
+        Route::post('leads/import', [LeadController::class, 'import'])->name('leads.import');
         Route::resource('leads', LeadController::class);
         Route::post('leads/whatsapp-campaign', [LeadController::class, 'whatsappCampaign'])->name('leads.whatsapp-campaign');
     });

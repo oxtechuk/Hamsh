@@ -20,12 +20,16 @@ class Lead extends Model
         'status_details',
         'car_id',
         'assigned_to',
+        'salary',
+        'obligations',
     ];
 
     protected function casts(): array
     {
         return [
             'started_at' => 'date',
+            'salary' => 'decimal:2',
+            'obligations' => 'decimal:2',
         ];
     }
 

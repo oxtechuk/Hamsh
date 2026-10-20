@@ -90,6 +90,22 @@
                                         @endforeach
                                     </select>
                                 </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold" style="font-size:14px;">{{ __('الراتب الشهري (ر.س)') }}</label>
+                                    <input type="number" step="0.01" min="0" name="salary" class="form-control @error('salary') is-invalid @enderror"
+                                        value="{{ old('salary') }}" placeholder="0.00" style="font-size:14px;border-radius:8px;">
+                                    @error('salary')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold" style="font-size:14px;">{{ __('الالتزامات الشهرية (ر.س)') }}</label>
+                                    <input type="number" step="0.01" min="0" name="obligations" class="form-control @error('obligations') is-invalid @enderror"
+                                        value="{{ old('obligations') }}" placeholder="0.00" style="font-size:14px;border-radius:8px;">
+                                    @error('obligations')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
                                 <div class="col-12">
                                     <label class="form-label fw-semibold" style="font-size:14px;">{{ __('تفاصيل الحالة / متابعة (اختياري)') }}</label>
                                     <textarea name="status_details" class="form-control" rows="4"

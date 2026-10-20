@@ -63,6 +63,15 @@ class Booking extends Model
                 $statusDetails .= ' [⚠️ تنبيه: شبهة طلب وهمي / مكرر]';
             }
 
+            $salary = null;
+            if (! empty($booking->notes) && preg_match('/(?:الدخل الشهري|الراتب)[:\s]+([0-9,]+)/u', (string) $booking->notes, $m)) {
+                $salary = (float) str_replace(',', '', $m[1]);
+            }
+            $obligations = null;
+            if (! empty($booking->notes) && preg_match('/الالتزامات(?: الشهرية)?[:\s]+([0-9,]+)/u', (string) $booking->notes, $m)) {
+                $obligations = (float) str_replace(',', '', $m[1]);
+            }
+
             if (! $existingLead) {
                 Lead::create([
                     'client_name' => $booking->client_name,
@@ -73,6 +82,8 @@ class Booking extends Model
                     'started_at' => now(),
                     'car_id' => $booking->car_id,
                     'assigned_to' => $booking->assigned_to,
+                    'salary' => $salary,
+                    'obligations' => $obligations,
                     'status_details' => $statusDetails,
                 ]);
             } else {
@@ -82,6 +93,12 @@ class Booking extends Model
                 }
                 if (empty($existingLead->assigned_to)) {
                     $updateData['assigned_to'] = $booking->assigned_to;
+                }
+                if (empty($existingLead->salary) && $salary !== null) {
+                    $updateData['salary'] = $salary;
+                }
+                if (empty($existingLead->obligations) && $obligations !== null) {
+                    $updateData['obligations'] = $obligations;
                 }
                 if (! empty($updateData)) {
                     $existingLead->update($updateData);
